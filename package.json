@@ -1,0 +1,19 @@
+{
+    "name": "2022_1_Wave",
+    "version": "1.0.0",
+    "main": "index.js",
+    "scripts": {
+        "lint": "npx eslint .",
+        "fix": "npx eslint --fix .",
+        "dev": "node server"
+    },
+    "dependencies": {
+        "debug": "^4.3.3",
+        "node": "^17.4.0"
+    },
+    "devDependencies": {
+        "eslint": "^8.9.0",
+        "eslint-config-airbnb-base": "^15.0.0",
+        "eslint-plugin-import": "^2.25.4"
+    }
+}

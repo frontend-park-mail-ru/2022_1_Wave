@@ -1,10 +1,10 @@
 const http = require('http');
 const fs = require('fs');
 const debug = require('debug');
+const opts = require('optimist').argv;
 
 const log = debug('server');
-
-const SERVER_PORT = 3000;
+const serverPort = opts.port;
 
 const server = http.createServer((req, res) => {
   const { url } = req;
@@ -32,4 +32,4 @@ const server = http.createServer((req, res) => {
   });
 });
 
-server.listen(SERVER_PORT);
+server.listen(serverPort);

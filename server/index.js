@@ -11,12 +11,9 @@ const server = http.createServer((req, res) => {
 
   log('request', req.url);
 
-  const regex = '[^\n]+[.][^\n]+';
-  const nestedFileName = `${url}${url}`.match(regex) ? `${url.split('.')[0]}${url}`.match(regex)[0] : `${url}${url}.html`;
-  const isIndex = `${url}`.match('[^\n]+[index][^\n]+');
-  const indexFileName = isIndex ? `${url}`.match('[^\n]+[index][^\n]+')[0] : '/index.html';
-
-  const fileName = url === '/' || isIndex ? indexFileName : nestedFileName;
+  const regex = '[^\n]+.html';
+  const nestedFileName = `${url}${url}`.match(regex) ? `${url.split('.')[0]}${url}`.match(regex)[0] : `${url}`;
+  const fileName = url === '/' || url === '/main' ? 'main/main.html' : nestedFileName;
 
   log('filename:', fileName);
 

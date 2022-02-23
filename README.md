@@ -12,6 +12,9 @@
 * Сарафанников Александр  &mdash; [Sarafa2n](https://github.com/Sarafa2n)
 * Куприй Александр  &mdash; [SanSanchezzz](https://github.com/SanSanchezzz)
 
+## Дизайн
+[Figma](https://www.figma.com/file/w4crBLh2y0BzmC7fO81rd7/Wave?node-id=0%3A1)
+
 ## Основные команды для работы 
 #### Инициализация проекта:
 ```

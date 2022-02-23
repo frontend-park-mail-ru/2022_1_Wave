@@ -1,0 +1,9 @@
+@import "__header/main__top-chart__header.css";
+@import "__album/main__top-chart__album.css";
+
+.main__top-chart{
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    background-image: url("../../img.png");
+}

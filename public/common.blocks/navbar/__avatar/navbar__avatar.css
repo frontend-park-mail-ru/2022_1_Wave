@@ -1,0 +1,8 @@
+@import "__img_round/navbar__avatar__img_round.css";
+
+.navbar__avatar{
+    width: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

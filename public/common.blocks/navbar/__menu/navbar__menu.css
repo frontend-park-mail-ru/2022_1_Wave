@@ -1,0 +1,13 @@
+@import "__button/navbar__menu__button.css";
+
+
+.navbar__menu{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.navbar__menu__button{
+    text-align: center;
+    margin: auto 0;
+}

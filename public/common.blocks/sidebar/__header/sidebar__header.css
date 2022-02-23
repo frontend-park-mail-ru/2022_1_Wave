@@ -1,0 +1,15 @@
+@import '__expand-btn/sidebar__control__expand-btn.css';
+@import "__logo/sidebar__header__logo.css";
+@import '__title/sidebar__header__title.css';
+
+.sidebar__header{
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+.sidebar__control__expand-btn{
+    margin: auto 0;
+}
+.sidebar__header__title{
+    flex-grow: 1;
+}

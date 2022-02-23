@@ -1,0 +1,12 @@
+@import '__header/sidebar__header.css';
+
+.sidebar{
+    width: 330px;
+    display: flex;
+    flex-direction: column;
+    transition: all 1s;
+}
+
+.sidebar__header{
+    height: 80px;
+}

@@ -1,0 +1,28 @@
+.navbar__search{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+}
+
+.navbar__search input {
+    padding: 5px;
+    width: 100%;
+    border-radius: 19px;
+    height: 40px;
+    text-indent: 35px;
+    border:solid 0px;
+    background-color: rgba(0, 0, 0, 0.17);
+    font-size: 16px;
+    color: #6D7184;
+    outline: none;
+
+}
+
+.navbar__search .fa-magnifying-glass {
+    position: absolute;
+    color: #6D7184;
+    left: 12px;
+    font-size: 16px;
+}

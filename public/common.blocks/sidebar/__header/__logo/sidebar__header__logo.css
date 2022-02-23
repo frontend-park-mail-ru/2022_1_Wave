@@ -1,0 +1,7 @@
+
+.sidebar__header__logo{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    left: 0;
+}

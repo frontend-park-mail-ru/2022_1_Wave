@@ -1,0 +1,21 @@
+@import "__tooltip/navbar__menu__button__tooltip.css";
+@import "_text-color/navbar__menu__button__text-color.css";
+
+.navbar__menu__button{
+    font-size: 13px;
+
+}
+
+.navbar__menu__button:hover > .navbar__menu__button_text-color{
+    color: #37B8D6;
+}
+
+.navbar__menu__button:hover > .navbar__menu__button__tooltip {
+    visibility: visible;
+}
+
+.navbar__menu__button__tooltip{
+    margin: 5px auto;
+    height: 2px;
+    max-height: 2px;
+}

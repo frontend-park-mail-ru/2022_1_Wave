@@ -1,0 +1,8 @@
+[build]
+base = ""
+publish = "public/"
+[[redirects]]
+from = "/*"
+to = "/"
+status = 301
+force = false

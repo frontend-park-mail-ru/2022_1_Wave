@@ -1,0 +1,35 @@
+version: "3.5"
+services:
+  web:
+    image: nginx
+    container_name: "web"
+    ports:
+      - "80:80"
+    working_dir: /var/www/service/server
+    volumes:
+      - ./server:/var/www/service/server
+      - ./public:/usr/share/nginx/html:ro
+      - ./server/nginx.conf:/etc/nginx/nginx.conf
+      - ./server/wave:/etc/nginx/servers/wave 
+  
+  backend:
+    image: golang:alpine
+    container_name: "backend"
+    entrypoint: ./entrypoint.sh
+    ports:
+      - "50:80"
+    working_dir: /var/www/service
+    volumes:
+      - ./backend:/var/www/service
+  
+  database:
+    image: postgres:13
+    container_name: "database"
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_PASSWORD=wave
+      - POSTGRES_USER=wave
+      - POSTGRES_DB=wave
+
+

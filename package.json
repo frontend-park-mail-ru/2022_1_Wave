@@ -9,6 +9,7 @@
         "build": "node server --port 443"
     },
     "dependencies": {
+        "@fontsource/montserrat": "^4.5.5",
         "debug": "^4.3.3",
         "optimist": "^0.6.1"
     },

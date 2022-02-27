@@ -1,6 +1,7 @@
 @import "__avatar/navbar__avatar.css";
 @import "__search/navbar__search.css";
 @import "__menu/navbar__menu.css";
+@import "../colors.css";
 
 
 .navbar {
@@ -8,7 +9,7 @@
     display: flex;
     flex-wrap: wrap;
     flex-grow: 1;
-    background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.5) 20%, rgba(1, 208, 234, 0.5) 100%);
+    background-image: var(--linear-gradient-blue-dark);
 }
 
 .navbar__menu{

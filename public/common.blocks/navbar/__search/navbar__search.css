@@ -1,4 +1,4 @@
-.navbar__search {
+.navbar__search{
     display: flex;
     justify-content: center;
     flex-direction: column;
@@ -12,17 +12,17 @@
     border-radius: 19px;
     height: 40px;
     text-indent: 35px;
-    border: solid 0px;
-    background-color: rgba(0, 0, 0, 0.17);
+    border:solid 0px;
+    background-color: var(--input-color);
     font-size: 16px;
-    color: #6D7184;
+    color: var(--btn-inactive);
     outline: none;
 
 }
 
-.navbar__search .fa-magnifying-glass {
+.navbar__search__icon {
     position: absolute;
-    color: #6D7184;
+    color: var(--btn-inactive);
     left: 12px;
     font-size: 16px;
 }

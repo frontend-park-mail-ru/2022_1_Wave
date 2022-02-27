@@ -1,4 +1,4 @@
-.navbar__search{
+.navbar__search {
     display: flex;
     justify-content: center;
     flex-direction: column;
@@ -12,7 +12,7 @@
     border-radius: 19px;
     height: 40px;
     text-indent: 35px;
-    border:solid 0px;
+    border: solid 0px;
     background-color: rgba(0, 0, 0, 0.17);
     font-size: 16px;
     color: #6D7184;

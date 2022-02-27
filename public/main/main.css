@@ -5,6 +5,7 @@
 @import '../common.blocks/sidebar/_collapsed/sidebar_collapsed.css';
 @import "__top-chart/main__top-chart.css";
 @import "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css";
+@import "../common.blocks/sidebar/__sidebar-navigation/sidebar__sidebar-navigation.css";
 
 h1 {
     color: aqua;

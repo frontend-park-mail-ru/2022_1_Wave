@@ -5,7 +5,7 @@
     "scripts": {
         "lint": "npx eslint .",
         "fix": "npx eslint --fix .",
-        "dev": "DEBUG=server node server --port 3000",
+        "dev": "node server --port 3000",
         "build": "node server --port 443"
     },
     "dependencies": {

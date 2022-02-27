@@ -3,5 +3,5 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    left: 0;
+    margin: auto;
 }

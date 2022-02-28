@@ -1,9 +1,62 @@
-@import "__header/main__top-chart__header.css";
-@import "__album/main__top-chart__album.css";
 
-.main__top-chart{
+.main__page{
     display: flex;
     flex-direction: column;
     flex-grow: 1;
     background-image: url("../../img.png");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+
+}
+
+.main__top-chart__album{
+    display: flex;
+    flex-direction: column;
+    width: 30%;
+    padding-left: 40px;
+}
+
+.main__top-chart__album__name{
+    padding-top: 35px;
+    font-size: 59px;
+}
+
+.main__top-chart__album__quote {
+    font-size: 18px;
+    opacity: 50%;
+    padding-top: 10px;
+}
+
+.main__top-chart__album__controls {
+    padding-top: 20px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.main__top-chart__album__btn_play {
+    display: flex;
+    justify-content: center;
+    background-color: #37B8D6;
+    width: 170px;
+    height: 40px;
+    border-radius: 21px;
+}
+
+.main__top-chart__album__btn_play > .text{
+    margin: auto;
+}
+
+.main__top-chart__album__btn_follow > .text {
+    margin: auto;
+    color: #37B8D6;
+}
+
+.main__top-chart__album__btn_follow{
+    display: flex;
+    justify-content: center;
+    background-color: rgba(11, 18, 32, 0.3);
+    border: solid 2px #37B8D6;
+    width: 170px;
+    height: 40px;
+    border-radius: 21px;
 }

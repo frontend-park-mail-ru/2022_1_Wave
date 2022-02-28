@@ -23,7 +23,7 @@
 .navbar__menu__button:hover .button__text{
     color: var(--btn-hover);
     border-bottom: solid 2px;
-    padding: 5px;
+    padding-bottom: 3px;
     border-image-slice: 1;
     border-image-source: var(--linear-gradient-blue-white);
 }

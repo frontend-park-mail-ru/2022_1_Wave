@@ -1,7 +1,0 @@
-@import "__name/main__top-chart__album__name.css";
-
-.main__top-chart__album{
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-}

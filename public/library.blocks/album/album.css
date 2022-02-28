@@ -1,0 +1,24 @@
+
+
+.album{
+    padding-right: 20px;
+}
+
+.album__image{
+}
+
+.album__image > img{
+    width: 150px;
+    height: 150px;
+}
+
+.album__title{
+    font-size: 18px;
+
+}
+
+.album__artist{
+    font-size: 13px;
+    opacity: 50%;
+    padding-top: 3px;
+}

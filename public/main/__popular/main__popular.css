@@ -1,0 +1,32 @@
+.main__popular{
+    padding-left: 30px;
+    padding-top: 20px;
+    width: 80%;
+
+}
+
+.main__popular .carousel-row {
+    height: 200px;
+    overflow: hidden;
+}
+
+.main__popular_slider {
+
+}
+
+.main__popular__albums {
+
+}
+
+.main__popular__artists {
+    width: 80%;
+
+}
+
+.main__popular > .text{
+
+}
+
+.main__popular__title{
+    font-size: 24px;
+}

@@ -5,19 +5,20 @@
     flex-grow: 1;
     background-image: url("../../img.png");
     background-repeat: no-repeat;
-    background-size: 100% 100%;
+    background-size: auto 100%;
+    background-position: 50%;
 
 }
 
 .main__top-chart__album{
     display: flex;
     flex-direction: column;
-    width: 30%;
+    width: 35%;
     padding-left: 40px;
 }
 
 .main__top-chart__album__name{
-    padding-top: 35px;
+    padding-top: 5px;
     font-size: 59px;
 }
 

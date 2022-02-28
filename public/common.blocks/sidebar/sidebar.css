@@ -2,9 +2,8 @@
 
 .sidebar{
     width: 330px;
-    display: flex;
+    display: inline-flex;
     flex-direction: column;
-    transition: all 1s;
 }
 
 .sidebar__header{

@@ -7,7 +7,7 @@
 .album__image{
 }
 
-.album__image > img{
+.album__image {
     width: 150px;
     height: 150px;
 }

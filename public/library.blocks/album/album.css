@@ -2,14 +2,13 @@
 
 .album{
     padding-right: 20px;
+    height: 140px;
 }
 
-.album__image{
-}
 
 .album__image {
-    width: 150px;
-    height: 150px;
+    width: 90px;
+    height: 90px;
 }
 
 .album__title{

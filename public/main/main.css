@@ -17,17 +17,11 @@ h1 {
 
 .main__page{
     width: calc(100% - 350px);
-    display: inline-flex !important;
+    display: inline-flex ;
     box-sizing: border-box;
 }
 
 body{
     display: block;
-    background: #0B1220;
-}
-
-.main-content{
-    height: 100vh;
-    position: relative;
     background: #0B1220;
 }

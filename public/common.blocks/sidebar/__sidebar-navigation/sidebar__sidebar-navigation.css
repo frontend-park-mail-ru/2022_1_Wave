@@ -53,8 +53,11 @@
     margin-top: 64px;
     margin-left: 26px;
     list-style-type: none;
-    height: inherit;
-    overflow: auto;
+    overflow-y: scroll;
+    padding-right: 100px;
+    width: 250px;
+    height: 400px;
+
 }
 
 .my-playlist__playlist-track-block {

@@ -4,6 +4,7 @@
     width: 330px;
     display: inline-flex;
     flex-direction: column;
+    overflow: hidden;
 }
 
 .sidebar__header{

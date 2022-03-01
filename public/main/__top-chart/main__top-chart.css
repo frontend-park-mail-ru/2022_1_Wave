@@ -19,7 +19,7 @@
 
 .main__top-chart__album__name{
     padding-top: 5px;
-    font-size: 59px;
+    font-size: 35px;
 }
 
 .main__top-chart__album__quote {
@@ -38,7 +38,7 @@
     display: flex;
     justify-content: center;
     background-color: #37B8D6;
-    width: 170px;
+    width: 150px;
     height: 40px;
     border-radius: 21px;
 }
@@ -57,7 +57,7 @@
     justify-content: center;
     background-color: rgba(11, 18, 32, 0.3);
     border: solid 2px #37B8D6;
-    width: 170px;
+    width: 150px;
     height: 40px;
     border-radius: 21px;
 }

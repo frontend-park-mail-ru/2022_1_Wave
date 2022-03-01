@@ -1,15 +1,15 @@
-@import '__expand-btn/sidebar__control__expand-btn.css';
-@import "__logo/sidebar__header__logo.css";
-@import '__title/sidebar__header__title.css';
+.sidebar__header__logo {
+    justify-content: center;
+    margin: 0 auto;
+}
 
-.sidebar__header{
+.sidebar__header__title {
     display: flex;
-    flex-direction: row-reverse;
+    width: 100px;
+    margin: 0 auto;
+    justify-content: center;
 }
 
-.sidebar__control__expand-btn{
-    margin: auto 0;
-}
-.sidebar__header__title{
-    flex-grow: 1;
+.sidebar__header__title_text-size-md {
+    font-size: 30px;
 }

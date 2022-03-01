@@ -1,8 +1,0 @@
-@import '_text-size-md/sidebar__header__title_text-size-md.css';
-
-.sidebar__header__title{
-    display: flex;
-    width: 100px;
-    margin: auto;
-    justify-content: center;
-}

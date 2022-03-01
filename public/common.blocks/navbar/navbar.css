@@ -7,8 +7,6 @@
 .navbar {
     height: 100px;
     display: flex;
-    flex-wrap: wrap;
-    /*flex-grow: 1;*/
     background-image: var(--linear-gradient-blue-dark);
 }
 

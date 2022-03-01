@@ -1,15 +1,4 @@
 
-.main__page{
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1;
-    background-image: url("../../img.png");
-    background-repeat: no-repeat;
-    background-size: auto 100%;
-    background-position: 50%;
-
-}
-
 .main__top-chart__album{
     display: flex;
     flex-direction: column;
@@ -18,7 +7,7 @@
 }
 
 .main__top-chart__album__name{
-    padding-top: 5px;
+    padding-top: 25px;
     font-size: 35px;
 }
 

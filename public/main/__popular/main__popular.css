@@ -1,5 +1,8 @@
 .main__popular{
+    padding-top: 70px;
     padding-left: 30px;
+    display: flex;
+    flex-direction: column;
 }
 
 .main__popular .carousel-row {
@@ -14,12 +17,12 @@
 }
 
 .main__popular__albums {
-    padding-top: 10px;
-    height: 200px;
+    padding-top: 30px;
+    height: 250px;
 }
 
 .main__popular__artists {
-    padding-top: 20px;
+    padding-top: 30px;
     height: 150px;
 }
 

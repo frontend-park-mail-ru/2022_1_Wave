@@ -1,5 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@200&display=swap');
+
 .text{
-    font-family: 'Montserrat';
+    /*font-family: 'Inter', sans-serif;*/
+    font-family: 'Montserrat', sans-serif;;
     font-size: 15px;
     color: white;
 }

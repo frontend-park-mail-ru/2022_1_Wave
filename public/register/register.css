@@ -90,9 +90,10 @@ main {
     color: white;
 }
 
-.login-form__button {
+.register-form__button {
     width: 106px;
     height: 45px;
+    margin-left: auto;
 }
 
 .login-form__logo {
@@ -104,14 +105,10 @@ main {
     text-align: left;
 }
 
-.login-form__input-line {
+.register-form__input-line {
     width: inherit;
     margin-top: 8px;
     margin-bottom: 17px;
-}
-
-.login-form__button {
-    margin-left: auto;
 }
 
 .menu-footer {

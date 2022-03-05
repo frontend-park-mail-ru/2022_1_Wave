@@ -1,35 +1,60 @@
-const http = require('http');
+const express = require('express');
+const path = require('path');
+const opt = require('optimist');
 const fs = require('fs');
-const debug = require('debug');
-const opts = require('optimist').argv;
+const chokidar = require('chokidar');
+const Handlebars = require('handlebars');
+const { exec } = require('child_process');
 
-const log = debug('server');
-const serverPort = opts.port;
+const srcPath = path.resolve(__dirname, '..', 'src');
+let indexTemplateSrc = fs.readFileSync(`${srcPath}/index.hbs`).toString();
+let indexTemplate = Handlebars.compile(indexTemplateSrc);
 
-const server = http.createServer((req, res) => {
-  const { url } = req;
+const templates = new Set();
+const watchPath = path.resolve(__dirname, '..', 'src');
 
-  log('request', req.url);
+chokidar.watch(watchPath)
+  .on('all', (event, fullPath) => {
+    const stat = fs.statSync(fullPath);
 
-  const regex = '[^\n]+[.][^\n]+';
-  const nestedFileName = `${url}${url}`.match(regex) ? `${url.split('.')[0]}${url}`.match(regex)[0] : `${url}${url}.html`;
-  const isIndex = `${url}`.match('[^\n]+[index][^\n]+');
-  const indexFileName = isIndex ? `${url}`.match('[^\n]+[index][^\n]+')[0] : '/index.html';
+    if (stat.isFile() && fullPath.endsWith('.hbs')) {
+      const relPath = fullPath.slice(watchPath.length + 1);
+      const relPathCompiled = `${relPath}.precompile.js`;
 
-  const fileName = url === '/' || isIndex ? indexFileName : nestedFileName;
+      if (relPath === 'index.hbs') {
+        indexTemplateSrc = fs.readFileSync(`${srcPath}/index.hbs`).toString();
+        indexTemplate = Handlebars.compile(indexTemplateSrc);
+        fs.writeFileSync(`${srcPath}/index.html`, indexTemplate({ templates }));
+        return;
+      }
 
-  log('filename:', fileName);
+      if (event === 'add') {
+        templates.add(relPathCompiled);
+      }
 
-  fs.readFile(`${__dirname}/../public/${fileName}`, (err, file) => {
-    if (err) {
-      log('error');
-      res.write('not found');
-      res.end();
-      return;
+      if (event === 'add' || event === 'change') {
+        exec(`$(npm bin)/handlebars ${fullPath} -f ${fullPath}.precompile.js`);
+      }
+
+      if (event === 'unlink') {
+        templates.delete(relPathCompiled);
+      }
+
+      fs.writeFileSync(`${srcPath}/index.html`, indexTemplate({ templates }));
     }
-    res.write(file);
-    res.end();
   });
-});
 
-server.listen(serverPort);
+const config = {
+  port: opt.argv.port ?? process.env.PORT ?? 3000,
+};
+
+const app = express();
+
+app
+  .use(express.static(path.resolve(__dirname, '..', 'src')))
+  .get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, '..', 'src', 'index.html'));
+  })
+  .listen(config.port, () => {
+    console.log(`Server is running at http://localhost:${config.port}`);
+  });

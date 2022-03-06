@@ -1,0 +1,21 @@
+@import "__avatar/navbar__avatar.css";
+@import "__search/navbar__search.css";
+@import "__menu/navbar__menu.css";
+@import "../colors.css";
+
+
+.navbar {
+    height: 100px;
+    display: flex;
+    background-image: var(--linear-gradient-blue-dark);
+}
+
+.navbar__menu{
+    width: 400px;
+}
+
+.navbar__search{
+    flex-grow: 1;
+    min-width: 25%;
+
+}

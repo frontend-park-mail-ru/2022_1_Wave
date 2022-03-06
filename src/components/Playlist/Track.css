@@ -1,0 +1,59 @@
+.my-playlist__playlist-track-block {
+    height: auto;
+    overflow: auto;
+    padding-left: 0;
+}
+
+.my-playlist__playlist-track-block:hover {
+    cursor: pointer;
+}
+
+.my-playlist__playlist-track-block:hover .playlist-track-block__number {
+    color: #37B8D6;
+}
+
+.my-playlist__playlist-track-block:hover .track-info__title {
+    color: #37B8D6;
+}
+
+.playlist-track-block__number {
+    color: #6D7184;
+    letter-spacing: 0.055em;
+    float: left;
+    width: 1.5em;
+    text-align: center;
+}
+
+.playlist-track-block__icon {
+    float: left;
+    width: 47px;
+    height: 47px;
+    border-radius: 4px;
+    margin-left: 20px;
+}
+
+.playlist-track-block__track-info {
+    float: left;
+    margin-left: 14px;
+}
+
+.track-info__title {
+    color: #FFFFFF;
+    line-height: 18px;
+    letter-spacing: 0.02em;
+    margin-top: 4px;
+    margin-bottom: 0;
+}
+
+.track-info__artist {
+    font-size: 13px;
+    line-height: 16px;
+    letter-spacing: 0.05em;
+    margin-top: 5px;
+    margin-bottom: 0;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.playlist-track-block__space {
+    height: 2em;
+}

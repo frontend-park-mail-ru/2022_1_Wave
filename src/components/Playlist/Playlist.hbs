@@ -1,0 +1,10 @@
+<div class="sidebar__wrap__my-playlist">
+<ul class="sidebar__my-playlist">
+{{#each tracks}}
+    {{mount this}}
+    {{#unless @last}}
+        <div class="playlist-track-block__space"></div>
+    {{/unless}}
+{{/each}}
+</ul>
+</div>

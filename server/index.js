@@ -15,29 +15,28 @@ const watchPath = path.resolve(__dirname, '..', 'src');
 
 chokidar.watch(watchPath)
   .on('all', (event, fullPath) => {
-    const stat = fs.statSync(fullPath);
+    const relPath = fullPath.slice(watchPath.length + 1);
+    const relPathCompiled = `${relPath}.precompile.js`;
 
-    if (stat.isFile() && fullPath.endsWith('.hbs')) {
-      const relPath = fullPath.slice(watchPath.length + 1);
-      const relPathCompiled = `${relPath}.precompile.js`;
-
+    if (fullPath.endsWith('.hbs')) {
       if (relPath === 'index.hbs') {
         indexTemplateSrc = fs.readFileSync(`${srcPath}/index.hbs`).toString();
         indexTemplate = Handlebars.compile(indexTemplateSrc);
-        fs.writeFileSync(`${srcPath}/index.html`, indexTemplate({ templates }));
-        return;
-      }
-
-      if (event === 'add') {
-        templates.add(relPathCompiled);
-      }
-
-      if (event === 'add' || event === 'change') {
-        exec(`$(npm bin)/handlebars ${fullPath} -f ${fullPath}.precompile.js`);
-      }
-
-      if (event === 'unlink') {
-        templates.delete(relPathCompiled);
+      } else {
+        switch (event) {
+          case 'add':
+            templates.add(relPathCompiled);
+            exec(`$(npm bin)/handlebars ${fullPath} -f ${fullPath}.precompile.js`);
+            break;
+          case 'change':
+            exec(`$(npm bin)/handlebars ${fullPath} -f ${fullPath}.precompile.js`);
+            break;
+          case 'unlink':
+            templates.delete(relPathCompiled);
+            break;
+          default:
+            break;
+        }
       }
 
       fs.writeFileSync(`${srcPath}/index.html`, indexTemplate({ templates }));

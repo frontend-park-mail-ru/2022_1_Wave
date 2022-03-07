@@ -1,0 +1,146 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;400&display=swap');
+
+html, body {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    width: 100vw;
+    height: 100vh;
+}
+
+main {
+    width: inherit;
+    height: inherit;
+    display: flex;
+    background-image: url("../../assets/background.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.content {
+    box-sizing: border-box;
+    margin: auto;
+}
+
+.login-form {
+    box-sizing: border-box;
+    display: block;
+    width: 516px;
+    margin: auto;
+}
+
+.logo {
+    background: url("../../assets/logo.png") no-repeat;
+    width: 273px;
+    height: 46px;
+}
+
+.input-label {
+    font-family: Montserrat, serif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 17px;
+    color: #fff;
+}
+
+.input-line {
+    box-sizing: border-box;
+    height: 50px;
+    background: #212121;
+    border-radius: 3px;
+    border: none;
+
+    color: #fff;
+    padding-left: 15px;
+    font-family: Montserrat, serif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 18px;
+    line-height: 22px;
+}
+
+.button {
+    border-radius: 50px;
+    border: none;
+
+    cursor: pointer;
+
+    font-family: Montserrat, serif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 18px;
+    line-height: 22px;
+    text-decoration: none;
+
+    align-items: center;
+    text-align: center;
+}
+
+.button_gray {
+    background: #212121;
+
+    color: white;
+}
+
+.button_blue {
+    background: #37B8D6;
+
+    color: white;
+}
+
+.login-form__button {
+    width: inherit;
+    height: 45px;
+}
+
+.login-form__logo {
+    margin: 0 auto;
+    padding-bottom: 60px;
+}
+
+.login-form__input-label {
+    text-align: left;
+}
+
+.login-form__input-line {
+    width: inherit;
+    margin-top: 8px;
+    margin-bottom: 17px;
+}
+
+.login-form__button {
+    margin-left: auto;
+}
+
+.menu-footer {
+    clear: both;
+    display: block;
+    margin-top: 30px;
+}
+
+.menu-footer__line {
+    border: 1px solid #444444;
+}
+
+.menu-footer__text {
+    margin-top: 30px;
+    text-align: center;
+
+    font-family: Montserrat, serif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 17px;
+    color: #fff;
+}
+
+.menu-footer__button {
+    display: flex;
+    height: 45px;
+    margin-top: 17px;
+}
+
+.menu-footer__button span {
+    margin: auto;
+}

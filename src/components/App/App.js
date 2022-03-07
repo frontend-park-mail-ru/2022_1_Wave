@@ -1,5 +1,6 @@
 import Component from '/modules/Component/Component.js';
 import MainPage from '/components/MainPage/MainPage.js';
+import LoginPage from '/components/LoginPage/LoginPage.js';
 
 export default class App extends Component {
   #template;
@@ -11,7 +12,7 @@ export default class App extends Component {
 
   render() {
     return this.#template({
-      content: new MainPage(),
+      content: new LoginPage(),
     });
   }
 }

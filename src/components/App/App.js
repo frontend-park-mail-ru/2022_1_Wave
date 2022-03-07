@@ -13,7 +13,7 @@ export default class App extends Component {
 
   render() {
     return this.#template({
-      content: new SignupPage(),
+      content: window.location.pathname == '/auth' ? new SignupPage() : new MainPage(),
     });
   }
 }

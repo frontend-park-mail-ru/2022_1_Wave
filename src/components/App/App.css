@@ -1,6 +1,6 @@
-@import "../MainPage/MainPage.css";
-@import "../LoginPage/LoginPage.css";
 @import "../SignupPage/SignupPage.css";
+@import "../LoginPage/LoginPage.css";
+@import "../MainPage/MainPage.css";
 
 .app {
     width: inherit;

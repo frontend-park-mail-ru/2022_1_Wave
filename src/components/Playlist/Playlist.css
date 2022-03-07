@@ -1,0 +1,12 @@
+@import 'Track.css';
+
+.sidebar__my-playlist {
+    margin-top: 64px;
+    margin-left: 26px;
+    list-style-type: none;
+    overflow-y: scroll;
+    padding-right: 100px;
+    padding-inline-start: 0;
+    width: 300px;
+    height: 600px;
+}

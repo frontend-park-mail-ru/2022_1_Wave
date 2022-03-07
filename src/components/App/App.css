@@ -1,0 +1,8 @@
+@import "../MainPage/MainPage.css";
+@import "../LoginPage/LoginPage.css";
+@import "../SignupPage/SignupPage.css";
+
+.app {
+    width: inherit;
+    height: inherit;
+}

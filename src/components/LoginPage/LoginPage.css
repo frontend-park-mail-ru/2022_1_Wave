@@ -43,7 +43,7 @@
 .input-line {
     box-sizing: border-box;
     height: 50px;
-    background: #212121;
+    background: #222730;
     border-radius: 3px;
     border: none;
 
@@ -75,7 +75,7 @@
 }
 
 .button_gray {
-    background: #212121;
+    background: #222730;
 
     color: white;
 }

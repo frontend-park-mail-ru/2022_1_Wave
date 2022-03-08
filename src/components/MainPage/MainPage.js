@@ -13,7 +13,7 @@ export default class MainPage extends Component {
   render() {
     return this.#template({
       sidebar: new Sidebar(),
-      content: new Homepage(),
+      content: new Homepage({parent: this.props.parent}),
     });
   }
 }

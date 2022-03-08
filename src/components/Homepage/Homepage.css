@@ -1,7 +1,7 @@
 @import './Popular.css';
 
 .main__page{
-    width: calc(100% - 350px);
+    width: calc(100% - 335px);
     box-sizing: border-box;
     display: inline-flex;
     flex-direction: column;

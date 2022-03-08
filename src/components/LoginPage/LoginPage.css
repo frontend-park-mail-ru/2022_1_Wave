@@ -4,7 +4,7 @@
 
 .login-page {
     box-sizing: border-box;
-    background: linear-gradient(rgba(11, 18, 32, 0.5) 100%, rgba(11, 18, 32, 0.4) 100%), url("../../assets/background.jpg") no-repeat 50%;
+    background: url("../../assets/auth.png") no-repeat 50%;
     background-size: 100% 100%;
     display: flex;
     flex-direction: column;

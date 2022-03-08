@@ -28,7 +28,6 @@
 .login-form_align {
     display: flex;
     flex-direction: column;
-    margin: 0 auto;
     padding-top: 0.5rem;
 }
 
@@ -47,21 +46,19 @@
     background: #222730;
     border-radius: 3px;
     border: none;
-
     color: #fff;
     font-family: Montserrat, serif;
     font-style: normal;
     font-weight: normal;
     font-size: 18px;
     line-height: 22px;
-    width: 30vw;
     padding-left: 10px;
+    width: 100%;
 }
 
 .button {
     border-radius: 50px;
     border: none;
-
     cursor: pointer;
 
     font-family: Montserrat, serif;
@@ -70,25 +67,22 @@
     font-size: 18px;
     line-height: 22px;
     text-decoration: none;
-
     align-items: center;
     text-align: center;
 }
 
 .button_gray {
     background: #222730;
-
     color: white;
 }
 
 .button_blue {
     background: #37B8D6;
-
     color: white;
 }
 
 .login-form__button {
-    width: inherit;
+    width: 100%;
     height: 45px;
 }
 
@@ -112,14 +106,7 @@
 }
 
 .login-form__input-line {
-    width: 30vw;
-
-}
-
-.login-form__button {
-    margin-left: auto;
-    width: 30vw;
-
+    width: 100%;
 }
 
 .menu-footer {
@@ -130,7 +117,7 @@
 
 .menu-footer__line {
     border: 1px solid #444444;
-    width: 30vw;
+    width: 100%;
 }
 
 .menu-footer__text {

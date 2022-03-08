@@ -32,7 +32,6 @@
 .main__top-chart__album__controls {
     padding-top: 20px;
     display: flex;
-    justify-content: space-between;
 }
 
 .main__top-chart__album__btn_play {
@@ -58,6 +57,7 @@
     justify-content: center;
     background-color: rgba(11, 18, 32, 0.3);
     border: solid 2px #37B8D6;
+    margin-left: 30px;
     width: 150px;
     height: 40px;
     border-radius: 21px;

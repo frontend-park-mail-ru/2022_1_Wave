@@ -1,5 +1,6 @@
 import Component from '/modules/Component/Component.js';
 import MainPage from '/components/MainPage/MainPage.js';
+import UnauthorizedMainPage from '/components/UnauthorizedMainPage/UnauthorizedMainPage.js';
 import LoginPage from '/components/LoginPage/LoginPage.js';
 import SignupPage from '/components/SignupPage/SignupPage.js';
 

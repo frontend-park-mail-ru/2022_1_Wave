@@ -1,6 +1,7 @@
 @import "../SignupPage/SignupPage.css";
 @import "../LoginPage/LoginPage.css";
 @import "../MainPage/MainPage.css";
+@import "../UnauthorizedMainPage/UnauthorizedMainPage.css";
 
 .app {
     position: fixed;

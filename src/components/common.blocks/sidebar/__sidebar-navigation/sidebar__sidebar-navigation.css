@@ -6,6 +6,8 @@
 
 .sidebar-navigation-block {
     height: 26px;
+    display: flex;
+    font-size: 15px;
 }
 
 .sidebar-navigation__space {
@@ -26,28 +28,36 @@
 }
 
 .sidebar-navigation-block__sidebar-navigation-text {
-    margin-left: 25px;
-    padding-top: 1px;
-    margin-top: 0;
-    margin-bottom: 0;
+    margin: auto 12px;
 }
 
 .sidebar-navigation-block__sidebar-navigation-icon {
     float: left;
-    margin-top: 5px;
+    margin: auto 0;
+}
+
+.sidebar-navigation-block__sidebar-navigation-icon.fa-itunes-note{
+    display: none;
 }
 
 .sidebar-navigation-block:hover {
     cursor: pointer;
 }
 
+
 .sidebar-navigation-block:hover .sidebar-navigation-text {
     color: #37B8D6;
 }
 
-.sidebar-navigation-block:hover .sidebar-navigation-icon {
-    border-color: #37B8D6;
+.sidebar-navigation-block:hover .fa-itunes-note {
+    display: block;
+    color: #37B8D6;
+
 }
+.sidebar-navigation-block:hover .sidebar-navigation-icon {
+    display: none;
+}
+
 
 .sidebar__my-playlist {
     margin-top: 64px;
@@ -91,9 +101,6 @@
     margin-left: 25px;
 }
 
-.playlist-track-block__icon_background-image {
-    background-image: url("../../../playlist-track-icon-dummy.png");
-}
 
 .playlist-track-block__track-info {
     float: left;

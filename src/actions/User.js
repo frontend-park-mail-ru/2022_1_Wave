@@ -17,13 +17,18 @@ export default class User {
   }
 
   static logout() {
+    let body = null;
+
     return HTTPClient.post(UserPaths.logout)
       .then((response) => {
         if (response.status !== 200) {
           return Promise.reject(response.body);
         }
-        return response.body;
-      });
+        body = response.body;
+
+        return User.getCSRFToken();
+      })
+      .then(() => body);
   }
 
   static login({ email, username, password }) {

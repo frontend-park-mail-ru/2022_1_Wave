@@ -18,8 +18,9 @@ export default class Homepage extends Component {
   }
 
   logout() {
-    User.logout();
-    this.props.parent.remount();
+    User.logout().then(() => {
+      this.props.parent.remount();
+    });
   }
 
   didMount(node) {

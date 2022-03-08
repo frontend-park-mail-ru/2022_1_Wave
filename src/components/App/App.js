@@ -44,22 +44,24 @@ export default class App extends Component {
   }
 
   render() {
-    console.log(this.#user);
-
     let content = null;
 
+    switch (window.location.pathname) {
+      case '/signup':
+        content = new SignupPage({ parent: this });
+        break;
+      case '/login':
+        content = new LoginPage({ parent: this });
+        break;
+      default:
+        window.history.replaceState(null, '', '/');
+        content = new UnauthorizedMainPage({ parent: this });
+        break;
+    }
+
     if (this.#user) {
+      window.history.replaceState(null, '', '/');
       content = new MainPage({ parent: this });
-    } else {
-      content = new UnauthorizedMainPage({ parent: this });
-    }
-
-    if (window.location.pathname === '/signup') {
-      content = new SignupPage({ parent: this });
-    }
-
-    if (window.location.pathname === '/login') {
-      content = new LoginPage({ parent: this });
     }
 
     return this.#template({ content });

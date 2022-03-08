@@ -22,14 +22,17 @@ export default class SignupPage extends Component {
     const emailTooltip = document.getElementById('login__email-label_danger');
     const passwordTooltip = document.getElementById('login__password-label_danger');
     const passwordRepeatTooltip = document.getElementById('login__password-repeat-label_danger');
+    const submitTooltip = document.getElementById('register__submit-label_danger');
 
     e.target.username.classList.remove('input__wrong');
     e.target.email.classList.remove('input__wrong');
     e.target.password.classList.remove('input__wrong');
     e.target.confirmPassword.classList.remove('input__wrong');
+
     usernameTooltip.classList.add('invisible');
     emailTooltip.classList.add('invisible');
     passwordTooltip.classList.add('invisible');
+    passwordRepeatTooltip.classList.add('invisible');
     passwordRepeatTooltip.classList.add('invisible');
 
     const signup = {
@@ -66,7 +69,8 @@ export default class SignupPage extends Component {
         this.props.parent.remount();
       })
       .catch((err) => {
-        alert(JSON.stringify(err));
+        submitTooltip.classList.remove('invisible');
+        submitTooltip.innerText = err ? err.error : 'none response from server';
       });
   }
 

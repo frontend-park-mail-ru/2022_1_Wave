@@ -21,11 +21,13 @@ export default class LoginPage extends Component {
 
     const usernameTooltip = document.getElementById('login__username-label_danger');
     const passwordTooltip = document.getElementById('login__password-label_danger');
+    const submitTooltip = document.getElementById('login__submit-label_danger');
 
     e.target.password.classList.remove('input__wrong');
     e.target.username.classList.remove('input__wrong');
     usernameTooltip.classList.add('invisible');
     passwordTooltip.classList.add('invisible');
+    submitTooltip.classList.add('invisible');
 
     const login = {
       password: e.target.password.value,
@@ -52,7 +54,8 @@ export default class LoginPage extends Component {
         this.props.parent.remount();
       })
       .catch((err) => {
-        alert(JSON.stringify(err));
+        submitTooltip.classList.remove('invisible');
+        submitTooltip.innerText = err ? err.error : 'none response from server';
       });
   }
 

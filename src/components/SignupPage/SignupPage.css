@@ -1,9 +1,9 @@
 .register-form__button {
     height: 45px;
     margin-left: auto;
-    width: 30vw;
+    width: 100%;
 }
 
 .register-form__input-line {
-    width: inherit;
+    width: 100%;
 }

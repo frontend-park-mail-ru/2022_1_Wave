@@ -10,6 +10,8 @@ export default class Component {
 
   #node;
 
+  static #unmounters = new Map();
+
   get props() {
     return this.#props;
   }
@@ -26,17 +28,6 @@ export default class Component {
     this.#props = { ...props };
     this.#node = null;
   }
-
-  /*
-   * Инициализировать DOM-элемент
-   * полученный после вставки HTML-кода
-   * в документ
-   * @param {HTMLElement} node - элемент DOM-дерева
-   * полученный после встаки кода, сгенерированного
-   * методом render
-   */
-  // eslint-disable-next-line class-methods-use-this
-  addEventListeners() {}
 
   /*
    * Генерирует HTML код
@@ -62,11 +53,30 @@ export default class Component {
   didMount() {}
 
   /*
-   * Должен заменить переданный DOM-элемент
+   * Вызывается внутри mount перед удалением
+   * текущего компонента из документа
+   * @param {HTMLElement} node - корневой узел
+   * добавленного на страницу компонента
+   */
+  // eslint-disable-next-line class-methods-use-this
+  willUnmount() {}
+
+  /*
+   * Заменяет переданный DOM-элемент
    * на сгененированный шаблоном код
+   * @param {HTMLElement} node - DOM-элемент
+   * который будет заменён на компонент
    */
   mount(node) {
     this.willMount();
+
+    Array.prototype.slice.call(node.querySelectorAll('[unmount-id]'))
+      .reverse()
+      .forEach((element) => {
+        const unmountId = element.getAttribute('unmount-id');
+        Component.#unmounters.get(unmountId)();
+        Component.#unmounters.delete(unmountId);
+      });
 
     const subMounters = [];
     Handlebars.registerHelper('mount', (component) => {
@@ -82,12 +92,19 @@ export default class Component {
     tempDiv.innerHTML = this.render();
     this.#node = tempDiv.firstElementChild;
 
+    const unmountId = Math.random().toString(36).slice(2);
+    Component.#unmounters.set(unmountId, this.willUnmount.bind(this, this.#node));
+    this.#node.setAttribute('unmount-id', unmountId);
+
     node.replaceWith(this.#node);
     subMounters.forEach((mounter) => mounter());
 
     this.didMount(this.#node);
   }
 
+  /*
+   * Перерисует компонент
+   */
   remount() {
     if (this.#node != null) {
       this.mount(this.#node);

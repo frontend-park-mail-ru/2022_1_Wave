@@ -54,14 +54,13 @@ export default class App extends Component {
         content = new LoginPage({ parent: this });
         break;
       default:
+        window.history.replaceState(null, '', '/');
         content = new UnauthorizedMainPage({ parent: this });
         break;
     }
 
     if (this.#user) {
-      if (window.location.pathname !== '/') {
-        window.history.replaceState(null, '', '/');
-      }
+      window.history.replaceState(null, '', '/');
       content = new MainPage({ parent: this });
     }
 

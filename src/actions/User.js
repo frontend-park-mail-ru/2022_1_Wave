@@ -17,7 +17,12 @@ export default class User {
   }
 
   static logout() {
-    return HTTPClient.post(UserPaths.logout);
+    return HTTPClient.post(UserPaths.logout).then((response) => {
+      if (response.status !== 200) {
+        return Promise.reject(response.body);
+      }
+      return response.body;
+    });
   }
 
   static login({ email, username, password }) {
@@ -25,6 +30,11 @@ export default class User {
       email,
       username,
       password,
+    }).then((response) => {
+      if (response.status !== 200) {
+        return Promise.reject(response.body);
+      }
+      return response.body;
     });
   }
 
@@ -33,6 +43,11 @@ export default class User {
       email,
       username,
       password,
-    });
+    }.then((response) => {
+      if (response.status !== 200) {
+        return Promise.reject(response.body);
+      }
+      return response.body;
+    }));
   }
 }

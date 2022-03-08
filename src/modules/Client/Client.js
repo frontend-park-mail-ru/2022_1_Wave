@@ -13,6 +13,8 @@ export default class Client {
    * @param {string} path - путь, относительно домена
    */
   static get(path) {
+    let status = null;
+
     return fetch(this.fullUrl(path), {
       method: 'GET',
       headers: {
@@ -24,11 +26,15 @@ export default class Client {
           localStorage.setItem('csrf', response.headers.get(config.csrfHeader));
         }
 
-        return {
-          status: response.status,
-          body: response.body,
-        };
-      });
+        status = response.status;
+
+        return response.json()
+          .catch(() => null);
+      })
+      .then((body) => ({
+        status,
+        body,
+      }));
   }
 
   /*
@@ -36,17 +42,24 @@ export default class Client {
    * @param {string} path - путь, относительно домена
    * @param {Object} body - тело запроса
    */
-  static post(path, body) {
+  static post(path, requestBody) {
+    let status = null;
+
     return fetch(this.fullUrl(path), {
       method: 'POST',
-      body: JSON.stringify(body),
+      body: JSON.stringify(requestBody),
       headers: {
         [config.csrfHeader]: localStorage.getItem('csrf'),
       },
     })
-      .then((response) => ({
-        status: response.status,
-        body: response.body,
+      .then((response) => {
+        status = response.status;
+        return response.json()
+          .catch(() => null);
+      })
+      .then((body) => ({
+        status,
+        body,
       }));
   }
 }

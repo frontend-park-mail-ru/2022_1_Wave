@@ -1,5 +1,9 @@
 import App from '/components/App/App.js';
+import User from '/actions/User.js';
 
-const root = document.querySelector('#root');
-const app = new App({ parent: root });
-app.mount(root);
+User.getCSRFToken()
+  .then(() => {
+    const root = document.querySelector('#root');
+    const app = new App({ parent: root });
+    app.mount(root);
+  });

@@ -1,31 +1,20 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;400&display=swap');
 
-html, body {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    width: 100vw;
-    height: 100vh;
-}
 
-main {
-    width: inherit;
-    height: inherit;
-    display: flex;
+
+.login-page {
+    box-sizing: border-box;
     background-image: url("../../assets/background.jpg");
-    background-size: cover;
     background-repeat: no-repeat;
-}
-
-.content {
-    box-sizing: border-box;
-    margin: auto;
+    background-size: 100% 100%;
+    background-position: 50%;
+    height: 100vh;
 }
 
 .login-form {
     box-sizing: border-box;
-    display: block;
-    width: 516px;
+    display: flex;
+    flex-direction: column;
     margin: auto;
 }
 
@@ -33,6 +22,12 @@ main {
     background: url("../../assets/logo.png") no-repeat;
     width: 273px;
     height: 46px;
+}
+
+.login-form_align{
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
 }
 
 .input-label {
@@ -52,12 +47,12 @@ main {
     border: none;
 
     color: #fff;
-    padding-left: 15px;
     font-family: Montserrat, serif;
     font-style: normal;
     font-weight: normal;
     font-size: 18px;
     line-height: 22px;
+    width: 30vw;
 }
 
 .button {
@@ -121,6 +116,7 @@ main {
 
 .menu-footer__line {
     border: 1px solid #444444;
+    width: 30vw;
 }
 
 .menu-footer__text {

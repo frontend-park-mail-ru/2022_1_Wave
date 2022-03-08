@@ -3,10 +3,15 @@
     height: 140px;
 }
 
+.album:hover{
+    cursor: pointer;
+}
 
 .album__image {
     width: 150px;
     height: 150px;
+    object-fit: cover;
+    border-radius: 10px;
 }
 
 .album__title {

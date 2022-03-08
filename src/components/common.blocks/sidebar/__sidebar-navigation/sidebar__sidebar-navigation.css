@@ -14,11 +14,18 @@
     height: 28px;
 }
 
+.sidebar__icon__wrapper{
+    width: 10px;
+    height: 10px;
+    margin:auto 0;
+}
+
 .sidebar-navigation-icon {
     width: 8px;
     height: 8px;
     border: 1px solid #6D7184;
     border-radius: 50%;
+    margin: auto;
 }
 
 .sidebar-navigation-text {
@@ -32,8 +39,7 @@
 }
 
 .sidebar-navigation-block__sidebar-navigation-icon {
-    float: left;
-    margin: auto 0;
+    position: fixed;
 }
 
 .sidebar-navigation-block__sidebar-navigation-icon.fa-itunes-note{

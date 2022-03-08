@@ -100,6 +100,7 @@
 
 .login-form__input-label {
     text-align: left;
+    padding-bottom: 5px;
 }
 
 .login-form__input-line {

@@ -4,10 +4,11 @@
 
 .login-page {
     box-sizing: border-box;
-    background-image: url("../../assets/background.jpg");
-    background-repeat: no-repeat;
     background-size: 100% 100%;
-    background-position: 50%;
+    background: linear-gradient(rgba(11, 18, 32, 0.5) 100%, rgba(11, 18, 32, 0.4) 100%), url("../../assets/background.jpg") no-repeat 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     height: 100vh;
 }
 
@@ -53,6 +54,7 @@
     font-size: 18px;
     line-height: 22px;
     width: 30vw;
+    padding-left: 10px;
 }
 
 .button {

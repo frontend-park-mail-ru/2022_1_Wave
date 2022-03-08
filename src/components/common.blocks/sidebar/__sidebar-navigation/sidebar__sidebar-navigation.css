@@ -38,9 +38,6 @@
     margin: auto 12px;
 }
 
-.sidebar-navigation-block__sidebar-navigation-icon {
-    position: fixed;
-}
 
 .sidebar-navigation-block__sidebar-navigation-icon.fa-itunes-note{
     display: none;

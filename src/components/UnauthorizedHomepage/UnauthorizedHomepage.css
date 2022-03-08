@@ -7,3 +7,8 @@
     text-align: center;
     margin: auto 0;
 }
+
+.navbar__link-new-page{
+    text-decoration: none;
+
+}

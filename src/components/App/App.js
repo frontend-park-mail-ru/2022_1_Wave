@@ -14,7 +14,8 @@ export default class App extends Component {
 
   render() {
     return this.#template({
-      content: window.location.pathname == '/auth' ? new SignupPage() : new MainPage(),
+      content: window.location.pathname == '/signup' ? new SignupPage() :
+        window.location.pathname == '/login' ? new LoginPage() : new UnauthorizedMainPage(),
     });
   }
 }

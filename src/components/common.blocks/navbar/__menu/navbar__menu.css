@@ -12,6 +12,9 @@
     margin: auto 0;
 }
 
+.navbar__menu__button:hover {
+    cursor: pointer;
+}
 .navbar__menu__button{
     font-size: 13px;
 }

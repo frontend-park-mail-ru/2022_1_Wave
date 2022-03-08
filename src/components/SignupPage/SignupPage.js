@@ -17,10 +17,20 @@ export default class SignupPage extends Component {
 
   submit(e) {
     e.preventDefault();
+
+    const usernameTooltip = document.getElementById('login__username-label_danger');
+    const emailTooltip = document.getElementById('login__email-label_danger');
+    const passwordTooltip = document.getElementById('login__password-label_danger');
+    const passwordRepeatTooltip = document.getElementById('login__password-repeat-label_danger');
+
     e.target.username.classList.remove('input__wrong');
     e.target.email.classList.remove('input__wrong');
     e.target.password.classList.remove('input__wrong');
     e.target.confirmPassword.classList.remove('input__wrong');
+    usernameTooltip.classList.add('invisible');
+    emailTooltip.classList.add('invisible');
+    passwordTooltip.classList.add('invisible');
+    passwordRepeatTooltip.classList.add('invisible');
 
     const signup = {
       username: e.target.username.value,
@@ -31,18 +41,22 @@ export default class SignupPage extends Component {
 
     if (!validateUsername(signup.username)) {
       e.target.username.classList.add('input__wrong');
+      usernameTooltip.classList.remove('invisible');
       return;
     }
     if (!validateEmail(signup.email)) {
       e.target.email.classList.add('input__wrong');
+      emailTooltip.classList.remove('invisible');
       return;
     }
     if (!validatePassword(signup.password)) {
       e.target.password.classList.add('input__wrong');
+      passwordTooltip.classList.remove('invisible');
       return;
     }
     if (signup.password !== signup.confirmPassword) {
       e.target.confirmPassword.classList.add('input__wrong');
+      passwordRepeatTooltip.classList.remove('invisible');
       return;
     }
 

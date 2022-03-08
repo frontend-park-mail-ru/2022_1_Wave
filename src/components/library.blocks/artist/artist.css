@@ -1,4 +1,4 @@
-.artist{
+.artist {
     display: flex;
     flex-direction: column;
     width: 100px;
@@ -6,13 +6,13 @@
     padding-right: 20px;
 }
 
-.artist__image{
+.artist__image {
     width: 80px;
     height: 80px;
     border-radius: 40px;
 }
 
-.artist__name{
+.artist__name {
     padding-top: 5px;
     font-size: 13px;
     margin: auto;

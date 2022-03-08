@@ -14,10 +14,10 @@
     height: 28px;
 }
 
-.sidebar__icon__wrapper{
+.sidebar__icon__wrapper {
     width: 10px;
     height: 10px;
-    margin:auto 0;
+    margin: auto 0;
 }
 
 .sidebar-navigation-icon {
@@ -39,7 +39,7 @@
 }
 
 
-.sidebar-navigation-block__sidebar-navigation-icon.fa-itunes-note{
+.sidebar-navigation-block__sidebar-navigation-icon.fa-itunes-note {
     display: none;
 }
 
@@ -57,6 +57,7 @@
     color: #37B8D6;
 
 }
+
 .sidebar-navigation-block:hover .sidebar-navigation-icon {
     display: none;
 }

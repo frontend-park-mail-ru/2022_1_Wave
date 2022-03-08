@@ -1,8 +1,7 @@
-
 @import '__name/logo__name.css';
 @import '__picture/logo__picture.css';
 
-.sidebar__logo{
+.sidebar__logo {
     display: flex;
     text-align: center;
     height: 40px;

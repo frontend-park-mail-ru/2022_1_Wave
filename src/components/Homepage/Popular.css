@@ -1,4 +1,4 @@
-.main__popular{
+.main__popular {
     padding-top: 70px;
     padding-left: 30px;
     display: flex;
@@ -12,7 +12,7 @@
 
 }
 
-.main__popular_slider-hidden{
+.main__popular_slider-hidden {
     overflow: hidden;
 }
 
@@ -26,10 +26,10 @@
     height: 150px;
 }
 
-.main__popular > .text{
+.main__popular > .text {
 
 }
 
-.main__popular__title{
+.main__popular__title {
     font-size: 24px;
 }

@@ -1,6 +1,6 @@
 @import '../Homepage/Popular.css';
 
-.navbar__auth__menu{
+.navbar__auth__menu {
     display: flex;
     justify-content: space-evenly;
     width: 200px;
@@ -8,7 +8,7 @@
     margin: auto 0;
 }
 
-.navbar__link-new-page{
+.navbar__link-new-page {
     text-decoration: none;
 
 }

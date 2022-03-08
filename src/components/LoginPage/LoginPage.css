@@ -1,7 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;400&display=swap');
 
 
-
 .login-page {
     box-sizing: border-box;
     background: url("../../assets/auth.png") no-repeat 50%;
@@ -26,7 +25,7 @@
     height: 46px;
 }
 
-.login-form_align{
+.login-form_align {
     display: flex;
     flex-direction: column;
     margin: 0 auto;

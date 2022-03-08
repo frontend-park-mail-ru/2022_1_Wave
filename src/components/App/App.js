@@ -3,6 +3,7 @@ import UnauthorizedMainPage from '/components/UnauthorizedMainPage/UnauthorizedM
 import LoginPage from '/components/LoginPage/LoginPage.js';
 import SignupPage from '/components/SignupPage/SignupPage.js';
 import User from '/actions/User.js';
+import MainPage from '/components/MainPage/MainPage.js';
 
 export default class App extends Component {
   #template;
@@ -44,9 +45,22 @@ export default class App extends Component {
   render() {
     console.log(this.#user);
 
-    return this.#template({
-      content: window.location.pathname == '/signup' ? new SignupPage({ parent: this }) :
-        window.location.pathname == '/login' ? new LoginPage({ parent: this }) : new UnauthorizedMainPage({ parent: this }),
-    });
+    let content = null;
+
+    if (this.#user) {
+      content = new MainPage({ parent: this });
+    } else {
+      content = new UnauthorizedMainPage({ parent: this });
+    }
+
+    if (window.location.pathname === '/signup') {
+      content = new SignupPage({ parent: this });
+    }
+
+    if (window.location.pathname === '/login') {
+      content = new LoginPage({ parent: this });
+    }
+
+    return this.#template({ content });
   }
 }

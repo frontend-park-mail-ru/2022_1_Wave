@@ -2,7 +2,5 @@
 @import '__picture/logo__picture.css';
 
 .sidebar__logo {
-    display: flex;
-    text-align: center;
-    height: 40px;
+    height: 80px;
 }

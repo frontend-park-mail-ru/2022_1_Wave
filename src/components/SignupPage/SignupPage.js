@@ -16,35 +16,44 @@ export default class SignupPage extends Component {
   }
 
   submit(e) {
+    e.preventDefault();
     e.target.username.classList.remove('input__wrong');
     e.target.email.classList.remove('input__wrong');
     e.target.password.classList.remove('input__wrong');
     e.target.confirmPassword.classList.remove('input__wrong');
 
-    const login = {
+    const signup = {
       username: e.target.username.value,
       email: e.target.email.value,
       password: e.target.password.value,
       confirmPassword: e.target.confirmPassword.value,
     };
 
-    if (!validateUsername(login.username)) {
+    if (!validateUsername(signup.username)) {
       e.target.username.classList.add('input__wrong');
       return;
     }
-    if (!validateEmail(login.email)) {
+    if (!validateEmail(signup.email)) {
       e.target.email.classList.add('input__wrong');
       return;
     }
-    if (!validatePassword(login.password)) {
+    if (!validatePassword(signup.password)) {
       e.target.password.classList.add('input__wrong');
       return;
     }
-    if (login.password !== login.confirmPassword) {
+    if (signup.password !== signup.confirmPassword) {
       e.target.confirmPassword.classList.add('input__wrong');
       return;
     }
-    User.login(login);
+
+    User.signup(signup)
+      .then(() => {
+        window.history.pushState(null, '', '/');
+        this.props.parent.remount();
+      })
+      .catch((err) => {
+        alert(JSON.stringify(err));
+      });
   }
 
   didMount(node) {

@@ -4,6 +4,6 @@ import User from '/actions/User.js';
 User.getCSRFToken()
   .then(() => {
     const root = document.querySelector('#root');
-    const app = new App({ parent: root });
+    const app = new App();
     app.mount(root);
   });

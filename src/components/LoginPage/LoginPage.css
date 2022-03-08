@@ -5,7 +5,7 @@
 .login-page {
     box-sizing: border-box;
     background: url("../../assets/auth.png") no-repeat 50%;
-    background-size: 100% 100%;
+    background-size: cover;
     display: flex;
     flex-direction: column;
     justify-content: center;

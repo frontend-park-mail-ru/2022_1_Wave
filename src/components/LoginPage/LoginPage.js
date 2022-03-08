@@ -16,6 +16,7 @@ export default class LoginPage extends Component {
   }
 
   submit(e) {
+    e.preventDefault();
     e.target.password.classList.remove('input__wrong');
     e.target.username.classList.remove('input__wrong');
 

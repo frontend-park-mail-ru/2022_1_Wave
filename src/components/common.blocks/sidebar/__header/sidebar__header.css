@@ -1,12 +1,13 @@
 .sidebar__header__logo {
-    justify-content: center;
-    margin: 0 auto;
+    margin-left: 20px;
+    height: 100px;
+    display: flex;
+    align-items: center;
 }
 
 .sidebar__header__title {
     display: flex;
     width: 100px;
-    margin: 0 auto;
     justify-content: center;
 }
 

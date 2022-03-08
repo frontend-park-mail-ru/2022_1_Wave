@@ -2,10 +2,11 @@
 
 .sidebar{
     width: 330px;
+    position: relative;
+    top: 0;
     display: inline-flex;
     flex-direction: column;
     overflow: hidden;
-
 
 }
 

@@ -44,11 +44,11 @@
     border-radius: 21px;
 }
 
-.main__top-chart__album__btn_play > .text{
+.main__top-chart__album__btn_play .text{
     margin: auto;
 }
 
-.main__top-chart__album__btn_follow > .text {
+.main__top-chart__album__btn_follow .text {
     margin: auto;
     color: #37B8D6;
 }

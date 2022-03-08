@@ -1,5 +1,5 @@
-import HTTPClient from '../modules/Client/Client.js';
-import UserPaths from '../config/User.js';
+import HTTPClient from '/modules/Client/Client.js';
+import UserPaths from '/config/User.js';
 
 export default class User {
   static getCSRFToken() {

@@ -15,6 +15,9 @@ export default class Client {
   static get(path) {
     return fetch(this.fullUrl(path), {
       method: 'GET',
+      headers: {
+        [config.csrfHeader]: localStorage.getItem('csrf'),
+      },
     })
       .then((response) => {
         if (response.headers.has(config.csrfHeader)) {

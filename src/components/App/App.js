@@ -20,9 +20,10 @@ export default class App extends Component {
     this.#isUserLoaded = false;
 
     document.addEventListener('click', (e) => {
-      if (e.target.tagName === 'A') {
+      const anchor = e.target.closest('a');
+      if (anchor) {
         e.preventDefault();
-        window.history.pushState(null, '', e.target.href);
+        window.history.pushState(null, '', anchor.href);
         this.remount();
       }
     });

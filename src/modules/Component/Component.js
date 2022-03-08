@@ -74,6 +74,7 @@ export default class Component {
       .reverse()
       .forEach((element) => {
         const unmountId = element.getAttribute('unmount-id');
+        console.log(this.constructor.name, node);
         Component.#unmounters.get(unmountId)();
         Component.#unmounters.delete(unmountId);
       });

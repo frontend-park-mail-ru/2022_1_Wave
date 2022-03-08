@@ -1,7 +1,7 @@
 import HTTPClient from '/modules/Client/Client.js';
-import Paths from '/config/Album.js';
+import Paths from '/config/Artist.js';
 
-export default class Album {
+export default class Artist {
   static getPopular() {
     return HTTPClient.get(Paths.popular)
       .then((response) => {

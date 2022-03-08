@@ -1,5 +1,5 @@
 const config = {
-  url: '',
+  url: 'http://localhost',
   csrfHeader: 'X-CSRF-TOKEN',
 };
 

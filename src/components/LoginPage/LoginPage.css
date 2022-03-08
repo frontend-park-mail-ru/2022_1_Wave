@@ -30,7 +30,7 @@
     display: flex;
     flex-direction: column;
     margin: 0 auto;
-    padding-top: 20px;
+    padding-top: 0.5rem;
 }
 
 .input-label {
@@ -100,7 +100,6 @@
 
 .login-form__input-label {
     text-align: left;
-    padding-bottom: 5px;
 }
 
 .login-form__input-line {

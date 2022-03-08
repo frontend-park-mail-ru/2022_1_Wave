@@ -4,30 +4,34 @@
         <div class="login-form_align">
             <label for="username" class="input-label login-form__input-label">Username:</label>
             <input type="text" placeholder="Username" class="input-line register-form__input-line" id="username">
+            <label id="login__username-label_danger" class="input-label login-form__input-label login-from__tooltip_danger invisible">Username have to contain at least 3 charecters (digits, letters or &#171;_&#187;)</label>
         </div>
 
         <div class="login-form_align">
             <label for="email" class="input-label login-form__input-label">Email:</label>
             <input type="email" placeholder="Email" class="input-line register-form__input-line" id="email">
+            <label id="login__email-label_danger" class="input-label login-form__input-label login-from__tooltip_danger invisible">Wrong email format</label>
         </div>
 
         <div class="login-form_align">
             <label for="password" class="input-label login-form__input-label">Password:</label>
             <input type="password" placeholder="Password" class="input-line register-form__input-line" id="password">
+            <label id="login__password-label_danger" class="input-label login-form__input-label login-from__tooltip_danger invisible">Password have to contain at least 6 charecters (digits and letters)</label>
         </div>
 
         <div class="login-form_align">
             <label for="confirmPassword" class="input-label login-form__input-label">Confirm password:</label>
             <input type="password" placeholder="Confirm Password" class="input-line register-form__input-line"
                    id="confirmPassword">
+            <label id="login__password-repeat-label_danger" class="input-label login-form__input-label login-from__tooltip_danger invisible">Passwords mismatch</label>
         </div>
 
         <div class="login-form_align">
-            <input type="submit" value="Register" class="button button_blue register-form__button">
+            <input type="submit" value="Sign up" class="button button_blue register-form__button">
         </div>
         <div class=" menu-footer login-form_align">
             <div class="menu-footer__line"></div>
-            <p class="menu-footer__text">Do you have an account?</p>
+            <p class="menu-footer__text">Already have an account?</p>
             <a  class="button button_gray menu-footer__button" href="/login" ><span>Log in</span></a>
         </div>
     </form>

@@ -19,6 +19,8 @@ export default class App extends Component {
     this.#user = null;
     this.#isUserLoaded = false;
 
+    window.addEventListener('popstate', () => this.remount());
+
     document.addEventListener('click', (e) => {
       const anchor = e.target.closest('a');
       if (anchor) {

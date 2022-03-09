@@ -16,19 +16,22 @@
     display: flex;
     flex-direction: column;
     margin: auto;
-    max-height: 80vh;
+    justify-content: space-between;
+    align-items: center;
+    width: 60%;
+    height: 60vh;
+    padding-bottom: 50px;
 }
 
 .logo {
     background: url("../../assets/logo.png") no-repeat;
     width: 273px;
-    height: 46px;
+    height: 30%;
 }
 
 .login-form_align {
-    display: flex;
-    flex-direction: column;
-    padding-top: 0.5rem;
+    width: inherit;
+    height: 20%;
 }
 
 .input-label {
@@ -42,7 +45,7 @@
 
 .input-line {
     box-sizing: border-box;
-    height: 50px;
+    height: 40px;
     background: #222730;
     border-radius: 3px;
     border: none;
@@ -60,7 +63,7 @@
     border-radius: 50px;
     border: none;
     cursor: pointer;
-
+    height: 40px;
     font-family: Montserrat, serif;
     font-style: normal;
     font-weight: normal;
@@ -83,7 +86,6 @@
 
 .login-form__button {
     width: 100%;
-    height: 45px;
 }
 
 .login-form__logo {
@@ -119,7 +121,6 @@
 .menu-footer {
     clear: both;
     display: block;
-    margin-top: 30px;
 }
 
 .menu-footer__line {
@@ -128,9 +129,7 @@
 }
 
 .menu-footer__text {
-    margin-top: 30px;
     text-align: center;
-
     font-family: Montserrat, serif;
     font-style: normal;
     font-weight: normal;
@@ -141,8 +140,6 @@
 
 .menu-footer__button {
     display: flex;
-    height: 45px;
-    margin-top: 17px;
 }
 
 .menu-footer__button span {

@@ -10,7 +10,13 @@
         "ecmaVersion": "latest",
         "sourceType": "module"
     },
+    "ignorePatterns": ["*.precompile.js"],
     "rules": {
-        "no-console": "off"
+        "no-console": "off",
+        "import/extensions": "off",
+        "import/no-absolute-path": "off",
+        "import/no-unresolved": "off",
+        "class-methods-use-this": "off",
+        "no-undef": "off"
     }
 }

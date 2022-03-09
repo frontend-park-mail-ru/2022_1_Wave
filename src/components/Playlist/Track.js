@@ -9,7 +9,9 @@ export default class Track extends Component {
   }
 
   render() {
-    const { number, title, artist, cover } = this.props;
+    const {
+      number, title, artist, cover,
+    } = this.props;
     return this.#template({
       number: number.toString().padStart(2, '0'),
       title,

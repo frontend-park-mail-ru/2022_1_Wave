@@ -1,7 +1,6 @@
 import Component from '/modules/Component/Component.js';
 import User from '/actions/User.js';
 import { validateEmail, validatePassword, validateUsername } from '/utils/User.js';
-import user from "../../config/User.js";
 
 export default class LoginPage extends Component {
   #template;

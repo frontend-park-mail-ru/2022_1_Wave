@@ -32,14 +32,12 @@ export default class Component {
   /*
    * Генерирует HTML код
    */
-  // eslint-disable-next-line class-methods-use-this
   render() {}
 
   /*
    * Вызывается внутри mount перед рендерингом
    * и добавлением на страницу
    */
-  // eslint-disable-next-line class-methods-use-this
   willMount() {}
 
   /*
@@ -49,7 +47,6 @@ export default class Component {
    * @param {HTMLElement} node - корневой узел
    * добавленного на страницу компонента
    */
-  // eslint-disable-next-line class-methods-use-this
   didMount() {}
 
   /*
@@ -58,7 +55,6 @@ export default class Component {
    * @param {HTMLElement} node - корневой узел
    * добавленного на страницу компонента
    */
-  // eslint-disable-next-line class-methods-use-this
   willUnmount() {}
 
   /*
@@ -67,7 +63,9 @@ export default class Component {
    * @param {HTMLElement} node - DOM-элемент
    * который будет заменён на компонент
    */
-  mount(node) {
+  mount(passedNode) {
+    let node = passedNode;
+
     if (!document.contains(node)) {
       return;
     }

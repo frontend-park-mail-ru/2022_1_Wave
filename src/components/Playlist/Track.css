@@ -30,6 +30,7 @@
     height: 47px;
     border-radius: 4px;
     margin-left: 20px;
+    object-fit: cover;
 }
 
 .playlist-track-block__track-info {

@@ -138,3 +138,9 @@ dist
 
 # SvelteKit build / generate output
 .svelte-kit
+
+# hbs precompiled
+*.precompile.js
+
+# JetBrains
+.idea

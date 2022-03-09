@@ -1,0 +1,10 @@
+:root {
+}
+
+.navbar {
+    --linear-gradient-blue-dark: linear-gradient(0deg, rgba(0, 0, 0, 0) 10%, rgba(1, 208, 234, 0.1) 100%);
+    --linear-gradient-blue-white: linear-gradient(90deg, rgba(33, 144, 179, 1) 0%, rgba(184, 227, 228, 1) 100%);
+    --btn-inactive: #6D7184;
+    --input-color: #0000002B;
+    --btn-hover: #37B8D6;
+}

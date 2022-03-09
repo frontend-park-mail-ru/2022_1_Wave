@@ -1,0 +1,54 @@
+@import "../../colors.css";
+
+
+.navbar__menu {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.navbar__menu__button {
+    text-align: center;
+    margin: auto 0;
+}
+
+.navbar__menu__button:hover {
+    cursor: pointer;
+}
+
+.navbar__menu__button {
+    font-size: 13px;
+}
+
+.navbar__menu__button:hover .button__text {
+    color: var(--btn-hover);
+}
+
+.navbar__menu__button::after {
+    content: '';
+    display: block;
+    margin-top: 5px;
+    width: 0;
+    height: 2px;
+    background: var(--linear-gradient-blue-white);
+    transition: width .5s;
+}
+
+.navbar__menu__button:hover::after {
+    color: var(--btn-hover);
+    width: 100%;
+}
+
+.button__text {
+    color: var(--btn-inactive);
+}
+
+/*.navbar__menu__button:hover .button__text {*/
+/*    color: var(--btn-hover);*/
+/*    border-bottom: solid 2px;*/
+/*    padding-bottom: 5px;*/
+/*    border-image-slice: 1;*/
+/*    border-image-source: var(--linear-gradient-blue-white);*/
+
+/*}*/
+

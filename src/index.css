@@ -1,1 +1,14 @@
 @import "components/App/App.css";
+
+*::-webkit-scrollbar {
+    width: 0.20rem;
+}
+
+*::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0);
+}
+
+*::-webkit-scrollbar-thumb {
+    background-color: #BEB7DF;
+    border-radius: 3px;
+}

@@ -68,14 +68,17 @@ export default class Component {
    * который будет заменён на компонент
    */
   mount(node) {
+    if (!document.contains(node)) {
+      return;
+    }
+
     this.willMount();
 
     Array.prototype.slice.call(node.querySelectorAll('[unmount-id]'))
       .reverse()
       .forEach((element) => {
         const unmountId = element.getAttribute('unmount-id');
-        console.log(this.constructor.name, node);
-        Component.#unmounters.get(unmountId)();
+        Component.#unmounters.get(unmountId)?.();
         Component.#unmounters.delete(unmountId);
       });
 

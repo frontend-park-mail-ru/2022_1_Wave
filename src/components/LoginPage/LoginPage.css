@@ -103,6 +103,13 @@
 
 .login-from__tooltip_danger {
     color: #FF6464;
+    overflow-wrap: break-word;
+}
+
+.login-from__common-tooltip_danger {
+    color: #FF6464;
+    overflow-wrap: break-word;
+    text-align: center;
 }
 
 .login-form__input-line {

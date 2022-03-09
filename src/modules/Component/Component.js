@@ -72,6 +72,11 @@ export default class Component {
       return;
     }
 
+    if (node.hasAttribute('unmount-id')) {
+      const unmountId = node.getAttribute('unmount-id');
+      node = document.querySelector(`[unmount-id="${unmountId}"]`);
+    }
+
     this.willMount();
 
     Array.prototype.slice.call(node.querySelectorAll('[unmount-id]'))

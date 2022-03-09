@@ -54,6 +54,7 @@
 }
 
 .main__top-chart__album__btn_follow {
+    box-sizing: border-box;
     display: flex;
     justify-content: center;
     background-color: rgba(11, 18, 32, 0.3);

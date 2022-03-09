@@ -15,6 +15,9 @@
 ## Дизайн
 [Figma](https://www.figma.com/file/w4crBLh2y0BzmC7fO81rd7/Wave?node-id=0%3A1)
 
+## Деплой
+[wave-music.online](http://wave-music.online)
+
 ## Основные команды для работы 
 #### Инициализация проекта:
 ```

@@ -9,17 +9,11 @@
         "build": "NODE_ENV=production webpack --mode production"
     },
     "dependencies": {
-        "@babel/cli": "^7.8.0",
-        "@babel/core": "^7.8.0",
-        "@babel/plugin-transform-react-jsx": "^7.8.0",
-        "@babel/standalone": "^7.17.7",
         "node-sass": "^6.0.1",
         "postcss-cli": "^8.3.1",
         "postcss-loader": "^6.1.1"
     },
     "devDependencies": {
-        "@babel/preset-typescript": "^7.16.7",
-        "babel-loader": "^8.2.2",
         "css-loader": "^5.2.7",
         "eslint": "^8.9.0",
         "eslint-config-airbnb-base": "^15.0.0",

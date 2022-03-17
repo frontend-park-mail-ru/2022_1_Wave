@@ -1,6 +1,5 @@
-import {createElement, appendChild} from 'engine';
 import App from './components/App/App';
-//import User from '/actions/User.js';
+import  {createElement,appendChild} from 'factory';
 
 document.getElementById('root').appendChild(<App name="foo" />);
 

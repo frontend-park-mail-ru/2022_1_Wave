@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "outDir": "./build",
+    "target": "es6",
+    "module": "es6",
+    "declaration": true,
+    "jsx": "react",
+    "jsxFactory": "createElement",
+    "allowJs": true,
+    "moduleResolution": "node",
+    "baseUrl": ".",
+    "paths": {
+      "factory": ["src/modules/Factory/factory"]
+    }
+  }
+}

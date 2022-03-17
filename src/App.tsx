@@ -4,7 +4,7 @@
 // import SignupPage from '/components/SignupPage/SignupPage.js';
 // import User from '/actions/User.js';
 // import MainPage from '/components/MainPage/MainPage.js';
-import {createElement, appendChild} from 'engine';
+import {createElement, appendChild} from 'factory';
 import './App.sass';
 
 const App = () => (

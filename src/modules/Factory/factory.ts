@@ -1,11 +1,9 @@
-export function appendChild(parent, child) {
+export function appendChild(parent: any, child: any) {
   if (Array.isArray(child)) child.forEach((nestedChild) => appendChild(parent, nestedChild));
   else parent.appendChild(child.nodeType ? child : document.createTextNode(child));
 }
 
-/** @jsx createElement */
-/** @jsxFrag createFragment */
-export function createElement(tag, props, ...children) {
+export function createElement(tag: Function | string, props: (HTMLElement | string), ...children: (HTMLElement | string)[]): HTMLElement{
   if (typeof tag === 'function') return tag(props, ...children);
   const element = document.createElement(tag);
 

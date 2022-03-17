@@ -19,7 +19,7 @@ module.exports = (env = {}) => {
   return {
     mode,
     entry: {
-      index: './src/index.jsx',
+      index: './src/index.tsx',
     },
     target: ['web', 'es6'],
     output: {
@@ -29,25 +29,19 @@ module.exports = (env = {}) => {
     },
     module: {
       rules: [
-        // Loading JS
+        // Loading TS
         {
-          test: /\.(js|jsx)$/,
-          exclude: /(node_modules|bower_components)/,
+          test: /\.(ts|tsx)$/,
+          exclude: /(node_modules)/,
           resolve: {
-            extensions: ['.js', '.jsx'],
+            extensions: ['.ts', '.tsx', '.js', '.json'],
             alias: {
-              engine: path.resolve(__dirname, 'src/modules/Engine/engine'),
+              factory: path.resolve(__dirname, 'src/modules/Factory/factory'),
             },
           },
-          use: {
-            loader: 'babel-loader',
-            options: {
-              plugins: [
-                ['@babel/plugin-transform-react-jsx',
-                  { pragma: 'createElement', pragmaFrag: "'fragment'" }],
-              ],
-            },
-          },
+          use: [
+            { loader: 'ts-loader' },
+          ],
         },
         {
           test: /\.(css)$/,

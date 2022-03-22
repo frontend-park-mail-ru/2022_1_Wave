@@ -1,7 +1,8 @@
+import { createElement } from 'factory';
 import App from './components/App/App';
-import  {createElement,appendChild} from 'factory';
 
-document.getElementById('root').appendChild(<App name="foo" />);
+
+document.getElementById('root').appendChild(<App name="Faris" />);
 
 // User.getCSRFToken()
 //   .then(() => {

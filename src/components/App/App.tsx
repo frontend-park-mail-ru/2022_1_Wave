@@ -11,40 +11,40 @@ import {store} from "../../modules/Reducers";
 
 
 const onclickTest = (e) => {
-    store.dispatch({type: 'Inc'})
+  store.dispatch({type: 'Inc'})
 }
 
 const onclickHi = (e) => {
-    store.dispatch({type: 'De'})
+  store.dispatch({type: 'De'})
 }
 
 const state = store.getState()
 const router = (): HTMLElement => {
-    let r: HTMLElement;
-    switch (window.location.pathname) {
-        case '/signup':
-            r = (<div>
-                    <div class="app" onclick={onclickHi}>
-                        Hi there
-                        <Example/>
-                    </div>
-                    <div class="test" onclick={onclickTest}>
-                        test {state.num}
-                    </div>
-                </div>
-            )
-            ;
-            break;
-        default:
-            r = (<div>'foo'</div>);
-            break;
-    }
-    return r;
+  let r: HTMLElement;
+  switch (window.location.pathname) {
+  case '/signup':
+    r = (<div>
+      <div class="app" onclick={onclickHi}>
+          Hi there
+        <Example/>
+      </div>
+      <div class="test" onclick={onclickTest}>
+          test
+      </div>
+    </div>
+    )
+    ;
+    break;
+  default:
+    r = (<div>'foo'</div>);
+    break;
+  }
+  return r;
 }
 const App = (): HTMLElement => {
-    //let {state} = appStore.getState();
-    //state.subscribe(s => state = s);
-    return router();
+  //let {state} = appStore.getState();
+  //state.subscribe(s => state = s);
+  return router();
 }
 
 export default App;

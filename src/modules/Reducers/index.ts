@@ -6,11 +6,11 @@ import {createLoggerMiddleware, createThunkMiddleware} from "../Factory/middlewa
 const combineReducers = (reducers: object) => {
   return (state, action) => {
     Object.entries(reducers)
-      .map(([name, r]) => {
+      .map(([name, reducer]) => {
         if (!state[name]) {
           state[name] = {};
         }
-        r(state[name], action);
+        reducer(state[name], action);
       });
     return state;
   }

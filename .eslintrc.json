@@ -1,11 +1,12 @@
 {
+    "root": true,
+    "extends": [
+        "airbnb-base"
+    ],
     "env": {
         "browser": true,
         "es2021": true
     },
-    "extends": [
-        "airbnb-base"
-    ],
     "parser": "@typescript-eslint/parser",
     "plugins": [
         "@typescript-eslint"
@@ -17,13 +18,25 @@
         "ecmaVersion": "latest",
         "sourceType": "module"
     },
-    "ignorePatterns": ["*.precompile.js"],
     "rules": {
         "no-console": "off",
         "import/extensions": "off",
         "import/no-absolute-path": "off",
         "import/no-unresolved": "off",
         "class-methods-use-this": "off",
-        "no-undef": "off"
-    }
+        "no-undef": "off",
+        "indent": ["error", 2]
+    },
+    "overrides": [
+        {
+            // enable the rule specifically for TypeScript files
+            "files": ["*.ts", "*.tsx"],
+            "rules": {
+                "@typescript-eslint/explicit-function-return-type": ["error",
+                    {
+                        "allowTypedFunctionExpressions": true
+                    }]
+            }
+        }
+    ]
 }

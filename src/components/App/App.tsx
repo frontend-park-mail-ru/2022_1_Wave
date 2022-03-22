@@ -4,14 +4,48 @@
 // import SignupPage from '/components/SignupPage/SignupPage.js';
 // import User from '/actions/User.js';
 // import MainPage from '/components/MainPage/MainPage.js';
-import {createElement, appendChild} from 'factory';
+import {createElement} from 'factory';
+import Example from "../AlbumCard/example";
 import './App.sass';
+import {store} from "../../modules/Reducers";
 
-const App = () => (
-  <div class="app" >
-    Hi there
-  </div>
-);
+
+const onclickTest = (e) => {
+    store.dispatch({type: 'Inc'})
+}
+
+const onclickHi = (e) => {
+    store.dispatch({type: 'De'})
+}
+
+const state = store.getState()
+const router = (): HTMLElement => {
+    let r: HTMLElement;
+    switch (window.location.pathname) {
+        case '/signup':
+            r = (<div>
+                    <div class="app" onclick={onclickHi}>
+                        Hi there
+                        <Example/>
+                    </div>
+                    <div class="test" onclick={onclickTest}>
+                        test {state.num}
+                    </div>
+                </div>
+            )
+            ;
+            break;
+        default:
+            r = (<div>'foo'</div>);
+            break;
+    }
+    return r;
+}
+const App = (): HTMLElement => {
+    //let {state} = appStore.getState();
+    //state.subscribe(s => state = s);
+    return router();
+}
 
 export default App;
 //

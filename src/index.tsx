@@ -1,5 +1,5 @@
 import { createElement } from 'factory';
-import App from './components/App/App';
+// import App from './components/App/App';
 import patch from './modules/VDom/patchNode';
 import VirtualElement from './modules/VDom/VirtualElement';
 
@@ -15,7 +15,7 @@ patch({
   oldVNode: null,
   newVNode: vnode,
   domNode: null,
-  parentDom: root,
+  parentDom: root!,
   pos: 0,
 });
 
@@ -30,8 +30,8 @@ setInterval(() => {
   patch({
     oldVNode: vnode,
     newVNode: newVnode,
-    domNode: root.firstElementChild as HTMLElement,
-    parentDom: root,
+    domNode: root!.firstElementChild as HTMLElement,
+    parentDom: root!,
     pos: 0,
   });
 

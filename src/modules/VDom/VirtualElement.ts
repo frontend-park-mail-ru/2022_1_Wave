@@ -4,14 +4,14 @@ export default class VirtualElement {
 
   public readonly props: any;
 
-  public readonly key: string | null;
+  public readonly key: string | undefined;
 
   public readonly children: Array<VirtualElement | string>;
 
   constructor(type: string, children: Array<VirtualElement | string>, key?: string) {
     this.type = type;
     this.props = {};
-    this.key = key ?? null;
+    this.key = key;
     this.children = [...children];
   }
 }

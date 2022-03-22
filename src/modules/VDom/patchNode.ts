@@ -1,6 +1,14 @@
 import VirtualElement from './VirtualElement';
 
-function patchProp(domNode: HTMLElement, propName: string, oldVal: string, newVal: string) {
+type PatchArg = {
+  oldVNode: VirtualElement | string | null,
+  newVNode: VirtualElement | string,
+  domNode: HTMLElement | null,
+  parentDom: HTMLElement,
+  pos: number,
+};
+
+function patchProp(domNode: HTMLElement, propName: string, oldVal: string, newVal: string): void {
   if (oldVal !== newVal) {
     if (!newVal) {
       domNode.removeAttribute(propName);
@@ -10,7 +18,7 @@ function patchProp(domNode: HTMLElement, propName: string, oldVal: string, newVa
   }
 }
 
-function patchProps(domNode: HTMLElement, oldProps: any, newProps: any) {
+function patchProps(domNode: HTMLElement, oldProps: any, newProps: any): void {
   const mergedProps = { ...oldProps, ...newProps };
 
   Object.keys(mergedProps).forEach((prop: string) => {
@@ -18,7 +26,7 @@ function patchProps(domNode: HTMLElement, oldProps: any, newProps: any) {
   });
 }
 
-function isAllChildrenWithKey(vnode: VirtualElement) {
+function isAllChildrenWithKey(vnode: VirtualElement): boolean {
   return vnode.children.every((child) => {
     if (child instanceof VirtualElement) {
       return (child as VirtualElement).key != null;
@@ -27,22 +35,16 @@ function isAllChildrenWithKey(vnode: VirtualElement) {
   });
 }
 
-export default function patch(initial: {
-  oldVNode: VirtualElement,
-  newVNode: VirtualElement,
-  domNode: HTMLElement,
-  parentDom: HTMLElement,
-  pos: number,
-}) {
+export default function patch(initial: PatchArg): void {
   const nodesStack = [initial];
 
   while (nodesStack.length > 0) {
     const {
       oldVNode, newVNode, domNode, parentDom, pos,
-    } = nodesStack.pop();
+    }: PatchArg = nodesStack.pop()!;
 
     if (!oldVNode || !domNode) {
-      let newElement: Node = null;
+      let newElement: Node;
       let toPlace: Node;
 
       if (newVNode instanceof VirtualElement) {
@@ -58,7 +60,8 @@ export default function patch(initial: {
       }
 
       nodesStack.push({
-        oldVNode: new VirtualElement(newVNode.type, []),
+        oldVNode: newVNode instanceof VirtualElement
+          ? new VirtualElement(newVNode.type, []) : newVNode,
         newVNode,
         domNode: newElement as HTMLElement,
         parentDom,
@@ -70,14 +73,19 @@ export default function patch(initial: {
     if (typeof newVNode === 'string') {
       if (oldVNode !== newVNode) {
         domNode.replaceWith(document.createTextNode(newVNode));
-        continue;
       }
+      continue;
     }
 
     if (typeof oldVNode === 'string' || oldVNode.type !== newVNode.type) {
+      let key: string | undefined;
+      if (oldVNode instanceof VirtualElement) {
+        key = oldVNode.key;
+      }
+
       domNode.replaceWith(document.createElement(newVNode.type));
       nodesStack.push({
-        oldVNode: new VirtualElement(newVNode.type, [], oldVNode.key),
+        oldVNode: new VirtualElement(newVNode.type, [], key),
         newVNode,
         domNode,
         parentDom,
@@ -88,7 +96,7 @@ export default function patch(initial: {
 
     patchProps(domNode, oldVNode.props, newVNode.props);
 
-    const toMount = [];
+    const toMount: PatchArg[] = [];
     if (isAllChildrenWithKey(oldVNode) && isAllChildrenWithKey(newVNode)) {
       let oldIdx = 0;
 

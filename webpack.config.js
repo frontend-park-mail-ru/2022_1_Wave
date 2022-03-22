@@ -1,8 +1,13 @@
+// eslint-disable-next-line no-undef
 const path = require('path');
+// eslint-disable-next-line no-undef
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+// eslint-disable-next-line no-undef
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
+// eslint-disable-next-line no-undef
 module.exports = (env = {}) => {
+  // eslint-disable-next-line no-undef
   const { mode = process.env.NODE_ENV || 'development' } = env;
 
   const isProd = mode === 'production';
@@ -23,6 +28,7 @@ module.exports = (env = {}) => {
     },
     target: ['web', 'es6'],
     output: {
+      // eslint-disable-next-line no-undef
       path: path.join(__dirname, 'build'),
       publicPath: '/',
       filename: '[name]-[contenthash].js',
@@ -36,6 +42,7 @@ module.exports = (env = {}) => {
           resolve: {
             extensions: ['.ts', '.tsx', '.js', '.json'],
             alias: {
+              // eslint-disable-next-line no-undef
               factory: path.resolve(__dirname, 'src/modules/Factory/factory'),
             },
           },
@@ -50,7 +57,7 @@ module.exports = (env = {}) => {
         // Loading SCSS/SASS
         {
           test: /\.s[ac]ss$/i,
-          use: [isProd ? MiniCssExtractPlugin.loader : 'style-loader', 'css-loader', 'postcss-loader', 'sass-loader'],
+          use: [isProd ? MiniCssExtractPlugin.loader : 'css-loader', 'sass-loader'],
           // use: [
           // // Creates `style` nodes from JS strings
           //   'style-loader',

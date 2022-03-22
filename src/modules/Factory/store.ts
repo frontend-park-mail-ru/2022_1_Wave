@@ -8,8 +8,8 @@ export type Store = {
 }
 
 function decorateDispatch(store, middlewareFactories) {
-  let dispatch = store.dispatch;
-  middlewareFactories.forEach(factory => {
+  let { dispatch } = store;
+  middlewareFactories.forEach((factory) => {
     dispatch = factory(store)(dispatch);
   });
   return dispatch;
@@ -28,10 +28,10 @@ export const createStore = (reducer, middlewareFactories = [], initialState = {}
       store.state = reducer(store.state, action);
       store.listeners
         .forEach((listener: ()=> void) => {
-          listener()
+          listener();
         });
     },
   };
   store.dispatch = decorateDispatch(store, middlewareFactories);
   return store;
-}
+};

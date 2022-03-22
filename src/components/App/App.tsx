@@ -4,48 +4,42 @@
 // import SignupPage from '/components/SignupPage/SignupPage.js';
 // import User from '/actions/User.js';
 // import MainPage from '/components/MainPage/MainPage.js';
-import {createElement} from 'factory';
-import Example from "../AlbumCard/example";
+import { createElement } from 'factory';
+import Example from '../AlbumCard/example';
 import './App.sass';
-import {store} from "../../modules/Reducers";
-
+import { store } from '../../modules/Reducers';
 
 const onclickTest = (e) => {
-  store.dispatch({type: 'Inc'})
-}
+  store.dispatch({ type: 'Inc' });
+};
 
 const onclickHi = (e) => {
-  store.dispatch({type: 'De'})
-}
+  store.dispatch({ type: 'De' });
+};
 
-const state = store.getState()
-const router = (): HTMLElement => {
-  let r: HTMLElement;
+const router = (): JSX.Element => {
+  let r: JSX.Element;
   switch (window.location.pathname) {
   case '/signup':
     r = (<div>
-      <div class="app" onclick={onclickHi}>
+      <div className="app" onClick={onclickHi}>
           Hi there
         <Example/>
       </div>
-      <div class="test" onclick={onclickTest}>
+      <div className="test" onClick={onclickTest}>
           test
       </div>
     </div>
-    )
-    ;
+    );
     break;
   default:
     r = (<div>'foo'</div>);
     break;
   }
   return r;
-}
-const App = (): HTMLElement => {
-  //let {state} = appStore.getState();
-  //state.subscribe(s => state = s);
-  return router();
-}
+};
+
+const App = (): HTMLElement => router();
 
 export default App;
 //

@@ -19,28 +19,28 @@ patch({
   pos: 0,
 });
 
-// setInterval(() => {
-//   counter += 1;
-//
-//   let newVnode = new VirtualElement('div', [
-//     new VirtualElement('p', [counter.toString()]),
-//     new VirtualElement('div', []),
-//   ]);
-//
-//   if (counter % 2 === 0) {
-//     newVnode = new VirtualElement('a', ['bye']);
-//   }
-//
-//   patch({
-//     oldVNode: vnode,
-//     newVNode: newVnode,
-//     domNode: root!.firstElementChild as HTMLElement,
-//     parentDom: root!,
-//     pos: 0,
-//   });
-//
-//   vnode = newVnode;
-// }, 1000);
+setInterval(() => {
+  counter += 1;
+
+  let newVnode = new VirtualElement('div', {}, [
+    new VirtualElement('p', {}, [counter.toString()]),
+    new VirtualElement('div', { class: 'black' }, []),
+  ]);
+
+  if (counter % 5 === 0) {
+    newVnode = new VirtualElement('a', {}, ['bye']);
+  }
+
+  patch({
+    oldVNode: vnode,
+    newVNode: newVnode,
+    domNode: root!.firstElementChild as HTMLElement,
+    parentDom: root!,
+    pos: 0,
+  });
+
+  vnode = newVnode;
+}, 1000);
 
 // User.getCSRFToken()
 //   .then(() => {

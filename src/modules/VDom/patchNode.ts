@@ -39,6 +39,8 @@ export default function patch(initial: PatchArg): void {
   const nodesStack = [initial];
 
   while (nodesStack.length > 0) {
+    console.log(nodesStack[nodesStack.length - 1]);
+
     const {
       oldVNode, newVNode, domNode, parentDom, pos,
     }: PatchArg = nodesStack.pop()!;
@@ -72,7 +74,8 @@ export default function patch(initial: PatchArg): void {
 
     if (typeof newVNode === 'string') {
       if (oldVNode !== newVNode) {
-        domNode.replaceWith(document.createTextNode(newVNode));
+        const newDomNode = document.createTextNode(newVNode);
+        domNode.replaceWith(newDomNode);
       }
       continue;
     }
@@ -83,11 +86,13 @@ export default function patch(initial: PatchArg): void {
         key = oldVNode.key;
       }
 
-      domNode.replaceWith(document.createElement(newVNode.type));
+      const newDomNode = document.createElement(newVNode.type);
+      domNode.replaceWith(newDomNode);
+
       nodesStack.push({
         oldVNode: new VirtualElement(newVNode.type, {}, [], key),
         newVNode,
-        domNode,
+        domNode: newDomNode as HTMLElement,
         parentDom,
         pos,
       });

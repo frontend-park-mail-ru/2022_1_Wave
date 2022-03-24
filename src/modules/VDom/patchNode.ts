@@ -35,15 +35,23 @@ function isAllChildrenWithKey(vnode: VirtualElement): boolean {
   });
 }
 
+function patchAsString(current: PatchArg, nodesStack: PatchArg[]): void {
+}
+
+function patchAsVNode(current: PatchArg, nodesStack: PatchArg[]): void {
+}
+
+function patchChildren(current: PatchArg, nodesStack: PatchArg[]): void {
+}
+
 export default function patch(initial: PatchArg): void {
   const nodesStack = [initial];
 
   while (nodesStack.length > 0) {
-    console.log(nodesStack[nodesStack.length - 1]);
-
+    const current: PatchArg = nodesStack.pop()!;
     const {
       oldVNode, newVNode, domNode, parentDom, pos,
-    }: PatchArg = nodesStack.pop()!;
+    }: PatchArg = current;
 
     if (!oldVNode || !domNode) {
       let newElement: Node;
@@ -55,10 +63,10 @@ export default function patch(initial: PatchArg): void {
         toPlace = document.createTextNode(newVNode);
       }
 
-      if (parentDom.childNodes.length > pos) {
-        newElement = parentDom.insertBefore(toPlace, parentDom.childNodes[pos]);
-      } else {
+      if (parentDom.childNodes.length <= pos) {
         newElement = parentDom.appendChild(toPlace);
+      } else {
+        newElement = parentDom.insertBefore(toPlace, parentDom.childNodes[pos]);
       }
 
       nodesStack.push({
@@ -146,9 +154,9 @@ export default function patch(initial: PatchArg): void {
         });
       });
     }
-    toMount.forEach((item) => {
-      nodesStack.push(item);
-    });
+    while (toMount.length > 0) {
+      nodesStack.push(toMount.pop()!);
+    }
 
     const toUnmount = Array.from<Node>(domNode.childNodes).slice(newVNode.children.length);
 

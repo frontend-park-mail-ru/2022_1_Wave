@@ -8,9 +8,9 @@ export default class VirtualElement {
 
   public readonly children: Array<VirtualElement | string>;
 
-  constructor(type: string, children: Array<VirtualElement | string>, key?: string) {
+  constructor(type: string, props: any, children: Array<VirtualElement | string>, key?: string) {
     this.type = type;
-    this.props = {};
+    this.props = props;
     this.key = key;
     this.children = [...children];
   }

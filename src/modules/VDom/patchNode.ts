@@ -61,7 +61,7 @@ export default function patch(initial: PatchArg): void {
 
       nodesStack.push({
         oldVNode: newVNode instanceof VirtualElement
-          ? new VirtualElement(newVNode.type, []) : newVNode,
+          ? new VirtualElement(newVNode.type, {}, []) : newVNode,
         newVNode,
         domNode: newElement as HTMLElement,
         parentDom,
@@ -85,7 +85,7 @@ export default function patch(initial: PatchArg): void {
 
       domNode.replaceWith(document.createElement(newVNode.type));
       nodesStack.push({
-        oldVNode: new VirtualElement(newVNode.type, [], key),
+        oldVNode: new VirtualElement(newVNode.type, {}, [], key),
         newVNode,
         domNode,
         parentDom,
@@ -148,7 +148,7 @@ export default function patch(initial: PatchArg): void {
     const toUnmount = Array.from<Node>(domNode.childNodes).slice(newVNode.children.length);
 
     toUnmount.forEach((node) => {
-      parentDom.removeChild(node);
+      domNode.removeChild(node);
     });
   }
 }

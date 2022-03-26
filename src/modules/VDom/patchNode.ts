@@ -1,8 +1,6 @@
 import VirtualElement from './VirtualElement';
 import Component from './Component';
-
-const ComponentAttr = Symbol('component');
-const VNodeAttr = Symbol('virtualElement');
+import { ComponentAttr, VNodeAttr } from './Symbols';
 
 type PatchArg = {
   oldVNode: VirtualElement | string | null,
@@ -159,6 +157,7 @@ function patchAsString(
   newVNode: string,
 ): void {
   if (oldVNode !== newVNode) {
+    prepareVNodeRemove(oldVNode);
     domNode.replaceWith(document.createTextNode(newVNode));
   }
 }
@@ -179,13 +178,24 @@ function patchAsVNode(
       key = oldVNode.key;
     }
 
-    const newDomNode = document.createElement(newVNode.type as string);
-    domNode.replaceWith(newDomNode);
+    const newElement = document.createElement(newVNode.type as string);
+
+    if (newVNode.ref) {
+      newVNode.ref.instance = newElement as HTMLElement;
+    }
+
+    if (newVNode.component) {
+      (newElement as any)[ComponentAttr] = newVNode.component;
+      (newElement as any)[VNodeAttr] = newVNode;
+      newVNode.component.node = newElement as HTMLElement;
+    }
+
+    domNode.replaceWith(newElement);
 
     nodesStack.push({
       oldVNode: new VirtualElement(newVNode.type, {}, [], key),
       newVNode,
-      domNode: newDomNode as HTMLElement,
+      domNode: newElement as HTMLElement,
       parentDom,
       pos,
     });
@@ -206,17 +216,32 @@ function patchAsComponent(
   commitChangesStack: Array<() => void>,
 ): void {
   let component: Component;
+  let updatedOldVNode = oldVNode;
+  let updatedDomNode = domNode;
 
   if (oldVNode && domNode && (domNode as any)[ComponentAttr]) {
     component = (domNode as any)[ComponentAttr] as Component;
 
-    const snapshot: any = component.makeSnapshot();
-    commitChangesStack.push(() => component.didUpdate(snapshot));
+    if (Object.getPrototypeOf(component).constructor === newVNode.type) {
+      const prevProps = component.props;
+      component.setProps(newVNode.props);
+      const snapshot = component.makeSnapshot(prevProps, component.state);
+      commitChangesStack.push(() => component.didUpdate(snapshot));
+    } else {
+      prepareVNodeRemove(oldVNode);
+      domNode.remove();
+      updatedOldVNode = null;
+      updatedDomNode = null;
+
+      component = new (newVNode.type as (new (props: any) => Component))(newVNode.props);
+      commitChangesStack.push(() => component.didMount());
+    }
   } else {
-    component = new (newVNode.type as (new () => Component))();
+    component = new (newVNode.type as (new (props: any) => Component))(newVNode.props);
     commitChangesStack.push(() => component.didMount());
   }
 
+  component.children = newVNode.children;
   const rendered = component.render();
   rendered.component = component;
 
@@ -226,9 +251,9 @@ function patchAsComponent(
   }
 
   nodesStack.push({
-    oldVNode,
+    oldVNode: updatedOldVNode,
     newVNode: rendered,
-    domNode,
+    domNode: updatedDomNode,
     parentDom,
     pos,
   });
@@ -260,9 +285,14 @@ function placeIntoDom(
     newElement = parentDom.insertBefore(toPlace, parentDom.childNodes[pos]);
   }
 
+  if (newVNode instanceof VirtualElement && newVNode.ref) {
+    newVNode.ref.instance = newElement as HTMLElement;
+  }
+
   if (newVNode instanceof VirtualElement && newVNode.component) {
     (newElement as any)[ComponentAttr] = newVNode.component;
     (newElement as any)[VNodeAttr] = newVNode;
+    newVNode.component.node = newElement as HTMLElement;
   }
 
   nodesStack.push({
@@ -312,5 +342,21 @@ export default function patch(initial: PatchArg): void {
 
   while (commitChangesStack.length > 0) {
     commitChangesStack.pop()!();
+  }
+
+  const { oldVNode, newVNode }: PatchArg = initial;
+  if (
+    oldVNode
+    && oldVNode instanceof VirtualElement
+    && oldVNode.parent
+    && oldVNode.pos
+    && newVNode
+  ) {
+    oldVNode.parent.children[oldVNode.pos] = newVNode;
+
+    if (newVNode instanceof VirtualElement) {
+      newVNode.parent = oldVNode.parent;
+      newVNode.pos = oldVNode.pos;
+    }
   }
 }

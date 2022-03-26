@@ -1,4 +1,5 @@
 import Component from './Component';
+import Ref from './Ref';
 
 export default class VirtualElement {
   public readonly type: string | Function;
@@ -13,11 +14,16 @@ export default class VirtualElement {
 
   public parent: VirtualElement | null;
 
+  public pos: number | null;
+
+  public ref: Ref | undefined;
+
   constructor(
     type: string | Function,
     props: any,
     children: Array<VirtualElement | string>,
     key?: string,
+    ref?: Ref,
   ) {
     this.type = type;
     this.props = props;
@@ -25,10 +31,13 @@ export default class VirtualElement {
     this.children = [...children];
     this.component = null;
     this.parent = null;
+    this.pos = null;
+    this.ref = ref;
 
-    this.children.forEach((child) => {
+    this.children.forEach((child, idx) => {
       if (child instanceof VirtualElement) {
         child.parent = this;
+        child.pos = idx;
       }
     });
   }

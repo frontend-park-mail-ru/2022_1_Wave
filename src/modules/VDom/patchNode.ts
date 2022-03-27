@@ -111,6 +111,19 @@ function patchProp(domNode: HTMLElement, propName: string, oldVal: any, newVal: 
     return;
   }
 
+  if (propName === 'style') {
+    const styleString = Object.entries(newVal)
+      .filter(([key]) => key)
+      .map(([key, value]) => `${key}: ${value};`)
+      .join(' ');
+
+    if (styleString && styleString !== domNode.style.cssText) {
+      domNode.style.cssText = styleString;
+    }
+
+    return;
+  }
+
   if (oldVal !== newVal) {
     if (!newVal) {
       domNode.removeAttribute(propName);

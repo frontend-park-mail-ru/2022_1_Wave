@@ -5,14 +5,14 @@
     "module": "es6",
     "declaration": true,
     "jsx": "react",
-    "jsxFactory": "createElement",
+    "jsxFactory": "VDom.createElement",
     "allowJs": false,
     "noImplicitAny": true,
     "strictNullChecks": true,
     "moduleResolution": "node",
     "baseUrl": ".",
     "paths": {
-      "factory": ["src/modules/Factory/factory"]
+      "factory": ["src/modules/VDom/createElement"]
     }
   }
 }

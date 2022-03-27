@@ -1,70 +1,66 @@
-import { createElement } from 'factory';
+import VDom from './modules/VDom';
 // import App from './components/App/App';
-import patch from './modules/VDom/patchNode';
 import VirtualElement from './modules/VDom/VirtualElement';
-import Player from './components/common/Player/Player';
-import "@fortawesome/fontawesome-free/js/all.js";
-import "@fortawesome/fontawesome-free/css/all.css";
+import Component from './modules/VDom/Component';
+import Ref from './modules/VDom/Ref';
 import render from './modules/VDom/render';
 
+class Dummy extends Component {
+  render = (): VirtualElement => (
+    <div>
+      <p>{this.props.data}</p>
+    </div>
+  );
+}
 
-render(<Player/>,document.getElementById('root')!);
-//____________________-test
-const config = { attributes: true, childList: true, subtree: true };
+class DummyParent extends Component {
+  render = (): VirtualElement => {
+    const children = this.children.map((child) => (
+      <div class='child'>
+        {child}
+      </div>
+    ));
 
-const targetNode = document.getElementById('root');
+    return (
+      <div>
+        {children}
+      </div>
+    );
+  };
+}
 
-const observer = new MutationObserver((mutationsList, observer) =>{
-  for(const mutation of mutationsList) {
-    if (mutation.type === 'childList') {
-      if( mutation.addedNodes[0].nodeName == 'AUDIO'){
+class DummyApp extends Component {
+  constructor(props: any) {
+    super(props);
 
-        mutation.addedNodes[0].addEventListener('progress',progress);
-        mutation.addedNodes[0].addEventListener('timeupdated',timeupdate);
-
-      }
-    }
-    else if (mutation.type === 'attributes') {
-      console.log('The ' + mutation.attributeName + ' attribute was modified.');
-    }
+    this.state = {
+      counter: 0,
+    };
   }
-});
 
-observer.observe(targetNode, config);
+  handler = (e: Event) => console.log(e);
 
-function progress(e) {
-  console.log('Event:',e);
-  const audio = document.querySelector('audio');
-  console.log('Audio tag',audio);
-  let bufferedEnd =  audio.buffered.end(audio.buffered.length - 1);
-  let duration = audio.duration;
-  console.log(((bufferedEnd / duration)*100) + "%");
-  // const targer = e.currentTarget;
-  // console.log('Target:',targer)
-  // console.log('Audio:', targer.currentTime,targer.duration);
+  render = (): VirtualElement => (
+    <div onclick={(e) => console.log(e)} style={{
+      background: 'cyan',
+    }}>
+      <Dummy data='Counter:'/>
+      <Dummy data={this.state.counter.toString()}/>
+      <DummyParent>
+        <p>first</p>
+        <p>second</p>
+        <p>third</p>
+      </DummyParent>
+      <Dummy data='footer'/>
+    </div>
+  );
+
+  didMount(): void {
+    setInterval(() => this.setState({ counter: this.state.counter + 1 }), 1000);
+  }
 }
 
-function timeupdate(e) {
-  console.log('Event:',e);
-  const audio = document.querySelector('audio');
-  let duration = audio.duration;
-  console.log(((myAudio.currentTime / duration)*100) + "%");
-
-}
-document.querySelector('body').addEventListener('click', (e) => {
-
-  if (navigator.mediaSession.playbackState === 'playing') {
-    // mySound.pause();
-    navigator.mediaSession.playbackState = 'paused';
-  } else {
-    // mySound.play()
-    //   .then(() => {
-    //     navigator.mediaSession.playbackState = 'playing';
-    //     console.log('started music', mySound.buffered, mySound.duration/60, mySound.preload);
-  });
-}
-});
-//____________________-end test
+render(<DummyApp/>, document.getElementById('root')!);
 
 // User.getCSRFToken()
 //   .then(() => {

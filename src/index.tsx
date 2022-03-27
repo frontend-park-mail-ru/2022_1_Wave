@@ -1,46 +1,70 @@
-import {appendChild, createElement} from 'factory';
+import { createElement } from 'factory';
 // import App from './components/App/App';
 import patch from './modules/VDom/patchNode';
 import VirtualElement from './modules/VDom/VirtualElement';
+import Player from './components/common/Player/Player';
+import "@fortawesome/fontawesome-free/js/all.js";
+import "@fortawesome/fontawesome-free/css/all.css";
+import render from './modules/VDom/render';
 
-let counter = 0;
 
-// document.getElementById('root').appendChild(<App name="Faris" />);
-let vnode = new VirtualElement('div', {}, [
-  new VirtualElement('p', {}, [counter.toString()]),
-  new VirtualElement('div', { class: 'black' }, []),
-]);
-const root = document.getElementById('root');
-patch({
-  oldVNode: null,
-  newVNode: vnode,
-  domNode: null,
-  parentDom: root!,
-  pos: 0,
+render(<Player/>,document.getElementById('root')!);
+//____________________-test
+const config = { attributes: true, childList: true, subtree: true };
+
+const targetNode = document.getElementById('root');
+
+const observer = new MutationObserver((mutationsList, observer) =>{
+  for(const mutation of mutationsList) {
+    if (mutation.type === 'childList') {
+      if( mutation.addedNodes[0].nodeName == 'AUDIO'){
+
+        mutation.addedNodes[0].addEventListener('progress',progress);
+        mutation.addedNodes[0].addEventListener('timeupdated',timeupdate);
+
+      }
+    }
+    else if (mutation.type === 'attributes') {
+      console.log('The ' + mutation.attributeName + ' attribute was modified.');
+    }
+  }
 });
 
-setInterval(() => {
-  counter += 1;
+observer.observe(targetNode, config);
 
-  let newVnode = new VirtualElement('div', {}, [
-    new VirtualElement('p', {}, [counter.toString()]),
-    new VirtualElement('div', { class: 'black' }, []),
-  ]);
+function progress(e) {
+  console.log('Event:',e);
+  const audio = document.querySelector('audio');
+  console.log('Audio tag',audio);
+  let bufferedEnd =  audio.buffered.end(audio.buffered.length - 1);
+  let duration = audio.duration;
+  console.log(((bufferedEnd / duration)*100) + "%");
+  // const targer = e.currentTarget;
+  // console.log('Target:',targer)
+  // console.log('Audio:', targer.currentTime,targer.duration);
+}
 
-  if (counter % 5 === 0) {
-    newVnode = new VirtualElement('a', {}, ['bye']);
-  }
+function timeupdate(e) {
+  console.log('Event:',e);
+  const audio = document.querySelector('audio');
+  let duration = audio.duration;
+  console.log(((myAudio.currentTime / duration)*100) + "%");
 
-  patch({
-    oldVNode: vnode,
-    newVNode: newVnode,
-    domNode: root!.firstElementChild as HTMLElement,
-    parentDom: root!,
-    pos: 0,
+}
+document.querySelector('body').addEventListener('click', (e) => {
+
+  if (navigator.mediaSession.playbackState === 'playing') {
+    // mySound.pause();
+    navigator.mediaSession.playbackState = 'paused';
+  } else {
+    // mySound.play()
+    //   .then(() => {
+    //     navigator.mediaSession.playbackState = 'playing';
+    //     console.log('started music', mySound.buffered, mySound.duration/60, mySound.preload);
   });
-
-  vnode = newVnode;
-}, 1000);
+}
+});
+//____________________-end test
 
 // User.getCSRFToken()
 //   .then(() => {

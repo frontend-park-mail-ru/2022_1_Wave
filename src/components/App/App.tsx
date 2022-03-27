@@ -6,7 +6,7 @@
 // import MainPage from '/components/MainPage/MainPage.js';
 import { createElement } from 'factory';
 import Example from '../AlbumCard/example';
-import './App.sass';
+import './App.scss';
 import { store } from '../../modules/Reducers';
 
 const onclickTest = (e) => {

@@ -1,0 +1,76 @@
+
+.player {
+  background-color: #17132C;
+  height: 85px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+
+  & > * {
+    height: 100%;
+    align-items: center;
+  }
+  .player__waves {
+    background-color: #53d927;
+    width: 10%;
+  }
+
+  .player__track {
+    width: 250px;
+    background-color: #257e8a;
+    display: inline-flex;
+    .track__picture {
+      height: 50px;
+      width: 50px;
+      border-radius: 5px;
+      object-fit: cover;
+    }
+    .track__name {
+      padding-left: 15px;
+      .track__name__title {
+
+      }
+      .track__name__author {
+        font-size: 12px;
+        color: #6D7184;
+      }
+    }
+  }
+  .player__control {
+    width: 130px;
+    background-color: #222730;
+    display: inline-flex;
+    & > * {
+      color: #BEB7DF;
+    }
+    .control__prev{
+
+    }
+    .control__play_pause {
+      height: 35px;
+      width: 35px;
+    }
+    .control__next {
+
+    }
+  }
+  .player__progressbar {
+    background-color: #FF6464;
+    flex-grow: 1;
+  }
+  .player__shuffle {
+    background-color: #222730;
+    width: 60px;
+  }
+  .player__volume {
+    width: 10%;
+    background-color: #257e8a;
+  }
+}
+
+audio {
+  background: yellow;
+  display: block;
+}

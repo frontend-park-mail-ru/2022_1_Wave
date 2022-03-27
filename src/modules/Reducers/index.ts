@@ -1,30 +1,26 @@
-//import {createAsyncThunk} from "../Factory/thunk";
-import {createStore} from "../Factory/store";
-import {createLoggerMiddleware, createThunkMiddleware} from "../Factory/middleware";
+import { createStore } from '../Store/store';
+import { createLoggerMiddleware, createThunkMiddleware } from '../Store/middleware';
 
+const combineReducers = (reducers: Function[]) :object => (state:object, action: Function) => {
+  Object.entries(reducers)
+    .map(([name, reducer]):void => {
+      if (!state[name]) {
+        state[name] = {};
+      }
+      reducer(state[name], action);
+    });
+  return state;
+};
 
-const combineReducers = (reducers: object) => {
-  return (state, action) => {
-    Object.entries(reducers)
-      .map(([name, reducer]) => {
-        if (!state[name]) {
-          state[name] = {};
-        }
-        reducer(state[name], action);
-      });
-    return state;
-  }
-}
-
-const reducer1 = (state, action): object => {
-  if(!state.num){
+const reducer1 = (state: object, action): object => {
+  if (!state.num) {
     state.num = 0;
   }
   switch (action.type) {
-  case "Inc":
+  case 'Inc':
     state.num++;
     break;
-  case "Dec":
+  case 'Dec':
     state.num--;
     break;
   }
@@ -32,20 +28,20 @@ const reducer1 = (state, action): object => {
 };
 
 const reducer2 = (state, action): object => {
-  if(!state.num){
+  if (!state.num) {
     state.num = 0;
   }
   switch (action.type) {
-  case "In":
+  case 'In':
     state.num++;
     break;
-  case "De":
+  case 'De':
     state.num--;
     break;
   }
   return state;
 };
 
-const rootReducer = combineReducers({reducer1, reducer2})
+const rootReducer = combineReducers({ reducer1, reducer2 });
 const middleWares = [createLoggerMiddleware, createThunkMiddleware];
 export const store = createStore(rootReducer, middleWares, {});

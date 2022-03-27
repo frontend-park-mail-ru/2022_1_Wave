@@ -2,12 +2,13 @@ export type Store = {
     state: object,
     listeners: object[],
     getState: () => void,
-    subscribe: (listener: object) => void,
-    dispatch: (action: object) => void,
+    subscribe: Function,
+    dispatch: Function,
 
 }
 
-function decorateDispatch(store, middlewareFactories) {
+type MiddlewareFactory = (store: Store) => (dispatch: Function) => Function
+function decorateDispatch(store: Store, middlewareFactories: MiddlewareFactory[]):Function {
   let { dispatch } = store;
   middlewareFactories.forEach((factory) => {
     dispatch = factory(store)(dispatch);
@@ -15,7 +16,12 @@ function decorateDispatch(store, middlewareFactories) {
   return dispatch;
 }
 
-export const createStore = (reducer, middlewareFactories = [], initialState = {}): Store => {
+export type Reducer = (state:object,action:Function) => Function;
+export const createStore = (
+  reducer: Reducer,
+  middlewareFactories: MiddlewareFactory[] = [],
+  initialState:any = {},
+): Store => {
   const store: Store = {
     state: initialState,
     listeners: [],

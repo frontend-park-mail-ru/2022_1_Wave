@@ -57,7 +57,7 @@ module.exports = (env = {}) => {
         // Loading SCSS/SASS
         {
           test: /\.s[ac]ss$/i,
-          use: [isProd ? MiniCssExtractPlugin.loader : 'css-loader', 'sass-loader'],
+          use: [isProd ? MiniCssExtractPlugin.loader : 'style-loader', 'css-loader', 'postcss-loader', 'sass-loader'],
           // use: [
           // // Creates `style` nodes from JS strings
           //   'style-loader',
@@ -92,11 +92,18 @@ module.exports = (env = {}) => {
     },
     plugins: getPlugins(),
     devServer: {
-      // the historyAPIFallback allows react-router to work
-      historyApiFallback: true,
       proxy: {
-        // when a requst to /api is done, we want to apply a proxy
         '/api': {
+          changeOrigin: true,
+          cookieDomainRewrite: 'localhost',
+          target: 'http://localhost',
+          onProxyReq: (proxyReq) => {
+            if (proxyReq.getHeader('origin')) {
+              proxyReq.setHeader('origin', 'http://localhost');
+            }
+          },
+        },
+        '/assets': {
           changeOrigin: true,
           cookieDomainRewrite: 'localhost',
           target: 'http://localhost',

@@ -1,6 +1,10 @@
 import VirtualElement from './VirtualElement';
 import Component from './Component';
-import { ComponentAttr, VNodeAttr } from './Symbols';
+import { ComponentAttr, VNodeAttr, HandlersAttr } from './Symbols';
+import { createHandlersStable, HandlersTable } from './Types';
+
+const EVENT_PREFIX = 'on';
+const CAPTURE_SUFFIX = 'capture';
 
 type PatchArg = {
   oldVNode: VirtualElement | string | null,
@@ -17,6 +21,21 @@ function isAllChildrenWithKey(vnode: VirtualElement): boolean {
     }
     return false;
   });
+}
+
+function initNewElement(newElement: HTMLElement, newVNode: VirtualElement): void {
+  newVNode.domNode = newElement;
+
+  if (newVNode.ref) {
+    newVNode.ref.instance = newElement;
+  }
+
+  if (newVNode.component) {
+    (newElement as any)[ComponentAttr] = newVNode.component;
+    (newElement as any)[VNodeAttr] = newVNode;
+    (newElement as any)[HandlersAttr] = createHandlersStable();
+    newVNode.component.node = newElement;
+  }
 }
 
 function prepareVNodeRemove(oldVNode: VirtualElement | string | null): void {
@@ -61,7 +80,37 @@ function prepareVNodeRemove(oldVNode: VirtualElement | string | null): void {
   }
 }
 
-function patchProp(domNode: HTMLElement, propName: string, oldVal: string, newVal: string): void {
+function patchProp(domNode: HTMLElement, propName: string, oldVal: any, newVal: any): void {
+  const lowerPropName = propName.toLowerCase();
+
+  if (lowerPropName.startsWith(EVENT_PREFIX)) {
+    const descriptorName = lowerPropName.slice(EVENT_PREFIX.length);
+    const useCapture = descriptorName.endsWith(CAPTURE_SUFFIX);
+    const eventName = useCapture
+      ? descriptorName.slice(0, descriptorName.length - CAPTURE_SUFFIX.length)
+      : descriptorName;
+
+    if (oldVal !== newVal) {
+      const handlers = (domNode as any)[HandlersAttr] as HandlersTable;
+      const oldHandler = handlers.get(descriptorName)?.handler;
+      if (oldHandler) {
+        domNode.removeEventListener(eventName, oldHandler, useCapture);
+      }
+      handlers.delete(descriptorName);
+
+      if (newVal) {
+        handlers.set(descriptorName, {
+          eventName,
+          handler: newVal as EventListener,
+          useCapture,
+        });
+        domNode.addEventListener(eventName, newVal as EventListener, useCapture);
+      }
+    }
+
+    return;
+  }
+
   if (oldVal !== newVal) {
     if (!newVal) {
       domNode.removeAttribute(propName);
@@ -180,15 +229,7 @@ function patchAsVNode(
 
     const newElement = document.createElement(newVNode.type as string);
 
-    if (newVNode.ref) {
-      newVNode.ref.instance = newElement as HTMLElement;
-    }
-
-    if (newVNode.component) {
-      (newElement as any)[ComponentAttr] = newVNode.component;
-      (newElement as any)[VNodeAttr] = newVNode;
-      newVNode.component.node = newElement as HTMLElement;
-    }
+    initNewElement(newElement as HTMLElement, newVNode);
 
     domNode.replaceWith(newElement);
 
@@ -285,14 +326,8 @@ function placeIntoDom(
     newElement = parentDom.insertBefore(toPlace, parentDom.childNodes[pos]);
   }
 
-  if (newVNode instanceof VirtualElement && newVNode.ref) {
-    newVNode.ref.instance = newElement as HTMLElement;
-  }
-
-  if (newVNode instanceof VirtualElement && newVNode.component) {
-    (newElement as any)[ComponentAttr] = newVNode.component;
-    (newElement as any)[VNodeAttr] = newVNode;
-    newVNode.component.node = newElement as HTMLElement;
+  if (newVNode instanceof VirtualElement) {
+    initNewElement(newElement as HTMLElement, newVNode);
   }
 
   nodesStack.push({
@@ -357,6 +392,8 @@ export default function patch(initial: PatchArg): void {
     if (newVNode instanceof VirtualElement) {
       newVNode.parent = oldVNode.parent;
       newVNode.pos = oldVNode.pos;
+
+      newVNode.parent.children[newVNode.pos] = newVNode;
     }
   }
 }

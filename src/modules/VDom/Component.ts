@@ -52,6 +52,8 @@ export default abstract class Component<Props = any, State = any, Snapshot = any
     const parentDom = domNode.parentElement!;
     const pos = oldVNode!.pos!;
 
+    newVNode.component = this;
+
     patch({
       newVNode,
       oldVNode,

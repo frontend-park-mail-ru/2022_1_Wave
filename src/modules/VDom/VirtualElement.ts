@@ -1,5 +1,7 @@
 import Component from './Component';
 import Ref from './Ref';
+import { HandlersAttr } from './Symbols';
+import { HandlersTable, HandlerDescriptor } from './Types';
 
 export default class VirtualElement {
   public readonly type: string | Function;
@@ -18,6 +20,8 @@ export default class VirtualElement {
 
   public ref: Ref | undefined;
 
+  public domNode: HTMLElement | null;
+
   constructor(
     type: string | Function,
     props: any,
@@ -33,6 +37,7 @@ export default class VirtualElement {
     this.parent = null;
     this.pos = null;
     this.ref = ref;
+    this.domNode = null;
 
     this.children.forEach((child, idx) => {
       if (child instanceof VirtualElement) {
@@ -43,5 +48,11 @@ export default class VirtualElement {
   }
 
   destruct(): void {
+    const handlers = (this.domNode as any)?.[HandlersAttr] as HandlersTable | null;
+
+    handlers?.forEach((descriptor) => {
+      const { eventName, handler, useCapture }: HandlerDescriptor = descriptor;
+      this.domNode?.removeEventListener(eventName, handler, useCapture);
+    });
   }
 }

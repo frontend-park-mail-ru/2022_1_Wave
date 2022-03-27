@@ -1,5 +1,5 @@
-import VirtualElement from '../VDom/VirtualElement';
-import Ref from '../VDom/Ref';
+import VirtualElement from './VirtualElement';
+import Ref from './Ref';
 
 export default function createElement(
   type: string | Function,

@@ -43,7 +43,7 @@ module.exports = (env = {}) => {
             extensions: ['.ts', '.tsx', '.js', '.json'],
             alias: {
               // eslint-disable-next-line no-undef
-              factory: path.resolve(__dirname, 'src/modules/Factory/factory'),
+              factory: path.resolve(__dirname, 'src/modules/VDom/createElement'),
             },
           },
           use: [

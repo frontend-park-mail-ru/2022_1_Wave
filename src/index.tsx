@@ -1,46 +1,66 @@
-import {appendChild, createElement} from 'factory';
+import VDom from './modules/VDom';
 // import App from './components/App/App';
-import patch from './modules/VDom/patchNode';
 import VirtualElement from './modules/VDom/VirtualElement';
+import Component from './modules/VDom/Component';
+import Ref from './modules/VDom/Ref';
+import render from './modules/VDom/render';
 
-let counter = 0;
+class Dummy extends Component {
+  render = (): VirtualElement => (
+    <div>
+      <p>{this.props.data}</p>
+    </div>
+  );
+}
 
-// document.getElementById('root').appendChild(<App name="Faris" />);
-let vnode = new VirtualElement('div', {}, [
-  new VirtualElement('p', {}, [counter.toString()]),
-  new VirtualElement('div', { class: 'black' }, []),
-]);
-const root = document.getElementById('root');
-patch({
-  oldVNode: null,
-  newVNode: vnode,
-  domNode: null,
-  parentDom: root!,
-  pos: 0,
-});
+class DummyParent extends Component {
+  render = (): VirtualElement => {
+    const children = this.children.map((child) => (
+      <div class='child'>
+        {child}
+      </div>
+    ));
 
-setInterval(() => {
-  counter += 1;
+    return (
+      <div>
+        {children}
+      </div>
+    );
+  };
+}
 
-  let newVnode = new VirtualElement('div', {}, [
-    new VirtualElement('p', {}, [counter.toString()]),
-    new VirtualElement('div', { class: 'black' }, []),
-  ]);
+class DummyApp extends Component {
+  constructor(props: any) {
+    super(props);
 
-  if (counter % 5 === 0) {
-    newVnode = new VirtualElement('a', {}, ['bye']);
+    this.state = {
+      counter: 0,
+    };
   }
 
-  patch({
-    oldVNode: vnode,
-    newVNode: newVnode,
-    domNode: root!.firstElementChild as HTMLElement,
-    parentDom: root!,
-    pos: 0,
-  });
+  handler = (e: Event) => console.log(e);
 
-  vnode = newVnode;
-}, 1000);
+  render = (): VirtualElement => (
+    <div onclick={(e) => console.log(e)} style={{
+      background: 'cyan',
+    }}>
+      <Dummy data='Counter:'/>
+      <Dummy data={this.state.counter.toString()}/>
+      <DummyParent>
+        <p>first</p>
+        <p>second</p>
+        <p>third</p>
+      </DummyParent>
+      <Dummy data='footer'/>
+    </div>
+  );
+
+  didMount(): void {
+    setInterval(() => this.setState({ counter: this.state.counter + 1 }), 1000);
+  }
+}
+
+render(<DummyApp/>, document.getElementById('root')!);
 
 // User.getCSRFToken()
 //   .then(() => {

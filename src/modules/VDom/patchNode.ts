@@ -117,7 +117,7 @@ function patchProp(domNode: HTMLElement, propName: string, oldVal: any, newVal: 
       .map(([key, value]) => `${key}: ${value};`)
       .join(' ');
 
-    if (styleString && styleString !== domNode.style.cssText) {
+    if (styleString !== domNode.style.cssText) {
       domNode.style.cssText = styleString;
     }
 

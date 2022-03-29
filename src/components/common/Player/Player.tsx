@@ -43,13 +43,13 @@ class Player extends Component {
   }
 
   timeUpdater(e: Event): void {
+    this.fetchedUpdater(e);
     const filled = ((this.#player.audio.currentTime / this.#player.audio.duration) * 100);
     this.setState({ trackTime: this.#player.audio.currentTime, trackFilled: filled });
   }
 
   fetchedUpdater(e: Event): void {
     const fetchedEnd = this.#player.audio.buffered.end(this.#player.audio.buffered.length - 1);
-    console.log(fetchedEnd);
     this.setState({ trackBuffered: (fetchedEnd / this.#player.audio.duration) * 100 });
   }
 
@@ -82,6 +82,7 @@ class Player extends Component {
     this.#player = player;
     this.#player.audio.addEventListener('timeupdate', this.timeUpdater);
     this.#player.audio.addEventListener('progress', this.fetchedUpdater);
+    this.#player.audio.addEventListener('loadedmetadata', this.fetchedUpdater);
   }
 
   render(): VirtualElement {

@@ -33,9 +33,10 @@ function initNewElement(newElement: HTMLElement, newVNode: VirtualElement): void
   if (newVNode.component) {
     (newElement as any)[ComponentAttr] = newVNode.component;
     (newElement as any)[VNodeAttr] = newVNode;
-    (newElement as any)[HandlersAttr] = createHandlersStable();
     newVNode.component.node = newElement;
   }
+
+  (newElement as any)[HandlersAttr] = createHandlersStable();
 }
 
 function prepareVNodeRemove(oldVNode: VirtualElement | string | null): void {

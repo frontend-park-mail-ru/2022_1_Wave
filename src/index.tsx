@@ -4,6 +4,8 @@ import VirtualElement from './modules/VDom/VirtualElement';
 import Component from './modules/VDom/Component';
 import Ref from './modules/VDom/Ref';
 import render from './modules/VDom/render';
+import Player from './components/common/Player/Player';
+import { PlayerClass } from './modules/Media/player';
 
 class Dummy extends Component {
   render = (): VirtualElement => (
@@ -41,13 +43,13 @@ class DummyApp extends Component {
   handler = (e: Event) => console.log(e);
 
   render = (): VirtualElement => (
-    <div onclick={(e) => console.log(e)} style={{
+    <div onclick={(e: Event) => console.log(e)} style={{
       background: 'cyan',
     }}>
       <Dummy data='Counter:'/>
       <Dummy data={this.state.counter.toString()}/>
       <DummyParent>
-        <p>first</p>
+        <p >first</p>
         <p>second</p>
         <p>third</p>
       </DummyParent>
@@ -60,11 +62,6 @@ class DummyApp extends Component {
   }
 }
 
-render(<DummyApp/>, document.getElementById('root')!);
-
-// User.getCSRFToken()
-//   .then(() => {
-//     const root = document.querySelector('#root');
-//     const app = new App();
-//     app.mount(root);
-//   });
+//render(<DummyApp/>, document.getElementById('root')!);
+const player = new PlayerClass('/assets/music.mp3');
+render(<Player player={player} />, document.getElementById('root')!);

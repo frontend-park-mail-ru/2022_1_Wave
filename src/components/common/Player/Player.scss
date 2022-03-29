@@ -19,7 +19,6 @@
 
   .player__track {
     width: 250px;
-    background-color: #257e8a;
     display: inline-flex;
     .track__picture {
       height: 50px;
@@ -40,33 +39,94 @@
   }
   .player__control {
     width: 130px;
-    background-color: #222730;
     display: inline-flex;
+    justify-content: space-between;
     & > * {
       color: #BEB7DF;
+      cursor: pointer;
     }
     .control__prev{
-
+      font-size: 25px;
     }
     .control__play_pause {
-      height: 35px;
-      width: 35px;
+      font-size: 35px;
     }
     .control__next {
-
+      font-size: 25px;
     }
   }
   .player__progressbar {
-    background-color: #FF6464;
     flex-grow: 1;
+    display: inline-flex;
+    height: 10px;
+    align-self: center;
+    margin-left: 20px;
+    margin-right: 15px;
+    .progressbar{
+      background-color: #5D4099;
+      flex-grow: 1;
+      height: 2px;
+      align-items: inherit;
+      & > * {
+        height: 100%;
+      }
+      .progressbar__prefetched{
+        width: 80%;
+        background-color: #6D7184;
+      }
+      .progressbar__state{
+        display: flex;
+        width: 100%;
+        margin-top: -2px;
+        .progressbar__state__line{
+          background-color: #BEB7DF;
+        }
+        .progressbar__state__marker{
+          height: 25px;
+          width: 25px;
+          margin-left: -11.5px;
+          margin-top: -11.5px;
+          img {
+            height: inherit;
+            width: inherit;
+            object-fit: cover;
+          }
+        }
+      }
+
+    }
+    .player__progressbar__time {
+      padding-left: 10px;
+    }
   }
   .player__shuffle {
-    background-color: #222730;
     width: 60px;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    * {
+      color:#BEB7DF;
+      font-size: 20px;
+    }
   }
   .player__volume {
+    display: inline-flex;
+    justify-content: space-around;
+    align-items: center;
     width: 10%;
-    background-color: #257e8a;
+    color: #BEB7DF;
+    .volume__icon{
+      height: 20px;
+    }
+    .volume__input{
+      height: 2px;
+      width: 60%;
+      background-color: #5D4099;
+      .volume__input__state{
+        background-color: #BEB7DF;
+        height: inherit;
+      }
+    }
   }
 }
 

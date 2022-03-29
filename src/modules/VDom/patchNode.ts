@@ -148,6 +148,9 @@ function patchChildren(
   nodesStack: PatchArg[],
 ): void {
   const toMount: PatchArg[] = [];
+  const toUnmountDom = Array.from<Node>(domNode.childNodes).slice(newVNode.children.length);
+  const toUnmountVNode = oldVNode.children.slice(newVNode.children.length);
+
   if (isAllChildrenWithKey(oldVNode) && isAllChildrenWithKey(newVNode)) {
     let oldIdx = 0;
 
@@ -178,6 +181,11 @@ function patchChildren(
         });
       }
     });
+
+    for (let idx = oldIdx; idx < oldVNode.children.length; idx += 1) {
+      toUnmountDom.push(domNode.childNodes[idx]);
+      toUnmountVNode.push(oldVNode.children[idx]);
+    }
   } else {
     newVNode.children.forEach((newChild, idx) => {
       const child = domNode.childNodes[idx];
@@ -192,9 +200,6 @@ function patchChildren(
       });
     });
   }
-
-  const toUnmountDom = Array.from<Node>(domNode.childNodes).slice(newVNode.children.length);
-  const toUnmountVNode = oldVNode.children.slice(newVNode.children.length);
 
   while (toUnmountDom.length > 0) {
     const oldChild = toUnmountVNode.pop()!;
@@ -254,6 +259,10 @@ function patchAsVNode(
       pos,
     });
   } else {
+    if (newVNode.component) {
+      (domNode as any)[VNodeAttr] = newVNode;
+    }
+
     patchProps(domNode, oldVNode.props, newVNode.props);
 
     patchChildren(domNode, oldVNode, newVNode, nodesStack);
@@ -392,7 +401,7 @@ export default function patch(initial: PatchArg): void {
     commitChangesStack.pop()!();
   }
 
-  const { oldVNode, newVNode }: PatchArg = initial;
+  const { oldVNode, newVNode, domNode }: PatchArg = initial;
   if (
     oldVNode
     && oldVNode instanceof VirtualElement

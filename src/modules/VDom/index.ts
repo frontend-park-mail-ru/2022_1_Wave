@@ -1,13 +1,3 @@
-import render from './render';
-import createElement from './createElement';
-import Component from './Component';
-import Ref from './Ref';
-import VirtualElement from './VirtualElement';
+import * as VDom from './all';
 
-export default {
-  render,
-  createElement,
-  Component,
-  Ref,
-  VirtualElement,
-};
+export default VDom;

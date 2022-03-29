@@ -16,17 +16,19 @@ class Player extends Component {
 
   #pauseIcon : HTMLElement = (<i class="svg-inline--fa fa-regular fa-circle-pause"></i>);
 
-
   constructor(props: IProps) {
     super(props);
     this.state = {
       playState: false,
       trackTime: 0,
+      trackFilled: 0,
       trackFetched: 0,
+      trackBuffered: 0,
       trackVolume: 50,
     };
     this.tooglePlay = this.tooglePlay.bind(this);
     this.timeUpdater = this.timeUpdater.bind(this);
+    this.fetchedUpdater = this.fetchedUpdater.bind(this);
     this.setTime = this.setTime.bind(this);
     this.setVolume = this.setVolume.bind(this);
   }
@@ -42,25 +44,31 @@ class Player extends Component {
 
   timeUpdater(e: Event): void {
     const filled = ((this.#player.audio.currentTime / this.#player.audio.duration) * 100);
-    this.setState({ trackTime: filled });
+    this.setState({ trackTime: this.#player.audio.currentTime, trackFilled: filled });
+  }
+
+  fetchedUpdater(e: Event): void {
+    const fetchedEnd = this.#player.audio.buffered.end(this.#player.audio.buffered.length - 1);
+    console.log(fetchedEnd);
+    this.setState({ trackBuffered: (fetchedEnd / this.#player.audio.duration) * 100 });
   }
 
   setTime(e: MouseEvent): void {
-    e.preventDefault();
     const relativePosition = this.getRelativePosition(e);
+    console.log(relativePosition);
     this.#player.audio.currentTime = relativePosition * this.#player.audio.duration;
   }
 
   setVolume(e: MouseEvent): void {
-    e.preventDefault();
     const relativePosition = this.getRelativePosition(e);
     console.log(relativePosition);
     this.setState({ trackVolume: relativePosition * 100 });
     console.log(this.state);
-    //this.#player.audio.volume = relativePosition;
+    // this.#player.audio.volume = relativePosition;
   }
 
   getRelativePosition(e: MouseEvent): number {
+    e.preventDefault();
     const rect = e.currentTarget.getBoundingClientRect();
     const relativePosition = (e.x - rect.left) / (rect.right - rect.left);
     if (relativePosition < 0) {
@@ -73,6 +81,7 @@ class Player extends Component {
     const { player } = this.props;
     this.#player = player;
     this.#player.audio.addEventListener('timeupdate', this.timeUpdater);
+    this.#player.audio.addEventListener('progress', this.fetchedUpdater);
   }
 
   render(): VirtualElement {
@@ -105,25 +114,26 @@ class Player extends Component {
             <i class="fa-solid fa-forward-step"></i>
           </div>
         </div>
-        <div class="player__progressbar"
-             onclick={this.setTime}
-             ondrag={this.setTime}
-             ondragend={this.setTime}
-        >
-          <div class="progressbar">
-            <div class="progressbar__prefetched"></div>
+        <div class="player__progressbar">
+          <div class="progressbar"
+               onclick={this.setTime}
+               ondrag={this.setTime}
+               ondragend={this.setTime}>
+            <div class="progressbar__prefetched" style={
+              { width: `${this.state.trackBuffered.toString()}%` }
+            }></div>
             <div class="progressbar__state">
               <div class="progressbar__state__line" style={
-                { width: `${this.state.trackTime.toString()}%` }
+                { width: `${this.state.trackFilled.toString()}%` }
               }></div>
               <div draggable="true" class="progressbar__state__marker">
-                <img draggable="false"  src={marker}></img>
+                <img draggable="false" src={marker}></img>
               </div>
             </div>
           </div>
           <div class="text player__progressbar__time"> {
             `${formatInt(this.state.trackTime / 60)}:${
-              formatInt(this.state.trackTime - this.state.trackTime / 60)}`
+              formatInt(this.state.trackTime % 60)}`
           }</div>
         </div>
         <div class="player__shuffle">
@@ -132,9 +142,9 @@ class Player extends Component {
         <div class="player__volume">
           <div class="fa-solid fa-volume-low volume__icon"></div>
           <div class="volume__input"
-               onclick={this.setVolume}
-               ondrag={this.setVolume}
-               ondragend={this.setVolume}>
+            onclick={this.setVolume}
+            ondrag={this.setVolume}
+            ondragend={this.setVolume}>
             <div class="volume__input__state" style={
               { width: `${this.state.trackVolume.toString()}%` }
             }></div>

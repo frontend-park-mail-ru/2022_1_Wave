@@ -30,6 +30,13 @@ class Player extends Component {
         author: '',
         cover: '',
       },
+      freqArray: [],
+      waveHeights: [
+        0,
+        0,
+        0,
+        0,
+      ],
     };
     this.loadTrackData = this.loadTrackData.bind(this);
     this.tooglePlay = this.tooglePlay.bind(this);
@@ -37,6 +44,7 @@ class Player extends Component {
     this.runNext = this.runNext.bind(this);
     this.runPrev = this.runPrev.bind(this);
     this.timeUpdater = this.timeUpdater.bind(this);
+    this.updateWaveFront = this.updateWaveFront.bind(this);
     this.fetchedUpdater = this.fetchedUpdater.bind(this);
     this.setTime = this.setTime.bind(this);
     this.setVolume = this.setVolume.bind(this);
@@ -83,29 +91,59 @@ class Player extends Component {
 
   timeUpdater(e: Event): void {
     this.fetchedUpdater(e);
-    console.log(e);
-   // console.log(this.#player.analyser.frequencyBinCount);
+    this.updateWaveFront();
+    // console.log(this.#player.analyser.frequencyBinCount);
     const filled = ((this.#player.audio.currentTime / this.#player.audio.duration) * 100);
     this.setState({ trackTime: this.#player.audio.currentTime, trackFilled: filled });
   }
 
+  updateWaveFront(): void {
+    const currFreq = this.state.freqArray;
+    this.#player.analyser.getByteFrequencyData(currFreq);
+    const barsHeight: Array<number> = [0, 0, 0, 0];
+    const hzStep: number = 24;
+    const lowFreq: Array<number> = [100, 700];
+    const midFreq: Array<number> = [1000, 3000];
+    const midUpFreq: Array<number> = [4000, 6000];
+    const highFreq: Array<number> = [7000, 10000];
+    const freqRanges: Array<Array<number>> = [
+      lowFreq,
+      midFreq,
+      midUpFreq,
+      highFreq,
+    ];
+
+    for (let i = 0; i < barsHeight.length; i += 1) {
+      const range = freqRanges[i];
+      const leftBorder = Math.round(range[0] / hzStep);
+      const rightBorder = Math.round(range[1] / hzStep);
+      let sum = 0;
+      let elNums = 0;
+      currFreq.slice(leftBorder, rightBorder).forEach(
+        (val:number): void => {
+          sum += val;
+          elNums += 1;
+        },
+      );
+      const interpolated = sum / elNums;
+      barsHeight[i] = (interpolated / 256) * 100;
+    }
+    this.setState({ freqArray: currFreq, waveHeights: barsHeight });
+  }
+
   fetchedUpdater(e: Event): void {
-    console.log(this.#player.audio.buffered.start(0));
     const fetchedEnd = this.#player.audio.buffered.end(this.#player.audio.buffered.length - 1);
     this.setState({ trackBuffered: (fetchedEnd / this.#player.audio.duration) * 100 });
   }
 
   setTime(e: MouseEvent): void {
     const relativePosition = this.getRelativePosition(e);
-    console.log(relativePosition);
     this.#player.audio.currentTime = relativePosition * this.#player.audio.duration;
   }
 
   setVolume(e: MouseEvent): void {
     const relativePosition = this.getRelativePosition(e);
-    console.log(relativePosition);
     this.setState({ trackVolume: relativePosition * 100 });
-    console.log(this.state);
     // this.#player.audio.volume = relativePosition;
   }
 
@@ -122,7 +160,9 @@ class Player extends Component {
   didMount(): void {
     const { player } = this.props;
     this.#player = player;
-    this.setState({ trackVolume: this.#player.audio.volume });
+    const freqArr = new Uint8Array(this.#player.analyser.frequencyBinCount);
+    console.log(freqArr);
+    this.setState({ trackVolume: this.#player.audio.volume, freqArray: freqArr });
     this.#player.audio.addEventListener('timeupdate', this.timeUpdater);
     this.#player.audio.addEventListener('progress', this.fetchedUpdater);
     this.#player.audio.addEventListener('loadedmetadata', this.fetchedUpdater);
@@ -138,7 +178,12 @@ class Player extends Component {
 
     return (
       <div class="player">
-        <div class="player__waves"></div>
+        <div class="player__waves">
+          <div class="bar" id="1" style={ { height: `${this.state.waveHeights[0]}%` }}></div>
+          <div class="bar" id="2" style={ { height: `${this.state.waveHeights[1]}%` }}></div>
+          <div class="bar" id="3" style={ { height: `${this.state.waveHeights[2]}%` }}></div>
+          <div class="bar" id="4" style={ { height: `${this.state.waveHeights[3]}%` }}></div>
+        </div>
         <div class="player__track">
           <img class="track__picture" src={this.state.trackData.cover}></img>
           <div class="track__name">

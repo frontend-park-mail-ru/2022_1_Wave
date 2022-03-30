@@ -13,8 +13,16 @@
     align-items: center;
   }
   .player__waves {
-    background-color: #53d927;
-    width: 10%;
+    margin-left: 20px;
+    margin-right: 10px;
+    width: 32px;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    .bar{
+      background-color: #BEB7DF;
+      width: 2px;
+    }
   }
 
   .player__track {

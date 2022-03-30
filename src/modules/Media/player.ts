@@ -32,53 +32,16 @@ export class PlayerClass {
     this.#playlist = tracks;
     this.#playlist = tracks;
     this.currentTrack = this.#playlist[this.#playlistIndex];
-    // this.audio = new Audio(this.currentTrack.src);
-    // this.audio.preload = 'metadata';
-    // this.audio.volume = initVolume;
-    // this.#audioCtx = new AudioContext();
-    // const analyser = this.#audioCtx.createAnalyser();
-    // const source = this.#audioCtx.createMediaElementSource(this.audio);
-    // source.connect(this.#audioCtx.destination);
-    // source.connect(analyser);
-    // analyser.connect(this.#audioCtx.destination);
-    //var AudioContext = window.AudioContext || window.webkitAudioContext;
-    this.audio = new Audio();
-    //const analyser = context.createAnalyser();
-
-    this.audio.src = this.currentTrack.src;
-    this.audio.controls = true;
-
-    const audioCtx = new AudioContext();
-    const source = audioCtx.createMediaElementSource(this.audio);
-    source.connect(audioCtx.destination);
-    //console.log(source);
-    this.audio.volume = 0.5;
-    document.getElementById('root').appendChild(this.audio);
-    // analyser.connect(context.destination);
-
-    // this.analyser = this.#audioCtx.createAnalyser();
-    // source.connect(this.analyser);
-    // this.analyser.connect(this.#audioCtx.destination);
-  //  this.#loadMedia(this.currentTrack.src);
+    this.audio = new Audio(this.currentTrack.src);
+    this.audio.preload = 'metadata';
+    this.audio.volume = initVolume;
+    this.#audioCtx = new AudioContext();
+    this.analyser = this.#audioCtx.createAnalyser();
+    this.analyser.fftSize = 2048;
+    const source = this.#audioCtx.createMediaElementSource(this.audio);
+    source.connect(this.analyser);
+    this.analyser.connect(this.#audioCtx.destination);
   }
-
-  // #loadMedia(url:string): void {
-  //   console.log(url);
-  //   fetch(url)
-  //     .then(resp => resp.arrayBuffer())
-  //     .then(buf => this.#audioCtx.decodeAudioData(buf))
-  //     .then(audioBuffer => {
-  //       console.log("h",audioBuffer);
-  //       this.source.buffer = audioBuffer;
-  //       this.source.loop = true;
-  //       const streamResource = this.#audioCtx.createMediaStreamDestination();
-  //       this.source.connect(streamResource);
-  //       this.source.start();
-  //       this.audio.srcObject = streamResource.stream;
-  //       console.log("srcObject",this.audio.srcObject);
-  //     })
-  //     .catch((e) => console.log("cannot fetch",e,url));
-  // }
 
   addTrack(track: Track): void {
     this.#playlist.push(track);
@@ -90,6 +53,7 @@ export class PlayerClass {
 
   play(): void {
     console.log('play');
+    this.#audioCtx.resume();
     this.audio.play();
   }
 
@@ -105,7 +69,6 @@ export class PlayerClass {
     const nextTrack = this.#playlist[this.#playlistIndex];
     this.audio.src = nextTrack.src;
     this.currentTrack = nextTrack;
-  //  this.#loadMedia(this.currentTrack.src);
   }
 
   prev(): void {
@@ -116,7 +79,6 @@ export class PlayerClass {
     const prevTrack = this.#playlist[this.#playlistIndex];
     this.audio.src = prevTrack.src;
     this.currentTrack = prevTrack;
-   // this.#loadMedia(this.currentTrack.src);
   }
 
   #updateMetadata(track: Track): void {

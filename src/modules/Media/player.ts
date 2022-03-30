@@ -22,27 +22,63 @@ export class PlayerClass {
 
   currentTrack: Track;
 
+  analyser: AnalyserNode;
+
   #audioCtx: AudioContext;
 
   #mediaMetadata: MediaMetadata;
 
   constructor(tracks: Track[] = [], initVolume:number = 0.5) {
     this.#playlist = tracks;
-    if (this.#playlist.length === 0) {
-      this.audio = new Audio();
-      this.audio.preload = 'metadata';
-      return;
-    }
     this.#playlist = tracks;
     this.currentTrack = this.#playlist[this.#playlistIndex];
-    this.audio = new Audio(this.currentTrack.src);
-    this.audio.volume = initVolume;
+    // this.audio = new Audio(this.currentTrack.src);
+    // this.audio.preload = 'metadata';
+    // this.audio.volume = initVolume;
     // this.#audioCtx = new AudioContext();
+    // const analyser = this.#audioCtx.createAnalyser();
+    // const source = this.#audioCtx.createMediaElementSource(this.audio);
+    // source.connect(this.#audioCtx.destination);
+    // source.connect(analyser);
+    // analyser.connect(this.#audioCtx.destination);
+    //var AudioContext = window.AudioContext || window.webkitAudioContext;
+    this.audio = new Audio();
+    //const analyser = context.createAnalyser();
+
+    this.audio.src = this.currentTrack.src;
+    this.audio.controls = true;
+
+    const audioCtx = new AudioContext();
+    const source = audioCtx.createMediaElementSource(this.audio);
+    source.connect(audioCtx.destination);
+    //console.log(source);
+    this.audio.volume = 0.5;
+    document.getElementById('root').appendChild(this.audio);
+    // analyser.connect(context.destination);
+
+    // this.analyser = this.#audioCtx.createAnalyser();
+    // source.connect(this.analyser);
+    // this.analyser.connect(this.#audioCtx.destination);
+  //  this.#loadMedia(this.currentTrack.src);
   }
 
-  handleEvent(callback: Function):Function {
-    return () => callback(this.#playlist[this.#playlistIndex]);
-  }
+  // #loadMedia(url:string): void {
+  //   console.log(url);
+  //   fetch(url)
+  //     .then(resp => resp.arrayBuffer())
+  //     .then(buf => this.#audioCtx.decodeAudioData(buf))
+  //     .then(audioBuffer => {
+  //       console.log("h",audioBuffer);
+  //       this.source.buffer = audioBuffer;
+  //       this.source.loop = true;
+  //       const streamResource = this.#audioCtx.createMediaStreamDestination();
+  //       this.source.connect(streamResource);
+  //       this.source.start();
+  //       this.audio.srcObject = streamResource.stream;
+  //       console.log("srcObject",this.audio.srcObject);
+  //     })
+  //     .catch((e) => console.log("cannot fetch",e,url));
+  // }
 
   addTrack(track: Track): void {
     this.#playlist.push(track);
@@ -53,6 +89,7 @@ export class PlayerClass {
   }
 
   play(): void {
+    console.log('play');
     this.audio.play();
   }
 
@@ -68,6 +105,7 @@ export class PlayerClass {
     const nextTrack = this.#playlist[this.#playlistIndex];
     this.audio.src = nextTrack.src;
     this.currentTrack = nextTrack;
+  //  this.#loadMedia(this.currentTrack.src);
   }
 
   prev(): void {
@@ -78,6 +116,7 @@ export class PlayerClass {
     const prevTrack = this.#playlist[this.#playlistIndex];
     this.audio.src = prevTrack.src;
     this.currentTrack = prevTrack;
+   // this.#loadMedia(this.currentTrack.src);
   }
 
   #updateMetadata(track: Track): void {
@@ -95,58 +134,55 @@ export class PlayerClass {
     });
   }
 }
-
-function tryInitMediaSession() {
-
-}
-if ('mediaSession' in navigator) {
-  navigator.mediaSession.metadata = new MediaMetadata({
-    title: 'Unforgettable',
-    artist: 'Nat King Cole',
-    album: 'The Ultimate Collection (Remastered)',
-    artwork: [
-      {
-        src: 'https://dummyimage.com/96x96',
-        sizes: '96x96',
-        type: 'image/png',
-      },
-      {
-        src: 'https://dummyimage.com/128x128',
-        sizes: '128x128',
-        type: 'image/png',
-      },
-      {
-        src: 'https://dummyimage.com/192x192',
-        sizes: '192x192',
-        type: 'image/png',
-      },
-      {
-        src: 'https://dummyimage.com/256x256',
-        sizes: '256x256',
-        type: 'image/png',
-      },
-      {
-        src: 'https://dummyimage.com/384x384',
-        sizes: '384x384',
-        type: 'image/png',
-      },
-      {
-        src: 'https://dummyimage.com/512x512',
-        sizes: '512x512',
-        type: 'image/png',
-      },
-    ],
-  });
-
-  navigator.mediaSession.setActionHandler('play', () => {
-    console.log('play');
-    mySound.play();
-  });
-  navigator.mediaSession.setActionHandler('pause', () => {
-    console.log('pause');
-    mySound.pause();
-  });
-  navigator.mediaSession.setActionHandler('stop', () => {
-    console.log('stop');
-  });
-}
+//
+// if ('mediaSession' in navigator) {
+//   navigator.mediaSession.metadata = new MediaMetadata({
+//     title: 'Unforgettable',
+//     artist: 'Nat King Cole',
+//     album: 'The Ultimate Collection (Remastered)',
+//     artwork: [
+//       {
+//         src: 'https://dummyimage.com/96x96',
+//         sizes: '96x96',
+//         type: 'image/png',
+//       },
+//       {
+//         src: 'https://dummyimage.com/128x128',
+//         sizes: '128x128',
+//         type: 'image/png',
+//       },
+//       {
+//         src: 'https://dummyimage.com/192x192',
+//         sizes: '192x192',
+//         type: 'image/png',
+//       },
+//       {
+//         src: 'https://dummyimage.com/256x256',
+//         sizes: '256x256',
+//         type: 'image/png',
+//       },
+//       {
+//         src: 'https://dummyimage.com/384x384',
+//         sizes: '384x384',
+//         type: 'image/png',
+//       },
+//       {
+//         src: 'https://dummyimage.com/512x512',
+//         sizes: '512x512',
+//         type: 'image/png',
+//       },
+//     ],
+//   });
+//
+//   navigator.mediaSession.setActionHandler('play', () => {
+//     console.log('play');
+//     mySound.play();
+//   });
+//   navigator.mediaSession.setActionHandler('pause', () => {
+//     console.log('pause');
+//     mySound.pause();
+//   });
+//   navigator.mediaSession.setActionHandler('stop', () => {
+//     console.log('stop');
+//   });
+// }

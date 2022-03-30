@@ -78,5 +78,24 @@ const tracks = [{
   title: 'SomeTitleVEEEEEEEEEEEEEERYLONg',
 
 }];
-const player = new PlayerClass(tracks);
-render(<Player player={player} />, document.getElementById('root')!);
+
+
+// const source = context.createMediaElementSource(audio);
+// source.connect(analyser);
+// analyser.connect(context.destination);
+
+const audio = new Audio();
+
+audio.src = '/assets/music.mp3';//this.currentTrack.src;
+audio.controls = true;
+
+const audioCtx = new AudioContext();
+const source = audioCtx.createMediaElementSource(audio);
+source.connect(audioCtx.destination);
+audio.load();
+document.getElementById('root').appendChild(audio);
+
+
+//const player = new PlayerClass(tracks);
+
+//render(<Player player={player} />, document.getElementById('root')!);

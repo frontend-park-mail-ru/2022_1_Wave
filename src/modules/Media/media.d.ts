@@ -5,6 +5,8 @@ export interface IPlayerClass {
 
   currentTrack: Track;
 
+  analyser: AnalyserNode;
+
   addTrack(): void;
 
   popTrack(): void;

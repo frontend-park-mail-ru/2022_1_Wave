@@ -83,11 +83,14 @@ class Player extends Component {
 
   timeUpdater(e: Event): void {
     this.fetchedUpdater(e);
+    console.log(e);
+   // console.log(this.#player.analyser.frequencyBinCount);
     const filled = ((this.#player.audio.currentTime / this.#player.audio.duration) * 100);
     this.setState({ trackTime: this.#player.audio.currentTime, trackFilled: filled });
   }
 
   fetchedUpdater(e: Event): void {
+    console.log(this.#player.audio.buffered.start(0));
     const fetchedEnd = this.#player.audio.buffered.end(this.#player.audio.buffered.length - 1);
     this.setState({ trackBuffered: (fetchedEnd / this.#player.audio.duration) * 100 });
   }

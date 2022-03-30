@@ -5,7 +5,7 @@ import Component from './modules/VDom/Component';
 import Ref from './modules/VDom/Ref';
 import render from './modules/VDom/render';
 import Player from './components/common/Player/Player';
-import { PlayerClass } from './modules/Media/player';
+import { PlayerClass, Track } from './modules/Media/player';
 
 class Dummy extends Component {
   render = (): VirtualElement => (
@@ -62,6 +62,21 @@ class DummyApp extends Component {
   }
 }
 
-//render(<DummyApp/>, document.getElementById('root')!);
-const player = new PlayerClass('/assets/music.mp3');
+// render(<DummyApp/>, document.getElementById('root')!);
+const tracks = [{
+  album: '',
+  author: 'SomeAuthor',
+  cover: '/assets/playlist-track-icon-dummy.png',
+  src: '/assets/music.mp3',
+  title: 'SomeTitle',
+
+}, {
+  album: '',
+  author: 'SomeAuthorVEEEEEEEEEEEEEERYLONg',
+  cover: '/assets/playlist-track-icon-dummy.png',
+  src: '/assets/music.mp3',
+  title: 'SomeTitleVEEEEEEEEEEEEEERYLONg',
+
+}];
+const player = new PlayerClass(tracks);
 render(<Player player={player} />, document.getElementById('root')!);

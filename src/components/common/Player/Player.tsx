@@ -24,22 +24,61 @@ class Player extends Component {
       trackFilled: 0,
       trackFetched: 0,
       trackBuffered: 0,
-      trackVolume: 50,
+      trackVolume: 0,
+      trackData: {
+        title: '',
+        author: '',
+        cover: '',
+      },
     };
+    this.loadTrackData = this.loadTrackData.bind(this);
     this.tooglePlay = this.tooglePlay.bind(this);
+    this.checkPlay = this.checkPlay.bind(this);
+    this.runNext = this.runNext.bind(this);
+    this.runPrev = this.runPrev.bind(this);
     this.timeUpdater = this.timeUpdater.bind(this);
     this.fetchedUpdater = this.fetchedUpdater.bind(this);
     this.setTime = this.setTime.bind(this);
     this.setVolume = this.setVolume.bind(this);
   }
 
-  tooglePlay(e: Event): void {
-    this.setState({ playState: !this.state.playState });
+  loadTrackData(e: Event): void {
+    this.setState({
+      trackData: {
+        title: this.#player.currentTrack.title,
+        author: this.#player.currentTrack.author,
+        cover: this.#player.currentTrack.cover,
+      },
+    });
+    console.log(e);
+  }
+
+  checkPlay():void {
     if (this.state.playState) {
       this.#player.play();
       return;
     }
     this.#player.stop();
+  }
+
+  tooglePlay(e: Event): void {
+    this.setState({ playState: !this.state.playState });
+    this.checkPlay();
+  }
+
+  runNext(e: Event): void {
+    this.setState({ trackFilled: 100, playState: true });
+    this.#player.next();
+    this.checkPlay();
+  }
+
+  runPrev(e: Event): void {
+    if (this.#player.audio.currentTime !== 0) {
+      this.#player.audio.currentTime = 0;
+      return;
+    }
+    this.#player.prev();
+    this.checkPlay();
   }
 
   timeUpdater(e: Event): void {
@@ -80,9 +119,12 @@ class Player extends Component {
   didMount(): void {
     const { player } = this.props;
     this.#player = player;
+    this.setState({ trackVolume: this.#player.audio.volume });
     this.#player.audio.addEventListener('timeupdate', this.timeUpdater);
     this.#player.audio.addEventListener('progress', this.fetchedUpdater);
     this.#player.audio.addEventListener('loadedmetadata', this.fetchedUpdater);
+    this.#player.audio.addEventListener('durationchange', this.loadTrackData);
+    this.#player.audio.addEventListener('ended', this.runNext);
   }
 
   render(): VirtualElement {
@@ -95,14 +137,14 @@ class Player extends Component {
       <div class="player">
         <div class="player__waves"></div>
         <div class="player__track">
-          <img class="track__picture" src="/assets/playlist-track-icon-dummy.png"></img>
+          <img class="track__picture" src={this.state.trackData.cover}></img>
           <div class="track__name">
-            <div class="text track__name__title">Someth</div>
-            <div class="text track__name__author">Smth</div>
+            <div class="text track__name__title">{this.state.trackData.title}</div>
+            <div class="text track__name__author">{this.state.trackData.author}</div>
           </div>
         </div>
         <div class="player__control">
-          <div class="control__prev">
+          <div onclick={this.runPrev} class="control__prev">
             <i class="fa-solid fa-backward-step"></i>
           </div>
           <div onclick={this.tooglePlay} class="control__play_pause">
@@ -111,15 +153,15 @@ class Player extends Component {
             }
           </div>
 
-          <div class="control__next">
+          <div onclick={this.runNext} class="control__next">
             <i class="fa-solid fa-forward-step"></i>
           </div>
         </div>
         <div class="player__progressbar">
           <div class="progressbar"
-               onclick={this.setTime}
-               ondrag={this.setTime}
-               ondragend={this.setTime}>
+            onclick={this.setTime}
+            ondrag={this.setTime}
+            ondragend={this.setTime}>
             <div class="progressbar__prefetched" style={
               { width: `${this.state.trackBuffered.toString()}%` }
             }></div>

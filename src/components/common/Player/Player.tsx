@@ -2,8 +2,6 @@ import VirtualElement from '../../../modules/VDom/VirtualElement';
 import './Player.scss';
 import Component from '../../../modules/VDom/Component';
 import VDom from '../../../modules/VDom';
-import '@fortawesome/fontawesome-free/js/all.js';
-import '@fortawesome/fontawesome-free/css/all.css';
 import '../../App/App.scss';
 import marker from '../../../assets/player_marker.png';
 import { IPlayerClass } from '../../../modules/Media/media';
@@ -12,9 +10,9 @@ import { IProps } from '../../../modules/VDom/Interfaces';
 class Player extends Component {
   #player : IPlayerClass;
 
-  #playIcon : HTMLElement = (<i class="svg-inline--fa fa-regular fa-circle-play"></i>);
+  #playIcon : HTMLElement = (<div class="fa-regular fa-circle-play"></div>);
 
-  #pauseIcon : HTMLElement = (<i class="svg-inline--fa fa-regular fa-circle-pause"></i>);
+  #pauseIcon : HTMLElement = (<div class="fa-regular fa-circle-pause"></div>);
 
   constructor(props: IProps) {
     super(props);
@@ -144,7 +142,7 @@ class Player extends Component {
   setVolume(e: MouseEvent): void {
     const relativePosition = this.getRelativePosition(e);
     this.setState({ trackVolume: relativePosition * 100 });
-    // this.#player.audio.volume = relativePosition;
+    this.#player.audio.volume = relativePosition;
   }
 
   getRelativePosition(e: MouseEvent): number {
@@ -161,8 +159,7 @@ class Player extends Component {
     const { player } = this.props;
     this.#player = player;
     const freqArr = new Uint8Array(this.#player.analyser.frequencyBinCount);
-    console.log(freqArr);
-    this.setState({ trackVolume: this.#player.audio.volume, freqArray: freqArr });
+    this.setState({ trackVolume: this.#player.audio.volume * 100, freqArray: freqArr });
     this.#player.audio.addEventListener('timeupdate', this.timeUpdater);
     this.#player.audio.addEventListener('progress', this.fetchedUpdater);
     this.#player.audio.addEventListener('loadedmetadata', this.fetchedUpdater);
@@ -193,7 +190,7 @@ class Player extends Component {
         </div>
         <div class="player__control">
           <div onclick={this.runPrev} class="control__prev">
-            <i class="fa-solid fa-backward-step"></i>
+            <div class="fa-solid fa-backward-step"></div>
           </div>
           <div onclick={this.tooglePlay} class="control__play_pause">
             {
@@ -202,7 +199,7 @@ class Player extends Component {
           </div>
 
           <div onclick={this.runNext} class="control__next">
-            <i class="fa-solid fa-forward-step"></i>
+            <div class="fa-solid fa-forward-step"></div>
           </div>
         </div>
         <div class="player__progressbar">

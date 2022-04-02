@@ -23,6 +23,7 @@ class Player extends Component {
       trackFetched: 0,
       trackBuffered: 0,
       trackVolume: 0,
+      playRand: false,
       trackData: {
         title: '',
         author: '',
@@ -46,6 +47,7 @@ class Player extends Component {
     this.fetchedUpdater = this.fetchedUpdater.bind(this);
     this.setTime = this.setTime.bind(this);
     this.setVolume = this.setVolume.bind(this);
+    this.tooggleShuffle = this.tooggleShuffle.bind(this);
   }
 
   loadTrackData(e: Event): void {
@@ -56,7 +58,6 @@ class Player extends Component {
         cover: this.#player.currentTrack.cover,
       },
     });
-    console.log(e);
   }
 
   checkPlay():void {
@@ -90,7 +91,6 @@ class Player extends Component {
   timeUpdater(e: Event): void {
     this.fetchedUpdater(e);
     this.updateWaveFront();
-    // console.log(this.#player.analyser.frequencyBinCount);
     const filled = ((this.#player.audio.currentTime / this.#player.audio.duration) * 100);
     this.setState({ trackTime: this.#player.audio.currentTime, trackFilled: filled });
   }
@@ -153,6 +153,11 @@ class Player extends Component {
       return 0;
     }
     return relativePosition;
+  }
+
+  tooggleShuffle(e: Event): void {
+    this.#player.isPlayRand = !this.#player.isPlayRand;
+    this.setState({ playRand: this.#player.isPlayRand });
   }
 
   didMount(): void {
@@ -224,8 +229,10 @@ class Player extends Component {
               formatInt(this.state.trackTime % 60)}`
           }</div>
         </div>
-        <div class="player__shuffle">
-          <div class="fa-solid fa-shuffle"></div>
+        <div onclick={this.tooggleShuffle} class="player__shuffle">
+          <div class="fa-solid fa-shuffle" style={
+            {color: this.state.playRand ? '#5D4099' : '#BEB7DF'}
+          } ></div>
         </div>
         <div class="player__volume">
           <div class="fa-solid fa-volume-low volume__icon"></div>

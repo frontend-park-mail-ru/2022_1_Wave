@@ -1,9 +1,15 @@
 import { Track } from './player';
 
+export interface Dic {
+  [key: number]: Object
+}
+
 export interface IPlayerClass {
   audio: HTMLAudioElement;
 
   currentTrack: Track;
+
+  isPlayRand: boolean;
 
   analyser: AnalyserNode;
 

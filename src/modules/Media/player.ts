@@ -5,6 +5,8 @@
 // const context = new AudioContext()
 // const track = context.createMediaElementSource(mySound)
 
+import { Dic } from './media';
+
 export type Track = {
   title: string,
   author: string,
@@ -17,6 +19,12 @@ export class PlayerClass {
   #playlist: Track[];
 
   #playlistIndex: number = 0;
+
+  #playedCount: number = 0;
+
+  #randPlayed: Dic = {};
+
+  isPlayRand: boolean = false;
 
   audio: HTMLAudioElement;
 
@@ -52,7 +60,6 @@ export class PlayerClass {
   }
 
   play(): void {
-    console.log('play');
     this.#audioCtx.resume();
     this.audio.play();
   }
@@ -62,10 +69,20 @@ export class PlayerClass {
   }
 
   next(): void {
-    if (this.#playlistIndex > this.#playlist.length - 1) {
+    if (this.#playedCount > this.#playlist.length - 1) {
       return;
     }
-    this.#playlistIndex += 1;
+    if (this.isPlayRand) {
+      let idx: number = Math.trunc(Math.random() * this.#playlist.length);
+      while (this.#randPlayed.hasOwnProperty(idx)) {
+        idx = Math.trunc(Math.random() * this.#playlist.length);
+      }
+      this.#randPlayed[idx] = this.#playlist[idx];
+      this.#playlistIndex = idx;
+    } else {
+      this.#playlistIndex += 1;
+    }
+    this.#playedCount += 1;
     const nextTrack = this.#playlist[this.#playlistIndex];
     this.audio.src = nextTrack.src;
     this.currentTrack = nextTrack;

@@ -1,10 +1,11 @@
 {
   "compilerOptions": {
+    "typeRoots": ["./node_modules/@types"],
     "outDir": "./build",
     "target": "es6",
     "module": "es6",
-    "declaration": true,
-    "jsx": "react",
+    "jsx": "preserve",
+    "checkJs": false,
     "jsxFactory": "VDom.createElement",
     "allowJs": false,
     "noImplicitAny": true,
@@ -13,6 +14,14 @@
     "baseUrl": ".",
     "paths": {
       "factory": ["src/modules/VDom/createElement"]
-    }
-  }
+    },
+    // Ensure that .d.ts files are created by tsc, but not .js files
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    // Ensure that Babel can safely transpile files in the TypeScript project
+    "isolatedModules": true
+  },
+  "types": [
+    "src/typings/**/*.d.ts"
+  ]
 }

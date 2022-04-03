@@ -6,9 +6,6 @@ export type HandlerDescriptor = {
 
 export type HandlersTable = Map<string, HandlerDescriptor>;
 
-export const createHandlersStable = (): HandlersTable => (
+export const createHandlersTable = (): HandlersTable => (
   new Map<String, HandlerDescriptor>() as HandlersTable
 );
-
-export type VDomContext = {
-};

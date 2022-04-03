@@ -5,6 +5,16 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 // eslint-disable-next-line no-undef
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
+class EmitDeclarationOnly {
+  apply(compiler) {
+    compiler.hooks.shouldEmit.tap('EmitDeclarationOnly', (compilation) => this.handleHook(compiler, compilation));
+  }
+
+  handleHook(compiler, compilation) {
+    compilation.errors = compilation.errors.filter((error) => !error.toString().includes('TypeScript emitted no output for'));
+  }
+}
+
 // eslint-disable-next-line no-undef
 module.exports = (env = {}) => {
   // eslint-disable-next-line no-undef
@@ -19,6 +29,7 @@ module.exports = (env = {}) => {
     new MiniCssExtractPlugin({
       filename: '[name]-[hash:8].css',
     }),
+    // new EmitDeclarationOnly(),
   ];
 
   return {
@@ -47,7 +58,8 @@ module.exports = (env = {}) => {
             },
           },
           use: [
-            { loader: 'ts-loader' },
+            // { loader: 'ts-loader' },
+            { loader: 'babel-loader' },
           ],
         },
         {

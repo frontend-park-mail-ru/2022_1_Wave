@@ -1,7 +1,7 @@
 import VirtualElement from './VirtualElement';
 import Component from './Component';
 import { ComponentAttr, VNodeAttr, HandlersAttr } from './Symbols';
-import { createHandlersStable, HandlersTable } from './Types';
+import { createHandlersTable, HandlersTable } from './Types';
 
 const EVENT_PREFIX = 'on';
 const CAPTURE_SUFFIX = 'capture';
@@ -36,7 +36,7 @@ function initNewElement(newElement: HTMLElement, newVNode: VirtualElement): void
     newVNode.component.node = newElement;
   }
 
-  (newElement as any)[HandlersAttr] = createHandlersStable();
+  (newElement as any)[HandlersAttr] = createHandlersTable();
 }
 
 function prepareVNodeRemove(oldVNode: VirtualElement | string | null): void {
@@ -283,7 +283,7 @@ function patchAsComponent(
   let updatedOldVNode = oldVNode;
   let updatedDomNode = domNode;
 
-  if (oldVNode && domNode && (domNode as any)[ComponentAttr]) {
+  if (oldVNode != null && domNode && (domNode as any)[ComponentAttr]) {
     component = (domNode as any)[ComponentAttr] as Component;
 
     if (Object.getPrototypeOf(component).constructor === newVNode.type) {
@@ -376,7 +376,7 @@ export default function patch(initial: PatchArg): void {
     // new virtual node does not exist =>
     // we need to remove current node
     // from dom
-    if (!newVNode && oldVNode && domNode) {
+    if (newVNode == null && oldVNode != null && domNode) {
       removeFromDom(domNode, oldVNode);
     } else if (
       newVNode
@@ -386,10 +386,10 @@ export default function patch(initial: PatchArg): void {
       patchAsComponent(newVNode, oldVNode, domNode, parentDom, pos, nodesStack, commitChangesStack);
     // old virtual node and dom node do not exist =>
     // we need to place new node into dom
-    } else if (newVNode && !oldVNode && !domNode) {
+    } else if (newVNode != null && oldVNode == null && !domNode) {
       placeIntoDom(newVNode, parentDom, pos, nodesStack);
     // invalid case
-    } else if (!newVNode || !oldVNode || !domNode) {
+    } else if (newVNode == null || oldVNode == null || !domNode) {
       console.error('Can\'t patch current:', current);
     } else if (typeof newVNode === 'string') {
       patchAsString(domNode, oldVNode, newVNode);
@@ -402,7 +402,7 @@ export default function patch(initial: PatchArg): void {
     commitChangesStack.pop()!();
   }
 
-  const { oldVNode, newVNode, domNode }: PatchArg = initial;
+  const { oldVNode, newVNode }: PatchArg = initial;
   if (
     oldVNode
     && oldVNode instanceof VirtualElement

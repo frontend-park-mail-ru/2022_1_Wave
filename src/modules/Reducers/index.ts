@@ -1,9 +1,9 @@
 import { createStore } from '../Store/store';
 import { createLoggerMiddleware, createThunkMiddleware } from '../Store/middleware';
 
-const combineReducers = (reducers: Function[]) :object => (state:object, action: Function) => {
+const combineReducers = (reducers: Function[]) :object => (state: object, action: Function) => {
   Object.entries(reducers)
-    .map(([name, reducer]):void => {
+    .map(([name, reducer]): void => {
       if (!state[name]) {
         state[name] = {};
       }

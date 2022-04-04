@@ -1,8 +1,0 @@
-.carousel-row {
-    padding-top: 20px;
-    display: flex;
-    overflow-x: scroll;
-    scroll-behavior: smooth;
-    scroll-snap-type: x mandatory;
-    padding-bottom: 100px;
-}

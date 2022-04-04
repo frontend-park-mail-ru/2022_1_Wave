@@ -4,8 +4,11 @@ import VirtualElement from './modules/VDom/VirtualElement';
 import Component from './modules/VDom/Component';
 import Ref from './modules/VDom/Ref';
 import render from './modules/VDom/render';
-import Player from './components/common/Player/Player';
+import Player from './components/Page/Player/Player';
 import { PlayerClass, Track } from './modules/Media/player';
+import Sidebar from "./components/Sidebar/Sidebar";
+import Homepage from "./components/Homepage/Homepage";
+import Page from "./components/Page/Page";
 
 class Dummy extends Component {
   render = (): VirtualElement => (
@@ -81,4 +84,5 @@ const tracks = [{
 
 const player = new PlayerClass(tracks);
 
-render(<Player player={player} />, document.getElementById('root')!);
+//render(<Player player={player} />, document.getElementById('root')!);
+render(<Page content={<Homepage/>}/>, document.getElementById('root')!);

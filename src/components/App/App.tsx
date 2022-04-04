@@ -5,7 +5,7 @@
 // import User from '/actions/User.js';
 // import MainPage from '/components/MainPage/MainPage.js';
 import { createElement } from 'factory';
-import Example from '../AlbumCard/example';
+import Example from '../Homepage/Popular/AlbumCard/example';
 import './App.scss';
 import { store } from '../../modules/Reducers';
 

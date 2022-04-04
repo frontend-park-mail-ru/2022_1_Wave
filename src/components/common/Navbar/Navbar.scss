@@ -1,0 +1,127 @@
+.navbar {
+  --linear-gradient-blue-dark: linear-gradient(0deg, rgba(0, 0, 0, 0) 10%, rgba(1, 208, 234, 0.1) 100%);
+  --linear-gradient-blue-white: linear-gradient(90deg, rgba(33, 144, 179, 1) 0%, rgba(184, 227, 228, 1) 100%);
+  --btn-inactive: #6D7184;
+  --input-color: #0000002B;
+  --btn-hover: #37B8D6;
+}
+
+.navbar {
+  height: 100px;
+  display: flex;
+  background-image: var(--linear-gradient-blue-dark);
+
+  .navbar__menu{
+    width: 400px;
+  }
+
+  .navbar__search{
+    flex-grow: 1;
+    min-width: 25%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+
+    input {
+      padding: 5px;
+      width: 100%;
+      border-radius: 19px;
+      height: 40px;
+      text-indent: 35px;
+      border:solid 0px;
+      background-color: var(--input-color);
+      font-size: 16px;
+      color: var(--btn-inactive);
+      outline: none;
+    }
+
+    .navbar__search__icon{
+      position: absolute;
+      color: var(--btn-inactive);
+      left: 12px;
+      font-size: 16px;
+    }
+  }
+
+  .navbar__menu {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+
+    .navbar__menu__button {
+      text-align: center;
+      margin: auto 0;
+      font-size: 13px;
+
+      &:hover{
+        cursor: pointer;
+
+        .button__text {
+          color: var(--btn-hover);
+        }
+      }
+      &::after {
+        content: '';
+        display: block;
+        margin-top: 5px;
+        width: 0;
+        height: 2px;
+        background: var(--linear-gradient-blue-white);
+        transition: width .5s;
+      }
+      &:hover::after {
+        color: var(--btn-hover);
+        width: 100%;
+      }
+      .button__text {
+        color: var(--btn-inactive);
+      }
+    }
+
+
+    }
+  .navbar__avatar {
+    width: 180px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    .navbar__avatar__wrapper{
+      padding: 30px;
+      .navbar__avatar__img_round{
+        width: 50px;
+        height: 50px;
+        border-radius: 25px;
+        object-fit: cover;
+      }
+      .popup{
+        width: 180px;
+        height: 80px;
+        background-color: #080D21;
+        position: absolute;
+        top: 80px;
+        right: 50px;
+        display: none;
+        flex-direction: column;
+        justify-content: space-evenly;
+        a {
+          text-decoration: none;
+        }
+        .popup__text{
+          color: #DBD9D9;
+          font-size: 14px;
+          padding-left: 20px;
+          &:hover{
+            color: #37B8D6;
+            cursor: pointer;
+          }
+        }
+      }
+      &:hover .popup{
+        display: flex;
+      }
+    }
+  }
+}
+

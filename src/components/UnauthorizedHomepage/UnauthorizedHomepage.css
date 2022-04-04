@@ -1,4 +1,4 @@
-@import '../Homepage/Popular.css';
+@import '../Homepage/Popular/Popular.scss';
 
 .navbar__auth__menu {
     display: flex;

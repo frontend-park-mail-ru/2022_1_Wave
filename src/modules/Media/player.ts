@@ -37,6 +37,9 @@ export class PlayerClass {
   #mediaMetadata: MediaMetadata;
 
   constructor(tracks: Track[] = [], initVolume:number = 0.5) {
+    if (tracks.length === 0) {
+      return;
+    }
     this.#playlist = tracks;
     this.#playlist = tracks;
     this.currentTrack = this.#playlist[this.#playlistIndex];

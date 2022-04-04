@@ -1,4 +1,3 @@
-@import "components/App/App.css";
 
 *::-webkit-scrollbar {
     width: 0.20rem;
@@ -11,4 +10,16 @@
 *::-webkit-scrollbar-thumb {
     background-color: #BEB7DF;
     border-radius: 3px;
+}
+
+
+.text {
+    font-family: 'Montserrat', sans-serif;;
+    font-size: 15px;
+    color: white;
+}
+
+#root{
+    height: 100%;
+    width: 100%;
 }

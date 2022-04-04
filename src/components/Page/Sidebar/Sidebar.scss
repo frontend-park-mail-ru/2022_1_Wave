@@ -1,0 +1,29 @@
+
+.sidebar {
+  width: 330px;
+  height: 100%;
+  position: relative;
+  top: 0;
+  display: inline-flex;
+  flex-direction: column;
+  overflow: hidden;
+
+  .sidebar__header {
+    height: 80px;
+
+    .header__logo{
+      height: 100px;
+      display: flex;
+      .logo__picture{
+        height: 70%;
+        width: 70%;
+      }
+    }
+  }
+
+}
+
+
+
+
+

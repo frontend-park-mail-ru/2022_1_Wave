@@ -1,7 +1,7 @@
 @import "../library.blocks/text/text.css";
 @import "../library.blocks/logo/logo.css";
-@import "../Homepage/Popular/AlbumCard/AlbumCard.scss";
-@import "../Homepage/Popular/ArtistCard/ArtistCard.css";
+@import "../common/AlbumCard/AlbumCard.scss";
+@import "../common/ArtistCard/ArtistCard.css";
 @import "../library.blocks/carousel-row/carousel-row.css";
 @import "../common.blocks/navbar/navbar.css";
 @import "../common.blocks/sidebar/sidebar.css";

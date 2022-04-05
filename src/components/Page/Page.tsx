@@ -11,28 +11,16 @@ import Homepage from '../Homepage/Homepage';
 import { PlayerClass } from '../../modules/Media/player';
 
 export default class Page extends Component {
-  constructor(props:IProps) {
-    super(props);
-    this.state = {
-      content: <div/>,
-    };
-  }
-
-  didMount():void {
-    const someel = <Homepage/>;
-    this.setState({ content: someel });
-  }
-
   render = (): VirtualElement => {
     const player = new PlayerClass();
-
+    const { content, isAuthorized } = this.props;
     return (
-      <div className="page">
-        <Sidebar/>
-        <div className="content">
-          {this.state.content}
+      <div class="page">
+        <Sidebar isAuthorized={isAuthorized}/>
+        <div class="content">
+          {content}
         </div>
-        {/*<Player player={player}/>*/}
+        {/* <Player player={player}/> */}
       </div>
     );
   };

@@ -4,11 +4,20 @@ import Navbar from '../common/Navbar/Navbar';
 import VDom from '../../modules/VDom';
 import './Homepage.css';
 import Popular from './Popular/Popular';
+import { IProps } from '../../modules/VDom/Interfaces';
 
 export default class Homepage extends Component {
-  render = (): VirtualElement => (
+  didMount(): void {
+    const { isAuthorized } = this.props;
+    this.setState({ isAuthorized });
+  }
+
+  render = (): VirtualElement => {
+    const { isAuthorized } = this.props;
+
+    return (
       <div class="main__page">
-          <Navbar/>
+        <Navbar isAuthorized={isAuthorized}/>
         <div class="main__top-chart__album">
           <div class="main__top-chart__album__name">
             <div class="text main__top-chart__album__name">
@@ -30,5 +39,6 @@ export default class Homepage extends Component {
         </div>
         <Popular/>
       </div>
-  );
+    );
+  };
 }

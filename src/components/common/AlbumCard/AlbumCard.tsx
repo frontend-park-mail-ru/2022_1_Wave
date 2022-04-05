@@ -1,7 +1,7 @@
-import Component from '../../../../modules/VDom/Component';
-import VirtualElement from '../../../../modules/VDom/VirtualElement';
-import { IProps } from '../../../../modules/VDom/Interfaces';
-import VDom from "../../../../modules/VDom";
+import Component from '../../../modules/VDom/Component';
+import VirtualElement from '../../../modules/VDom/VirtualElement';
+import { IProps } from '../../../modules/VDom/Interfaces';
+import VDom from "../../../modules/VDom";
 import './AlbumCard.scss';
 
 export default class AlbumCard extends Component {

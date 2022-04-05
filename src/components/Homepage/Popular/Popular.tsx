@@ -2,9 +2,9 @@ import Component from '../../../modules/VDom/Component';
 import VirtualElement from '../../../modules/VDom/VirtualElement';
 import '../../../index.css';
 import './Popular.scss';
-import CarouselRow from './CarouselRow/CarouselRow';
-import AlbumCard from './AlbumCard/AlbumCard';
-import ArtistCard from './ArtistCard/ArtistCard';
+import CarouselRow from '../../common/CarouselRow/CarouselRow';
+import AlbumCard from '../../common/AlbumCard/AlbumCard';
+import ArtistCard from '../../common/ArtistCard/ArtistCard';
 import VDom from '../../../modules/VDom';
 import album from '../../../assets/playlist-track-icon-dummy.png';
 export default class Popular extends Component {

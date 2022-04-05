@@ -10,13 +10,14 @@ export default class Navigation extends Component {
   constructor(props: IProps) {
     super(props);
     this.state = {
-      name: '',
+      title: '',
     };
   }
 
   didMount(): void {
     const { title } = this.props;
-    this.setState({ name: title });
+    console.log("Navigator:",title);
+    this.setState({ title });
   }
 
   render = (): VirtualElement => (
@@ -26,7 +27,7 @@ export default class Navigation extends Component {
         <div class="icon__wrapper__icon-default"></div>
       </div>
       <p class="text nav-block__navigation-text">
-        {this.state.name}
+        {this.state.title}
       </p>
     </div>
   );

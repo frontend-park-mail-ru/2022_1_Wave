@@ -85,4 +85,4 @@ const tracks = [{
 const player = new PlayerClass(tracks);
 
 //render(<Player player={player} />, document.getElementById('root')!);
-render(<Page content={<Homepage/>}/>, document.getElementById('root')!);
+render(<Page isAuthorized={false} content={<Homepage isAuthorized={false}/>}/>, document.getElementById('root')!);

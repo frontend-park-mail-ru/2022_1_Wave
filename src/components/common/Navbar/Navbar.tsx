@@ -23,14 +23,14 @@ export default class Navbar extends Component {
   render = (): VirtualElement => {
     const { isAuthorized } = this.props;
     const content = isAuthorized ? (
-      <div className="navbar__avatar">
-        <div className="navbar__avatar__wrapper">
-          <img onClick={this.logout} className="navbar__avatar__img_round" src={avatar} alt="avatar.png"/>
-          <div className="popup">
-            <a className="popup__settings__link" href="">
-              <div className="text popup__text">Settings</div>
+      <div class="navbar__avatar">
+        <div class="navbar__avatar__wrapper">
+          <img onClick={this.logout} class="navbar__avatar__img_round" src={avatar} alt="avatar.png"/>
+          <div class="popup">
+            <a class="popup__settings__link" href="">
+              <div class="text popup__text">Settings</div>
             </a>
-            <div className="text popup__text popup__logout">Log out</div>
+            <div class="text popup__text popup__logout">Log out</div>
           </div>
         </div>
       </div>

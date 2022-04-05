@@ -7,11 +7,6 @@ import Popular from './Popular/Popular';
 import { IProps } from '../../modules/VDom/Interfaces';
 
 export default class Homepage extends Component {
-  didMount(): void {
-    const { isAuthorized } = this.props;
-    this.setState({ isAuthorized });
-  }
-
   render = (): VirtualElement => {
     const { isAuthorized } = this.props;
 

@@ -10,6 +10,7 @@ import Sidebar from "./components/Sidebar/Sidebar";
 import Homepage from "./components/Homepage/Homepage";
 import Page from "./components/Page/Page";
 import LoginPage from "./components/LoginPage/LoginPage";
+import ArtistPage from "./components/ArtistPage/ArtistPage";
 
 class Dummy extends Component {
   render = (): VirtualElement => (
@@ -87,5 +88,6 @@ const player = new PlayerClass(tracks);
 
 //render(<Player player={player} />, document.getElementById('root')!);
 //render(<Page isAuthorized={false} content={<Homepage isAuthorized={false}/>}/>, document.getElementById('root')!);
-
-render(<LoginPage/>, document.getElementById('root')!);
+//render(<LoginPage/>, document.getElementById('root')!);
+render(<Page isAuthorized={false} content={<ArtistPage />}/>, document.getElementById('root')!);
+//render(<Page isAuthorized={true} content={<Homepage isAuthorized={true}/>}/>, document.getElementById('root')!);

@@ -9,6 +9,7 @@ import { PlayerClass, Track } from './modules/Media/player';
 import Sidebar from "./components/Sidebar/Sidebar";
 import Homepage from "./components/Homepage/Homepage";
 import Page from "./components/Page/Page";
+import LoginPage from "./components/LoginPage/LoginPage";
 
 class Dummy extends Component {
   render = (): VirtualElement => (
@@ -85,4 +86,6 @@ const tracks = [{
 const player = new PlayerClass(tracks);
 
 //render(<Player player={player} />, document.getElementById('root')!);
-render(<Page isAuthorized={false} content={<Homepage isAuthorized={false}/>}/>, document.getElementById('root')!);
+//render(<Page isAuthorized={false} content={<Homepage isAuthorized={false}/>}/>, document.getElementById('root')!);
+
+render(<LoginPage/>, document.getElementById('root')!);

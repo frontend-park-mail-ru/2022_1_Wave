@@ -1,7 +1,11 @@
-.login-page {
-    box-sizing: border-box;
+body {
     background: url("../../assets/auth.png") no-repeat 50%;
     background-size: cover;
+    object-fit: cover;
+
+}
+.login-page {
+    box-sizing: border-box;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -145,4 +149,14 @@
 
 .input__wrong {
     border: solid 1.5px #FF6464;
+}
+
+.register-form__button {
+    height: 40px;
+    margin-left: auto;
+    width: 100%;
+}
+
+.register-form__input-line {
+    width: 100%;
 }

@@ -93,6 +93,10 @@ export default class RouteSwitch extends VDom.Component<any, any, any, Router> {
         if (matchResult) {
           const { params, rest } = matchResult;
           router.unhandledPath = rest;
+
+          child.props.params = params;
+
+          return child;
         }
       } else {
         throw Error('RouteSwitch have to contain only Route components');

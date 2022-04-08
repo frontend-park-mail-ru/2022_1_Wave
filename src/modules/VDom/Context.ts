@@ -1,50 +1,74 @@
-export interface IContextNode {
-  next: IContextNode | null;
-  readonly type: any;
+export interface IContextType {
+  contextId: Symbol;
 }
 
-export interface IContext<T> {
-  value: T;
-}
+export class ContextType<T> implements IContextType{
+  contextId: Symbol;
 
-export type ContextListener = () => void;
-export type ContextUnlistener = () => void;
+  defaultValue: T;
 
-export default class Context<T> implements IContextNode, IContext<T> {
-  value: T;
-
-  next: IContextNode | null;
-
-  #listeners: ContextListener[];
-
-  // @ts-ignore
-  readonly type = T;
-
-  constructor(parent: IContextNode, value: T) {
-    this.value = value;
-    this.next = parent;
-    this.#listeners = [];
-  }
-
-  subscribe(listener: ContextListener): ContextUnlistener {
-    this.#listeners.push(listener);
-
-    return () => {
-      const idx = this.#listeners.indexOf(listener);
-      if (idx > 0) {
-        this.#listeners.splice(idx, 1);
-      }
-    };
+  constructor(name: string, defaultValue: T) {
+    this.contextId = Symbol(name);
+    this.defaultValue = defaultValue;
   }
 }
 
-export function fromContextList<T>(ctx: IContextNode | null): IContext<T> | null {
-  let cur = ctx;
+export type Listener = () => void;
+export type Unsubscriber = () => void;
 
-  while (cur != null) {
-    // @ts-ignore
-    if (cur.type === T) {
-      return cur as Context<T>;
+export interface IContext {
+  type: IContextType;
+  subscribe(listener: Listener): Unsubscriber;
+}
+
+export class Context<T> implements IContext {
+  #type: ContextType<T>;
+
+  get type(): IContextType {
+    return this.#type;
+  }
+
+  #value: T;
+
+  get value(): T {
+    return this.#value;
+  }
+
+  set value(val: T) {
+    this.#value = val;
+    this.#listeners.forEach((listener) => listener());
+  }
+
+  #listeners: Set<Listener>;
+
+  constructor(type: ContextType<T>, value?: T) {
+    this.#type = type;
+    this.#listeners = new Set<Listener>();
+
+    if (value !== undefined) {
+      this.#value = value;
+    } else {
+      this.#value = type.defaultValue;
+    }
+  }
+
+  subscribe(listener: Listener): Unsubscriber {
+    this.#listeners.add(listener);
+    return () => this.#listeners.delete(listener);
+  }
+}
+
+export type ContextNode = {
+  context: IContext,
+  next: ContextNode,
+}
+
+export function fromContextList<T>(node: ContextNode | null, contextType: IContextType): Context<T> | null {
+  let cur = node;
+
+  while (cur !== null) {
+    if (cur.context.type.contextId === contextType.contextId) {
+      return cur.context as Context<T>;
     }
 
     cur = cur.next;

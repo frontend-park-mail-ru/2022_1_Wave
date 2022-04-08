@@ -2,6 +2,7 @@ import VirtualElement from './VirtualElement';
 import Component from './Component';
 import { ComponentAttr, VNodeAttr, HandlersAttr } from './Symbols';
 import { createHandlersTable, HandlersTable } from './Types';
+import { ContextNode, ContextType, fromContextList } from './Context';
 
 const EVENT_PREFIX = 'on';
 const CAPTURE_SUFFIX = 'capture';
@@ -12,6 +13,7 @@ type PatchArg = {
   domNode: HTMLElement | null,
   parentDom: HTMLElement,
   pos: number,
+  ctxNode: ContextNode | null,
 };
 
 function isAllChildrenWithKey(vnode: VirtualElement): boolean {
@@ -72,6 +74,7 @@ function prepareVNodeRemove(oldVNode: VirtualElement | string | null): void {
 
       if (current.component) {
         current.component.willUmount();
+        current.component.destruct();
       }
 
       current.destruct();
@@ -147,6 +150,7 @@ function patchChildren(
   oldVNode: VirtualElement,
   newVNode: VirtualElement,
   nodesStack: PatchArg[],
+  ctxNode: ContextNode | null,
 ): void {
   const toMount: PatchArg[] = [];
   const toUnmountDom = Array.from<Node>(domNode.childNodes).slice(newVNode.children.length);
@@ -170,6 +174,7 @@ function patchChildren(
           domNode: child as HTMLElement,
           parentDom: domNode,
           pos: idx,
+          ctxNode,
         });
         oldIdx += 1;
       } else {
@@ -179,6 +184,7 @@ function patchChildren(
           domNode: null,
           parentDom: domNode,
           pos: idx,
+          ctxNode,
         });
       }
     });
@@ -198,6 +204,7 @@ function patchChildren(
         domNode: child as HTMLElement,
         parentDom: domNode,
         pos: idx,
+        ctxNode,
       });
     });
   }
@@ -211,6 +218,7 @@ function patchChildren(
       newVNode: null,
       parentDom: domNode,
       pos: 0,
+      ctxNode,
     });
   }
 
@@ -237,6 +245,7 @@ function patchAsVNode(
   newVNode: VirtualElement,
   pos: number,
   nodesStack: PatchArg[],
+  ctxNode: ContextNode | null,
 ): void {
   if (typeof oldVNode === 'string' || oldVNode.type !== newVNode.type) {
     prepareVNodeRemove(oldVNode);
@@ -258,6 +267,7 @@ function patchAsVNode(
       domNode: newElement as HTMLElement,
       parentDom,
       pos,
+      ctxNode,
     });
   } else {
     if (newVNode.component) {
@@ -266,7 +276,7 @@ function patchAsVNode(
 
     patchProps(domNode, oldVNode.props, newVNode.props);
 
-    patchChildren(domNode, oldVNode, newVNode, nodesStack);
+    patchChildren(domNode, oldVNode, newVNode, nodesStack, ctxNode);
   }
 }
 
@@ -278,15 +288,18 @@ function patchAsComponent(
   pos: number,
   nodesStack: PatchArg[],
   commitChangesStack: Array<() => void>,
+  ctxNode: ContextNode | null,
 ): void {
   let component: Component;
   let updatedOldVNode = oldVNode;
   let updatedDomNode = domNode;
+  let updatedCtxNode = ctxNode;
 
   if (oldVNode != null && domNode && (domNode as any)[ComponentAttr]) {
     component = (domNode as any)[ComponentAttr] as Component;
 
     if (Object.getPrototypeOf(component).constructor === newVNode.type) {
+      updatedCtxNode = component.ctxNode;
       const prevProps = component.props;
       component.setProps(newVNode.props);
       const snapshot = component.makeSnapshot(prevProps, component.state);
@@ -299,12 +312,39 @@ function patchAsComponent(
 
       component = new (newVNode.type as (new (props: any) => Component))(newVNode.props);
       commitChangesStack.push(() => component.didMount());
+
+      const ctx = component.produceContext();
+      if (ctx) {
+        updatedCtxNode = {
+          context: ctx,
+          next: ctxNode,
+        };
+      }
+
+      const ctxType = component.contextType;
+      if (ctxType) {
+        component.setContext(fromContextList(ctxNode, ctxType));
+      }
     }
   } else {
     component = new (newVNode.type as (new (props: any) => Component))(newVNode.props);
     commitChangesStack.push(() => component.didMount());
+
+    const ctx = component.produceContext();
+    if (ctx) {
+      updatedCtxNode = {
+        context: ctx,
+        next: ctxNode,
+      };
+    }
+
+    const ctxType = component.contextType;
+    if (ctxType) {
+      component.setContext(fromContextList(ctxNode, ctxType));
+    }
   }
 
+  component.ctxNode = updatedCtxNode;
   component.children = newVNode.children;
   const rendered = component.render();
   rendered.component = component;
@@ -320,6 +360,7 @@ function patchAsComponent(
     domNode: updatedDomNode,
     parentDom,
     pos,
+    ctxNode: updatedCtxNode,
   });
 }
 
@@ -333,6 +374,7 @@ function placeIntoDom(
   parentDom: HTMLElement,
   pos: number,
   nodesStack: PatchArg[],
+  ctxNode: ContextNode,
 ): void {
   let newElement: Node;
   let toPlace: Node;
@@ -360,6 +402,7 @@ function placeIntoDom(
     domNode: newElement as HTMLElement,
     parentDom,
     pos,
+    ctxNode,
   });
 }
 
@@ -370,7 +413,7 @@ export default function patch(initial: PatchArg): void {
   while (nodesStack.length > 0) {
     const current: PatchArg = nodesStack.pop()!;
     const {
-      oldVNode, newVNode, domNode, parentDom, pos,
+      oldVNode, newVNode, domNode, parentDom, pos, ctxNode,
     }: PatchArg = current;
 
     // new virtual node does not exist =>
@@ -383,18 +426,27 @@ export default function patch(initial: PatchArg): void {
       && newVNode instanceof VirtualElement
       && typeof newVNode.type === 'function'
     ) {
-      patchAsComponent(newVNode, oldVNode, domNode, parentDom, pos, nodesStack, commitChangesStack);
+      patchAsComponent(
+        newVNode,
+        oldVNode,
+        domNode,
+        parentDom,
+        pos,
+        nodesStack,
+        commitChangesStack,
+        ctxNode,
+      );
     // old virtual node and dom node do not exist =>
     // we need to place new node into dom
     } else if (newVNode != null && oldVNode == null && !domNode) {
-      placeIntoDom(newVNode, parentDom, pos, nodesStack);
+      placeIntoDom(newVNode, parentDom, pos, nodesStack, ctxNode);
     // invalid case
     } else if (newVNode == null || oldVNode == null || !domNode) {
       console.error('Can\'t patch current:', current);
     } else if (typeof newVNode === 'string') {
       patchAsString(domNode, oldVNode, newVNode);
     } else {
-      patchAsVNode(domNode, parentDom, oldVNode, newVNode, pos, nodesStack);
+      patchAsVNode(domNode, parentDom, oldVNode, newVNode, pos, nodesStack, ctxNode);
     }
   }
 

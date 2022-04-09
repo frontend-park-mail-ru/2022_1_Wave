@@ -66,7 +66,7 @@ export type ContextNode = {
 export function fromContextList<T>(node: ContextNode | null, contextType: IContextType): Context<T> | null {
   let cur = node;
 
-  while (cur !== null) {
+  while (cur != null) {
     if (cur.context.type.contextId === contextType.contextId) {
       return cur.context as Context<T>;
     }

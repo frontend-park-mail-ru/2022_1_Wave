@@ -1,6 +1,9 @@
 // eslint-disable-next-line max-classes-per-file
 import VDom from './modules/VDom';
 import { Context, ContextType, IContext, IContextType } from './modules/VDom/Context';
+import Router from './modules/Router/Router';
+import Route from './modules/Router/Route';
+import { default as RouteSwitch, routerContextType } from './modules/Router/RouteSwitch';
 // import App from './components/App/App';
 
 class Dummy extends VDom.Component {
@@ -16,9 +19,6 @@ function f(tag: JSX.IntrinsicElements): void {
 }
 
 console.log(f);
-
-const dummyContextType = new ContextType<string>('dummy', 'default dummy');
-const dummyContext = new Context(dummyContextType, 'first dummy');
 
 class DummyParent extends VDom.Component {
   render = (): VDom.VirtualElement => {
@@ -36,15 +36,10 @@ class DummyParent extends VDom.Component {
       </div>
     );
   };
-
-  didUpdate(): void {
-    console.log(this.ctx.value);
-  }
-
-  get contextType(): IContextType | null {
-    return dummyContextType;
-  }
 }
+
+const router = new Router();
+const routerContext = new Context<router>(routerContextType, router);
 
 class DummyApp extends VDom.Component {
   constructor(props: any) {
@@ -57,8 +52,8 @@ class DummyApp extends VDom.Component {
     this.items = [];
   }
 
-  produceContext(): IContext | null {
-    return dummyContext;
+  produceContext(): IContext {
+    return routerContext;
   }
 
   handler = (e: Event): void => console.log(e);
@@ -75,6 +70,14 @@ class DummyApp extends VDom.Component {
       <div style={{
         background: 'cyan',
       }}>
+        <RouteSwitch>
+          <Route exact to="">
+            <div>home</div>
+          </Route>
+          <Route exact to="/about">
+            <div>about</div>
+          </Route>
+        </RouteSwitch>
         <Dummy data='Counter:'/>
         <Dummy data={this.state.counter.toString()}/>
         <DummyParent>

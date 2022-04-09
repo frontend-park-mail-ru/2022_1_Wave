@@ -1,5 +1,6 @@
 import VDom from '../VDom';
 import Route from './Route';
+import Router from './Router';
 import { ContextType, IContextType } from '../VDom/Context';
 
 const routeRegExp = /^(?:\/:?[\w_~.-]+)*$/;
@@ -10,28 +11,13 @@ type RouteProps = {
   exact: boolean,
 }
 
-class Router {
-  #workingPath: string;
-
-  handledPaths: string[];
-
-  unhandledPath: string;
-
-  get workingPath(): string {
-    return this.#workingPath;
-  }
-
-  constructor() {
-    this.#workingPath = '';
-    this.handledPaths = [];
-    this.unhandledPath = window.location.pathname;
-  }
-}
-
-const routerContextType = new ContextType<Router | null>('router', null);
+export const routerContextType = new ContextType<Router | null>('router', null);
 
 function match(expectPath: string, actualPath: string, isExact: boolean):
-  { params: any, rest: string } | null {
+  { params: any, handled: string, rest: string } | null {
+  if (actualPath === '/') {
+    actualPath = '';
+  }
   if (!expectPath.match(routeRegExp)) {
     throw Error(`Invalid route: ${expectPath}`);
   }
@@ -41,7 +27,6 @@ function match(expectPath: string, actualPath: string, isExact: boolean):
 
   const expect: string[] = expectPath.split('/');
   const actual: string[] = actualPath.split('/');
-  const rest = `/${actual.slice(expect.length).join('/')}`;
   const params: any = {};
 
   if (expect.length > actual.length) {
@@ -67,43 +52,72 @@ function match(expectPath: string, actualPath: string, isExact: boolean):
     return null;
   }
 
-  return { params, rest };
+  const handled = `/${actual.slice(0, expect.length).join('/')}`;
+  const rest = `/${actual.slice(expect.length).join('/')}`;
+
+  return { params, handled, rest };
 }
 
-// class Parent extends VDom.Component {
-//   produceContext(): IContext {
-//     return new Context(routerContextType, new Router());
-//   }
-// }
-
 export default class RouteSwitch extends VDom.Component<any, any, any, Router> {
+  private toRender: VDom.VirtualElement | null;
+
   get contextType(): IContextType {
     return routerContextType;
   }
 
-  render(): VDom.VirtualElement {
+  constructor(props: any) {
+    super(props);
+    this.toRender = null;
+    console.log('Switch!');
+  }
+
+  route(): void {
     const router = this.ctx.value;
 
-    if (!this.children.every((child) => child instanceof VDom.VirtualElement)) {
+    if (!this.children.every((child) => (
+      child instanceof VDom.VirtualElement && child.type === Route
+    ))) {
       throw Error('RouteSwitch have to contain only Route components');
     }
 
-    for (const childNode of this.children) {
-      const child = childNode as VDom.VirtualElement;
+    const toRender = this.children.reduce((acc, cur): VDom.VirtualNode => {
+      const child = cur as VDom.VirtualElement;
       const { to: path, exact: isExact } = child.props as RouteProps;
 
       const matchResult = match(path, router.unhandledPath, isExact);
 
       if (matchResult) {
-        const { params, rest } = matchResult;
+        const { params, handled, rest } = matchResult;
         router.unhandledPath = rest;
+        router.handledSwitchers.push({
+          path: handled,
+          switcher: this,
+        });
 
         child.props.params = params;
 
         return child;
       }
+
+      return acc;
+    }, null);
+
+    if (toRender) {
+      this.toRender = toRender;
+    }
+  }
+
+  render(): VDom.VirtualElement {
+    const router = this.ctx.value;
+
+    if (!router.contains(this)) {
+      this.route();
     }
 
-    throw Error('RouteSwitch no match');
+    if (!this.toRender) {
+      throw Error('RouteSwitch no match');
+    }
+
+    return this.toRender;
   }
 }

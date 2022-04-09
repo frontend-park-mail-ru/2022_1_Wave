@@ -6,10 +6,14 @@ export default class Route extends VDom.Component {
       throw Error('Route component have to contain only 1 child');
     }
 
-    if (!(this.children[0] instanceof VDom.VirtualElement)) {
+    const child = this.children[0];
+
+    if (!(child instanceof VDom.VirtualElement)) {
       throw Error('Route component have to be instance of VDom.VirtualElement');
     }
 
-    return this.children[0];
+    child.props.params = this.props.params;
+
+    return child;
   }
 }

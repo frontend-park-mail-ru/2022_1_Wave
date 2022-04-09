@@ -310,6 +310,7 @@ function patchAsComponent(
       updatedOldVNode = null;
       updatedDomNode = null;
 
+      console.log(component);
       component = new (newVNode.type as (new (props: any) => Component))(newVNode.props);
       commitChangesStack.push(() => component.didMount());
 
@@ -329,6 +330,7 @@ function patchAsComponent(
   } else {
     component = new (newVNode.type as (new (props: any) => Component))(newVNode.props);
     commitChangesStack.push(() => component.didMount());
+
 
     const ctx = component.produceContext();
     if (ctx) {

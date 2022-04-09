@@ -85,6 +85,7 @@ export default abstract class Component<Props = any, State = any, Snapshot = any
     const oldVNode = (this.node as any)?.[VNodeAttr] as VirtualElement;
     const parentDom = domNode.parentElement!;
     const pos = oldVNode!.pos!;
+    const ctxNode = this.ctxNode;
 
     newVNode.component = this;
 
@@ -94,6 +95,7 @@ export default abstract class Component<Props = any, State = any, Snapshot = any
       domNode,
       parentDom,
       pos,
+      ctxNode,
     });
 
     this.didUpdate(snapshot);

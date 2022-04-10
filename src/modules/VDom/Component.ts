@@ -2,20 +2,29 @@ import VirtualElement from './VirtualElement';
 import Ref from './Ref';
 import patch from './patchNode';
 import { VNodeAttr } from './Symbols';
-import { Context, ContextNode, ContextType, IContext, IContextType } from './Context';
+import { createContext, ContextType } from './Context';
+import StringWrapper from './StringWrapper';
+import { Debounce } from './util';
+import Fragment from './Fragment';
 
-export default abstract class Component<Props = any, State = any, Snapshot = any, ContextValueType = null> {
+export interface IComponentProps {
+  parentDomNode: HTMLElement;
+  leftSibling: HTMLElement;
+  vNode: VirtualElement;
+  children: Array<VirtualElement | StringWrapper>;
+  ref?: Ref;
+}
+
+export default abstract class Component<Props extends IComponentProps = any, State = any, Snapshot = any, ContextValueType = null> {
   public props: Props;
 
   public node: HTMLElement | null;
 
   public state: State;
 
-  public children: Array<VirtualElement | string>;
+  public children: Array<VirtualElement | StringWrapper>;
 
-  public ctxNode: ContextNode | null;
-
-  public ctx: Context<ContextValueType>;
+  public context: ContextValueType;
 
   #destructListeners: Array<() => void>;
 
@@ -23,28 +32,7 @@ export default abstract class Component<Props = any, State = any, Snapshot = any
     this.node = null;
     this.children = [];
     this.setProps(props);
-    this.ctxNode = null;
     this.#destructListeners = [];
-  }
-
-  setContext(ctx: IContext | null): void {
-    if (ctx) {
-      this.ctx = ctx as Context<ContextValueType>;
-    } else {
-      this.ctx = new Context<ContextValueType>(this.contextType! as ContextType<ContextValueType>);
-    }
-
-    this.#destructListeners.push(
-      this.ctx.subscribe(() => this.setState(this.state)),
-    );
-  }
-
-  produceContext(): IContext | null {
-    return null;
-  }
-
-  get contextType(): IContextType | null {
-    return null;
   }
 
   destruct(): void {
@@ -53,51 +41,110 @@ export default abstract class Component<Props = any, State = any, Snapshot = any
   }
 
   setProps(props: Props): void {
-    const { ref, ...rest } = props as unknown as { ref?: Ref };
+    const { ref } = props;
     if (ref) {
-      ref.instance = this;
+      ref.instance = this as unknown as Component;
     }
 
-    this.props = rest as Props;
+    const context = Object
+      .getPrototypeOf(this)
+      .constructor
+      .contextType as ContextType<ContextValueType>;
+    let curVNode: VirtualElement | null = props.vNode;
+
+    if (context != null) {
+      // console.log("!!!!!!!!!!!!!!!!!!!");
+      while (curVNode) {
+        // console.log(curVNode);
+        if (curVNode.component != null) {
+          if (Object.getPrototypeOf(curVNode.component).constructor === context.Provider) {
+            // console.log("????");
+            this.context = (curVNode.component as any).props.value as ContextValueType;
+            break;
+          }
+        }
+
+        curVNode = curVNode.parent;
+      }
+
+      if (curVNode == null) {
+        this.context = context.defaultValue;
+      }
+    }
+
+    this.props = props;
   }
 
   abstract render(): VirtualElement;
 
   didMount(): void {}
 
+  // eslint-disable-next-line no-unused-vars
   didUpdate(snapshot: Snapshot | null): void {}
 
   willUmount(): void {}
 
+  // eslint-disable-next-line no-unused-vars
   makeSnapshot(prevProps: Props, prevState: State): Snapshot | null { return null; }
 
   setState(partialState: any): void {
     const prevState = this.state;
     this.state = { ...this.state, ...partialState };
-    this.update(prevState);
+    this.enqueueUpdate(this.props, prevState);
   }
 
-  update(prevState: State): void {
-    const snapshot = this.makeSnapshot(this.props, prevState);
+  @Debounce(10)
+  enqueueUpdate(prevProps?: Props, prevState?: State): void {
+    let { props } = this;
+    let { state } = this;
 
-    const newVNode = this.render();
-    const domNode = this.node!;
-    const oldVNode = (this.node as any)?.[VNodeAttr] as VirtualElement;
-    const parentDom = domNode.parentElement!;
-    const pos = oldVNode!.pos!;
-    const ctxNode = this.ctxNode;
+    if (prevProps != null) {
+      props = prevProps;
+    }
+    if (prevState != null) {
+      state = prevState;
+    }
 
-    newVNode.component = this;
+    const snapshot = this.makeSnapshot(props, state);
+
+    const rendered = this.render();
+    const oldVNode = this.props.vNode.children[0];
+    const { parentDomNode, leftSibling } = this.props;
+
+    rendered.parent = this.props.vNode;
+    rendered.pos = 0;
 
     patch({
-      newVNode,
+      parentDomNode,
+      leftSibling,
+      newVNode: rendered,
       oldVNode,
-      domNode,
-      parentDom,
-      pos,
-      ctxNode,
     });
 
     this.didUpdate(snapshot);
   }
+  //
+  // update(prevState: State): void {
+  //   const snapshot = this.makeSnapshot(this.props, prevState);
+  //
+  //   const newVNode = this.render();
+  //   const domNode = this.node!;
+  //   const oldVNode = (this.node as any)?.[VNodeAttr] as VirtualElement;
+  //   const parentDom = domNode.parentElement!;
+  //   const pos = oldVNode!.pos!;
+  //   const ctxNode = this.ctxNode;
+  //
+  //   newVNode.component = this;
+  //
+  //   patch({
+  //     newVNode,
+  //     oldVNode,
+  //     domNode,
+  //     parentDom,
+  //     pos,
+  //     ctxNode,
+  //   });
+  //
+  //   this.didUpdate(snapshot);
+  // }
 }

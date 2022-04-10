@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "experimentalDecorators": true,
     "typeRoots": ["./node_modules/@types"],
     "outDir": "./build",
     "target": "es6",

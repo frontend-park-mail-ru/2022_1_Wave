@@ -14,20 +14,25 @@ class Player extends VDom.Component {
 
   constructor(props: IProps) {
     super(props);
+    const { player } = this.props;
+    this.#player = player;
+    const freqArr = this.#player.analyser
+      ? new Uint8Array(this.#player.analyser.frequencyBinCount) : null;
+    const volume = this.#player.audio ? this.#player.audio.volume : 0.5;
     this.state = {
       playState: false,
       trackTime: 0,
       trackFilled: 0,
       trackFetched: 0,
       trackBuffered: 0,
-      trackVolume: 0,
+      trackVolume: volume * 100,
       playRand: false,
       trackData: {
         title: '',
         author: '',
         cover: '',
       },
-      freqArray: [],
+      freqArray: freqArr,
       waveHeights: [
         0,
         0,
@@ -46,6 +51,16 @@ class Player extends VDom.Component {
     this.setTime = this.setTime.bind(this);
     this.setVolume = this.setVolume.bind(this);
     this.tooggleShuffle = this.tooggleShuffle.bind(this);
+    if (this.#player.audio) {
+      this.#player.audio.addEventListener('timeupdate', this.timeUpdater);
+      this.#player.audio.addEventListener('progress', this.fetchedUpdater);
+      this.#player.audio.addEventListener('loadedmetadata', this.fetchedUpdater);
+      this.#player.audio.addEventListener('durationchange', this.loadTrackData);
+      this.#player.audio.addEventListener('ended', this.runNext);
+    }
+    if (this.#player.currentTrack) {
+      this.loadTrackData();
+    }
   }
 
   loadTrackData(): void {
@@ -161,33 +176,8 @@ class Player extends VDom.Component {
     this.setState({ playRand: this.#player.isPlayRand });
   }
 
-  didMount(): void {
-    this.#initPlayer();
-  }
-
-  #initPlayer(): void {
-    const { player } = this.props;
-    this.#player = player;
-    const freqArr = this.#player.analyser
-      ? new Uint8Array(this.#player.analyser.frequencyBinCount) : null;
-    const volume = this.#player.audio ? this.#player.audio.volume : 0.5;
-    if (this.#player.currentTrack) {
-      this.loadTrackData();
-    }
-    this.setState({ trackVolume: volume * 100, freqArray: freqArr });
-    if (this.#player.audio) {
-      this.#player.audio.addEventListener('timeupdate', this.timeUpdater);
-      this.#player.audio.addEventListener('progress', this.fetchedUpdater);
-      this.#player.audio.addEventListener('loadedmetadata', this.fetchedUpdater);
-      this.#player.audio.addEventListener('durationchange', this.loadTrackData);
-      this.#player.audio.addEventListener('ended', this.runNext);
-    }
-  }
-
   render(): VDom.VirtualElement {
-    if (this.#player && !this.#player.audio) {
-      this.#initPlayer();
-    }
+
     const formatInt = (n: number):string => {
       const res = Math.trunc(n).toString();
       return n >= 10 ? res : `0${res}`;

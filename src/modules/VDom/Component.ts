@@ -111,6 +111,7 @@ export default abstract class Component<Props = any, State = any, Snapshot = any
 
     rendered.parent = this.props.vNode;
     rendered.pos = 0;
+    this.props.vNode.children[0] = rendered;
 
     patch({
       parentDomNode,
@@ -119,6 +120,8 @@ export default abstract class Component<Props = any, State = any, Snapshot = any
       oldVNode,
     });
 
+
+    // this.props.vNode.children[0] = rendered;
     this.didUpdate(snapshot);
   }
   //

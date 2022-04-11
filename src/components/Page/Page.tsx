@@ -14,22 +14,18 @@ class Page extends VDom.Component {
   constructor(props:IProps) {
     super(props);
     this.props.getPlaylist();
-    this.state = {
-      playlist: null,
-    };
   }
 
   render = (): VirtualElement => {
     const { content, isAuthorized } = this.props;
-    const player = this.props.playlist ? new PlayerClass(this.props.playlist) : null;
     return (
       <div class="page">
         <Sidebar isAuthorized={isAuthorized}/>
         <div class="content">
           {content}
         </div>
-        { player ? (
-          <Player player={player}></Player>
+        { this.props.playlist ? (
+          <Player playlist={this.props.playlist}></Player>
         ) : ''
         }
       </div>

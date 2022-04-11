@@ -14,7 +14,6 @@ import album from '../models/Album';
 export function getPopularAction(dispatch:Function):void {
   album.getPopular()
     .then((payload: any) => {
-      console.log('dispatch saaf', dispatch);
       dispatch({ type: 'popular', payload });
     });
 }

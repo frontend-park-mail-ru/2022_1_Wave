@@ -1,16 +1,15 @@
-import HTTPClient from '/modules/Client/Client.js';
-import Paths from '/config/Song.js';
+import HTTPClient from '../modules/Client/Client';
+import Paths from '../config/Artist';
 
 /*
- * Requests for song domain
+ * Requests for artist domain
  */
-export default class Song {
+export default class Artist {
   /*
-   * Get songs in popularity order
-   * @returns {Array} - array of songs, where each is like:
+   * Get artists in popularity order
+   * @returns {Array} - array of artists, where each is like:
    * {
-   *   'title': string,
-   *   'artist': string,
+   *   'name': string,
    *   'cover': string,
    * }
    */

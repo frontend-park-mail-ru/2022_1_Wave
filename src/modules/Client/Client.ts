@@ -1,10 +1,10 @@
 const config = {
-  url: 'http://localhost',
+  url: 'http://localhost:8080',
   csrfHeader: 'X-CSRF-TOKEN',
 };
 
 export default class Client {
-  static fullUrl(path) {
+  static fullUrl(path:string) {
     return `${config.url}/${path}`;
   }
 
@@ -12,8 +12,8 @@ export default class Client {
    * GET запрос на бэкенд
    * @param {string} path - путь, относительно домена
    */
-  static get(path) {
-    let status = null;
+  static get(path:string) {
+    let status:any = null;
 
     return fetch(this.fullUrl(path), {
       method: 'GET',
@@ -42,8 +42,8 @@ export default class Client {
    * @param {string} path - путь, относительно домена
    * @param {Object} body - тело запроса
    */
-  static post(path, requestBody) {
-    let status = null;
+  static post(path:string, requestBody:any) {
+    let status:any = null;
 
     return fetch(this.fullUrl(path), {
       method: 'POST',

@@ -2,7 +2,7 @@
 // import UnauthorizedMainPage from '/components/UnauthorizedMainPage/UnauthorizedMainPage.js';
 // import LoginPage from '/components/LoginPage/LoginPage.js';
 // import SignupPage from '/components/SignupPage/SignupPage.js';
-// import User from '/actions/User.js';
+// import User from '/actions/User.ts';
 // import MainPage from '/components/MainPage/MainPage.js';
 import './App.scss';
 import { PlayerClass } from '../../modules/Media/player';

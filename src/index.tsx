@@ -57,15 +57,15 @@ class Dude extends VDom.Component {
   }
 
   didMount(): void {
-    // setInterval(() => {
-    //   this.items.unshift(this.state.counter);
-    //   if (this.items.length > 10) {
-    //     this.items.pop();
-    //   }
-    //   this.setState({ counter: this.state.counter + 1 });
-    //   // console.log(this.pRef.instance);
-    //   // console.log(this.state.counter);
-    // }, 1000);
+    setInterval(() => {
+      this.items.unshift(this.state.counter);
+      if (this.items.length > 10) {
+        this.items.pop();
+      }
+      this.setState({ counter: this.state.counter + 1 });
+      // console.log(this.pRef.instance);
+      // console.log(this.state.counter);
+    }, 1000);
   }
 
   render = (): VDom.VirtualElement => {
@@ -96,7 +96,7 @@ class Dude extends VDom.Component {
       <Router>
         <MyContext.Provider value={8}>
           <RouteSwitch>
-            <Route to="" exact>
+            <Route to="/" exact>
               <div>home</div>
               <Link to="/about">go about</Link>
             </Route>

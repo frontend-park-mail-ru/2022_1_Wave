@@ -2,7 +2,7 @@ import VDom from '../VDom';
 import RouterContext from './RouterContext';
 import RouteNavigator from './RouteNavigator';
 
-interface LinkProps extends VDom.IComponentProps {
+interface LinkProps {
   to: string,
   as?: string | (new (props: any) => VDom.Component);
 }

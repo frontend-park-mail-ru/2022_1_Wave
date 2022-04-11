@@ -6,11 +6,11 @@ import { createContext, ContextType } from './Context';
 import StringWrapper from './StringWrapper';
 import { Debounce } from './util';
 import Fragment from './Fragment';
-import IComponentProps from './IComponentProps';
+import type { IComponentProps } from './IComponentProps';
 import cloneVNode from './cloneVNode';
 
-export default abstract class Component<Props extends IComponentProps = any, State = any, Snapshot = any, ContextValueType = null> {
-  public props: Props;
+export default abstract class Component<Props = any, State = any, Snapshot = any, ContextValueType = null> {
+  public props: Props & IComponentProps;
 
   public node: HTMLElement | null;
 

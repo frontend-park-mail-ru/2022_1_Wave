@@ -4,6 +4,7 @@ import '../../App/App.scss';
 import marker from '../../../assets/player_marker.png';
 import { IPlayerClass } from '../../../modules/Media/media';
 import { IProps } from '../../../modules/VDom/Interfaces';
+import { PlayerClass } from '../../../modules/Media/player';
 
 class Player extends VDom.Component {
   #player : IPlayerClass;
@@ -14,8 +15,9 @@ class Player extends VDom.Component {
 
   constructor(props: IProps) {
     super(props);
-    const { player } = this.props;
-    this.#player = player;
+    const { playlist } = this.props;
+    this.#player = new PlayerClass(playlist);
+    console.log(this.#player);
     const freqArr = this.#player.analyser
       ? new Uint8Array(this.#player.analyser.frequencyBinCount) : null;
     const volume = this.#player.audio ? this.#player.audio.volume : 0.5;
@@ -28,9 +30,9 @@ class Player extends VDom.Component {
       trackVolume: volume * 100,
       playRand: false,
       trackData: {
-        title: '',
-        author: '',
-        cover: '',
+        title: this.#player.currentTrack.title,
+        author: this.#player.currentTrack.artist,
+        cover: this.#player.currentTrack.cover,
       },
       freqArray: freqArr,
       waveHeights: [
@@ -177,7 +179,6 @@ class Player extends VDom.Component {
   }
 
   render(): VDom.VirtualElement {
-
     const formatInt = (n: number):string => {
       const res = Math.trunc(n).toString();
       return n >= 10 ? res : `0${res}`;

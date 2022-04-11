@@ -13,32 +13,25 @@ import { IProps } from '../../modules/VDom/Interfaces';
 class Page extends VDom.Component {
   constructor(props:IProps) {
     super(props);
+    this.props.getPlaylist();
     this.state = {
       playlist: null,
     };
   }
 
-  didMount():void {
-    this.props.getPlaylist();
-  }
-
   render = (): VirtualElement => {
     const { content, isAuthorized } = this.props;
-    console.log(this.props);
-    const playlist = this.props.playlist ? this.props.playlist : null;
-    if (this.state.playlist !== playlist) {
-      this.setState({ playlist });
-    }
-    console.log('playlist:', this.state.playlist);
-
-    const player = new PlayerClass(this.state.playlist);
+    const player = this.props.playlist ? new PlayerClass(this.props.playlist) : null;
     return (
       <div class="page">
         <Sidebar isAuthorized={isAuthorized}/>
         <div class="content">
           {content}
         </div>
-        <Player player={player}></Player>
+        { player ? (
+          <Player player={player}></Player>
+        ) : ''
+        }
       </div>
     );
   };

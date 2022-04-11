@@ -15,11 +15,10 @@ export const connect = (mapStateToProps: Map, mapDispatchToProps:Map) => (Wrappe
 
     constructor(props: IProps) {
       super(props);
-      this.state = null;
+      this.state = this.context.getState();
     }
 
     didMount(): void {
-      this.state = this.context.getState();
       this.context.subscribe((state:any):void => {
         this.setState(state);
       });

@@ -15,7 +15,7 @@ export default class Album {
    * }
    */
   static getPopular() {
-    return HTTPClient.get(Paths.popular)
+    return HTTPClient.get('api/v1/tracks/popular')//Paths.popular)
       .then((response) => {
         if (response.status !== 200) {
           return Promise.reject(response.body);

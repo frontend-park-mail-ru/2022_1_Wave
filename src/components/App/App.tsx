@@ -10,7 +10,7 @@ import PageConnected from '../Page/Page';
 import Homepage from '../Homepage/Homepage';
 import VDom from '../../modules/VDom';
 import {
-  Context, ContextType, IContext, IContextType,
+  Context, ContextType, createContext, IContext, IContextType,
 } from '../../modules/VDom/Context';
 import {
   createStore, MiddlewareFactory, Store, StoreT,
@@ -18,7 +18,8 @@ import {
 import { createLoggerMiddleware, createThunkMiddleware } from '../../modules/Store/middleware';
 import rootReducer from '../../modules/Reducers';
 import { IStore } from '../../modules/Store/types';
-import {storeContextType} from "../../modules/Connect";
+import { StoreContext, storeContextType } from '../../modules/Connect';
+
 //
 // const onclickTest = (e) => {
 //   store.dispatch({ type: 'Inc' });
@@ -77,9 +78,6 @@ import {storeContextType} from "../../modules/Connect";
 
 const store = createStore();
 
-console.log("store:",store)
-const storeContext = new Context(storeContextType, store);
-
 export default class App extends VDom.Component {
   produceContext(): IContext {
     return storeContext;
@@ -90,7 +88,9 @@ export default class App extends VDom.Component {
     // console.log('store:', store);
 
     return (
-      <PageConnected isAuthorized={true} content={<Homepage isAuthorized={true}/>}/>
+      <StoreContext.Provider value={store}>
+        <PageConnected isAuthorized={true} content={<Homepage isAuthorized={true}/>}/>
+      </StoreContext.Provider>
     );
   }
 }

@@ -3,7 +3,6 @@ import { Map } from '../Store/types';
 
 // eslint-disable-next-line max-len
 const combineReducers = (reducers: Map) :Reducer => (state: Map, action: Function): Map => {
-  console.log('combineReducers reducers: ', reducers);
   Object.entries(reducers)
     .map(([name, reducer]): void => {
       if (!state[name]) {

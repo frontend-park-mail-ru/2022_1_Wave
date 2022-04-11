@@ -9,7 +9,7 @@ import { Dic } from './media';
 
 export type Track = {
   title: string,
-  author: string,
+  artist: string,
   album: string,
   src: string,
   cover: string
@@ -37,10 +37,10 @@ export class PlayerClass {
   #mediaMetadata: MediaMetadata;
 
   constructor(tracks: Track[] = [], initVolume:number = 0.5) {
-    if (tracks.length === 0) {
+    console.log(tracks);
+    if (!tracks || tracks.length === 0) {
       return;
     }
-    this.#playlist = tracks;
     this.#playlist = tracks;
     this.currentTrack = this.#playlist[this.#playlistIndex];
     this.audio = new Audio(this.currentTrack.src);
@@ -111,7 +111,7 @@ export class PlayerClass {
     }
     navigator.mediaSession.metadata = new MediaMetadata({
       title: track.title,
-      artist: track.author,
+      artist: track.artist,
       album: track.album,
       artwork: [
         {

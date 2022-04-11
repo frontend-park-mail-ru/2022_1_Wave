@@ -2,17 +2,16 @@ import VDom from '../VDom';
 import { IProps } from '../VDom/Interfaces';
 import { IStore, Map } from '../Store/types';
 import { Store } from '../Store/store';
-import { ContextType, IContextType } from '../VDom/Context';
+import {ContextType, createContext, IContextType} from '../VDom/Context';
 
-export const storeContextType = new ContextType<IStore>('store', null);
+export const StoreContext = createContext<IStore>(null);
 
 // eslint-disable-next-line no-unused-vars,max-len,import/prefer-default-export
-export const connect = (mapStateToProps: Function[], mapDispatchToProps:Function[]) => (WrappedComponent: (new (props:any) => VDom.Component)) => {
+export const connect = (mapStateToProps: Map, mapDispatchToProps:Map) => (WrappedComponent: (new (props:any) => VDom.Component)):void => {
   // eslint-disable-next-line no-unused-vars
   class Connect extends VDom.Component<any, any, any, Store> {
-    get contextType(): IContextType {
-      return storeContextType;
-    }
+    static contextType = StoreContext;
+
 
     constructor(props: IProps) {
       super(props);
@@ -20,14 +19,14 @@ export const connect = (mapStateToProps: Function[], mapDispatchToProps:Function
     }
 
     didMount(): void {
-      this.state = this.ctx.value.getState();
-      this.ctx.value.subscribe((state:any):void => {
+      this.state = this.context.getState();
+      this.context.subscribe((state:any):void => {
         this.setState(state);
       });
     }
 
     render(): VDom.VirtualElement {
-      const store = this.ctx.value;
+      const store = this.context;
       // this.state = store.getState();
       // this.ctx.value.subscribe((state:any):void => {
       //   console.log("state",state);

@@ -1,22 +1,12 @@
 import { IStore, Map } from './types';
 import { createLoggerMiddleware, createThunkMiddleware } from './middleware';
 import combineReducers from '../Reducers';
-import { Context } from '../VDom/Context';
-import rootReducer from '../../reducers';
 import playlistPopular from '../../reducers/popular';
 
 // eslint-disable-next-line no-unused-vars
 export type MiddlewareFactory = (store: IStore) => (dispatch: Function) => () => void
 // eslint-disable-next-line no-unused-vars
 export type Reducer = (state: Map, action:Function) => Map;
-
-function decorateDispatch(store: IStore, middlewareFactories: MiddlewareFactory[]):Function {
-  let { dispatch } = store;
-  middlewareFactories.forEach((factory) => {
-    dispatch = factory(store)(dispatch);
-  });
-  return dispatch;
-}
 
 export class Store {
   #state:Map;
@@ -56,7 +46,7 @@ export class Store {
     console.log('dispatch:', this);
     this.#state = this.#reducer(this.#state, action);
     this.#listeners.forEach((listener) => {
-      listener();
+      listener(this.#state);
     });
   }
 }

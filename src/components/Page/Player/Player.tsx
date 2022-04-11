@@ -1,13 +1,11 @@
-import VirtualElement from '../../../modules/VDom/VirtualElement';
 import './Player.scss';
-import Component from '../../../modules/VDom/Component';
 import VDom from '../../../modules/VDom';
 import '../../App/App.scss';
 import marker from '../../../assets/player_marker.png';
 import { IPlayerClass } from '../../../modules/Media/media';
 import { IProps } from '../../../modules/VDom/Interfaces';
 
-class Player extends Component {
+class Player extends VDom.Component {
   #player : IPlayerClass;
 
   #playIcon : HTMLElement = (<div class="fa-regular fa-circle-play"></div>);
@@ -54,7 +52,7 @@ class Player extends Component {
     this.setState({
       trackData: {
         title: this.#player.currentTrack.title,
-        author: this.#player.currentTrack.author,
+        author: this.#player.currentTrack.artist,
         cover: this.#player.currentTrack.cover,
       },
     });
@@ -79,7 +77,7 @@ class Player extends Component {
     this.checkPlay();
   }
 
-  runPrev(e: Event): void {
+  runPrev(): void {
     if (this.#player.audio.currentTime !== 0) {
       this.#player.audio.currentTime = 0;
       return;
@@ -97,6 +95,9 @@ class Player extends Component {
 
   updateWaveFront(): void {
     const currFreq = this.state.freqArray;
+    if (!currFreq) {
+      return;
+    }
     this.#player.analyser.getByteFrequencyData(currFreq);
     const barsHeight: Array<number> = [0, 0, 0, 0];
     const hzStep: number = 24;
@@ -129,7 +130,7 @@ class Player extends Component {
     this.setState({ freqArray: currFreq, waveHeights: barsHeight });
   }
 
-  fetchedUpdater(e: Event): void {
+  fetchedUpdater(): void {
     const fetchedEnd = this.#player.audio.buffered.end(this.#player.audio.buffered.length - 1);
     this.setState({ trackBuffered: (fetchedEnd / this.#player.audio.duration) * 100 });
   }
@@ -155,29 +156,42 @@ class Player extends Component {
     return relativePosition;
   }
 
-  tooggleShuffle(e: Event): void {
+  tooggleShuffle(): void {
     this.#player.isPlayRand = !this.#player.isPlayRand;
     this.setState({ playRand: this.#player.isPlayRand });
   }
 
   didMount(): void {
-    const { player } = this.props;
-    this.#player = player;
-    const freqArr = new Uint8Array(this.#player.analyser.frequencyBinCount);
-    this.setState({ trackVolume: this.#player.audio.volume * 100, freqArray: freqArr });
-    this.#player.audio.addEventListener('timeupdate', this.timeUpdater);
-    this.#player.audio.addEventListener('progress', this.fetchedUpdater);
-    this.#player.audio.addEventListener('loadedmetadata', this.fetchedUpdater);
-    this.#player.audio.addEventListener('durationchange', this.loadTrackData);
-    this.#player.audio.addEventListener('ended', this.runNext);
+    this.#initPlayer();
   }
 
-  render(): VirtualElement {
+  #initPlayer(): void {
+    const { player } = this.props;
+    this.#player = player;
+    const freqArr = this.#player.analyser
+      ? new Uint8Array(this.#player.analyser.frequencyBinCount) : null;
+    const volume = this.#player.audio ? this.#player.audio.volume : 0.5;
+    if (this.#player.currentTrack) {
+      this.loadTrackData();
+    }
+    this.setState({ trackVolume: volume * 100, freqArray: freqArr });
+    if (this.#player.audio) {
+      this.#player.audio.addEventListener('timeupdate', this.timeUpdater);
+      this.#player.audio.addEventListener('progress', this.fetchedUpdater);
+      this.#player.audio.addEventListener('loadedmetadata', this.fetchedUpdater);
+      this.#player.audio.addEventListener('durationchange', this.loadTrackData);
+      this.#player.audio.addEventListener('ended', this.runNext);
+    }
+  }
+
+  render(): VDom.VirtualElement {
+    if (this.#player && !this.#player.audio) {
+      this.#initPlayer();
+    }
     const formatInt = (n: number):string => {
       const res = Math.trunc(n).toString();
       return n >= 10 ? res : `0${res}`;
     };
-
     return (
       <div class="player">
         <div class="player__waves">
@@ -231,7 +245,7 @@ class Player extends Component {
         </div>
         <div onclick={this.tooggleShuffle} class="player__shuffle">
           <div class="fa-solid fa-shuffle" style={
-            {color: this.state.playRand ? '#5D4099' : '#BEB7DF'}
+            { color: this.state.playRand ? '#5D4099' : '#BEB7DF' }
           } ></div>
         </div>
         <div class="player__volume">

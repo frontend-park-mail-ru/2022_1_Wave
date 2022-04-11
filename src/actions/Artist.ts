@@ -1,25 +1,10 @@
-import HTTPClient from '/modules/Client/Client.ts';
-import Paths from '/config/Artist.ts';
-
+import artist from '../models/Artist';
 /*
- * Requests for artist domain
+ * Actions for artist domain
  */
-export default class Artist {
-  /*
-   * Get artists in popularity order
-   * @returns {Array} - array of artists, where each is like:
-   * {
-   *   'name': string,
-   *   'cover': string,
-   * }
-   */
-  static getPopular() {
-    return HTTPClient.get(Paths.popular)
-      .then((response) => {
-        if (response.status !== 200) {
-          return Promise.reject(response.body);
-        }
-        return response.body.Result;
-      });
-  }
+export function artistGetPopular(dispatch:Function):void {
+  artist.getPopular()
+    .then((payload: any) => {
+      dispatch({ type: 'popular/artist', payload });
+    });
 }

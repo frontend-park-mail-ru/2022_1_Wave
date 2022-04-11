@@ -1,96 +1,38 @@
-import HTTPClient from '/modules/Client/Client.ts';
-import UserPaths from '/config/User.ts';
-
+import user from '../models/User';
 /*
- * Requests for user domain
+ * Actions for artist domain
  */
-export default class User {
-  /*
-   * Sets CSRF-token in LocalStorage
-   */
-  static getCSRFToken() {
-    return HTTPClient.get(UserPaths.csrf);
-  }
+export function userGetCSRF(dispatch:Function):void {
+  user.getCSRFToken()
+    .then((payload: any) => {
+      dispatch({ type: 'csrf/user', payload });
+    });
+}
 
-  /*
-   * Get current user info
-   * @returns {Object} - Current user object:
-   * {
-   *   'id': number,
-   *   'username': string,
-   * }
-   */
-  static getUser() {
-    return HTTPClient.get(UserPaths.info)
-      .then((response) => {
-        if (response.status !== 200) {
-          return Promise.reject(response.body);
-        }
-        return response.body;
-      });
-  }
+export function userGetSelf(dispatch:Function):void {
+  user.getUser()
+    .then((payload: any) => {
+      dispatch({ type: 'self/user', payload });
+    });
+}
 
-  /*
-   * Perform logout
-   */
-  static logout() {
-    let body = null;
+export function userLogout(dispatch:Function):void {
+  user.logout()
+    .then(() => {
+      dispatch({ type: 'logout/user', payload: null });
+    });
+}
 
-    return HTTPClient.post(UserPaths.logout)
-      .then((response) => {
-        if (response.status !== 200) {
-          return Promise.reject(response.body);
-        }
-        body = response.body;
+export function userLogin(dispatch:Function, form:any):void {
+  user.login(form)
+    .then((payload: any) => {
+      dispatch({ type: 'logout/user', payload });
+    });
+}
 
-        return User.getCSRFToken();
-      })
-      .then(() => body);
-  }
-
-  /*
-   * Perform login
-   * @param {Object} - object like:
-   * {
-   *   'email': string,
-   *   'username': string,
-   *   'password': string,
-   * }
-   */
-  static login({ email, username, password }) {
-    return HTTPClient.post(UserPaths.login, {
-      email,
-      username,
-      password,
-    })
-      .then((response) => {
-        if (response.status !== 200) {
-          return Promise.reject(response.body);
-        }
-        return response.body;
-      });
-  }
-
-  /*
-   * Perform signup
-   * @param {Object} - object like:
-   * {
-   *   'email': string,
-   *   'username': string,
-   *   'password': string,
-   * }
-   */
-  static signup({ email, username, password }) {
-    return HTTPClient.post(UserPaths.signup, {
-      email,
-      username,
-      password,
-    })
-      .then((response) => {
-        if (response.status !== 200) {
-          return Promise.reject(response.body);
-        }
-        return response.body;
-      });
-  }
+export function userSignup(dispatch:Function, form:any):void {
+  user.signup(form)
+    .then((payload: any) => {
+      dispatch({ type: 'logout/user', payload });
+    });
 }

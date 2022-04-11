@@ -12,12 +12,11 @@ import Page from "./components/Page/Page";
 import LoginPage from "./components/LoginPage/LoginPage";
 import ArtistPage from "./components/ArtistPage/ArtistPage";
 import PersonalPage from "./components/PersonalPage/PersonalPage";
-import VDom from './modules/VDom';
 import { Context, ContextType, IContext, IContextType } from './modules/VDom/Context';
 import Router from './modules/Router/Router';
 import Route from './modules/Router/Route';
 import { default as RouteSwitch, routerContextType } from './modules/Router/RouteSwitch';
-// import App from './components/App/App';
+import App from "./components/App/App";
 
 class Dummy extends VDom.Component {
   render = (): VDom.VirtualElement => (
@@ -32,6 +31,9 @@ function f(tag: JSX.IntrinsicElements): void {
 }
 
 console.log(f);
+
+const dummyContextType = new ContextType<string>('dummy', 'default dummy');
+const dummyContext = new Context(dummyContextType, 'first dummy');
 
 class DummyParent extends VDom.Component {
   render = (): VDom.VirtualElement => {
@@ -109,37 +111,13 @@ class DummyApp extends VDom.Component {
   }
 }
 
-VDom.render(<DummyApp/>, document.getElementById('root')!);
-
-// User.getCSRFToken()
-//   .then(() => {
-//     const root = document.querySelector('#root');
-//     const app = new App();
-//     app.mount(root);
-//   });
-
-// render(<DummyApp/>, document.getElementById('root')!);
-const tracks = [{
-  album: '',
-  author: 'SomeAuthor',
-  cover: '/assets/playlist-track-icon-dummy.png',
-  src: '/assets/music.mp3',
-  title: 'SomeTitle',
-
-}, {
-  album: '',
-  author: 'SomeAuthorVEEEEEEEEEEEEEERYLONg',
-  cover: '/assets/playlist-track-icon-dummy.png',
-  src: '/assets/music.mp3',
-  title: 'SomeTitleVEEEEEEEEEEEEEERYLONg',
-
-}];
-
-const player = new PlayerClass(tracks);
-
+VDom.render(<App/>, document.getElementById('root')!);
+//
+// const player = new PlayerClass(tracks);
+//
 //render(<Player player={player} />, document.getElementById('root')!);
 //render(<Page isAuthorized={false} content={<Homepage isAuthorized={false}/>}/>, document.getElementById('root')!);
 //render(<LoginPage/>, document.getElementById('root')!);
 //render(<Page isAuthorized={false} content={<ArtistPage />}/>, document.getElementById('root')!);
 //render(<Page isAuthorized={true} content={<Homepage isAuthorized={true}/>}/>, document.getElementById('root')!);
-render(<Page isAuthorized={false} content={<PersonalPage />}/>, document.getElementById('root')!);
+//render(<Page isAuthorized={false} content={<PersonalPage />}/>, document.getElementById('root')!);

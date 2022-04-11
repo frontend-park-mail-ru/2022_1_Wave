@@ -1,10 +1,13 @@
-import { createStore } from '../Store/store';
-import { createLoggerMiddleware, createThunkMiddleware } from '../Store/middleware';
+import { Reducer } from '../Store/store';
+import { Map } from '../Store/types';
 
-const combineReducers = (reducers: Function[]) :object => (state: object, action: Function) => {
+// eslint-disable-next-line max-len
+const combineReducers = (reducers: Map) :Reducer => (state: Map, action: Function): Map => {
+  console.log('combineReducers reducers: ', reducers);
   Object.entries(reducers)
     .map(([name, reducer]): void => {
       if (!state[name]) {
+        // eslint-disable-next-line no-param-reassign
         state[name] = {};
       }
       reducer(state[name], action);
@@ -12,36 +15,4 @@ const combineReducers = (reducers: Function[]) :object => (state: object, action
   return state;
 };
 
-const reducer1 = (state: object, action): object => {
-  if (!state.num) {
-    state.num = 0;
-  }
-  switch (action.type) {
-  case 'Inc':
-    state.num++;
-    break;
-  case 'Dec':
-    state.num--;
-    break;
-  }
-  return state;
-};
-
-const reducer2 = (state, action): object => {
-  if (!state.num) {
-    state.num = 0;
-  }
-  switch (action.type) {
-  case 'In':
-    state.num++;
-    break;
-  case 'De':
-    state.num--;
-    break;
-  }
-  return state;
-};
-
-const rootReducer = combineReducers({ reducer1, reducer2 });
-const middleWares = [createLoggerMiddleware, createThunkMiddleware];
-export const store = createStore(rootReducer, middleWares, {});
+export default combineReducers;

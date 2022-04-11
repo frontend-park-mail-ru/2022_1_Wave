@@ -1,5 +1,5 @@
-import HTTPClient from '/modules/Client/Client.js';
-import Paths from '/config/Album.js';
+import HTTPClient from '../modules/Client/Client.js';
+import Paths from '../config/Album.js';
 
 /*
  * Requests for album domain

@@ -4,44 +4,97 @@
 // import SignupPage from '/components/SignupPage/SignupPage.js';
 // import User from '/actions/User.js';
 // import MainPage from '/components/MainPage/MainPage.js';
-import { createElement } from 'factory';
-import Example from '../common/AlbumCard/example';
 import './App.scss';
-import { store } from '../../modules/Reducers';
+import { PlayerClass } from '../../modules/Media/player';
+import PageConnected from '../Page/Page';
+import Homepage from '../Homepage/Homepage';
+import VDom from '../../modules/VDom';
+import {
+  Context, ContextType, IContext, IContextType,
+} from '../../modules/VDom/Context';
+import {
+  createStore, MiddlewareFactory, Store, StoreT,
+} from '../../modules/Store/store';
+import { createLoggerMiddleware, createThunkMiddleware } from '../../modules/Store/middleware';
+import rootReducer from '../../modules/Reducers';
+import { IStore } from '../../modules/Store/types';
+import {storeContextType} from "../../modules/Connect";
+//
+// const onclickTest = (e) => {
+//   store.dispatch({ type: 'Inc' });
+// };
+//
+// const onclickHi = (e) => {
+//   store.dispatch({ type: 'De' });
+// };
+//
+// const router = (): JSX.Element => {
+//   let r: JSX.Element;
+//   switch (window.location.pathname) {
+//   case '/signup':
+//     r = (<div>
+//       <div className="app" onClick={onclickHi}>
+//           Hi there
+//         <Example/>
+//       </div>
+//       <div className="test" onClick={onclickTest}>
+//           test
+//       </div>
+//     </div>
+//     );
+//     break;
+//   default:
+//     r = (<div>'foo'</div>);
+//     break;
+//   }
+//   return r;
+// };
+//
+// const tracks = [{
+//   album: '',
+//   author: 'SomeAuthor',
+//   cover: '/assets/playlist-track-icon-dummy.png',
+//   src: '/assets/music.mp3',
+//   title: 'SomeTitle',
+//
+// }, {
+//   album: '',
+//   author: 'SomeAuthorVEEEEEEEEEEEEEERYLONg',
+//   cover: '/assets/playlist-track-icon-dummy.png',
+//   src: '/assets/music.mp3',
+//   title: 'SomeTitleVEEEEEEEEEEEEEERYLONg',
+//
+// }];
+//
+// const player = new PlayerClass(tracks);
+//
+// // render(<Player player={player} />, document.getElementById('root')!);
+// render(<Page isAuthorized={true} content={<Homepage isAuthorized={true}/>}/>, document.getElementById('root')!);
+// // render(<LoginPage/>, document.getElementById('root')!);
+// // render(<Page isAuthorized={false} content={<ArtistPage />}/>, document.getElementById('root')!);
+// // render(<Page isAuthorized={true} content={<Homepage isAuthorized={true}/>}/>, document.getElementById('root')!);
+// // render(<Page isAuthorized={false} content={<PersonalPage />}/>, document.getElementById('root')!);
 
-const onclickTest = (e) => {
-  store.dispatch({ type: 'Inc' });
-};
+const store = createStore();
 
-const onclickHi = (e) => {
-  store.dispatch({ type: 'De' });
-};
+console.log("store:",store)
+const storeContext = new Context(storeContextType, store);
 
-const router = (): JSX.Element => {
-  let r: JSX.Element;
-  switch (window.location.pathname) {
-  case '/signup':
-    r = (<div>
-      <div className="app" onClick={onclickHi}>
-          Hi there
-        <Example/>
-      </div>
-      <div className="test" onClick={onclickTest}>
-          test
-      </div>
-    </div>
-    );
-    break;
-  default:
-    r = (<div>'foo'</div>);
-    break;
+export default class App extends VDom.Component {
+  produceContext(): IContext {
+    return storeContext;
   }
-  return r;
-};
 
-const App = (): HTMLElement => router();
+  render(): VDom.VirtualElement {
+    // const store = this.ctx.value;
+    // console.log('store:', store);
 
-export default App;
+    return (
+      <PageConnected isAuthorized={true} content={<Homepage isAuthorized={true}/>}/>
+    );
+  }
+}
+
 //
 // export default class App extends Component {
 //   #template;

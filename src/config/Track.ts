@@ -1,3 +1,3 @@
 export default {
-  popular: 'api/v1/track/popular',
+  popular: 'api/v1/tracks/popular',
 };

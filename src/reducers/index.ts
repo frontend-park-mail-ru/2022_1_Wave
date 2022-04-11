@@ -1,7 +1,6 @@
 import combineReducers from '../modules/Reducers';
-import { playlistPopular } from '../reducers/popular';
+import tracksPopular from './track';
+import albumPopular from './album';
+import artistPopular from './artist';
 
-const rootReducer = playlistPopular; //combineReducers(playlistPopular);
-console.log('root:',rootReducer);
-
-export default rootReducer;
+export default combineReducers({ tracksPopular, albumPopular, artistPopular });

@@ -27,15 +27,6 @@ export const connect = (mapStateToProps: Map, mapDispatchToProps:Map) => (Wrappe
 
     render(): VDom.VirtualElement {
       const store = this.context;
-      // this.state = store.getState();
-      // this.ctx.value.subscribe((state:any):void => {
-      //   console.log("state",state);
-      //   this.setState(state);
-      // });
-      // console.log('context Connect: ', store);
-
-      // eslint-disable-next-line max-len
-      // return VDom.createElement(WrappedComponent, { ...this.props, ...mapStateToProps(this.state), ...mapDispatchToProps(store.dispatch) });
       return (
         <WrappedComponent
           { ...this.props}

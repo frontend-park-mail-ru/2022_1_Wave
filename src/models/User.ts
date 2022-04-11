@@ -36,7 +36,7 @@ export default class User {
   static logout() {
     let body = null;
 
-    return HTTPClient.post(UserPaths.logout)
+    return HTTPClient.post(UserPaths.logout, null)
       .then((response) => {
         if (response.status !== 200) {
           return Promise.reject(response.body);
@@ -57,7 +57,7 @@ export default class User {
    *   'password': string,
    * }
    */
-  static login({ email, username, password }) {
+  static login({ email: string, username:string, password:string }) {
     return HTTPClient.post(UserPaths.login, {
       email,
       username,

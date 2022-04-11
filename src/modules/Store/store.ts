@@ -1,7 +1,8 @@
 import { IStore, Map } from './types';
 import { createLoggerMiddleware, createThunkMiddleware } from './middleware';
+import rootReducer from '../../reducers';
 import combineReducers from '../Reducers';
-import playlistPopular from '../../reducers/popular';
+import playlistPopular from '../../reducers/track';
 
 // eslint-disable-next-line no-unused-vars
 export type MiddlewareFactory = (store: IStore) => (dispatch: Function) => () => void
@@ -53,7 +54,6 @@ export class Store {
 
 export const createStore = ():Store => {
   const middleWares:MiddlewareFactory[] = [createLoggerMiddleware, createThunkMiddleware];
-  const rootReducer = combineReducers({ playlistPopular });
   const initStore:Store = new Store(rootReducer, middleWares, {});
   return initStore;
 };

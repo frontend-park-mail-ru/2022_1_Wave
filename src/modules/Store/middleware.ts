@@ -1,6 +1,6 @@
 // eslint-disable-next-line max-len
 import { MiddlewareFactory } from './store';
-import {IStore} from "./types";
+import { IStore } from './types';
 
 // eslint-disable-next-line max-len
 export const createLoggerMiddleware:MiddlewareFactory = (store:IStore) => (dispatch:Function) => (action:Function) => {

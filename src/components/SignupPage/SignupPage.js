@@ -1,6 +1,6 @@
 import Component from '/modules/Component/Component.js';
-import User from '/actions/User.js';
-import { validatePassword, validateUsername, validateEmail } from '/utils/User.js';
+import User from '/actions/User.ts';
+import { validatePassword, validateUsername, validateEmail } from '/utils/User.ts';
 
 export default class SignupPage extends Component {
   #template;

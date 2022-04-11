@@ -1,6 +1,6 @@
 import Component from '/modules/Component/Component.js';
 import Playlist from '/components/Playlist/Playlist.js';
-import Song from '/actions/Song.js';
+import Song from '/actions/Track.ts';
 
 export default class UnauthorizedSidebar extends Component {
   #template;

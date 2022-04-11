@@ -5,14 +5,10 @@ import Player from './Player/Player';
 import '../../index.css';
 import './Page.scss';
 import { PlayerClass } from '../../modules/Media/player';
-import { Store } from '../../modules/Store/store';
-import { ContextType, IContextType } from '../../modules/VDom/Context';
-import { IStore, Map } from '../../modules/Store/types';
+import { Map } from '../../modules/Store/types';
 import { connect } from '../../modules/Connect';
-import rootReducer from '../../modules/Reducers';
-import { getPopularAction } from '../../actions/Album';
+import { trackGetPopular } from '../../actions/Track';
 import { IProps } from '../../modules/VDom/Interfaces';
-import playlistPopular from '../../reducers/popular';
 
 class Page extends VDom.Component {
   constructor(props:IProps) {
@@ -28,6 +24,7 @@ class Page extends VDom.Component {
 
   render = (): VirtualElement => {
     const { content, isAuthorized } = this.props;
+    console.log(this.props);
     const playlist = this.props.playlist ? this.props.playlist : null;
     if (this.state.playlist !== playlist) {
       this.setState({ playlist });
@@ -42,20 +39,19 @@ class Page extends VDom.Component {
           {content}
         </div>
         <Player player={player}></Player>
-        {/* <Player player={player}/> */}
       </div>
     );
   };
 }
 
 const mapStateToProps = (state: any):Map => ({
-  playlist: state.playlistPopular ? state.playlistPopular.playlist : null,
-  something: state.playlistPopular,
+  playlist: state.tracksPopular ? state.tracksPopular.popular : null,
+  something: state.tracksPopular,
 });
 
 const mapDispatchToProps = (dispatch:any):Map => ({
   getPlaylist: () => {
-    dispatch(getPopularAction);
+    dispatch(trackGetPopular);
   },
 });
 

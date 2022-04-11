@@ -5,6 +5,7 @@ import VDom from '../../modules/VDom';
 import './Homepage.css';
 import Popular from './Popular/Popular';
 import { IProps } from '../../modules/VDom/Interfaces';
+import PopularConnected from "./Popular/Popular";
 
 export default class Homepage extends Component {
   render = (): VirtualElement => {
@@ -32,7 +33,7 @@ export default class Homepage extends Component {
             </div>
           </div>
         </div>
-        <Popular/>
+        <PopularConnected/>
       </div>
     );
   };

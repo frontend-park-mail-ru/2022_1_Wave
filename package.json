@@ -9,6 +9,7 @@
         "build": "NODE_ENV=production webpack --mode production"
     },
     "dependencies": {
+        "@babel/plugin-proposal-decorators": "^7.17.9",
         "@babel/runtime": "^7.17.8",
         "node-sass": "^7.0.1",
         "postcss-cli": "^8.3.1",

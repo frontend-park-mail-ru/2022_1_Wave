@@ -15,6 +15,12 @@
         "runtime": "classic",
         "pragma": "VDom.createElement"
       }
+    ],
+    [
+      "@babel/plugin-proposal-decorators",
+      {
+        "legacy": true
+      }
     ]
   ]
 }

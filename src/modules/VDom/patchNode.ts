@@ -1,20 +1,13 @@
 import VirtualElement from './VirtualElement';
 import Component from './Component';
-import { ComponentAttr, VNodeAttr, HandlersAttr } from './Symbols';
+import Fragment from './Fragment';
+import { HandlersAttr } from './Symbols';
 import { createHandlersTable, HandlersTable } from './Types';
-import { ContextNode, ContextType, fromContextList } from './Context';
+import { ContextNode, fromContextList } from './Context';
+import StringWrapper from './StringWrapper';
 
 const EVENT_PREFIX = 'on';
 const CAPTURE_SUFFIX = 'capture';
-
-type PatchArg = {
-  oldVNode: VirtualElement | string | null,
-  newVNode: VirtualElement | string | null,
-  domNode: HTMLElement | null,
-  parentDom: HTMLElement,
-  pos: number,
-  ctxNode: ContextNode | null,
-};
 
 function isAllChildrenWithKey(vnode: VirtualElement): boolean {
   return vnode.children.every((child) => {
@@ -25,23 +18,7 @@ function isAllChildrenWithKey(vnode: VirtualElement): boolean {
   });
 }
 
-function initNewElement(newElement: HTMLElement, newVNode: VirtualElement): void {
-  newVNode.domNode = newElement;
-
-  if (newVNode.ref) {
-    newVNode.ref.instance = newElement;
-  }
-
-  if (newVNode.component) {
-    (newElement as any)[ComponentAttr] = newVNode.component;
-    (newElement as any)[VNodeAttr] = newVNode;
-    newVNode.component.node = newElement;
-  }
-
-  (newElement as any)[HandlersAttr] = createHandlersTable();
-}
-
-function prepareVNodeRemove(oldVNode: VirtualElement | string | null): void {
+function removeVNodeFromDom(oldVNode: VirtualElement | StringWrapper | null): void {
   const toRemove: VirtualElement[] = [];
   const levels: number[] = [];
   let prevLevel = 0;
@@ -49,6 +26,8 @@ function prepareVNodeRemove(oldVNode: VirtualElement | string | null): void {
   if (oldVNode instanceof VirtualElement) {
     toRemove.push(oldVNode);
     levels.push(0);
+  } else {
+    oldVNode?.domNode!.remove();
   }
 
   while (toRemove.length > 0) {
@@ -58,12 +37,14 @@ function prepareVNodeRemove(oldVNode: VirtualElement | string | null): void {
 
     if (prevLevel <= level) {
       for (let idx = top.children.length - 1; idx >= 0; idx -= 1) {
-        const child: VirtualElement | string = top.children[idx];
+        const child: VirtualElement | StringWrapper = top.children[idx];
 
         if (child instanceof VirtualElement) {
           isLeaf = false;
           toRemove.push(child);
           levels.push(level + 1);
+        } else {
+          child.domNode!.remove();
         }
       }
     }
@@ -78,6 +59,7 @@ function prepareVNodeRemove(oldVNode: VirtualElement | string | null): void {
       }
 
       current.destruct();
+      current.domNode?.remove();
     }
 
     prevLevel = level;
@@ -122,6 +104,7 @@ function patchProp(domNode: HTMLElement, propName: string, oldVal: any, newVal: 
       .join(' ');
 
     if (styleString !== domNode.style.cssText) {
+      // eslint-disable-next-line no-param-reassign
       domNode.style.cssText = styleString;
     }
 
@@ -145,332 +128,361 @@ function patchProps(domNode: HTMLElement, oldProps: any, newProps: any): void {
   });
 }
 
-function patchChildren(
-  domNode: HTMLElement,
-  oldVNode: VirtualElement,
-  newVNode: VirtualElement,
-  nodesStack: PatchArg[],
-  ctxNode: ContextNode | null,
-): void {
-  const toMount: PatchArg[] = [];
-  const toUnmountDom = Array.from<Node>(domNode.childNodes).slice(newVNode.children.length);
-  const toUnmountVNode = oldVNode.children.slice(newVNode.children.length);
-
-  if (isAllChildrenWithKey(oldVNode) && isAllChildrenWithKey(newVNode)) {
-    let oldIdx = 0;
-
-    newVNode.children.forEach((newChild, idx) => {
-      const child = domNode.childNodes[oldIdx];
-      const oldChild = oldVNode.children[oldIdx];
-
-      if (
-        oldChild instanceof VirtualElement
-        && newChild instanceof VirtualElement
-        && oldChild.key === newChild.key
-      ) {
-        toMount.push({
-          oldVNode: oldChild,
-          newVNode: newChild,
-          domNode: child as HTMLElement,
-          parentDom: domNode,
-          pos: idx,
-          ctxNode,
-        });
-        oldIdx += 1;
-      } else {
-        toMount.push({
-          oldVNode: null,
-          newVNode: newChild,
-          domNode: null,
-          parentDom: domNode,
-          pos: idx,
-          ctxNode,
-        });
-      }
-    });
-
-    for (let idx = oldIdx; idx < oldVNode.children.length; idx += 1) {
-      toUnmountDom.push(domNode.childNodes[idx]);
-      toUnmountVNode.push(oldVNode.children[idx]);
-    }
+function insertAfter(parentDomNode: HTMLElement, newDomNode: Node, leftSibling: Node | null): void {
+  if (leftSibling == null) {
+    parentDomNode.prepend(newDomNode);
+  } else if (leftSibling.nextSibling == null) {
+    parentDomNode.append(newDomNode);
   } else {
-    newVNode.children.forEach((newChild, idx) => {
-      const child = domNode.childNodes[idx];
-      const oldChild = oldVNode.children[idx];
-
-      toMount.push({
-        oldVNode: oldChild,
-        newVNode: newChild,
-        domNode: child as HTMLElement,
-        parentDom: domNode,
-        pos: idx,
-        ctxNode,
-      });
-    });
-  }
-
-  while (toUnmountDom.length > 0) {
-    const oldChild = toUnmountVNode.pop()!;
-    const oldDom = toUnmountDom.pop()!;
-    nodesStack.push({
-      oldVNode: oldChild,
-      domNode: oldDom as HTMLElement,
-      newVNode: null,
-      parentDom: domNode,
-      pos: 0,
-      ctxNode,
-    });
-  }
-
-  while (toMount.length > 0) {
-    nodesStack.push(toMount.pop()!);
+    parentDomNode.insertBefore(newDomNode, leftSibling.nextSibling);
   }
 }
 
-function patchAsString(
-  domNode: HTMLElement,
-  oldVNode: VirtualElement | string,
-  newVNode: string,
-): void {
-  if (oldVNode !== newVNode) {
-    prepareVNodeRemove(oldVNode);
-    domNode.replaceWith(document.createTextNode(newVNode));
-  }
-}
-
-function patchAsVNode(
-  domNode: HTMLElement,
-  parentDom: HTMLElement,
-  oldVNode: VirtualElement | string,
-  newVNode: VirtualElement,
-  pos: number,
-  nodesStack: PatchArg[],
-  ctxNode: ContextNode | null,
-): void {
-  if (typeof oldVNode === 'string' || oldVNode.type !== newVNode.type) {
-    prepareVNodeRemove(oldVNode);
-
-    let key: string | undefined;
-    if (oldVNode instanceof VirtualElement) {
-      key = oldVNode.key;
-    }
-
-    const newElement = document.createElement(newVNode.type as string);
-
-    initNewElement(newElement as HTMLElement, newVNode);
-
-    domNode.replaceWith(newElement);
-
-    nodesStack.push({
-      oldVNode: new VirtualElement(newVNode.type, {}, [], key),
-      newVNode,
-      domNode: newElement as HTMLElement,
-      parentDom,
-      pos,
-      ctxNode,
-    });
-  } else {
-    if (newVNode.component) {
-      (domNode as any)[VNodeAttr] = newVNode;
-    }
-
-    patchProps(domNode, oldVNode.props, newVNode.props);
-
-    patchChildren(domNode, oldVNode, newVNode, nodesStack, ctxNode);
-  }
-}
-
-function patchAsComponent(
-  newVNode: VirtualElement,
-  oldVNode: VirtualElement | string | null,
-  domNode: HTMLElement | null,
-  parentDom: HTMLElement,
-  pos: number,
-  nodesStack: PatchArg[],
+function patchNode(args: {
+  parentDomNode: HTMLElement,
+  leftSibling: HTMLElement | null,
+  oldVNode: VirtualElement | StringWrapper | null,
+  newVNode: VirtualElement | StringWrapper | null,
   commitChangesStack: Array<() => void>,
-  ctxNode: ContextNode | null,
-): void {
-  let component: Component;
-  let updatedOldVNode = oldVNode;
-  let updatedDomNode = domNode;
-  let updatedCtxNode = ctxNode;
-
-  if (oldVNode != null && domNode && (domNode as any)[ComponentAttr]) {
-    component = (domNode as any)[ComponentAttr] as Component;
-
-    if (Object.getPrototypeOf(component).constructor === newVNode.type) {
-      updatedCtxNode = component.ctxNode;
-      const prevProps = component.props;
-      component.setProps(newVNode.props);
-      const snapshot = component.makeSnapshot(prevProps, component.state);
-      commitChangesStack.push(() => component.didUpdate(snapshot));
-    } else {
-      prepareVNodeRemove(oldVNode);
-      domNode.remove();
-      updatedOldVNode = null;
-      updatedDomNode = null;
-
-      console.log(component);
-      component = new (newVNode.type as (new (props: any) => Component))(newVNode.props);
-      commitChangesStack.push(() => component.didMount());
-
-      const ctx = component.produceContext();
-      if (ctx) {
-        updatedCtxNode = {
-          context: ctx,
-          next: ctxNode,
-        };
-      }
-
-      const ctxType = component.contextType;
-      if (ctxType) {
-        component.setContext(fromContextList(ctxNode, ctxType));
-      }
-    }
-  } else {
-    component = new (newVNode.type as (new (props: any) => Component))(newVNode.props);
-    commitChangesStack.push(() => component.didMount());
-
-
-    const ctx = component.produceContext();
-    if (ctx) {
-      updatedCtxNode = {
-        context: ctx,
-        next: ctxNode,
-      };
-    }
-
-    const ctxType = component.contextType;
-    if (ctxType) {
-      component.setContext(fromContextList(ctxNode, ctxType));
-    }
-  }
-
-  component.ctxNode = updatedCtxNode;
-  component.children = newVNode.children;
-  const rendered = component.render();
-  rendered.component = component;
-
-  if (newVNode.parent) {
-    newVNode.parent.children[pos] = rendered;
-    rendered.parent = newVNode.parent;
-  }
-
-  nodesStack.push({
-    oldVNode: updatedOldVNode,
-    newVNode: rendered,
-    domNode: updatedDomNode,
-    parentDom,
-    pos,
-    ctxNode: updatedCtxNode,
-  });
-}
-
-function removeFromDom(domNode: HTMLElement, oldVNode: VirtualElement | string | null): void {
-  prepareVNodeRemove(oldVNode);
-  domNode.remove();
-}
-
-function placeIntoDom(
-  newVNode: VirtualElement | string,
-  parentDom: HTMLElement,
-  pos: number,
-  nodesStack: PatchArg[],
-  ctxNode: ContextNode,
-): void {
-  let newElement: Node;
-  let toPlace: Node;
-
-  if (newVNode instanceof VirtualElement) {
-    toPlace = document.createElement(newVNode.type as string);
-  } else {
-    toPlace = document.createTextNode(newVNode);
-  }
-
-  if (parentDom.childNodes.length <= pos) {
-    newElement = parentDom.appendChild(toPlace);
-  } else {
-    newElement = parentDom.insertBefore(toPlace, parentDom.childNodes[pos]);
-  }
-
-  if (newVNode instanceof VirtualElement) {
-    initNewElement(newElement as HTMLElement, newVNode);
-  }
-
-  nodesStack.push({
-    oldVNode: newVNode instanceof VirtualElement
-      ? new VirtualElement(newVNode.type, {}, []) : newVNode,
+                   }): HTMLElement | null {
+  const {
+    parentDomNode,
+    leftSibling,
+    oldVNode,
     newVNode,
-    domNode: newElement as HTMLElement,
-    parentDom,
-    pos,
-    ctxNode,
-  });
+    commitChangesStack,
+  } = args;
+
+  let realDomNode: HTMLElement | null = null;
+
+  if (newVNode != null) {
+    if (newVNode instanceof VirtualElement && typeof newVNode.type === 'function') {
+      // Component or Fragment
+      if (newVNode.type === Fragment) {
+        // Fragment
+        let oldChildren: Array<VirtualElement | StringWrapper> = [];
+        let currentLeftSibling = leftSibling;
+
+        if (!(oldVNode instanceof VirtualElement) || oldVNode.type !== Fragment) {
+          removeVNodeFromDom(oldVNode);
+        } else {
+          oldChildren = oldVNode.children;
+        }
+
+        oldChildren.forEach((oldChild, idx) => {
+          currentLeftSibling = patchNode({
+            parentDomNode,
+            leftSibling: currentLeftSibling,
+            oldVNode: oldChild,
+            newVNode: newVNode.children[idx] ?? null,
+            commitChangesStack,
+          });
+        });
+        newVNode.children.slice(oldChildren.length).forEach((newChild) => {
+          currentLeftSibling = patchNode({
+            parentDomNode,
+            leftSibling: currentLeftSibling,
+            oldVNode: null,
+            newVNode: newChild,
+            commitChangesStack,
+          });
+        });
+
+        realDomNode = currentLeftSibling;
+      } else {
+        // Component
+        let component: Component;
+        let nextOldVNode: VirtualElement | StringWrapper | null = oldVNode;
+        let componentAlreadyExists = false;
+
+        if (oldVNode instanceof VirtualElement && oldVNode.component != null) {
+          component = oldVNode.component;
+
+          if (Object.getPrototypeOf(component).constructor === newVNode.type) {
+            componentAlreadyExists = true;
+
+            const prevProps = component.props;
+            component.setProps({
+              ...newVNode.props,
+              parentDomNode,
+              leftSibling,
+              vNode: newVNode,
+              children: newVNode.children,
+            });
+            const snapshot = component.makeSnapshot(prevProps, component.state);
+
+            commitChangesStack.push(() => component.didUpdate(snapshot));
+          } else {
+            removeVNodeFromDom(oldVNode);
+            nextOldVNode = null;
+          }
+        }
+
+        if (!componentAlreadyExists) {
+          component = new (newVNode.type as (new (props: any) => Component))({
+            ...newVNode.props,
+            parentDomNode,
+            leftSibling,
+            vNode: newVNode,
+            children: newVNode.children,
+          });
+          commitChangesStack.push((): void => component.didMount());
+        }
+
+        component!.children = newVNode.children;
+        const rendered = component!.render();
+        const renderedWrapper = new VirtualElement(Fragment, {}, [rendered]);
+        renderedWrapper.component = component!;
+        renderedWrapper.parent = newVNode.parent;
+        renderedWrapper.pos = newVNode.pos;
+        component!.props.vNode = renderedWrapper;
+
+        if (renderedWrapper.parent != null && renderedWrapper.pos !== null) {
+          renderedWrapper.parent.children[renderedWrapper.pos] = renderedWrapper;
+        }
+
+        realDomNode = patchNode({
+          parentDomNode,
+          leftSibling,
+          newVNode: renderedWrapper,
+          oldVNode: nextOldVNode,
+          commitChangesStack,
+        });
+      }
+    } else if (oldVNode == null) {
+      // Create
+      // newVNode is not component
+      let nextParentDomNode = parentDomNode;
+      let newDomNode: Node;
+
+      if (newVNode instanceof StringWrapper) {
+        newDomNode = document.createTextNode(newVNode.data);
+        (newVNode as any).domNode = newDomNode;
+      } else {
+        newDomNode = document.createElement(newVNode.type as string);
+        newVNode.domNode = newDomNode as HTMLElement;
+        (newDomNode as any)[HandlersAttr] = createHandlersTable();
+
+        if (newVNode.ref != null) {
+          newVNode.ref.instance = newVNode.domNode;
+        }
+
+        patchProps(newVNode.domNode, {}, newVNode.props);
+
+        nextParentDomNode = newDomNode as HTMLElement;
+      }
+
+      insertAfter(parentDomNode, newDomNode, leftSibling);
+      realDomNode = newDomNode as unknown as HTMLElement;
+
+      // create children
+      if (newVNode instanceof VirtualElement) {
+        // update parentDomNode
+        let newLeftSibling: HTMLElement | null = null;
+        newVNode.children.forEach((childVNode): void => {
+          newLeftSibling = patchNode({
+            parentDomNode: nextParentDomNode,
+            leftSibling: newLeftSibling,
+            newVNode: childVNode,
+            oldVNode: null,
+            commitChangesStack,
+          });
+        });
+      }
+    } else {
+      // Compare old and new
+      // both are regular node or text node
+      if (newVNode instanceof StringWrapper) {
+        // Text node
+        if (!(oldVNode instanceof StringWrapper) || oldVNode.data !== newVNode.data) {
+          // replace old with new
+          removeVNodeFromDom(oldVNode);
+          realDomNode = patchNode({
+            parentDomNode,
+            leftSibling,
+            oldVNode: null,
+            newVNode,
+            commitChangesStack,
+          });
+          newVNode.domNode = realDomNode as unknown as Text;
+        } else {
+          // Equal
+          newVNode.domNode = oldVNode.domNode as Text;
+          realDomNode = newVNode.domNode as unknown as HTMLElement;
+        }
+      } else {
+        // Regular node
+        if (oldVNode instanceof StringWrapper || oldVNode.type !== newVNode.type) {
+          // replace old with new
+          removeVNodeFromDom(oldVNode);
+          realDomNode = patchNode({
+            parentDomNode,
+            leftSibling,
+            oldVNode: null,
+            newVNode,
+            commitChangesStack,
+          });
+        } else {
+          realDomNode = oldVNode.domNode;
+          newVNode.domNode = realDomNode;
+
+          patchProps(realDomNode!, oldVNode.props, newVNode.props);
+
+          // Patch children
+          let nextLeftSibling: HTMLElement | null = null;
+
+          if (isAllChildrenWithKey(oldVNode) && isAllChildrenWithKey(newVNode)) {
+            let oldChildIdx = 0;
+
+            newVNode.children.forEach((newChild) => {
+              const oldChild = oldVNode.children[oldChildIdx] ?? null;
+
+              if (
+                oldChild instanceof VirtualElement
+                && newChild instanceof VirtualElement
+                && newChild.key === oldChild.key
+              ) {
+                nextLeftSibling = patchNode({
+                  parentDomNode: newVNode.domNode!,
+                  leftSibling: nextLeftSibling,
+                  oldVNode: oldChild,
+                  newVNode: newChild,
+                  commitChangesStack,
+                });
+
+                oldChildIdx += 1;
+              } else {
+                nextLeftSibling = patchNode({
+                  parentDomNode: newVNode.domNode!,
+                  leftSibling: nextLeftSibling,
+                  oldVNode: null,
+                  newVNode: newChild,
+                  commitChangesStack,
+                });
+              }
+            });
+            oldVNode.children.slice(oldChildIdx).forEach((oldChild) => {
+              patchNode({
+                parentDomNode: newVNode.domNode!,
+                leftSibling: nextLeftSibling,
+                oldVNode: oldChild,
+                newVNode: null,
+                commitChangesStack,
+              });
+            });
+          } else {
+            oldVNode.children.forEach((oldChild, idx) => {
+              nextLeftSibling = patchNode({
+                parentDomNode: newVNode.domNode!,
+                leftSibling: nextLeftSibling,
+                oldVNode: oldChild,
+                newVNode: newVNode.children[idx] ?? null,
+                commitChangesStack,
+              });
+            });
+            newVNode.children.slice(oldVNode.children.length).forEach((newChild) => {
+              nextLeftSibling = patchNode({
+                parentDomNode: newVNode.domNode!,
+                leftSibling: nextLeftSibling,
+                oldVNode: null,
+                newVNode: newChild,
+                commitChangesStack,
+              });
+            });
+          }
+        }
+      }
+    }
+  } else {
+    if (oldVNode == null) {
+      throw Error('Can not patch Virtual Dom: new node and old node are both null');
+    }
+
+    // Delete
+    removeVNodeFromDom(oldVNode);
+  }
+
+  return realDomNode;
 }
 
-export default function patch(initial: PatchArg): void {
-  const nodesStack = [initial];
+export default function patch(args: {
+  parentDomNode: HTMLElement,
+  leftSibling: HTMLElement | null,
+  oldVNode: VirtualElement | StringWrapper | null,
+  newVNode: VirtualElement | StringWrapper | null,
+}): void {
   const commitChangesStack: Array<() => void> = [];
 
-  while (nodesStack.length > 0) {
-    const current: PatchArg = nodesStack.pop()!;
-    const {
-      oldVNode, newVNode, domNode, parentDom, pos, ctxNode,
-    }: PatchArg = current;
-
-    // new virtual node does not exist =>
-    // we need to remove current node
-    // from dom
-    if (newVNode == null && oldVNode != null && domNode) {
-      removeFromDom(domNode, oldVNode);
-    } else if (
-      newVNode
-      && newVNode instanceof VirtualElement
-      && typeof newVNode.type === 'function'
-    ) {
-      patchAsComponent(
-        newVNode,
-        oldVNode,
-        domNode,
-        parentDom,
-        pos,
-        nodesStack,
-        commitChangesStack,
-        ctxNode,
-      );
-    // old virtual node and dom node do not exist =>
-    // we need to place new node into dom
-    } else if (newVNode != null && oldVNode == null && !domNode) {
-      placeIntoDom(newVNode, parentDom, pos, nodesStack, ctxNode);
-    // invalid case
-    } else if (newVNode == null || oldVNode == null || !domNode) {
-      console.error('Can\'t patch current:', current);
-    } else if (typeof newVNode === 'string') {
-      patchAsString(domNode, oldVNode, newVNode);
-    } else {
-      patchAsVNode(domNode, parentDom, oldVNode, newVNode, pos, nodesStack, ctxNode);
-    }
-  }
+  patchNode({ ...args, commitChangesStack });
 
   while (commitChangesStack.length > 0) {
     commitChangesStack.pop()!();
   }
-
-  const { oldVNode, newVNode }: PatchArg = initial;
-  if (
-    oldVNode
-    && oldVNode instanceof VirtualElement
-    && oldVNode.parent
-    && oldVNode.pos
-    && newVNode
-  ) {
-    oldVNode.parent.children[oldVNode.pos] = newVNode;
-
-    if (newVNode instanceof VirtualElement) {
-      newVNode.parent = oldVNode.parent;
-      newVNode.pos = oldVNode.pos;
-
-      newVNode.parent.children[newVNode.pos] = newVNode;
-    }
-  }
 }
+
+// export default function patch(initial: PatchArg): void {
+//   const nodesStack = [initial];
+//   const commitChangesStack: Array<() => void> = [];
+//
+//   while (nodesStack.length > 0) {
+//     const current: PatchArg = nodesStack.pop()!;
+//     const {
+//       oldVNode, newVNode, domNode, parentDom, pos, ctxNode,
+//     }: PatchArg = current;
+//
+//     // new virtual node does not exist =>
+//     // we need to remove current node
+//     // from dom
+//     if (newVNode == null && oldVNode != null && domNode) {
+//       removeFromDom(domNode, oldVNode);
+//     } else if (
+//       newVNode
+//       && newVNode instanceof VirtualElement
+//       && typeof newVNode.type === 'function'
+//     ) {
+//       patchAsComponent(
+//         newVNode,
+//         oldVNode,
+//         domNode,
+//         parentDom,
+//         pos,
+//         nodesStack,
+//         commitChangesStack,
+//         ctxNode,
+//       );
+//     // old virtual node and dom node do not exist =>
+//     // we need to place new node into dom
+//     } else if (newVNode != null && oldVNode == null && !domNode) {
+//       placeIntoDom(newVNode, parentDom, pos, nodesStack, ctxNode);
+//     // invalid case
+//     } else if (newVNode == null || oldVNode == null || !domNode) {
+//       console.error('Can\'t patch current:', current);
+//     } else if (typeof newVNode === 'string') {
+//       patchAsString(domNode, oldVNode, newVNode);
+//     } else {
+//       patchAsVNode(domNode, parentDom, oldVNode, newVNode, pos, nodesStack, ctxNode);
+//     }
+//   }
+//
+//   while (commitChangesStack.length > 0) {
+//     commitChangesStack.pop()!();
+//   }
+//
+//   const { oldVNode, newVNode }: PatchArg = initial;
+//   if (
+//     oldVNode
+//     && oldVNode instanceof VirtualElement
+//     && oldVNode.parent
+//     && oldVNode.pos
+//     && newVNode
+//   ) {
+//     oldVNode.parent.children[oldVNode.pos] = newVNode;
+//
+//     if (newVNode instanceof VirtualElement) {
+//       newVNode.parent = oldVNode.parent;
+//       newVNode.pos = oldVNode.pos;
+//
+//       newVNode.parent.children[newVNode.pos] = newVNode;
+//     }
+//   }
+// }

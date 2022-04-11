@@ -2,6 +2,7 @@ import Component from './Component';
 import Ref from './Ref';
 import { HandlersAttr } from './Symbols';
 import { HandlersTable, HandlerDescriptor } from './Types';
+import StringWrapper from './StringWrapper';
 
 export default class VirtualElement {
   public readonly type: string | Function;
@@ -10,10 +11,12 @@ export default class VirtualElement {
 
   public readonly key: string | undefined;
 
-  public children: Array<VirtualElement | string>;
+  // eslint-disable-next-line no-use-before-define
+  public children: Array<VirtualElement | StringWrapper>;
 
   public component: Component | null;
 
+  // eslint-disable-next-line no-use-before-define
   public parent: VirtualElement | null;
 
   public pos: number | null;
@@ -25,7 +28,7 @@ export default class VirtualElement {
   constructor(
     type: string | Function,
     props: any,
-    children: Array<VirtualElement | string>,
+    children: Array<VirtualElement | StringWrapper>,
     key?: string,
     ref?: Ref,
   ) {

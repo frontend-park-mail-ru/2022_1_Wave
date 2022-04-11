@@ -7,8 +7,7 @@ export default function render(vNode: VirtualElement, root: HTMLElement): void {
   patch({
     newVNode: vNode,
     oldVNode: null,
-    domNode: null,
-    parentDom: root,
-    pos: 0,
+    parentDomNode: root,
+    leftSibling: null,
   });
 }

@@ -6,14 +6,8 @@ import { createContext, ContextType } from './Context';
 import StringWrapper from './StringWrapper';
 import { Debounce } from './util';
 import Fragment from './Fragment';
-
-export interface IComponentProps {
-  parentDomNode: HTMLElement;
-  leftSibling: HTMLElement;
-  vNode: VirtualElement;
-  children: Array<VirtualElement | StringWrapper>;
-  ref?: Ref;
-}
+import IComponentProps from './IComponentProps';
+import cloneVNode from './cloneVNode';
 
 export default abstract class Component<Props extends IComponentProps = any, State = any, Snapshot = any, ContextValueType = null> {
   public props: Props;
@@ -77,6 +71,10 @@ export default abstract class Component<Props extends IComponentProps = any, Sta
 
   abstract render(): VirtualElement;
 
+  renderAndCopy(): VirtualElement {
+    return cloneVNode(this.render());
+  }
+
   didMount(): void {}
 
   // eslint-disable-next-line no-unused-vars
@@ -107,7 +105,7 @@ export default abstract class Component<Props extends IComponentProps = any, Sta
 
     const snapshot = this.makeSnapshot(props, state);
 
-    const rendered = this.render();
+    const rendered = this.renderAndCopy();
     const oldVNode = this.props.vNode.children[0];
     const { parentDomNode, leftSibling } = this.props;
 

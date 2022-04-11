@@ -2,9 +2,10 @@
 import VDom from './modules/VDom';
 import { createContext } from './modules/VDom/Context';
 import Router from './modules/Router/Router';
-// import Route from './modules/Router/Route';
-// import RouteSwitch, { routerContextType } from './modules/Router/RouteSwitch';
+import Route from './modules/Router/Route';
+import RouteSwitch from './modules/Router/RouteSwitch';
 import Ref from './modules/VDom/Ref';
+import Link from './modules/Router/Link';
 // import App from './components/App/App';
 
 const MyContext = createContext<number>(15);
@@ -22,6 +23,12 @@ class DudeChild extends VDom.Component {
 
 class AnotherDudeChild extends VDom.Component {
   static contextType = MyContext;
+
+  constructor(props: any) {
+    super(props);
+
+    console.log(this.context);
+  }
 
   render = (): VDom.VirtualElement => {
     // console.log(this.children);
@@ -50,15 +57,15 @@ class Dude extends VDom.Component {
   }
 
   didMount(): void {
-    setInterval(() => {
-      this.items.unshift(this.state.counter);
-      if (this.items.length > 10) {
-        this.items.pop();
-      }
-      this.setState({ counter: this.state.counter + 1 });
-      // console.log(this.pRef.instance);
-      // console.log(this.state.counter);
-    }, 1000);
+    // setInterval(() => {
+    //   this.items.unshift(this.state.counter);
+    //   if (this.items.length > 10) {
+    //     this.items.pop();
+    //   }
+    //   this.setState({ counter: this.state.counter + 1 });
+    //   // console.log(this.pRef.instance);
+    //   // console.log(this.state.counter);
+    // }, 1000);
   }
 
   render = (): VDom.VirtualElement => {
@@ -86,24 +93,49 @@ class Dude extends VDom.Component {
     const itemsComps = this.items.map((item) => <p key={item.toString()}>{item}</p>);
 
     return (
-      <MyContext.Provider value={8}>
-        <div>
-          hi
-          {dudeChild}
-          <VDom.Fragment>
-            {child}
-            <p>who r u</p>
-            <VDom.Fragment>
-              <p ref={this.pRef}>i am u</p>
-              <p>duuude</p>
-            </VDom.Fragment>
-          </VDom.Fragment>
-          <p>{this.state.counter}</p>
+      <Router>
+        <MyContext.Provider value={8}>
+          <RouteSwitch>
+            <Route to="" exact>
+              <div>home</div>
+              <Link to="/about">go about</Link>
+            </Route>
+            <Route to="/about">
+              <div>about</div>
+              <Link to='/'>go home</Link>
+              <div>
+                <RouteSwitch>
+                  <Route to="/some">
+                    <Link to='/about/nothing'>go nothing</Link>
+                  </Route>
+                  <Route to="/nothing">
+                    <div>about</div>
+                    <Link to='/about/some'>go some</Link>
+                  </Route>
+                  <Route to="">
+                  </Route>
+                </RouteSwitch>
+              </div>
+            </Route>
+          </RouteSwitch>
           <div>
-            {itemsComps}
+            hi
+            {dudeChild}
+            <VDom.Fragment>
+              {child}
+              <p>who r u</p>
+              <VDom.Fragment>
+                <p ref={this.pRef}>i am u</p>
+                <p>duuude</p>
+              </VDom.Fragment>
+            </VDom.Fragment>
+            <p>{this.state.counter}</p>
+            <div>
+              {itemsComps}
+            </div>
           </div>
-        </div>
-      </MyContext.Provider>
+        </MyContext.Provider>
+      </Router>
     );
   };
 }
@@ -141,8 +173,6 @@ class DummyParent extends VDom.Component {
     );
   };
 }
-
-const router = new Router();
 
 class DummyApp extends VDom.Component {
   constructor(props: any) {

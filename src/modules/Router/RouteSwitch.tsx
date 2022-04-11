@@ -1,78 +1,30 @@
 import VDom from '../VDom';
 import Route from './Route';
-import Router from './Router';
-import { ContextType, IContextType } from '../VDom/Context';
-
-const routeRegExp = /^(?:\/:?[\w_~.-]+)*$/;
-const pathRegExp = /^(?:\/[\w_~.-]+)*$/;
+import RouteNavigator from './RouteNavigator';
+import RouterContext from './RouterContext';
+import match from './match';
 
 type RouteProps = {
   to: string,
   exact: boolean,
 }
 
-export const routerContextType = new ContextType<Router | null>('router', null);
+export default class RouteSwitch extends VDom.Component<any, any, any, RouteNavigator | null> {
+  static contextType = RouterContext;
 
-function match(expectPath: string, actualPath: string, isExact: boolean):
-  { params: any, handled: string, rest: string } | null {
-  if (actualPath === '/') {
-    actualPath = '';
-  }
-  if (!expectPath.match(routeRegExp)) {
-    throw Error(`Invalid route: ${expectPath}`);
-  }
-  if (!actualPath.match(pathRegExp)) {
-    throw Error(`Invalid path: ${actualPath}`);
-  }
-
-  const expect: string[] = expectPath.split('/');
-  const actual: string[] = actualPath.split('/');
-  const params: any = {};
-
-  if (expect.length > actual.length) {
-    return null;
-  }
-
-  if (isExact && expect.length !== actual.length) {
-    return null;
-  }
-
-  const isMatching = expect.every((expectFrag, idx) => {
-    const actualFrag = actual[idx];
-
-    if (expectFrag.startsWith(':')) {
-      params[expectFrag.slice(1)] = actualFrag;
-      return true;
-    }
-
-    return expectFrag === actualFrag;
-  });
-
-  if (!isMatching) {
-    return null;
-  }
-
-  const handled = `/${actual.slice(0, expect.length).join('/')}`;
-  const rest = `/${actual.slice(expect.length).join('/')}`;
-
-  return { params, handled, rest };
-}
-
-export default class RouteSwitch extends VDom.Component<any, any, any, Router> {
-  private toRender: VDom.VirtualElement | null;
-
-  get contextType(): IContextType {
-    return routerContextType;
-  }
+  private toRenderIdx: number | null;
 
   constructor(props: any) {
     super(props);
-    this.toRender = null;
-    console.log('Switch!');
+    this.toRenderIdx = null;
+
+    if (this.context == null) {
+      throw Error('Router has not been found');
+    }
   }
 
   route(): void {
-    const router = this.ctx.value;
+    const navigator = this.context!;
 
     if (!this.children.every((child) => (
       child instanceof VDom.VirtualElement && child.type === Route
@@ -80,44 +32,56 @@ export default class RouteSwitch extends VDom.Component<any, any, any, Router> {
       throw Error('RouteSwitch have to contain only Route components');
     }
 
-    const toRender = this.children.reduce((acc, cur): VDom.VirtualNode => {
-      const child = cur as VDom.VirtualElement;
-      const { to: path, exact: isExact } = child.props as RouteProps;
+    this.toRenderIdx = null;
+    let idx = 0;
 
-      const matchResult = match(path, router.unhandledPath, isExact);
+    // eslint-disable-next-line no-restricted-syntax
+    for (const child of this.children) {
+      const route = child as VDom.VirtualElement;
+      const { to: path, exact: isExact } = route.props as RouteProps;
+
+      const matchResult = match(path, navigator.unhandledPath, isExact);
 
       if (matchResult) {
         const { params, handled, rest } = matchResult;
-        router.unhandledPath = rest;
-        router.handledSwitchers.push({
+
+        navigator.unhandledPath = rest;
+        navigator.handledSwitchers.push({
           path: handled,
-          switcher: this,
+          switcher: this as unknown as VDom.Component,
         });
 
-        child.props.params = params;
-
-        return child;
+        route.props.params = params;
+        this.toRenderIdx = idx;
+        break;
       }
 
-      return acc;
-    }, null);
-
-    if (toRender) {
-      this.toRender = toRender;
+      idx += 1;
     }
   }
 
   render(): VDom.VirtualElement {
-    const router = this.ctx.value;
+    const navigator = this.context!;
 
-    if (!router.contains(this)) {
+    // console.log('#');
+
+    if (!navigator.contains(this as unknown as VDom.Component)) {
       this.route();
+
+      // console.log(navigator.unhandledPath);
+      // console.log(this.toRender);
     }
 
-    if (!this.toRender) {
+    if (this.toRenderIdx == null) {
       throw Error('RouteSwitch no match');
     }
 
-    return this.toRender;
+    // console.log('RouteSwitch: ', this.toRender);
+
+    return (
+      <RouterContext.Provider value={navigator}>
+        {this.props.children[this.toRenderIdx]}
+      </RouterContext.Provider>
+    );
   }
 }

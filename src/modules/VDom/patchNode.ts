@@ -3,7 +3,6 @@ import Component from './Component';
 import Fragment from './Fragment';
 import { HandlersAttr } from './Symbols';
 import { createHandlersTable, HandlersTable } from './Types';
-import { ContextNode, fromContextList } from './Context';
 import StringWrapper from './StringWrapper';
 
 const EVENT_PREFIX = 'on';
@@ -230,7 +229,7 @@ function patchNode(args: {
         }
 
         component!.children = newVNode.children;
-        const rendered = component!.render();
+        const rendered = component!.renderAndCopy();
         const renderedWrapper = new VirtualElement(Fragment, {}, [rendered]);
         renderedWrapper.component = component!;
         renderedWrapper.parent = newVNode.parent;

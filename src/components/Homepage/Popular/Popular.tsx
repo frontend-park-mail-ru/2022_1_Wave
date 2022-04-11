@@ -13,40 +13,17 @@ import { albumGetPopular } from '../../../actions/Album';
 import { artistGetPopular } from '../../../actions/Artist';
 import { IProps } from '../../../modules/VDom/Interfaces';
 import artistPopular from '../../../reducers/artist';
+import { PlayerClass } from '../../../modules/Media/player';
 
 class Popular extends VDom.Component {
   constructor(props: IProps) {
     super(props);
     this.props.getAlbums();
     this.props.getArtist();
-    this.state = {
-      artists: null,
-      albums: null,
-    };
-  }
-
-  didMount() {
-    console.log('Popular:', this.props);
   }
 
   render = (): VDom.VirtualElement => {
-    const artists = this.props.artists ? this.props.artists : null;
-    if (this.state.playlist !== artists) {
-      this.setState({ artists });
-    }
-    const albums = this.props.albums ? this.props.albums : null;
-    if (this.state.playlist !== albums) {
-      this.setState({ albums });
-    }
-    if (this.props.artists) {
-      console.log(this.props.artists.map((v:any) => <ArtistCard cover={v.cover} name={v.name}/>));
-    }
-    // {this.props.artistPopular ? Array(this.props.artistPopular.popular).map((artist):VDom.VirtualElement => (
-    //     <ArtistCard cover={artist.cover} name={artist.name}/>)) : null
-    // }
-
     return (
-
       <div class="main__popular">
 
         <div class="main__popular__albums main__popular_slider-hidden">
@@ -54,12 +31,7 @@ class Popular extends VDom.Component {
                     Popular albums
           </div>
           <CarouselRow>
-            <AlbumCard cover={album} title="eboi" artist="viva"/>
-            <AlbumCard cover={album} title="eboi" artist="viva"/>
-            <AlbumCard cover={album} title="eboi" artist="viva"/>
-            <AlbumCard cover={album} title="eboi" artist="viva"/>
-            <AlbumCard cover={album} title="eboi" artist="viva"/>
-            <AlbumCard cover={album} title="eboi" artist="viva"/>
+            { this.props.albums ? this.props.albums.map((v:any) => <AlbumCard cover={v.cover} title={v.title} artist={v.artist}/>) : '' }
           </CarouselRow>
         </div>
         <div class="main__popular__artists main__popular_slider-hidden">
@@ -67,7 +39,7 @@ class Popular extends VDom.Component {
                     Popular artist
           </div>
           <CarouselRow>
-            { this.props.artists ? this.props.artists.map((v:any) => <ArtistCard cover={v.cover} name={v.name}/>) : "" }
+            { this.props.artists ? this.props.artists.map((v:any) => <ArtistCard cover={v.cover} name={v.name}/>) : '' }
           </CarouselRow>
         </div>
       </div>

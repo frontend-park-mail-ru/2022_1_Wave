@@ -73,6 +73,7 @@ export default class RouteSwitch extends VDom.Component<any, any, any, RouteNavi
     }
 
     if (this.toRenderIdx == null) {
+      console.log(navigator);
       throw Error('RouteSwitch no match');
     }
 

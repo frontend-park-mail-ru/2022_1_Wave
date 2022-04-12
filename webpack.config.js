@@ -104,6 +104,7 @@ module.exports = (env = {}) => {
     },
     plugins: getPlugins(),
     devServer: {
+      historyApiFallback: true,
       proxy: {
         '/api': {
           changeOrigin: true,

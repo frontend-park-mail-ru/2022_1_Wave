@@ -6,6 +6,8 @@ import Route from './modules/Router/Route';
 import RouteSwitch from './modules/Router/RouteSwitch';
 import Ref from './modules/VDom/Ref';
 import Link from './modules/Router/Link';
+import RouterContext from './modules/Router/RouterContext';
+import RouteNavigator from './modules/Router/RouteNavigator';
 // import App from './components/App/App';
 
 const MyContext = createContext<number>(15);
@@ -39,6 +41,18 @@ class AnotherDudeChild extends VDom.Component {
       </p>
     );
   };
+}
+
+class AnotherAbout extends VDom.Component<any, any, null, RouteNavigator> {
+  static contextType = RouterContext;
+
+  render(): VDom.VirtualElement {
+    const { slug }: { slug: string } = this.context.params;
+
+    return (
+      <div>{slug}</div>
+    );
+  }
 }
 
 class Dude extends VDom.Component {
@@ -112,7 +126,11 @@ class Dude extends VDom.Component {
                     <div>about</div>
                     <Link to='/about/some'>go some</Link>
                   </Route>
+                  <Route exact to="/:slug">
+                    <AnotherAbout/>
+                  </Route>
                   <Route to="">
+                    not found
                   </Route>
                 </RouteSwitch>
               </div>

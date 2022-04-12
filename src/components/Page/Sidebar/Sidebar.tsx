@@ -11,22 +11,24 @@ export default class Sidebar extends VDom.Component {
     const { isAuthorized, playlist } = this.props;
     const content = isAuthorized ? (
       <div>
-        <Navigation title='My playlist'/>
-        <Navigation title='Last listening'/>
-        <Navigation title='Recommended'/>
+        <Navigation title="My playlist" />
+        <Navigation title="Last listening" />
+        <Navigation title="Recommended" />
       </div>
-    ) : <Navigation title='Listening in the world'/>;
+    ) : (
+      <Navigation title="Listening in the world" />
+    );
     return (
       <div class="sidebar">
         <div class="sidebar__header">
           <Link to="/">
             <div class="header__logo">
-              <img class="logo__picture" src={logo} alt="logo.svg"/>
+              <img class="logo__picture" src={logo} alt="logo.svg" />
             </div>
           </Link>
         </div>
         {content}
-        <Playlist playlist={playlist}/>
+        <Playlist playlist={playlist} />
       </div>
     );
   };

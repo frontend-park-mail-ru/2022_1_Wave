@@ -138,19 +138,13 @@ function insertAfter(parentDomNode: HTMLElement, newDomNode: Node, leftSibling: 
 }
 
 function patchNode(args: {
-  parentDomNode: HTMLElement,
-  leftSibling: HTMLElement | null,
-  oldVNode: VirtualElement | StringWrapper | null,
-  newVNode: VirtualElement | StringWrapper | null,
-  commitChangesStack: Array<() => void>,
-                   }): HTMLElement | null {
-  const {
-    parentDomNode,
-    leftSibling,
-    oldVNode,
-    newVNode,
-    commitChangesStack,
-  } = args;
+  parentDomNode: HTMLElement;
+  leftSibling: HTMLElement | null;
+  oldVNode: VirtualElement | StringWrapper | null;
+  newVNode: VirtualElement | StringWrapper | null;
+  commitChangesStack: Array<() => void>;
+}): HTMLElement | null {
+  const { parentDomNode, leftSibling, oldVNode, newVNode, commitChangesStack } = args;
 
   let realDomNode: HTMLElement | null = null;
 
@@ -218,7 +212,7 @@ function patchNode(args: {
         }
 
         if (!componentAlreadyExists) {
-          component = new (newVNode.type as (new (props: any) => Component))({
+          component = new (newVNode.type as new (props: any) => Component)({
             ...newVNode.props,
             parentDomNode,
             leftSibling,
@@ -337,9 +331,9 @@ function patchNode(args: {
               const oldChild = oldVNode.children[oldChildIdx] ?? null;
 
               if (
-                oldChild instanceof VirtualElement
-                && newChild instanceof VirtualElement
-                && newChild.key === oldChild.key
+                oldChild instanceof VirtualElement &&
+                newChild instanceof VirtualElement &&
+                newChild.key === oldChild.key
               ) {
                 nextLeftSibling = patchNode({
                   parentDomNode: newVNode.domNode!,
@@ -405,10 +399,10 @@ function patchNode(args: {
 }
 
 export default function patch(args: {
-  parentDomNode: HTMLElement,
-  leftSibling: HTMLElement | null,
-  oldVNode: VirtualElement | StringWrapper | null,
-  newVNode: VirtualElement | StringWrapper | null,
+  parentDomNode: HTMLElement;
+  leftSibling: HTMLElement | null;
+  oldVNode: VirtualElement | StringWrapper | null;
+  newVNode: VirtualElement | StringWrapper | null;
 }): void {
   const commitChangesStack: Array<() => void> = [];
 

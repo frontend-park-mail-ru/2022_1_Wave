@@ -17,12 +17,12 @@ export default class AlbumCard extends VDom.Component {
   render = (): VDom.VirtualElement => {
     const { cover, title, artist } = this.props;
 
-    return (<div class="album">
-      <img class="album__image" src={cover}/>
-      <div class="text album__title">{title}</div>
-      <div class="text album__artist">{artist}</div>
-    </div>
-
+    return (
+      <div class="album">
+        <img class="album__image" src={cover} />
+        <div class="text album__title">{title}</div>
+        <div class="text album__artist">{artist}</div>
+      </div>
     );
   };
 }

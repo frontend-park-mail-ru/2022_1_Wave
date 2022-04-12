@@ -7,11 +7,15 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 class EmitDeclarationOnly {
   apply(compiler) {
-    compiler.hooks.shouldEmit.tap('EmitDeclarationOnly', (compilation) => this.handleHook(compiler, compilation));
+    compiler.hooks.shouldEmit.tap('EmitDeclarationOnly', (compilation) =>
+      this.handleHook(compiler, compilation),
+    );
   }
 
   handleHook(compiler, compilation) {
-    compilation.errors = compilation.errors.filter((error) => !error.toString().includes('TypeScript emitted no output for'));
+    compilation.errors = compilation.errors.filter(
+      (error) => !error.toString().includes('TypeScript emitted no output for'),
+    );
   }
 }
 
@@ -69,7 +73,12 @@ module.exports = (env = {}) => {
         // Loading SCSS/SASS
         {
           test: /\.s[ac]ss$/i,
-          use: [isProd ? MiniCssExtractPlugin.loader : 'style-loader', 'css-loader', 'postcss-loader', 'sass-loader'],
+          use: [
+            isProd ? MiniCssExtractPlugin.loader : 'style-loader',
+            'css-loader',
+            'postcss-loader',
+            'sass-loader',
+          ],
           // use: [
           // // Creates `style` nodes from JS strings
           //   'style-loader',
@@ -81,24 +90,28 @@ module.exports = (env = {}) => {
         },
         {
           test: /\.(png|jpg|jpeg|gif|ico|svg)$/,
-          use: [{
-            loader: 'file-loader',
-            options: {
-              outputPath: 'images',
-              name: '[name]-[sha1:hash:7].[ext]',
+          use: [
+            {
+              loader: 'file-loader',
+              options: {
+                outputPath: 'images',
+                name: '[name]-[sha1:hash:7].[ext]',
+              },
             },
-          }],
+          ],
         },
         // Loading fonts
         {
           test: /\.(ttf|otf|eot|woff2)$/,
-          use: [{
-            loader: 'file-loader',
-            options: {
-              outputPath: 'fonts',
-              name: '[name].[ext]',
+          use: [
+            {
+              loader: 'file-loader',
+              options: {
+                outputPath: 'fonts',
+                name: '[name].[ext]',
+              },
             },
-          }],
+          ],
         },
       ],
     },

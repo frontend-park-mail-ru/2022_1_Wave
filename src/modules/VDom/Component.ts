@@ -15,7 +15,12 @@ interface IComponentPropsIternal {
   vNode: VirtualElement;
 }
 
-export default abstract class Component<Props = any, State = any, Snapshot = any, ContextValueType = null> {
+export default abstract class Component<
+  Props = any,
+  State = any,
+  Snapshot = any,
+  ContextValueType = null,
+> {
   public props: Props & IComponentProps & IComponentPropsIternal;
 
   public node: HTMLElement | null;
@@ -46,9 +51,7 @@ export default abstract class Component<Props = any, State = any, Snapshot = any
       ref.instance = this as unknown as Component;
     }
 
-    const context = Object
-      .getPrototypeOf(this)
-      .constructor
+    const context = Object.getPrototypeOf(this).constructor
       .contextType as ContextType<ContextValueType>;
     let curVNode: VirtualElement | null = props.vNode;
 
@@ -89,7 +92,9 @@ export default abstract class Component<Props = any, State = any, Snapshot = any
   willUmount(): void {}
 
   // eslint-disable-next-line no-unused-vars
-  makeSnapshot(prevProps: Props, prevState: State): Snapshot | null { return null; }
+  makeSnapshot(prevProps: Props, prevState: State): Snapshot | null {
+    return null;
+  }
 
   setState(partialState: any): void {
     const prevState = this.state;
@@ -125,7 +130,6 @@ export default abstract class Component<Props = any, State = any, Snapshot = any
       newVNode: rendered,
       oldVNode,
     });
-
 
     // this.props.vNode.children[0] = rendered;
     this.didUpdate(snapshot);

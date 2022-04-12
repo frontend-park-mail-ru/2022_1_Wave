@@ -59,12 +59,10 @@ export default class LoginPage extends Component {
   }
 
   didMount(node) {
-    node.querySelector('form')
-      .addEventListener('submit', this.submit);
+    node.querySelector('form').addEventListener('submit', this.submit);
   }
 
   willUnmount(node) {
-    node.querySelector('form')
-      .removeEventListener('submit', this.submit);
+    node.querySelector('form').removeEventListener('submit', this.submit);
   }
 }

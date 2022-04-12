@@ -19,7 +19,8 @@ class Player extends VDom.Component {
     this.#player = new PlayerClass(playlist);
     console.log(this.#player);
     const freqArr = this.#player.analyser
-      ? new Uint8Array(this.#player.analyser.frequencyBinCount) : null;
+      ? new Uint8Array(this.#player.analyser.frequencyBinCount)
+      : null;
     const volume = this.#player.audio ? this.#player.audio.volume : 0.5;
     this.state = {
       playState: false,
@@ -35,12 +36,7 @@ class Player extends VDom.Component {
         cover: this.#player.currentTrack.cover,
       },
       freqArray: freqArr,
-      waveHeights: [
-        0,
-        0,
-        0,
-        0,
-      ],
+      waveHeights: [0, 0, 0, 0],
     };
     this.loadTrackData = this.loadTrackData.bind(this);
     this.tooglePlay = this.tooglePlay.bind(this);
@@ -107,7 +103,7 @@ class Player extends VDom.Component {
   timeUpdater(e: Event): void {
     this.fetchedUpdater(e);
     this.updateWaveFront();
-    const filled = ((this.#player.audio.currentTime / this.#player.audio.duration) * 100);
+    const filled = (this.#player.audio.currentTime / this.#player.audio.duration) * 100;
     this.setState({ trackTime: this.#player.audio.currentTime, trackFilled: filled });
   }
 
@@ -123,12 +119,7 @@ class Player extends VDom.Component {
     const midFreq: Array<number> = [1000, 3000];
     const midUpFreq: Array<number> = [4000, 6000];
     const highFreq: Array<number> = [7000, 10000];
-    const freqRanges: Array<Array<number>> = [
-      lowFreq,
-      midFreq,
-      midUpFreq,
-      highFreq,
-    ];
+    const freqRanges: Array<Array<number>> = [lowFreq, midFreq, midUpFreq, highFreq];
 
     for (let i = 0; i < barsHeight.length; i += 1) {
       const range = freqRanges[i];
@@ -136,12 +127,10 @@ class Player extends VDom.Component {
       const rightBorder = Math.round(range[1] / hzStep);
       let sum = 0;
       let elNums = 0;
-      currFreq.slice(leftBorder, rightBorder).forEach(
-        (val: number): void => {
-          sum += val;
-          elNums += 1;
-        },
-      );
+      currFreq.slice(leftBorder, rightBorder).forEach((val: number): void => {
+        sum += val;
+        elNums += 1;
+      });
       const interpolated = sum / elNums;
       barsHeight[i] = (interpolated / 256) * 100;
     }
@@ -189,20 +178,20 @@ class Player extends VDom.Component {
       const res = Math.trunc(n).toString();
       return n >= 10 ? res : `0${res}`;
     };
-    let volIcon:string;
+    let volIcon: string;
     switch (true) {
-    case this.state.trackVolume === 0:
-      volIcon = 'fa-volume-xmark';
-      break;
-    case this.state.trackVolume < 25:
-      volIcon = 'fa-volume-off';
-      break;
-    case this.state.trackVolume < 60:
-      volIcon = 'fa-volume-low';
-      break;
-    default:
-      volIcon = 'fa-volume-high';
-      break;
+      case this.state.trackVolume === 0:
+        volIcon = 'fa-volume-xmark';
+        break;
+      case this.state.trackVolume < 25:
+        volIcon = 'fa-volume-off';
+        break;
+      case this.state.trackVolume < 60:
+        volIcon = 'fa-volume-low';
+        break;
+      default:
+        volIcon = 'fa-volume-high';
+        break;
     }
     return (
       <div class="player">
@@ -224,9 +213,7 @@ class Player extends VDom.Component {
             <div class="fa-solid fa-backward-step"></div>
           </div>
           <div onclick={this.tooglePlay} class="control__play_pause">
-            {
-              this.state.playState ? this.#pauseIcon : this.#playIcon
-            }
+            {this.state.playState ? this.#pauseIcon : this.#playIcon}
           </div>
 
           <div onclick={this.runNext} class="control__next">
@@ -234,40 +221,50 @@ class Player extends VDom.Component {
           </div>
         </div>
         <div class="player__progressbar">
-          <div class="progressbar"
+          <div
+            class="progressbar"
             onclick={this.setTime}
             ondrag={this.setTime}
-            ondragend={this.setTime}>
-            <div class="progressbar__prefetched" style={
-              { width: `${this.state.trackBuffered.toString()}%` }
-            }></div>
+            ondragend={this.setTime}
+          >
+            <div
+              class="progressbar__prefetched"
+              style={{ width: `${this.state.trackBuffered.toString()}%` }}
+            ></div>
             <div class="progressbar__state">
-              <div class="progressbar__state__line" style={
-                { width: `${this.state.trackFilled.toString()}%` }
-              }></div>
-              <div class="progressbar__state__marker" style={{ 'background-image': `url("${marker}")` }}>
-              </div>
+              <div
+                class="progressbar__state__line"
+                style={{ width: `${this.state.trackFilled.toString()}%` }}
+              ></div>
+              <div
+                class="progressbar__state__marker"
+                style={{ 'background-image': `url("${marker}")` }}
+              ></div>
             </div>
           </div>
-          <div class="text player__progressbar__time"> {
-            `${formatInt(this.state.trackTime / 60)}:${
-              formatInt(this.state.trackTime % 60)}`
-          }</div>
+          <div class="text player__progressbar__time">
+            {' '}
+            {`${formatInt(this.state.trackTime / 60)}:${formatInt(this.state.trackTime % 60)}`}
+          </div>
         </div>
         <div onclick={this.toogleShuffle} class="player__shuffle">
-          <div class="fa-solid fa-shuffle" style={
-            { color: this.state.playRand ? '#5D4099' : '#BEB7DF' }
-          }></div>
+          <div
+            class="fa-solid fa-shuffle"
+            style={{ color: this.state.playRand ? '#5D4099' : '#BEB7DF' }}
+          ></div>
         </div>
         <div class="player__volume">
           <div onclick={this.toogleMute} class={`fa-solid ${volIcon} volume__icon`}></div>
-          <div class="volume__input"
+          <div
+            class="volume__input"
             onclick={this.setVolume}
             ondrag={this.setVolume}
-            ondragend={this.setVolume}>
-            <div class="volume__input__state" style={
-              { width: `${this.state.trackVolume.toString()}%` }
-            }></div>
+            ondragend={this.setVolume}
+          >
+            <div
+              class="volume__input__state"
+              style={{ width: `${this.state.trackVolume.toString()}%` }}
+            ></div>
           </div>
         </div>
       </div>

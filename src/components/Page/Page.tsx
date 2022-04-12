@@ -10,7 +10,7 @@ import { trackGetPopular } from '../../actions/Track';
 import { IProps } from '../../modules/VDom/Interfaces';
 
 class Page extends VDom.Component {
-  constructor(props:IProps) {
+  constructor(props: IProps) {
     super(props);
     this.props.getPlaylist();
     this.state = {
@@ -27,7 +27,6 @@ class Page extends VDom.Component {
 
   render = (): VDom.VirtualElement => {
     const { content, isAuthorized } = this.props;
-    console.log('height:', this.state.contentHeight);
     return (
       <div class="page" style={{ height: `${this.state.contentHeight.toString()}px` }}>
         <Sidebar playlist={this.props.playlist} isAuthorized={isAuthorized}/>
@@ -43,7 +42,7 @@ class Page extends VDom.Component {
   };
 }
 
-const mapStateToProps = (state: any):Map => ({
+const mapStateToProps = (state: any): Map => ({
   playlist: state.tracksPopular ? state.tracksPopular.popular : null,
   something: state.tracksPopular,
 });

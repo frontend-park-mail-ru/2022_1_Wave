@@ -8,12 +8,12 @@
 import { Dic } from './media';
 
 export type Track = {
-  title: string,
-  artist: string,
-  album: string,
-  src: string,
-  cover: string
-}
+  title: string;
+  artist: string;
+  album: string;
+  src: string;
+  cover: string;
+};
 
 export class PlayerClass {
   #playlist: Track[];
@@ -36,7 +36,7 @@ export class PlayerClass {
 
   #mediaMetadata: MediaMetadata;
 
-  constructor(tracks: Track[] = [], initVolume:number = 0.5) {
+  constructor(tracks: Track[] = [], initVolume: number = 0.5) {
     console.log(tracks);
     if (!tracks || tracks.length === 0) {
       return;
@@ -65,8 +65,7 @@ export class PlayerClass {
 
   play(): void {
     this.#audioCtx.resume();
-    this.audio.play()
-      .then((): void => this.#updatePosition());
+    this.audio.play().then((): void => this.#updatePosition());
   }
 
   stop(): void {
@@ -106,7 +105,7 @@ export class PlayerClass {
   }
 
   #updateMetadata(track: Track): void {
-    if (!('mediaSession' ! in navigator)) {
+    if (!('mediaSession'! in navigator)) {
       return;
     }
     navigator.mediaSession.metadata = new MediaMetadata({
@@ -122,7 +121,7 @@ export class PlayerClass {
   }
 
   #updatePosition(): void {
-    if (!('mediaSession' ! in navigator)) {
+    if (!('mediaSession'! in navigator)) {
       return;
     }
 

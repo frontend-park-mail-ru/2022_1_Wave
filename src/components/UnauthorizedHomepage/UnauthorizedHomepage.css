@@ -1,14 +1,13 @@
 @import '../Homepage/Popular/Popular.scss';
 
 .navbar__auth__menu {
-    display: flex;
-    justify-content: space-evenly;
-    width: 200px;
-    text-align: center;
-    margin: auto 0;
+  display: flex;
+  justify-content: space-evenly;
+  width: 200px;
+  text-align: center;
+  margin: auto 0;
 }
 
 .navbar__link-new-page {
-    text-decoration: none;
-
+  text-decoration: none;
 }

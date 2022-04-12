@@ -22,7 +22,5 @@
     // Ensure that Babel can safely transpile files in the TypeScript project
     "isolatedModules": true
   },
-  "types": [
-    "src/typings/**/*.d.ts"
-  ]
+  "types": ["src/typings/**/*.d.ts"]
 }

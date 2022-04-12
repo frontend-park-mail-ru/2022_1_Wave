@@ -9,7 +9,10 @@ export default class User {
    * Sets CSRF-token in LocalStorage
    */
   static getCSRFToken() {
-    return HTTPClient.get(UserPaths.csrf);
+    return HTTPClient.get(UserPaths.csrf).then((response) => {
+      console.log(response);
+      return response;
+    });
   }
 
   /*
@@ -21,13 +24,12 @@ export default class User {
    * }
    */
   static getUser() {
-    return HTTPClient.get(UserPaths.info)
-      .then((response) => {
-        if (response.status !== 200) {
-          return Promise.reject(response.body);
-        }
-        return response.body;
-      });
+    return HTTPClient.get(UserPaths.info).then((response) => {
+      if (response.status !== 200) {
+        return Promise.reject(response.body);
+      }
+      return response.body;
+    });
   }
 
   /*
@@ -62,13 +64,12 @@ export default class User {
       email,
       username,
       password,
-    })
-      .then((response) => {
-        if (response.status !== 200) {
-          return Promise.reject(response.body);
-        }
-        return response.body;
-      });
+    }).then((response) => {
+      if (response.status !== 200) {
+        return Promise.reject(response.body);
+      }
+      return response.body;
+    });
   }
 
   /*
@@ -85,12 +86,11 @@ export default class User {
       email,
       username,
       password,
-    })
-      .then((response) => {
-        if (response.status !== 200) {
-          return Promise.reject(response.body);
-        }
-        return response.body;
-      });
+    }).then((response) => {
+      if (response.status !== 200) {
+        return Promise.reject(response.body);
+      }
+      return response.body;
+    });
   }
 }

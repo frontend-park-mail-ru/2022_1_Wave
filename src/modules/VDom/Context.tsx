@@ -1,23 +1,18 @@
 import VDom from './index';
-import Component, { IComponentProps } from './Component';
-import Fragment from './Fragment';
+import type { IComponentProps } from './IComponentProps';
 
 export type ContextType<T> = {
-  Provider: Function,
-  defaultValue: T,
-}
+  Provider: Function;
+  defaultValue: T;
+};
 
-export const createContext = <T, >(defaultValue: T): ContextType<T> => {
+export const createContext = <T,>(defaultValue: T): ContextType<T> => {
   interface ProviderProps extends IComponentProps {
     value: T;
   }
 
-  class Provider extends Component<ProviderProps> {
-    render = () => (
-      <Fragment>
-        {this.props.children}
-      </Fragment>
-    );
+  class Provider extends VDom.Component<ProviderProps> {
+    render = (): VDom.VirtualElement => <>{this.props.children}</>;
   }
 
   return {

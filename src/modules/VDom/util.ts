@@ -15,7 +15,7 @@ export function Debounce(ms: number): Decorator {
     const originalFunc = descriptor.value;
 
     // eslint-disable-next-line no-param-reassign
-    descriptor.value = function(...args: any) {
+    descriptor.value = function (...args: any) {
       if (timeoutID != null) {
         clearTimeout(timeoutID);
       }

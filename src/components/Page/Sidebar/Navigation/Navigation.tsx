@@ -9,9 +9,7 @@ export default class Navigation extends VDom.Component {
         <div class="fa-brands fa-itunes-note icon__wrapper__icon-fa"></div>
         <div class="icon__wrapper__icon-default"></div>
       </div>
-      <p class="text nav-block__navigation-text">
-        {this.props.title}
-      </p>
+      <p class="text nav-block__navigation-text">{this.props.title}</p>
     </div>
   );
 }

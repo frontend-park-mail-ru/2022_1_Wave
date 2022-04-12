@@ -4,7 +4,7 @@ const config = {
 };
 
 export default class Client {
-  static fullUrl(path:string) {
+  static fullUrl(path: string): string {
     return `${config.url}/${path}`;
   }
 
@@ -12,24 +12,23 @@ export default class Client {
    * GET запрос на бэкенд
    * @param {string} path - путь, относительно домена
    */
-  static get(path:string) {
-    let status:any = null;
+  static get(path: string) {
+    let status: any = null;
 
     return fetch(this.fullUrl(path), {
       method: 'GET',
       headers: {
         [config.csrfHeader]: localStorage.getItem('csrf'),
-      },
+      } as HeadersInit,
     })
       .then((response) => {
         if (response.headers.has(config.csrfHeader)) {
-          localStorage.setItem('csrf', response.headers.get(config.csrfHeader));
+          localStorage.setItem('csrf', response.headers.get(config.csrfHeader)!);
         }
 
         status = response.status;
 
-        return response.json()
-          .catch(() => null);
+        return response.json();
       })
       .then((body) => ({
         status,
@@ -42,8 +41,8 @@ export default class Client {
    * @param {string} path - путь, относительно домена
    * @param {Object} body - тело запроса
    */
-  static post(path:string, requestBody:any) {
-    let status:any = null;
+  static post(path: string, requestBody: any) {
+    let status: any = null;
 
     return fetch(this.fullUrl(path), {
       method: 'POST',
@@ -54,8 +53,7 @@ export default class Client {
     })
       .then((response) => {
         status = response.status;
-        return response.json()
-          .catch(() => null);
+        return response.json().catch(() => null);
       })
       .then((body) => ({
         status,

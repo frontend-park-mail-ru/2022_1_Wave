@@ -41,18 +41,16 @@ export default class Popular extends Component {
   }
 
   render() {
-    const albums = this.#albums
-      .map((item) => ({
-        title: item.title,
-        artist: item.artist,
-        cover: item.cover,
-      }));
+    const albums = this.#albums.map((item) => ({
+      title: item.title,
+      artist: item.artist,
+      cover: item.cover,
+    }));
 
-    const artists = this.#artists
-      .map((item) => ({
-        name: item.name,
-        cover: item.cover,
-      }));
+    const artists = this.#artists.map((item) => ({
+      name: item.name,
+      cover: item.cover,
+    }));
 
     return this.#template({
       albums: new CarouselRow({

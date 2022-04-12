@@ -13,7 +13,6 @@ export default class Navbar extends Component {
     super(props);
     this.state = {
       isPopupShow: false,
-
     };
     this.logout = this.logout.bind(this);
   }
@@ -27,7 +26,12 @@ export default class Navbar extends Component {
     const content = isAuthorized ? (
       <div class="navbar__avatar">
         <div class="navbar__avatar__wrapper">
-          <img onClick={this.logout} class="navbar__avatar__img_round" src={avatar} alt="avatar.png"/>
+          <img
+            onClick={this.logout}
+            class="navbar__avatar__img_round"
+            src={avatar}
+            alt="avatar.png"
+          />
           <div class="popup">
             <Link to="/settings">
               <div class="text popup__text">Settings</div>
@@ -66,10 +70,11 @@ export default class Navbar extends Component {
           </div>
         </div>
         <div class="navbar__search">
-          <input class="search__input" type="text" placeholder="Search artists, albums..."/>
+          <input class="search__input" type="text" placeholder="Search artists, albums..." />
           <span class="fa-solid fa-magnifying-glass navbar__search__icon"></span>
         </div>
         {content}
-      </div>);
+      </div>
+    );
   };
 }

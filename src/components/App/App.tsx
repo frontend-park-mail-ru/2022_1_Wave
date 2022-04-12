@@ -8,9 +8,7 @@ import './App.scss';
 import PageConnected from '../Page/Page';
 import Homepage from '../Homepage/Homepage';
 import VDom from '../../modules/VDom';
-import {
-  createStore,
-} from '../../modules/Store/store';
+import { createStore } from '../../modules/Store/store';
 import { StoreContext } from '../../modules/Connect';
 import Route from '../../modules/Router/Route';
 import RouteSwitch from '../../modules/Router/RouteSwitch';
@@ -78,6 +76,10 @@ import ArtistConnected from '../ArtistPage/ArtistPage';
 const store = createStore();
 
 export default class App extends VDom.Component {
+  produceContext(): IContext {
+    return storeContext;
+  }
+
   render(): VDom.VirtualElement {
     return (
       <Router>
@@ -95,8 +97,8 @@ export default class App extends VDom.Component {
                   <Route to="" exact>
                     <Homepage isAuthorized={true}/>
                   </Route>
-                  <Route to="/artist/:slug">
-                    <ArtistConnected isAuthorized={true} />
+                  <Route to="/artist">
+                    <ArtistPage isAuthorized={true} />
                   </Route>
                   <Route to="/settings">
                     <PersonalPage/>

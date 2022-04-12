@@ -1,1 +1,1 @@
-navigator.mediaSession.playbackState = "playing";
+navigator.mediaSession.playbackState = 'playing';

@@ -4,7 +4,7 @@ import Navbar from '../common/Navbar/Navbar';
 import VDom from '../../modules/VDom';
 import '../../index.css';
 import './PersonalPage.scss';
-import album from '../../assets/playlist-track-icon-dummy.png';
+import avatar from '../../assets/avatar.jpeg';
 
 export default class PersonalPage extends Component {
   render = (): VirtualElement => {
@@ -22,7 +22,7 @@ export default class PersonalPage extends Component {
             <input type="text" placeholder="Username" class="input-line form__username-label"
               id="username"/>
             <label id="login__username-label_danger"
-              class="input-label from__username-tooltip_danger invisible">Username
+              class="input-label from__tooltip_danger invisible">Username
                 have to contain at least 3 charecters (digits, letters or &#171;_&#187;)</label>
           </div>
           <div class="settings-form__form">
@@ -30,7 +30,7 @@ export default class PersonalPage extends Component {
             <input type="text" placeholder="Password" class="input-line form__password-label"
               id="username"/>
             <label id="login__password-label_danger"
-              class="input-label from__password-tooltip_danger invisible">Username
+              class="input-label from__tooltip_danger invisible">Username
                 have to contain at least 3 charecters (digits, letters or &#171;_&#187;)</label>
           </div>
           <div class="settings-form__form">
@@ -38,17 +38,16 @@ export default class PersonalPage extends Component {
             <input type="text" placeholder="Confirm" class="input-line form__confirm-label"
               id="username"/>
             <label id="login__confirm-label_danger"
-              class="input-label from__confirm-tooltip_danger invisible">Passwords are different!</label>
+              class="input-label from__tooltip_danger invisible">Passwords are different!</label>
           </div>
           <div class="settings-form__form">
-            <label htmlFor="avatar" class="input-label form__avatar-label">New avatar:</label>
-            <label class="form__upload">
+            <label htmlFor="avatar" class="input-label form__avatar-label">Load new avatar:</label>
+            <label class="form__upload" style={{ 'background-image': `url(${avatar})` }}>
               <input type="file" placeholder="Avatar" class="input-line form__avatar-label"
                 id="username"/>
-                Upload
             </label>
             <label id="login__avatar-label_danger"
-              class="input-label from__avatar-tooltip_danger invisible">It must be less 1MB!</label>
+              class="input-label from__tooltip_danger invisible">It must be less 1MB!</label>
           </div>
           <div class="settings-form__form">
             <input type="submit" value="Submit" class="text form__submit-button"/>

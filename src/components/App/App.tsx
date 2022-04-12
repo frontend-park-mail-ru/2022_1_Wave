@@ -20,6 +20,8 @@ import Route from '../../modules/Router/Route';
 import RouteSwitch from '../../modules/Router/RouteSwitch';
 import Router from '../../modules/Router/Router';
 import ArtistPage from "../ArtistPage/ArtistPage";
+import LoginPage from "../LoginPage/LoginPage";
+import PersonalPage from "../PersonalPage/PersonalPage";
 
 //
 // const onclickTest = (e) => {
@@ -97,7 +99,7 @@ export default class App extends VDom.Component {
                 <Homepage isAuthorized={true}/>
               </Route>
               <Route to="/">
-                <ArtistPage />
+                <PersonalPage />
               </Route>
             </RouteSwitch>
           </Router>

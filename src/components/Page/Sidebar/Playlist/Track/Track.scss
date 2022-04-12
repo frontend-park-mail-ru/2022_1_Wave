@@ -45,7 +45,7 @@ $hoverColor: #37B8D6;
 
     &:hover {
         cursor: pointer;
-        .playlist-track-block__number{
+        .track-block__number{
             color: $hoverColor;
         }
         .track-info__title{
@@ -55,8 +55,5 @@ $hoverColor: #37B8D6;
 
 }
 
-.my-playlist__playlist-track-block {
-
-}
 
 

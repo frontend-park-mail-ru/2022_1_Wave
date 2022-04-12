@@ -99,14 +99,14 @@
           position: relative;
           margin-left: -11px;
           margin-top: -11px;
-          img {
-            height: inherit;
-            width: inherit;
-            object-fit: cover;
-          }
+          object-fit: cover;
+          background-repeat: no-repeat;
+          background-size: cover;
         }
       }
-
+      &:hover{
+        cursor: pointer;
+      }
     }
     .player__progressbar__time {
       margin-left: 20px;
@@ -139,11 +139,9 @@
         background-color: #BEB7DF;
         height: inherit;
       }
+      &:hover{
+        cursor: pointer;
+      }
     }
   }
-}
-
-audio {
-  background: yellow;
-  display: block;
 }

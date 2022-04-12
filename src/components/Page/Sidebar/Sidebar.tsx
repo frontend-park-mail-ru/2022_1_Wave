@@ -1,17 +1,13 @@
-import VirtualElement from '../../../modules/VDom/VirtualElement';
 import './Sidebar.scss';
-import Component from '../../../modules/VDom/Component';
 import VDom from '../../../modules/VDom';
 import Playlist from './Playlist/Playlist';
 import '../../../index.css';
 import logo from '../../../assets/logo_img.png';
-import pic from '../../../assets/playlist-track-icon-dummy.png';
 import Navigation from './Navigation/Navigation';
-import { IProps } from '../../../modules/VDom/Interfaces';
 
-export default class Sidebar extends Component {
-  render = (): VirtualElement => {
-    const { isAuthorized } = this.props;
+export default class Sidebar extends VDom.Component {
+  render = (): VDom.VirtualElement => {
+    const { isAuthorized, playlist } = this.props;
     const content = isAuthorized ? (
       <div>
         <Navigation title='My playlist'/>
@@ -27,7 +23,7 @@ export default class Sidebar extends Component {
           </div>
         </div>
         { content}
-        <Playlist/>
+        <Playlist playlist={playlist}/>
       </div>
     );
   };

@@ -7,11 +7,11 @@ import { IProps } from '../../../modules/VDom/Interfaces';
 import { PlayerClass } from '../../../modules/Media/player';
 
 class Player extends VDom.Component {
-  #player : IPlayerClass;
+  #player: IPlayerClass;
 
-  #playIcon : HTMLElement = (<div class="fa-regular fa-circle-play"></div>);
+  #playIcon: HTMLElement = (<div class="fa-regular fa-circle-play"></div>);
 
-  #pauseIcon : HTMLElement = (<div class="fa-regular fa-circle-pause"></div>);
+  #pauseIcon: HTMLElement = (<div class="fa-regular fa-circle-pause"></div>);
 
   constructor(props: IProps) {
     super(props);
@@ -52,7 +52,8 @@ class Player extends VDom.Component {
     this.fetchedUpdater = this.fetchedUpdater.bind(this);
     this.setTime = this.setTime.bind(this);
     this.setVolume = this.setVolume.bind(this);
-    this.tooggleShuffle = this.tooggleShuffle.bind(this);
+    this.toogleShuffle = this.toogleShuffle.bind(this);
+    this.toogleMute = this.toogleMute.bind(this);
     if (this.#player.audio) {
       this.#player.audio.addEventListener('timeupdate', this.timeUpdater);
       this.#player.audio.addEventListener('progress', this.fetchedUpdater);
@@ -75,7 +76,7 @@ class Player extends VDom.Component {
     });
   }
 
-  checkPlay():void {
+  checkPlay(): void {
     if (this.state.playState) {
       this.#player.play();
       return;
@@ -136,7 +137,7 @@ class Player extends VDom.Component {
       let sum = 0;
       let elNums = 0;
       currFreq.slice(leftBorder, rightBorder).forEach(
-        (val:number): void => {
+        (val: number): void => {
           sum += val;
           elNums += 1;
         },
@@ -173,23 +174,43 @@ class Player extends VDom.Component {
     return relativePosition;
   }
 
-  tooggleShuffle(): void {
+  toogleShuffle(): void {
     this.#player.isPlayRand = !this.#player.isPlayRand;
     this.setState({ playRand: this.#player.isPlayRand });
   }
 
+  toogleMute(): void {
+    this.#player.audio.volume = this.state.trackVolume > 0 ? 0 : 0.5;
+    this.setState({ trackVolume: this.state.trackVolume > 0 ? 0 : 50 });
+  }
+
   render(): VDom.VirtualElement {
-    const formatInt = (n: number):string => {
+    const formatInt = (n: number): string => {
       const res = Math.trunc(n).toString();
       return n >= 10 ? res : `0${res}`;
     };
+    let volIcon:string;
+    switch (true) {
+    case this.state.trackVolume === 0:
+      volIcon = 'fa-volume-xmark';
+      break;
+    case this.state.trackVolume < 25:
+      volIcon = 'fa-volume-off';
+      break;
+    case this.state.trackVolume < 60:
+      volIcon = 'fa-volume-low';
+      break;
+    default:
+      volIcon = 'fa-volume-high';
+      break;
+    }
     return (
       <div class="player">
         <div class="player__waves">
-          <div class="bar" id="1" style={ { height: `${this.state.waveHeights[0]}%` }}></div>
-          <div class="bar" id="2" style={ { height: `${this.state.waveHeights[1]}%` }}></div>
-          <div class="bar" id="3" style={ { height: `${this.state.waveHeights[2]}%` }}></div>
-          <div class="bar" id="4" style={ { height: `${this.state.waveHeights[3]}%` }}></div>
+          <div class="bar" id="1" style={{ height: `${this.state.waveHeights[0]}%` }}></div>
+          <div class="bar" id="2" style={{ height: `${this.state.waveHeights[1]}%` }}></div>
+          <div class="bar" id="3" style={{ height: `${this.state.waveHeights[2]}%` }}></div>
+          <div class="bar" id="4" style={{ height: `${this.state.waveHeights[3]}%` }}></div>
         </div>
         <div class="player__track">
           <img class="track__picture" src={this.state.trackData.cover}></img>
@@ -224,8 +245,7 @@ class Player extends VDom.Component {
               <div class="progressbar__state__line" style={
                 { width: `${this.state.trackFilled.toString()}%` }
               }></div>
-              <div draggable="true" class="progressbar__state__marker">
-                <img draggable="false" src={marker}></img>
+              <div class="progressbar__state__marker" style={{ 'background-image': `url("${marker}")` }}>
               </div>
             </div>
           </div>
@@ -234,13 +254,13 @@ class Player extends VDom.Component {
               formatInt(this.state.trackTime % 60)}`
           }</div>
         </div>
-        <div onclick={this.tooggleShuffle} class="player__shuffle">
+        <div onclick={this.toogleShuffle} class="player__shuffle">
           <div class="fa-solid fa-shuffle" style={
             { color: this.state.playRand ? '#5D4099' : '#BEB7DF' }
-          } ></div>
+          }></div>
         </div>
         <div class="player__volume">
-          <div class="fa-solid fa-volume-low volume__icon"></div>
+          <div onclick={this.toogleMute} class={`fa-solid ${volIcon} volume__icon`}></div>
           <div class="volume__input"
             onclick={this.setVolume}
             ondrag={this.setVolume}

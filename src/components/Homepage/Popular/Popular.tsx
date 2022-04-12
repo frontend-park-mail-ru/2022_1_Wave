@@ -14,6 +14,9 @@ import { artistGetPopular } from '../../../actions/Artist';
 import { IProps } from '../../../modules/VDom/Interfaces';
 import artistPopular from '../../../reducers/artist';
 import { PlayerClass } from '../../../modules/Media/player';
+import Link from '../../../modules/Router/Link';
+import Router from '../../../modules/Router/Router';
+import RouteSwitch from '../../../modules/Router/RouteSwitch';
 
 class Popular extends VDom.Component {
   constructor(props: IProps) {
@@ -22,29 +25,27 @@ class Popular extends VDom.Component {
     this.props.getArtist();
   }
 
-  render = (): VDom.VirtualElement => {
-    return (
-      <div class="main__popular">
+  render = (): VDom.VirtualElement => (
+    <div class="main__popular">
 
-        <div class="main__popular__albums main__popular_slider-hidden">
-          <div class="text main__popular__title">
+      <div class="main__popular__albums main__popular_slider-hidden">
+        <div class="text main__popular__title">
                     Popular albums
-          </div>
-          <CarouselRow>
-            { this.props.albums ? this.props.albums.map((v:any) => <AlbumCard cover={v.cover} title={v.title} artist={v.artist}/>) : '' }
-          </CarouselRow>
         </div>
-        <div class="main__popular__artists main__popular_slider-hidden">
-          <div class="text main__popular__title">
-                    Popular artist
-          </div>
-          <CarouselRow>
-            { this.props.artists ? this.props.artists.map((v:any) => <ArtistCard cover={v.cover} name={v.name}/>) : '' }
-          </CarouselRow>
-        </div>
+        <CarouselRow>
+          { this.props.albums ? this.props.albums.map((v:any) => <AlbumCard cover={v.cover} title={v.title} artist={v.artist}/>) : '' }
+        </CarouselRow>
       </div>
-    );
-  };
+      <div class="main__popular__artists main__popular_slider-hidden">
+        <div class="text main__popular__title">
+                    Popular artist
+        </div>
+        <CarouselRow>
+          { this.props.artists ? this.props.artists.map((v:any) => <Link to="/artist"><ArtistCard cover={v.cover} name={v.name}/></Link>) : '' }
+        </CarouselRow>
+      </div>
+    </div>
+  );
 }
 const mapStateToProps = (state: any):Map => ({
   artists: state.artistPopular ? state.artistPopular.popular : null,

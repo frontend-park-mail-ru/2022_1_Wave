@@ -10,15 +10,16 @@ import PageConnected from '../Page/Page';
 import Homepage from '../Homepage/Homepage';
 import VDom from '../../modules/VDom';
 import {
-  Context, ContextType, createContext, IContext, IContextType,
+  IContext,
 } from '../../modules/VDom/Context';
 import {
-  createStore, MiddlewareFactory, Store, StoreT,
+  createStore,
 } from '../../modules/Store/store';
-import { createLoggerMiddleware, createThunkMiddleware } from '../../modules/Store/middleware';
-import rootReducer from '../../modules/Reducers';
-import { IStore } from '../../modules/Store/types';
 import { StoreContext, storeContextType } from '../../modules/Connect';
+import Route from '../../modules/Router/Route';
+import RouteSwitch from '../../modules/Router/RouteSwitch';
+import Router from '../../modules/Router/Router';
+import ArtistPage from "../ArtistPage/ArtistPage";
 
 //
 // const onclickTest = (e) => {
@@ -89,7 +90,19 @@ export default class App extends VDom.Component {
 
     return (
       <StoreContext.Provider value={store}>
-        <PageConnected isAuthorized={true} content={<Homepage isAuthorized={true}/>}/>
+        <PageConnected isAuthorized={true} content={
+          <Router>
+            <RouteSwitch>
+              <Route to="/main" exact>
+                <Homepage isAuthorized={true}/>
+              </Route>
+              <Route to="/">
+                <ArtistPage />
+              </Route>
+            </RouteSwitch>
+          </Router>
+        }/>
+
       </StoreContext.Provider>
     );
   }

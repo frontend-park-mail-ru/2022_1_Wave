@@ -148,7 +148,6 @@ class Dude extends VDom.Component {
   };
 }
 
-VDom.render(<Dude/>, document.getElementById('root')!);
 
 class Dummy extends VDom.Component {
   render = (): VDom.VirtualElement => (
@@ -224,7 +223,7 @@ class DummyApp extends VDom.Component {
   }
 }
 
-// VDom.render(<DummyApp/>, document.getElementById('root')!);
+//VDom.render(<DummyApp/>, document.getElementById('root')!);
 
 // User.getCSRFToken()
 //   .then(() => {
@@ -232,6 +231,7 @@ class DummyApp extends VDom.Component {
 //     const app = new App();
 //     app.mount(root);
 //   });
+//VDom.render(<Dude/>, document.getElementById('root')!);
 VDom.render(<App/>, document.getElementById('root')!);
 //
 // const player = new PlayerClass(tracks);

@@ -5,8 +5,8 @@ import '../../../index.css';
 import './Navbar.scss';
 import avatar from '../../../assets/avatar.jpeg';
 import { IProps } from '../../../modules/VDom/Interfaces';
-import ArtistCard from "../ArtistCard/ArtistCard";
-import Link from "../../../modules/Router/Link";
+import ArtistCard from '../ArtistCard/ArtistCard';
+import Link from '../../../modules/Router/Link';
 
 export default class Navbar extends Component {
   constructor(props: IProps) {
@@ -29,12 +29,12 @@ export default class Navbar extends Component {
         <div class="navbar__avatar__wrapper">
           <img onClick={this.logout} class="navbar__avatar__img_round" src={avatar} alt="avatar.png"/>
           <div class="popup">
-            <a class="popup__settings__link">
-              <Link to="/settings">
-                <div class="text popup__text">Settings</div>
-              </Link>
-            </a>
-            <div class="text popup__text popup__logout">Log out</div>
+            <Link to="/settings">
+              <div class="text popup__text">Settings</div>
+            </Link>
+            <Link to="/login">
+              <div class="text popup__text popup__logout">Log out</div>
+            </Link>
           </div>
         </div>
       </div>

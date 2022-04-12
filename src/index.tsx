@@ -15,6 +15,7 @@ import LoginPage from "./components/LoginPage/LoginPage";
 import ArtistPage from "./components/ArtistPage/ArtistPage";
 import PersonalPage from "./components/PersonalPage/PersonalPage";
 import App from "./components/App/App";
+import LoginConnected from "./components/LoginPage/LoginPage";
 
 const MyContext = createContext<number>(15);
 
@@ -233,6 +234,7 @@ class DummyApp extends VDom.Component {
 //   });
 //VDom.render(<Dude/>, document.getElementById('root')!);
 VDom.render(<App/>, document.getElementById('root')!);
+//VDom.render(</>, document.getElementById('root')!);
 //
 // const player = new PlayerClass(tracks);
 //

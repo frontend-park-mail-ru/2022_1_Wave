@@ -5,7 +5,6 @@
 // import User from '/actions/User.ts';
 // import MainPage from '/components/MainPage/MainPage.js';
 import './App.scss';
-import { PlayerClass } from '../../modules/Media/player';
 import PageConnected from '../Page/Page';
 import Homepage from '../Homepage/Homepage';
 import VDom from '../../modules/VDom';
@@ -15,7 +14,7 @@ import {
 import {
   createStore,
 } from '../../modules/Store/store';
-import { StoreContext, storeContextType } from '../../modules/Connect';
+import { StoreContext } from '../../modules/Connect';
 import Route from '../../modules/Router/Route';
 import RouteSwitch from '../../modules/Router/RouteSwitch';
 import Router from '../../modules/Router/Router';
@@ -87,28 +86,35 @@ export default class App extends VDom.Component {
   }
 
   render(): VDom.VirtualElement {
-    // const store = this.ctx.value;
-    // console.log('store:', store);
-
     return (
       <Router>
         <StoreContext.Provider value={store}>
-          <PageConnected isAuthorized={true} content={
-            <RouteSwitch>
-              <Route to="/" exact>
-                <Homepage isAuthorized={true}/>
-              </Route>
-              <Route to="/artist">
-                <ArtistPage isAuthorized={true} />
-              </Route>
-              <Route to="/settings">
-                <PersonalPage/>
-              </Route>
-            </RouteSwitch>
-          }/>
+          <RouteSwitch>
+            <Route exact to="/login">
+              <LoginPage isSignup={false}/>
+            </Route>
+            <Route exact to="/signup">
+              <LoginPage isSignup={true}/>
+            </Route>
+            <Route to="/">
+              <PageConnected isAuthorized={true} content={
+                <RouteSwitch>
+                  <Route to="" exact>
+                    <Homepage isAuthorized={true}/>
+                  </Route>
+                  <Route to="/artist">
+                    <ArtistPage isAuthorized={true} />
+                  </Route>
+                  <Route to="/settings">
+                    <PersonalPage/>
+                  </Route>
+                </RouteSwitch>
+              }/>
+            </Route>
+          </RouteSwitch>
+
         </StoreContext.Provider>
       </Router>
-
     );
   }
 }

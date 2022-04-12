@@ -131,7 +131,7 @@ class LoginPage extends VDom.Component {
     const content: HTMLElement = this.state.isSignUp ? (
       <form class="login-form">
         <a class="main__button" href="/">
-          <div class="logo login-form__logo"></div>
+          <div class="logo login-form__logo" />
         </a>
         <div class="login-form_align">
           <label htmlFor="username" class="input-label login-form__input-label">

@@ -7,4 +7,4 @@ import User from './models/User';
 
 User.getCSRFToken().then((): void => {
   VDom.render(<App />, document.getElementById('root')!);
-});
+})

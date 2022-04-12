@@ -1,4 +1,6 @@
 // eslint-disable-next-line max-classes-per-file
+// noinspection RequiredAttributes
+
 import VDom from './modules/VDom';
 import { createContext } from './modules/VDom/Context';
 import Router from './modules/Router/Router';
@@ -29,7 +31,7 @@ class AnotherDudeChild extends VDom.Component {
   constructor(props: any) {
     super(props);
 
-    console.log(this.context);
+    // console.log(this.context);
   }
 
   render = (): VDom.VirtualElement => {
@@ -77,7 +79,7 @@ class Dude extends VDom.Component {
         this.items.pop();
       }
       this.setState({ counter: this.state.counter + 1 });
-      // console.log(this.pRef.instance);
+      console.log(this.pRef.instance);
       // console.log(this.state.counter);
     }, 1000);
   }

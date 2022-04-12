@@ -232,7 +232,7 @@ class DummyApp extends VDom.Component {
 //     app.mount(root);
 //   });
 //VDom.render(<Dude/>, document.getElementById('root')!);
-VDom.render(<LoginPage/>, document.getElementById('root')!);
+VDom.render(<App/>, document.getElementById('root')!);
 //
 // const player = new PlayerClass(tracks);
 //

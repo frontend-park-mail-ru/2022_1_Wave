@@ -1,11 +1,14 @@
-import Component from '../../modules/VDom/Component';
-import VirtualElement from '../../modules/VDom/VirtualElement';
 import '../../index.css';
 import './LoginPage.scss';
 import VDom from '../../modules/VDom';
 import { IProps } from '../../modules/VDom/Interfaces';
+import { Map } from '../../modules/Store/types';
+import { artistGetPopular } from '../../actions/Artist';
+import { albumGetPopular } from '../../actions/Album';
+import { connect } from '../../modules/Connect';
+import { userLogin, userSignup } from '../../actions/User';
 
-export default class LoginPage extends Component {
+export default class LoginPage extends VDom.Component {
   constructor(props:IProps) {
     super(props);
     this.state = {
@@ -25,7 +28,7 @@ export default class LoginPage extends Component {
     }
   }
 
-  render(): VirtualElement {
+  render(): VDom.VirtualElement {
     const content: HTMLElement = this.state.isSignUp ? (
       <form class="login-form">
         <a class="main__button" href="/">
@@ -127,3 +130,20 @@ export default class LoginPage extends Component {
       </div>);
   }
 }
+
+const mapStateToProps = (state: any):Map => ({
+  user: state.artistPopular ? state.artistPopular.popular : null,
+  albums: state.albumPopular ? state.albumPopular.popular : null,
+});
+
+const mapDispatchToProps = (dispatch:any):Map => ({
+  login: ({ username, email, password }):void => {
+    dispatch(userLogin({ username, email, password }));
+  },
+  signup: ():void => {
+    dispatch(userSignup);
+  },
+});
+
+const PopularConnected = connect(mapStateToProps, mapDispatchToProps)(LoginPage);
+// export default PopularConnected;

@@ -17,12 +17,14 @@ import { PlayerClass } from '../../../modules/Media/player';
 import Link from '../../../modules/Router/Link';
 import Router from '../../../modules/Router/Router';
 import RouteSwitch from '../../../modules/Router/RouteSwitch';
+import { userLogin, userSignup } from '../../../actions/User';
 
 class Popular extends VDom.Component {
   constructor(props: IProps) {
     super(props);
     this.props.getAlbums();
     this.props.getArtist();
+    console.log(this.props);
   }
 
   render = (): VDom.VirtualElement => (
@@ -41,7 +43,7 @@ class Popular extends VDom.Component {
                     Popular artist
         </div>
         <CarouselRow>
-          { this.props.artists ? this.props.artists.map((v:any) => <Link to="/artist"><ArtistCard cover={v.cover} name={v.name}/></Link>) : '' }
+          { this.props.artists ? this.props.artists.map((v:any) => <Link to="/artist" as={ArtistCard} cover={v.cover} name={v.name}/>) : '' }
         </CarouselRow>
       </div>
     </div>

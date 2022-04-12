@@ -57,7 +57,7 @@ export default class User {
    *   'password': string,
    * }
    */
-  static login({ email: string, username:string, password:string }) {
+  static login({ email, username, password }) {
     return HTTPClient.post(UserPaths.login, {
       email,
       username,

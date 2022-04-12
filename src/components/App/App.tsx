@@ -95,11 +95,11 @@ export default class App extends VDom.Component {
         <PageConnected isAuthorized={true} content={
           <Router>
             <RouteSwitch>
-              <Route to="/main" exact>
+              <Route to="/" exact>
                 <Homepage isAuthorized={true}/>
               </Route>
-              <Route to="/">
-                <PersonalPage />
+              <Route to="/artists">
+                <ArtistPage />
               </Route>
             </RouteSwitch>
           </Router>

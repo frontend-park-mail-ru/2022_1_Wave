@@ -7,7 +7,11 @@ export default class Playlist extends VDom.Component {
     let n = 0;
     return (
       <ul class="sidebar__my-playlist">
-        { this.props.playlist ? this.props.playlist.map((v:any) => (<Track order={n++} title={v.title} cover={v.cover} artist={v.artist}/>)) : '' }
+        {this.props.playlist
+          ? this.props.playlist.map((v: any) => (
+              <Track order={n++} title={v.title} cover={v.cover} artist={v.artist} />
+            ))
+          : ''}
       </ul>
     );
   };

@@ -1,25 +1,23 @@
-
 *::-webkit-scrollbar {
-    width: 0.20rem;
+  width: 0.2rem;
 }
 
 *::-webkit-scrollbar-track {
-    background: rgba(0, 0, 0, 0);
+  background: rgba(0, 0, 0, 0);
 }
 
 *::-webkit-scrollbar-thumb {
-    background-color: #BEB7DF;
-    border-radius: 3px;
+  background-color: #beb7df;
+  border-radius: 3px;
 }
-
 
 .text {
-    font-family: 'Montserrat', sans-serif;;
-    font-size: 15px;
-    color: white;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 15px;
+  color: white;
 }
 
-#root{
-    height: 100%;
-    width: 100%;
+#root {
+  height: 100%;
+  width: 100%;
 }

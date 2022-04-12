@@ -1,15 +1,12 @@
-@import "../library.blocks/text/text.css";
-@import "../library.blocks/logo/logo.css";
-@import "../common/AlbumCard/AlbumCard.scss";
-@import "../common/ArtistCard/ArtistCard.css";
-@import "../library.blocks/carousel-row/carousel-row.css";
-@import "../common.blocks/navbar/navbar.css";
-@import "../common.blocks/sidebar/sidebar.css";
+@import '../library.blocks/text/text.css';
+@import '../library.blocks/logo/logo.css';
+@import '../common/AlbumCard/AlbumCard.scss';
+@import '../common/ArtistCard/ArtistCard.css';
+@import '../library.blocks/carousel-row/carousel-row.css';
+@import '../common.blocks/navbar/navbar.css';
+@import '../common.blocks/sidebar/sidebar.css';
 @import '../common.blocks/sidebar/_collapsed/sidebar_collapsed.css';
-@import "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css";
-@import "../common.blocks/sidebar/__sidebar-navigation/sidebar__sidebar-navigation.css";
-@import "../Sidebar/Sidebar.scss";
-@import "../Homepage/Homepage.css";
-
-
-
+@import 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css';
+@import '../common.blocks/sidebar/__sidebar-navigation/sidebar__sidebar-navigation.css';
+@import '../Sidebar/Sidebar.scss';
+@import '../Homepage/Homepage.css';

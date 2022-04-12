@@ -4,9 +4,9 @@ import { zip } from '../VDom/util';
 
 export default class RouteNavigator {
   handledSwitchers: {
-    path: string,
-    switcher: Component,
-    params: object,
+    path: string;
+    switcher: Component;
+    params: object;
   }[];
 
   unhandledPath: string;

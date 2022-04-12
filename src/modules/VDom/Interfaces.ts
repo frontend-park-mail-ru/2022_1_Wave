@@ -5,5 +5,4 @@ export interface IProps {
   store: Store;
 }
 
-export interface IState {
-}
+export interface IState {}

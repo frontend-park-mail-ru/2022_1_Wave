@@ -10,7 +10,7 @@ import { trackGetPopular } from '../../actions/Track';
 import { IProps } from '../../modules/VDom/Interfaces';
 
 class Page extends VDom.Component {
-  constructor(props:IProps) {
+  constructor(props: IProps) {
     super(props);
     this.props.getPlaylist();
   }
@@ -19,25 +19,20 @@ class Page extends VDom.Component {
     const { content, isAuthorized } = this.props;
     return (
       <div class="page">
-        <Sidebar playlist={this.props.playlist} isAuthorized={isAuthorized}/>
-        <div class="content">
-          {content}
-        </div>
-        { this.props.playlist ? (
-          <Player playlist={this.props.playlist}></Player>
-        ) : ''
-        }
+        <Sidebar playlist={this.props.playlist} isAuthorized={isAuthorized} />
+        <div class="content">{content}</div>
+        {this.props.playlist ? <Player playlist={this.props.playlist}></Player> : ''}
       </div>
     );
   };
 }
 
-const mapStateToProps = (state: any):Map => ({
+const mapStateToProps = (state: any): Map => ({
   playlist: state.tracksPopular ? state.tracksPopular.popular : null,
   something: state.tracksPopular,
 });
 
-const mapDispatchToProps = (dispatch:any):Map => ({
+const mapDispatchToProps = (dispatch: any): Map => ({
   getPlaylist: () => {
     dispatch(trackGetPopular);
   },

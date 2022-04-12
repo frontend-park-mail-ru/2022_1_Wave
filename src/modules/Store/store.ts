@@ -3,23 +3,23 @@ import { createLoggerMiddleware, createThunkMiddleware } from './middleware';
 import rootReducer from '../../reducers';
 
 // eslint-disable-next-line no-unused-vars
-export type MiddlewareFactory = (store: IStore) => (dispatch: Function) => () => void
+export type MiddlewareFactory = (store: IStore) => (dispatch: Function) => () => void;
 // eslint-disable-next-line no-unused-vars
-export type Reducer = (state: Map, action:Function) => Map;
+export type Reducer = (state: Map, action: Function) => Map;
 
 export class Store {
-  #state:Map;
+  #state: Map;
 
-  #middlewareFactories:MiddlewareFactory[];
+  #middlewareFactories: MiddlewareFactory[];
 
-  #reducer:Reducer;
+  #reducer: Reducer;
 
   #listeners: Function[];
 
   constructor(
-    reducer: Reducer = (state):Map => state,
+    reducer: Reducer = (state): Map => state,
     middlewareFactories: MiddlewareFactory[] = [],
-    initialState:any = {},
+    initialState: any = {},
   ) {
     this.#state = initialState;
     console.log('Middleware', middlewareFactories);
@@ -33,15 +33,15 @@ export class Store {
     this.subscribe = this.subscribe.bind(this);
   }
 
-  getState():Map {
+  getState(): Map {
     return this.#state;
   }
 
-  subscribe(listener: (key:any)=> void): void {
+  subscribe(listener: (key: any) => void): void {
     this.#listeners.push(listener);
   }
 
-  dispatch(action:Function):void {
+  dispatch(action: Function): void {
     console.log('dispatch:', this);
     this.#state = this.#reducer(this.#state, action);
     this.#listeners.forEach((listener) => {
@@ -50,8 +50,8 @@ export class Store {
   }
 }
 
-export const createStore = ():Store => {
-  const middleWares:MiddlewareFactory[] = [createLoggerMiddleware, createThunkMiddleware];
-  const initStore:Store = new Store(rootReducer, middleWares, {});
+export const createStore = (): Store => {
+  const middleWares: MiddlewareFactory[] = [createLoggerMiddleware, createThunkMiddleware];
+  const initStore: Store = new Store(rootReducer, middleWares, {});
   return initStore;
 };

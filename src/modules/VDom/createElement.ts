@@ -7,7 +7,7 @@ export default function createElement(
   props: any = {},
   ...children: Array<any>
 ): VirtualElement {
-  const { key, ref, ...restProps } = (props ?? {}) as unknown as { key?: string, ref?: Ref };
+  const { key, ref, ...restProps } = (props ?? {}) as unknown as { key?: string; ref?: Ref };
   const vChildren: Array<VirtualElement | StringWrapper> = children.flat().map((child) => {
     if (child instanceof VirtualElement) {
       return child;

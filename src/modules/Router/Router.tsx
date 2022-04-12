@@ -14,9 +14,7 @@ export default class Router extends VDom.Component {
 
   render(): VDom.VirtualElement {
     return (
-      <RouterContext.Provider value={this.navigator}>
-        {this.props.children}
-      </RouterContext.Provider>
+      <RouterContext.Provider value={this.navigator}>{this.props.children}</RouterContext.Provider>
     );
   }
 }

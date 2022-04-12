@@ -1,19 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
+<html lang='en'>
 
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset='UTF-8' />
     <title>WaveMusic</title>
-    <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
-    <script defer type="module" src="index.js"></script>
-    <link rel="stylesheet" href="index.css">
-    <link rel="icon" type="image/png" href="assets/favicon.png"/>
+    <script src='https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js'></script>
+    <script defer type='module' src='index.js'></script>
+    <link rel='stylesheet' href='index.css' />
+    <link rel='icon' type='image/png' href='assets/favicon.png' />
 
     {{#each templates}}
-        <script src="{{this}}"></script>
+      <script src='{{this}}'></script>
     {{/each}}
-</head>
-<body>
-<div id="root"></div>
-</body>
+  </head>
+  <body>
+    <div id='root'></div>
+  </body>
 </html>

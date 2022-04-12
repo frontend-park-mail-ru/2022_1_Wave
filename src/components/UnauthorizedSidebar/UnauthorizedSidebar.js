@@ -19,12 +19,11 @@ export default class UnauthorizedSidebar extends Component {
 
   willMount() {
     if (!this.#isLoaded) {
-      Song.getPopular()
-        .then((songs) => {
-          this.#isLoaded = true;
-          this.#tracks = songs;
-          this.remount();
-        });
+      Song.getPopular().then((songs) => {
+        this.#isLoaded = true;
+        this.#tracks = songs;
+        this.remount();
+      });
     } else {
       this.#isLoaded = false;
     }

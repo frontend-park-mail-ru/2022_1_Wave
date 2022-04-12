@@ -1,8 +1,11 @@
 const routeRegExp = /^(?:(?:\/:?[\w_~.-]+)*|\/)$/;
 const pathRegExp = /^(?:(?:\/[\w_~.-]+)*|\/)$/;
 
-export default function match(expectPath: string, actualPath: string, isExact: boolean):
-  { params: any, handled: string, rest: string } | null {
+export default function match(
+  expectPath: string,
+  actualPath: string,
+  isExact: boolean,
+): { params: any; handled: string; rest: string } | null {
   if (!expectPath.match(routeRegExp)) {
     throw Error(`Invalid route: ${expectPath}`);
   }

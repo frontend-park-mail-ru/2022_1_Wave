@@ -1,68 +1,68 @@
 @import 'Popular/Popular.scss';
 
 .main__page {
-    background-image: url("../../assets/img.png");
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: 50%;
-    display: flex;
-    flex-direction: column;
-    height: 100%;
+  background-image: url('../../assets/img.png');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: 50%;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
 .main__top-chart__album {
-    display: flex;
-    flex-direction: column;
-    width: 35%;
-    padding-left: 40px;
+  display: flex;
+  flex-direction: column;
+  width: 35%;
+  padding-left: 40px;
 }
 
 .main__top-chart__album__name {
-    padding-top: 25px;
-    font-size: 35px;
+  padding-top: 25px;
+  font-size: 35px;
 }
 
 .main__top-chart__album__quote {
-    font-size: 18px;
-    opacity: 50%;
-    padding-top: 10px;
+  font-size: 18px;
+  opacity: 50%;
+  padding-top: 10px;
 }
 
 .main__top-chart__album__controls {
-    padding-top: 20px;
-    display: flex;
+  padding-top: 20px;
+  display: flex;
 }
 
 .main__top-chart__album__btn_play {
-    display: flex;
-    justify-content: center;
-    background-color: #37B8D6;
-    width: 150px;
-    height: 40px;
-    border-radius: 21px;
+  display: flex;
+  justify-content: center;
+  background-color: #37b8d6;
+  width: 150px;
+  height: 40px;
+  border-radius: 21px;
 }
 
 .main__top-chart__album__btn_play .text {
-    margin: auto;
+  margin: auto;
 }
 
 .main__top-chart__album__btn_follow .text {
-    margin: auto;
-    color: #37B8D6;
+  margin: auto;
+  color: #37b8d6;
 }
 
 .main__top-chart__album__btn_follow {
-    box-sizing: border-box;
-    display: flex;
-    justify-content: center;
-    background-color: rgba(11, 18, 32, 0.3);
-    border: solid 2px #37B8D6;
-    margin-left: 30px;
-    width: 150px;
-    height: 40px;
-    border-radius: 21px;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  background-color: rgba(11, 18, 32, 0.3);
+  border: solid 2px #37b8d6;
+  margin-left: 30px;
+  width: 150px;
+  height: 40px;
+  border-radius: 21px;
 }
 
-.button:hover{
-    cursor: pointer;
+.button:hover {
+  cursor: pointer;
 }

@@ -5,9 +5,9 @@ import RouterContext from './RouterContext';
 import match from './match';
 
 type RouteProps = {
-  to: string,
-  exact: boolean,
-}
+  to: string;
+  exact: boolean;
+};
 
 export default class RouteSwitch extends VDom.Component<any, any, any, RouteNavigator | null> {
   static contextType = RouterContext;
@@ -26,9 +26,9 @@ export default class RouteSwitch extends VDom.Component<any, any, any, RouteNavi
   route(): void {
     const navigator = this.context!;
 
-    if (!this.children.every((child) => (
-      child instanceof VDom.VirtualElement && child.type === Route
-    ))) {
+    if (
+      !this.children.every((child) => child instanceof VDom.VirtualElement && child.type === Route)
+    ) {
       throw Error('RouteSwitch have to contain only Route components');
     }
 

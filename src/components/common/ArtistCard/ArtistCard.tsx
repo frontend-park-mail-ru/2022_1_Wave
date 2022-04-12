@@ -2,7 +2,7 @@ import VDom from '../../../modules/VDom';
 import './ArtistCard.scss';
 
 export default class ArtistCard extends VDom.Component {
-  someHandler():void {
+  someHandler(): void {
     console.log('hui');
   }
 
@@ -10,8 +10,8 @@ export default class ArtistCard extends VDom.Component {
     const { cover, name } = this.props;
     return (
       <div onclick={this.props.onClick} class="artist">
-        <img class="artist__image" src={cover}/>
-        <div class="text artist__name"> { name}</div>
+        <img class="artist__image" src={cover} />
+        <div class="text artist__name"> {name}</div>
       </div>
     );
   };

@@ -1,7 +1,7 @@
 import { Track } from './player';
 
 export interface Dic {
-  [key: number]: Object
+  [key: number]: Object;
 }
 
 export interface IPlayerClass {
@@ -24,5 +24,4 @@ export interface IPlayerClass {
   next(): void;
 
   prev(): void;
-
 }

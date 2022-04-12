@@ -6,7 +6,7 @@ export default function cloneVNode(vNode: VirtualElement): VirtualElement {
     vNode.type,
     vNode.props,
     vNode.children.map((child) => {
-      if (child instanceof  StringWrapper) {
+      if (child instanceof StringWrapper) {
         return new StringWrapper(child.data);
       }
 

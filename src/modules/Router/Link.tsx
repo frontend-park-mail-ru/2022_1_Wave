@@ -3,7 +3,7 @@ import RouterContext from './RouterContext';
 import RouteNavigator from './RouteNavigator';
 
 interface LinkProps {
-  to: string,
+  to: string;
   as?: string | (new (props: any) => VDom.Component);
 }
 

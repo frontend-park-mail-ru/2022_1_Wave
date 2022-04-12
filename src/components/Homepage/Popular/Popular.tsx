@@ -29,36 +29,39 @@ class Popular extends VDom.Component {
 
   render = (): VDom.VirtualElement => (
     <div class="main__popular">
-
       <div class="main__popular__albums main__popular_slider-hidden">
-        <div class="text main__popular__title">
-                    Popular albums
-        </div>
+        <div class="text main__popular__title">Popular albums</div>
         <CarouselRow>
-          { this.props.albums ? this.props.albums.map((v:any) => <AlbumCard cover={v.cover} title={v.title} artist={v.artist}/>) : '' }
+          {this.props.albums
+            ? this.props.albums.map((v: any) => (
+                <AlbumCard cover={v.cover} title={v.title} artist={v.artist} />
+              ))
+            : ''}
         </CarouselRow>
       </div>
       <div class="main__popular__artists main__popular_slider-hidden">
-        <div class="text main__popular__title">
-                    Popular artist
-        </div>
+        <div class="text main__popular__title">Popular artist</div>
         <CarouselRow>
-          { this.props.artists ? this.props.artists.map((v:any) => <Link to="/artist" as={ArtistCard} cover={v.cover} name={v.name}/>) : '' }
+          {this.props.artists
+            ? this.props.artists.map((v: any) => (
+                <Link to="/artist" as={ArtistCard} cover={v.cover} name={v.name} />
+              ))
+            : ''}
         </CarouselRow>
       </div>
     </div>
   );
 }
-const mapStateToProps = (state: any):Map => ({
+const mapStateToProps = (state: any): Map => ({
   artists: state.artistPopular ? state.artistPopular.popular : null,
   albums: state.albumPopular ? state.albumPopular.popular : null,
 });
 
-const mapDispatchToProps = (dispatch:any):Map => ({
-  getArtist: ():void => {
+const mapDispatchToProps = (dispatch: any): Map => ({
+  getArtist: (): void => {
     dispatch(artistGetPopular);
   },
-  getAlbums: ():void => {
+  getAlbums: (): void => {
     dispatch(albumGetPopular);
   },
 });

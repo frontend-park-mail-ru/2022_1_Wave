@@ -3,14 +3,13 @@
   width: 100%;
 }
 
-.content{
+.content {
   position: absolute;
   width: calc(100% - 330px);
   box-sizing: border-box;
   display: inline-flex;
   flex-direction: column;
   height: 100%;
-
 }
 
 h1 {
@@ -18,14 +17,13 @@ h1 {
 }
 
 body {
-  background: #0B1220;
+  background: #0b1220;
   height: 100%;
   width: 100%;
   overflow-x: hidden;
 }
 
-html{
+html {
   height: 100%;
   width: 100%;
 }
-

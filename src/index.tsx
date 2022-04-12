@@ -1,4 +1,6 @@
 // eslint-disable-next-line max-classes-per-file
+// noinspection RequiredAttributes
+
 import VDom from './modules/VDom';
 import { createContext } from './modules/VDom/Context';
 import Router from './modules/Router/Router';
@@ -6,6 +8,8 @@ import Route from './modules/Router/Route';
 import RouteSwitch from './modules/Router/RouteSwitch';
 import Ref from './modules/VDom/Ref';
 import Link from './modules/Router/Link';
+import RouterContext from './modules/Router/RouterContext';
+import RouteNavigator from './modules/Router/RouteNavigator';
 // import App from './components/App/App';
 import { PlayerClass, Track } from './modules/Media/player';
 import Sidebar from "./components/Sidebar/Sidebar";
@@ -36,7 +40,7 @@ class AnotherDudeChild extends VDom.Component {
   constructor(props: any) {
     super(props);
 
-    console.log(this.context);
+    // console.log(this.context);
   }
 
   render = (): VDom.VirtualElement => {
@@ -48,6 +52,18 @@ class AnotherDudeChild extends VDom.Component {
       </p>
     );
   };
+}
+
+class AnotherAbout extends VDom.Component<any, any, null, RouteNavigator> {
+  static contextType = RouterContext;
+
+  render(): VDom.VirtualElement {
+    const { slug }: { slug: string } = this.context.params;
+
+    return (
+      <div>{slug}</div>
+    );
+  }
 }
 
 class Dude extends VDom.Component {
@@ -72,7 +88,7 @@ class Dude extends VDom.Component {
         this.items.pop();
       }
       this.setState({ counter: this.state.counter + 1 });
-      // console.log(this.pRef.instance);
+      console.log(this.pRef.instance);
       // console.log(this.state.counter);
     }, 1000);
   }
@@ -121,7 +137,11 @@ class Dude extends VDom.Component {
                     <div>about</div>
                     <Link to='/about/some'>go some</Link>
                   </Route>
+                  <Route exact to="/:slug">
+                    <AnotherAbout/>
+                  </Route>
                   <Route to="">
+                    not found
                   </Route>
                 </RouteSwitch>
               </div>

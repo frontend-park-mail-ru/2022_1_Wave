@@ -1,15 +1,21 @@
 import { Component } from '../VDom/all';
 import Router from './Router';
+import { zip } from '../VDom/util';
 
 export default class RouteNavigator {
   handledSwitchers: {
     path: string,
     switcher: Component,
+    params: object,
   }[];
 
   unhandledPath: string;
 
   router: Router;
+
+  get params(): any {
+    return zip(...this.handledSwitchers.map((item) => item.params));
+  }
 
   constructor(router: Router) {
     this.handledSwitchers = [];

@@ -9,8 +9,14 @@ import Fragment from './Fragment';
 import type { IComponentProps } from './IComponentProps';
 import cloneVNode from './cloneVNode';
 
+interface IComponentPropsIternal {
+  parentDomNode: HTMLElement;
+  leftSibling: HTMLElement;
+  vNode: VirtualElement;
+}
+
 export default abstract class Component<Props = any, State = any, Snapshot = any, ContextValueType = null> {
-  public props: Props & IComponentProps;
+  public props: Props & IComponentProps & IComponentPropsIternal;
 
   public node: HTMLElement | null;
 

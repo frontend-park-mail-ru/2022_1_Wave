@@ -49,9 +49,9 @@ export default class RouteSwitch extends VDom.Component<any, any, any, RouteNavi
         navigator.handledSwitchers.push({
           path: handled,
           switcher: this as unknown as VDom.Component,
+          params,
         });
 
-        route.props.params = params;
         this.toRenderIdx = idx;
         break;
       }

@@ -1,6 +1,8 @@
 
 .artist-page {
   width: 100%;
+  display: flex;
+  flex-direction: column;
   padding-bottom: 100px;
 
   .artist-page__main {
@@ -88,6 +90,10 @@
   .artist-page__albums {
     padding-left: 40px;
     margin-top: 20px;
+    height: 250px;
+    .carousel-row{
+      height: 250px;
+    }
   }
 }
 

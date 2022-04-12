@@ -136,7 +136,7 @@ class LoginPage extends VDom.Component {
   render(): VDom.VirtualElement {
     console.log(this.props.user);
     const content: HTMLElement = this.state.isSignUp ? (
-      <form class="login-form">
+      <form class="text login-form">
         <a class="main__button" href="/">
           <div class="logo login-form__logo"></div>
         </a>
@@ -173,7 +173,7 @@ class LoginPage extends VDom.Component {
         </div>
       </form>
     ) : (
-      <form class="login-form">
+      <form class="text login-form">
         <a class="main__button" href="/">
           <div class="logo login-form__logo"></div>
         </a>

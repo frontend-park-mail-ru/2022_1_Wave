@@ -17,6 +17,10 @@ export default class ArtistPlaylist extends Component {
         <ArtistTrack num="1" cover={img} listenedCnt="2125" name="Rolling in the deep" isLiked={false} duration={'124'}/>
         <ArtistTrack num="2" cover={img} listenedCnt="2125" name="Rolling in the deep" isLiked={false} duration={'124'}/>
         <ArtistTrack num="2" cover={img} listenedCnt="2125" name="Rolling in the deep" isLiked={false} duration={'124'}/>
+        <ArtistTrack num="2" cover={img} listenedCnt="2125" name="Rolling in the deep" isLiked={false} duration={'124'}/>
+        <ArtistTrack num="2" cover={img} listenedCnt="2125" name="Rolling in the deep" isLiked={false} duration={'124'}/>
+        <ArtistTrack num="2" cover={img} listenedCnt="2125" name="Rolling in the deep" isLiked={false} duration={'124'}/>
+        <ArtistTrack num="2" cover={img} listenedCnt="2125" name="Rolling in the deep" isLiked={false} duration={'124'}/>
       </div>
     );
   };

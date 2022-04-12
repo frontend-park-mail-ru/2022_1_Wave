@@ -19,9 +19,9 @@ import { StoreContext, storeContextType } from '../../modules/Connect';
 import Route from '../../modules/Router/Route';
 import RouteSwitch from '../../modules/Router/RouteSwitch';
 import Router from '../../modules/Router/Router';
-import ArtistPage from "../ArtistPage/ArtistPage";
-import LoginPage from "../LoginPage/LoginPage";
-import PersonalPage from "../PersonalPage/PersonalPage";
+import ArtistPage from '../ArtistPage/ArtistPage';
+import LoginPage from '../LoginPage/LoginPage';
+import PersonalPage from '../PersonalPage/PersonalPage';
 
 //
 // const onclickTest = (e) => {
@@ -91,21 +91,24 @@ export default class App extends VDom.Component {
     // console.log('store:', store);
 
     return (
-      <StoreContext.Provider value={store}>
-        <PageConnected isAuthorized={true} content={
-          <Router>
+      <Router>
+        <StoreContext.Provider value={store}>
+          <PageConnected isAuthorized={true} content={
             <RouteSwitch>
               <Route to="/" exact>
                 <Homepage isAuthorized={true}/>
               </Route>
-              <Route to="/artists">
-                <ArtistPage />
+              <Route to="/artist">
+                <ArtistPage isAuthorized={true} />
+              </Route>
+              <Route to="/settings">
+                <PersonalPage/>
               </Route>
             </RouteSwitch>
-          </Router>
-        }/>
+          }/>
+        </StoreContext.Provider>
+      </Router>
 
-      </StoreContext.Provider>
     );
   }
 }

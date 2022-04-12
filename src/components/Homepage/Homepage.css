@@ -62,3 +62,7 @@
     height: 40px;
     border-radius: 21px;
 }
+
+.button:hover{
+    cursor: pointer;
+}

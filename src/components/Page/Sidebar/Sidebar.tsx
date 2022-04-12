@@ -4,6 +4,7 @@ import Playlist from './Playlist/Playlist';
 import '../../../index.css';
 import logo from '../../../assets/logo_img.png';
 import Navigation from './Navigation/Navigation';
+import Link from '../../../modules/Router/Link';
 
 export default class Sidebar extends VDom.Component {
   render = (): VDom.VirtualElement => {
@@ -18,11 +19,13 @@ export default class Sidebar extends VDom.Component {
     return (
       <div class="sidebar">
         <div class="sidebar__header">
-          <div class="header__logo">
-            <img class="logo__picture" src={logo} alt="logo.svg"/>
-          </div>
+          <Link to="/">
+            <div class="header__logo">
+              <img class="logo__picture" src={logo} alt="logo.svg"/>
+            </div>
+          </Link>
         </div>
-        { content}
+        {content}
         <Playlist playlist={playlist}/>
       </div>
     );

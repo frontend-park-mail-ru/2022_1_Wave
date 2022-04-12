@@ -15,6 +15,9 @@
       .logo__picture{
         height: 70%;
         width: 70%;
+        &:hover{
+          cursor: pointer;
+        }
       }
     }
   }

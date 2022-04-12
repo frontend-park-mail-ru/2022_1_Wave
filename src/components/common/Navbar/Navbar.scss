@@ -118,8 +118,11 @@
           }
         }
       }
-      &:hover .popup{
-        display: flex;
+      &:hover{
+        cursor: pointer;
+        .popup{
+          display: flex;
+        }
       }
     }
   }

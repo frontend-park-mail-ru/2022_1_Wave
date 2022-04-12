@@ -9,18 +9,15 @@ import PageConnected from '../Page/Page';
 import Homepage from '../Homepage/Homepage';
 import VDom from '../../modules/VDom';
 import {
-  IContext,
-} from '../../modules/VDom/Context';
-import {
   createStore,
 } from '../../modules/Store/store';
 import { StoreContext } from '../../modules/Connect';
 import Route from '../../modules/Router/Route';
 import RouteSwitch from '../../modules/Router/RouteSwitch';
 import Router from '../../modules/Router/Router';
-import ArtistPage from '../ArtistPage/ArtistPage';
 import LoginPage from '../LoginPage/LoginPage';
 import PersonalPage from '../PersonalPage/PersonalPage';
+import ArtistConnected from '../ArtistPage/ArtistPage';
 
 //
 // const onclickTest = (e) => {
@@ -81,10 +78,6 @@ import PersonalPage from '../PersonalPage/PersonalPage';
 const store = createStore();
 
 export default class App extends VDom.Component {
-  produceContext(): IContext {
-    return storeContext;
-  }
-
   render(): VDom.VirtualElement {
     return (
       <Router>
@@ -102,8 +95,8 @@ export default class App extends VDom.Component {
                   <Route to="" exact>
                     <Homepage isAuthorized={true}/>
                   </Route>
-                  <Route to="/artist">
-                    <ArtistPage isAuthorized={true} />
+                  <Route to="/artist/:slug">
+                    <ArtistConnected isAuthorized={true} />
                   </Route>
                   <Route to="/settings">
                     <PersonalPage/>

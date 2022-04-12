@@ -49,7 +49,7 @@ const mapStateToProps = (state: any):Map => ({
 });
 
 const mapDispatchToProps = (dispatch:any):Map => ({
-  getPlaylist: () => {
+  getPlaylist: ():void => {
     dispatch(trackGetPopular);
   },
 });

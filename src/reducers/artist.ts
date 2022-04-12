@@ -1,11 +1,18 @@
 import { Map } from '../modules/Store/types';
 
-const artistPopular = (state: Map, action: Map): Map => {
-  console.log(action.type);
+export const artistPopular = (state: Map, action: Map): Map => {
   if (action.type === 'popular/artist') {
     state.popular = action.payload;
   }
   return state;
 };
 
-export default artistPopular;
+export const artist = (state: Map, action: Map): Map => {
+  if (action.type === 'get/artist') {
+    for (const [key, value] of Object.entries(action.payload)) {
+      console.log('artist:', key, value);
+      state[key] = value;
+    }
+  }
+  return state;
+};

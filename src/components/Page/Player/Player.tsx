@@ -5,6 +5,7 @@ import marker from '../../../assets/player_marker.png';
 import { IPlayerClass } from '../../../modules/Media/media';
 import { IProps } from '../../../modules/VDom/Interfaces';
 import { PlayerClass } from '../../../modules/Media/player';
+import {config} from "../../../modules/Client/Client";
 
 class Player extends VDom.Component {
   #player: IPlayerClass;
@@ -33,7 +34,7 @@ class Player extends VDom.Component {
       trackData: {
         title: this.#player.currentTrack.title,
         author: this.#player.currentTrack.artist,
-        cover: this.#player.currentTrack.cover,
+        cover: config.files+this.#player.currentTrack.cover,
       },
       freqArray: freqArr,
       waveHeights: [0, 0, 0, 0],
@@ -67,7 +68,7 @@ class Player extends VDom.Component {
       trackData: {
         title: this.#player.currentTrack.title,
         author: this.#player.currentTrack.artist,
-        cover: this.#player.currentTrack.cover,
+        cover: config.files+this.#player.currentTrack.cover,
       },
     });
   }
@@ -180,18 +181,18 @@ class Player extends VDom.Component {
     };
     let volIcon: string;
     switch (true) {
-      case this.state.trackVolume === 0:
-        volIcon = 'fa-volume-xmark';
-        break;
-      case this.state.trackVolume < 25:
-        volIcon = 'fa-volume-off';
-        break;
-      case this.state.trackVolume < 60:
-        volIcon = 'fa-volume-low';
-        break;
-      default:
-        volIcon = 'fa-volume-high';
-        break;
+    case this.state.trackVolume === 0:
+      volIcon = 'fa-volume-xmark';
+      break;
+    case this.state.trackVolume < 25:
+      volIcon = 'fa-volume-off';
+      break;
+    case this.state.trackVolume < 60:
+      volIcon = 'fa-volume-low';
+      break;
+    default:
+      volIcon = 'fa-volume-high';
+      break;
     }
     return (
       <div class="player">

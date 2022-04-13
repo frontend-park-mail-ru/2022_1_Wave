@@ -3,72 +3,26 @@ import VirtualElement from '../../../modules/VDom/VirtualElement';
 import VDom from '../../../modules/VDom';
 import '../../../index.css';
 import './ArtistPlaylist.scss';
-import img from '../../../assets/playlist-track-icon-dummy.png';
 import ArtistTrack from './ArtistTrack/ArtistTrack';
+import {config} from "../../../modules/Client/Client";
 
 export default class ArtistPlaylist extends Component {
   render = (): VirtualElement => {
     const { playlist } = this.props;
-    console.log(playlist);
-
+    console.log("playlist:",playlist);
+    let n:number = 1;
     return (
+
       <div class="artist-playlist">
-        <ArtistTrack
-          num="1"
-          cover={img}
-          listenedCnt="2125"
-          name="Rolling in the deep"
-          isLiked={false}
-          duration={'124'}
-        />
-        <ArtistTrack
-          num="2"
-          cover={img}
-          listenedCnt="2125"
-          name="Rolling in the deep"
-          isLiked={false}
-          duration={'124'}
-        />
-        <ArtistTrack
-          num="2"
-          cover={img}
-          listenedCnt="2125"
-          name="Rolling in the deep"
-          isLiked={false}
-          duration={'124'}
-        />
-        <ArtistTrack
-          num="2"
-          cover={img}
-          listenedCnt="2125"
-          name="Rolling in the deep"
-          isLiked={false}
-          duration={'124'}
-        />
-        <ArtistTrack
-          num="2"
-          cover={img}
-          listenedCnt="2125"
-          name="Rolling in the deep"
-          isLiked={false}
-          duration={'124'}
-        />
-        <ArtistTrack
-          num="2"
-          cover={img}
-          listenedCnt="2125"
-          name="Rolling in the deep"
-          isLiked={false}
-          duration={'124'}
-        />
-        <ArtistTrack
-          num="2"
-          cover={img}
-          listenedCnt="2125"
-          name="Rolling in the deep"
-          isLiked={false}
-          duration={'124'}
-        />
+        { playlist ? playlist.map((v:any) =>
+          <ArtistTrack
+            num={n++}
+            cover={config.files+v.cover}
+            name={v.title}
+            listenedCnt={v.listenings}
+            isLiked={false}
+            duration={v.duration}
+          />) : '' }
       </div>
     );
   };

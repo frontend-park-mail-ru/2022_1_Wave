@@ -1,14 +1,16 @@
+
 .artist-page {
   width: 100%;
   display: flex;
   flex-direction: column;
   padding-bottom: 100px;
-
+  height: 100%;
   .artist-page__main {
     background-repeat: no-repeat;
+    background-size: cover;
     object-fit: cover;
     background-position: 50%;
-    background-position-y: 0%;
+    background-position-y: 50%;
     display: flex;
     flex-direction: column;
     height: 40%;
@@ -24,7 +26,7 @@
         display: flex;
 
         .related__title {
-          color: #37b8d6;
+          color: #37B8D6;
         }
 
         .related__names {
@@ -53,7 +55,7 @@
 
       .controls__btn-play {
         display: flex;
-        background-color: #37b8d6;
+        background-color: #37B8D6;
         width: 150px;
         height: 40px;
         border-radius: 21px;
@@ -72,6 +74,8 @@
         }
       }
     }
+
+
   }
 
   .artist__title {
@@ -81,14 +85,16 @@
   .artist-page__popular {
     padding-left: 40px;
     margin-top: 20px;
+    flex-grow: 1;
   }
 
   .artist-page__albums {
     padding-left: 40px;
-    margin-top: 20px;
     height: 250px;
+    margin-bottom: 100px;
     .carousel-row{
       height: 250px;
     }
   }
 }
+

@@ -10,6 +10,7 @@ import { albumGetPopular } from '../../../actions/Album';
 import { artistGetPopular } from '../../../actions/Artist';
 import { IProps } from '../../../modules/VDom/Interfaces';
 import Link from '../../../modules/Router/Link';
+import {config} from "../../../modules/Client/Client";
 
 class Popular extends VDom.Component {
   constructor(props: IProps) {
@@ -27,7 +28,7 @@ class Popular extends VDom.Component {
                     Popular albums
         </div>
         <CarouselRow>
-          { this.props.albums ? this.props.albums.map((v:any) => <AlbumCard cover={v.cover} title={v.title} artist={v.artist}/>) : '' }
+          { this.props.albums ? this.props.albums.map((v:any) => <AlbumCard cover={config.files+v.cover} title={v.title} artist={v.artist}/>) : '' }
         </CarouselRow>
       </div>
       <div class="main__popular__artists main__popular_slider-hidden">
@@ -37,7 +38,7 @@ class Popular extends VDom.Component {
         <CarouselRow>
           { this.props.artists
             ? this.props.artists.map((v:any) => <Link to={`/artist/${v.cover.split('_')[1].split('.')[0]}`}
-              as={ArtistCard} cover={v.cover} name={v.name}/>) : '' }
+              as={ArtistCard} cover={config.files+v.cover} name={v.name}/>) : '' }
         </CarouselRow>
       </div>
     </div>

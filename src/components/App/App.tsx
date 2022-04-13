@@ -16,6 +16,7 @@ import Router from '../../modules/Router/Router';
 import LoginPage from '../LoginPage/LoginPage';
 import PersonalPage from '../PersonalPage/PersonalPage';
 import ArtistConnected from '../ArtistPage/ArtistPage';
+import PersonalConnected from "../PersonalPage/PersonalPage";
 
 //
 // const onclickTest = (e) => {
@@ -76,9 +77,6 @@ import ArtistConnected from '../ArtistPage/ArtistPage';
 const store = createStore();
 
 export default class App extends VDom.Component {
-  produceContext(): IContext {
-    return storeContext;
-  }
 
   render(): VDom.VirtualElement {
     return (
@@ -97,11 +95,11 @@ export default class App extends VDom.Component {
                   <Route to="" exact>
                     <Homepage isAuthorized={true}/>
                   </Route>
-                  <Route to="/artist">
-                    <ArtistPage isAuthorized={true} />
+                  <Route to="/artist/:slug">
+                    <ArtistConnected isAuthorized={true} />
                   </Route>
                   <Route to="/settings">
-                    <PersonalPage/>
+                    <PersonalConnected/>
                   </Route>
                 </RouteSwitch>
               }/>

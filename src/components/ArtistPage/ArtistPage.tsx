@@ -2,17 +2,17 @@ import Navbar from '../common/Navbar/Navbar';
 import VDom from '../../modules/VDom';
 import '../../index.css';
 import './ArtistPage.scss';
-import img from '../../assets/img.png';
 import ArtistPlaylist from './ArtistPlaylist/ArtistPlaylist';
 import CarouselRow from '../common/CarouselRow/CarouselRow';
 import AlbumCard from '../common/AlbumCard/AlbumCard';
-import album from '../../assets/playlist-track-icon-dummy.png';
 import { Map } from '../../modules/Store/types';
-import { artistGetById } from '../../actions/Artist';
+import {artistGetById, artistGetPopularById} from '../../actions/Artist';
 import { connect } from '../../modules/Connect';
 import { IProps } from '../../modules/VDom/Interfaces';
 import RouterContext from '../../modules/Router/RouterContext';
 import RouteNavigator from '../../modules/Router/RouteNavigator';
+import {config} from "../../modules/Client/Client";
+import {artistPopularTracks} from "../../reducers/artist";
 
 class ArtistPage extends VDom.Component<any, any, null, RouteNavigator> {
   static contextType = RouterContext;
@@ -21,6 +21,7 @@ class ArtistPage extends VDom.Component<any, any, null, RouteNavigator> {
     super(props);
     console.log(this.props);
     this.getArtist = this.getArtist.bind(this);
+    this.getTracks = this.getTracks.bind(this);
     this.state = {
       albumLikes: 12511,
       isLiked: false,
@@ -30,16 +31,25 @@ class ArtistPage extends VDom.Component<any, any, null, RouteNavigator> {
 
   didMount():void {
     this.getArtist();
+    this.getTracks();
   }
 
   didUpdate():void {
     this.getArtist();
+    this.getTracks();
   }
 
   getArtist():void {
     const { slug } : {slug:string} = this.context.params;
     if (!this.props.artist || !this.props.artist[slug]) {
       this.props.getArtist(slug);
+    }
+  }
+
+  getTracks():void {
+    const { slug } : {slug:string} = this.context.params;
+    if (!this.props.popularTracks || !this.props.popularTracks[slug]) {
+      this.props.getArtistPopularTracks(slug);
     }
   }
 
@@ -52,16 +62,17 @@ class ArtistPage extends VDom.Component<any, any, null, RouteNavigator> {
 
   render = (): VDom.VirtualElement => {
     const { slug } : {slug:string} = this.context.params;
-    if (!this.props.artist) {
+    if (!this.props.artist || !this.props.popularTracks) {
       return (<div class="artist-page"/>);
     }
     const artist = this.props.artist[slug] ? this.props.artist[slug] : null;
-    if (!artist) {
+    const popularTracks = this.props.popularTracks[slug] ? this.props.popularTracks[slug] : null;
+    if (!artist || !popularTracks) {
       return (<div class="artist-page"/>);
     }
     return (
       <div class="artist-page">
-        <div class="artist-page__main" style={{ 'background-image': `url(${artist.cover})` }}>
+        <div class="artist-page__main" style={{ 'background-image': `url(${config.files+artist.cover})` }}>
           <Navbar isAuthorized={true}/>
           <div class="artist-page__artist">
             <div class="artist__related">
@@ -92,12 +103,12 @@ class ArtistPage extends VDom.Component<any, any, null, RouteNavigator> {
         </div>
         <div class="artist-page__popular">
           <div class="text artist__title">Popular songs</div>
-          <ArtistPlaylist/>
+          <ArtistPlaylist playlist={popularTracks}/>
         </div>
         <div class="artist-page__albums">
           <div class="text artist__title">Albums</div>
           <CarouselRow>
-            { artist.albums ? artist.albums.map((v:any) => <AlbumCard cover={v.cover} title={v.title} artist={v.artist}/>) : '' }
+            { artist.albums ? artist.albums.map((v:any) => <AlbumCard cover={config.files+v.cover} title={v.title} artist={v.artist}/>) : '' }
           </CarouselRow>
         </div>
       </div>
@@ -107,11 +118,15 @@ class ArtistPage extends VDom.Component<any, any, null, RouteNavigator> {
 
 const mapStateToProps = (state: any):Map => ({
   artist: state.artist ? state.artist : null,
+  popularTracks: state.artistPopularTracks ? state.artistPopularTracks : null,
 });
 
 const mapDispatchToProps = (dispatch:any):Map => ({
   getArtist: (id:string):void => {
     dispatch(artistGetById(id));
+  },
+  getArtistPopularTracks: (id:string):void => {
+    dispatch(artistGetPopularById(id));
   },
 });
 

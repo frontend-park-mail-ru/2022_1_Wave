@@ -81,12 +81,8 @@ export default class User {
    *   'password': string,
    * }
    */
-  static signup({ email, username, password }) {
-    return HTTPClient.post(UserPaths.signup, {
-      email,
-      username,
-      password,
-    }).then((response) => {
+  static signup(data: { email: string; username: string; password: string }) {
+    return HTTPClient.post(UserPaths.signup, data).then((response) => {
       if (response.status !== 200) {
         return Promise.reject(response.body);
       }

@@ -319,6 +319,10 @@ function patchNode(args: {
           realDomNode = oldVNode.domNode;
           newVNode.domNode = realDomNode;
 
+          if (newVNode.ref != null) {
+            newVNode.ref.instance = realDomNode;
+          }
+
           patchProps(realDomNode!, oldVNode.props, newVNode.props);
 
           // Patch children

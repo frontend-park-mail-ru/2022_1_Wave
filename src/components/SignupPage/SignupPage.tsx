@@ -1,19 +1,19 @@
 import '../../index.css';
 import './LoginPage.scss';
 import VDom from '../../modules/VDom';
+import { IProps } from '../../modules/VDom/Interfaces';
 import { Map } from '../../modules/Store/types';
 import { connect } from '../../modules/Connect';
 import { userLogin, userSignup } from '../../actions/User';
 import { validatePassword, validateUsername, validateEmail } from '../../utils/User';
-
-const validationTimeGapMS = 750;
+import { Auth } from '../../reducers/user';
 
 class LoginPage extends VDom.Component {
-  private usernameInputRef: VDom.Ref;
+  private userNameInputRef: VDom.Ref;
 
   private passwordInputRef: VDom.Ref;
 
-  constructor(props: any) {
+  constructor(props: IProps) {
     super(props);
     this.state = {
       isSignUp: false,
@@ -21,8 +21,6 @@ class LoginPage extends VDom.Component {
       password: '',
       confirmPassword: false,
       email: '',
-      usernameIsInvalid: false,
-      passwordIsInvalid: false,
     };
     this.tooglePage = this.tooglePage.bind(this);
     this.tryAcceptEmail = this.tryAcceptEmail.bind(this);
@@ -31,31 +29,8 @@ class LoginPage extends VDom.Component {
     this.tryAcceptUName = this.tryAcceptUName.bind(this);
     this.signUp = this.signUp.bind(this);
 
-    this.usernameInputRef = new VDom.Ref();
+    this.userNameInputRef = new VDom.Ref();
     this.passwordInputRef = new VDom.Ref();
-
-    this.validateUsername = this.validateUsername.bind(this);
-    this.validatePassword = this.validatePassword.bind(this);
-  }
-
-  @VDom.util.Debounce(validationTimeGapMS)
-  validateUsername(_: Event): void {
-    const { instance } = this.usernameInputRef;
-    const username = (instance as HTMLInputElement).value;
-
-    this.setState({
-      usernameIsInvalid: !validateUsername(username),
-    });
-  }
-
-  @VDom.util.Debounce(validationTimeGapMS)
-  validatePassword(_: Event): void {
-    const { instance } = this.passwordInputRef;
-    const password = (instance as HTMLInputElement).value;
-
-    this.setState({
-      passwordIsInvalid: !validatePassword(password),
-    });
   }
 
   tooglePage(): void {
@@ -67,9 +42,6 @@ class LoginPage extends VDom.Component {
     if (typeof isSignUp === 'boolean') {
       this.setState({ isSignUp });
     }
-  }
-
-  didUpdate(_snapshot: any): void {
   }
 
   login(e: Event): void {
@@ -162,6 +134,7 @@ class LoginPage extends VDom.Component {
   }
 
   render(): VDom.VirtualElement {
+    console.log(this.props.user);
     const content: HTMLElement = this.state.isSignUp ? (
       <form class="text login-form">
         <a class="main__button" href="/">
@@ -179,8 +152,7 @@ class LoginPage extends VDom.Component {
             placeholder="Username"
             class="input-line login-form__input-line"
             id="username"
-            ref={this.usernameInputRef}
-            oninput={this.validateUsername}
+            ref={this.userNameInputRef}
           />
           <label
             id="login__username-label_danger"
@@ -201,7 +173,6 @@ class LoginPage extends VDom.Component {
             class="input-line login-form__input-line"
             id="password"
             ref={this.passwordInputRef}
-            onInput={this.validatePassword}
           />
           <label
             id="login__password-label_danger"

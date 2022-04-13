@@ -1,20 +1,29 @@
 import VDom from '../VDom';
-import { IProps } from '../VDom/Interfaces';
 import { IStore, Map } from '../Store/types';
 import { Store } from '../Store/store';
-import { ContextType, createContext, IContextType } from '../VDom/Context';
+import { createContext } from '../VDom/Context';
 
-export const StoreContext = createContext<IStore>(null);
+export const StoreContext = createContext<IStore>(null as unknown as IStore);
 
-// eslint-disable-next-line no-unused-vars,max-len,import/prefer-default-export
-export const connect =
-  (mapStateToProps: Map, mapDispatchToProps: Map) =>
-  (WrappedComponent: new (props: any) => VDom.Component): void => {
-    // eslint-disable-next-line no-unused-vars
-    class Connect extends VDom.Component<any, any, any, Store> {
+type ComponentConstructor<Props, State, Snapshot, ContextValue> = new (
+  _props: Props,
+) => VDom.Component<Props, State, Snapshot, ContextValue>;
+type ConnectedConstructor<Pros, Snapshot> = ComponentConstructor<Pros, Map, Snapshot, Store>;
+type WrappedToConnected<Props, State, Snapshot, ContextValue> = (
+  _WrappedComponent: ComponentConstructor<Props, State, Snapshot, ContextValue>,
+) => ConnectedConstructor<Props, Snapshot>;
+
+export function connect<Props, State, Snapshot, ContextValue>(
+  mapStateToProps: (_: Map) => Map,
+  mapDispatchToProps: (_: Map) => Map,
+): WrappedToConnected<Props, State, Snapshot, ContextValue> {
+  return (
+    WrappedComponent: ComponentConstructor<Props, State, Snapshot, ContextValue>,
+  ): ConnectedConstructor<Props, Snapshot> => {
+    class Connect extends VDom.Component<Props, Map, Snapshot, Store> {
       static contextType = StoreContext;
 
-      constructor(props: IProps) {
+      constructor(props: Props) {
         super(props);
         this.state = this.context.getState();
       }
@@ -31,10 +40,14 @@ export const connect =
           <WrappedComponent
             {...this.props}
             {...mapStateToProps(store.getState())}
-            {...(store ? mapDispatchToProps(store.dispatch) : null)}
-          />
+            {...(mapDispatchToProps(store.dispatch) ?? null)}
+          >
+            {this.props.children}
+          </WrappedComponent>
         );
       }
     }
+
     return Connect;
   };
+}

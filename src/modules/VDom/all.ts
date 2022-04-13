@@ -5,3 +5,4 @@ export { default as Component } from './Component';
 export { default as Fragment } from './Fragment';
 export { default as Ref } from './Ref';
 export type { IComponentProps } from './IComponentProps';
+export * as util from './util'

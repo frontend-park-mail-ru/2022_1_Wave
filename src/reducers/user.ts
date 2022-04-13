@@ -1,8 +1,14 @@
 import { Map } from '../modules/Store/types';
 
-export const Auth = (state: Map, action: Map): Map => {
-  if (action.type === 'logout/user' || 'signup/user') {
-    state.user = action.payload;
+export default (state: Map, action: Map): Map | null => {
+  switch (action.type) {
+  case 'logout/user':
+    return null;
+  case 'self/user':
+  case 'login/user':
+  case 'signup/user':
+    return action.payload
+  default:
+    return state;
   }
-  return state;
 };

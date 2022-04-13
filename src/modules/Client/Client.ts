@@ -12,7 +12,7 @@ export default class Client {
    * GET запрос на бэкенд
    * @param {string} path - путь, относительно домена
    */
-  static get(path: string) {
+  static get(path: string): Promise<any> {
     let status: any = null;
 
     return fetch(this.fullUrl(path), {
@@ -41,7 +41,7 @@ export default class Client {
    * @param {string} path - путь, относительно домена
    * @param {Object} body - тело запроса
    */
-  static post(path: string, requestBody: any) {
+  static post(path: string, requestBody: any): Promise<any> {
     let status: any = null;
 
     console.log(JSON.stringify(requestBody));
@@ -51,7 +51,8 @@ export default class Client {
       body: JSON.stringify(requestBody),
       headers: {
         [config.csrfHeader]: localStorage.getItem('csrf'),
-      },
+        'Content-Type': 'application/json',
+      } as HeadersInit,
     })
       .then((response) => {
         status = response.status;

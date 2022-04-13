@@ -1,0 +1,40 @@
+.tooltip_danger {
+  color: #ff6464;
+  overflow-wrap: break-word;
+}
+
+.input-line {
+  box-sizing: border-box;
+  height: 40px;
+  background: #222730;
+  border-radius: 3px;
+  border: none;
+  color: #fff;
+  font-family: Montserrat, serif;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 18px;
+  line-height: 22px;
+  padding-left: 10px;
+  width: 100%;
+}
+
+.input__wrong {
+  border: solid 1.5px #ff6464;
+}
+
+.input-label {
+  font-family: Montserrat, serif;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 17px;
+  color: #fff;
+  text-align: left;
+  padding-top: 0.3rem;
+  padding-bottom: 0.3rem;
+}
+
+.invisible {
+  visibility: hidden;
+}

@@ -4,5 +4,10 @@ import Ref from './Ref';
 
 export interface IComponentProps {
   children: Array<VirtualElement | StringWrapper>;
-  ref?: Ref;
+  ref?: any;
+}
+
+export interface IComponentPropsCommon {
+  key?: string;
+  ref?: any;
 }

@@ -1,5 +1,7 @@
 import Component from './Component';
 
-export default class Ref {
-  public instance: HTMLElement | Component | null;
+type RefTypes = HTMLElement | Component;
+
+export default class Ref<T extends RefTypes> {
+  public instance: T;
 }

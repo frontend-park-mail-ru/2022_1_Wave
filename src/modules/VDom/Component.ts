@@ -1,27 +1,25 @@
 import VirtualElement from './VirtualElement';
 import Ref from './Ref';
 import patch from './patchNode';
-import { VNodeAttr } from './Symbols';
-import { createContext, ContextType } from './Context';
+import { ContextType } from './Context';
 import StringWrapper from './StringWrapper';
 import { Debounce } from './util';
-import Fragment from './Fragment';
-import type { IComponentProps } from './IComponentProps';
+import type { IComponentProps, IComponentPropsCommon } from './IComponentProps';
 import cloneVNode from './cloneVNode';
 
-interface IComponentPropsIternal {
+interface ICComponentPropsInternal {
   parentDomNode: HTMLElement;
   leftSibling: HTMLElement;
   vNode: VirtualElement;
 }
 
 export default abstract class Component<
-  Props = any,
+  Props extends IComponentPropsCommon = IComponentPropsCommon,
   State = any,
   Snapshot = any,
   ContextValueType = null,
 > {
-  public props: Props & IComponentProps & IComponentPropsIternal;
+  public props: Props & IComponentProps & ICComponentPropsInternal;
 
   public node: HTMLElement | null;
 

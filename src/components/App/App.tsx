@@ -8,6 +8,7 @@ import Route from '../../modules/Router/Route';
 import RouteSwitch from '../../modules/Router/RouteSwitch';
 import Router from '../../modules/Router/Router';
 import LoginPage from '../LoginPage/LoginPage';
+import SignupPage from '../SignupPage/SignupPage';
 import ArtistConnected from '../ArtistPage/ArtistPage';
 import PersonalConnected from '../PersonalPage/PersonalPage';
 
@@ -23,7 +24,7 @@ export default class App extends VDom.Component {
               <LoginPage isSignup={false} />
             </Route>
             <Route exact to="/signup">
-              <LoginPage isSignup={true} />
+              <SignupPage isSignup={true} />
             </Route>
             <Route to="/">
               <PageConnected

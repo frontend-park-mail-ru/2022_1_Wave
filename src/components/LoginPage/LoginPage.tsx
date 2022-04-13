@@ -112,8 +112,8 @@ class LoginPage extends VDom.Component {
   }
 
   clearEmail(e: Event): void {
-    e.target.classList.remove('input__wrong');
-    document.getElementById('login__email-label_danger').classList.add('invisible');
+    (e.target as HTMLElement).classList.remove('input__wrong');
+    document.getElementById('login__email-label_danger')!.classList.add('invisible');
   }
 
   clearPassword(e: Event): void {

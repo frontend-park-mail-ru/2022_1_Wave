@@ -44,6 +44,8 @@ export default class Client {
   static post(path: string, requestBody: any) {
     let status: any = null;
 
+    console.log(JSON.stringify(requestBody));
+
     return fetch(this.fullUrl(path), {
       method: 'POST',
       body: JSON.stringify(requestBody),

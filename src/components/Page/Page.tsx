@@ -13,25 +13,12 @@ class Page extends VDom.Component {
   constructor(props: IProps) {
     super(props);
     this.props.getPlaylist();
-    this.state = {
-      contentHeight: 0,
-    };
-  }
-
-  didUpdate(): void {
-    const { content } = this.props;
-    const contentHeight: number = document.getElementsByClassName('content')[0]
-      ? document.getElementsByClassName('content')[0].clientHeight
-      : 0;
-    if (this.state.contentHeight !== contentHeight || content !== this.state.content) {
-      this.setState({ contentHeight, content });
-    }
   }
 
   render = (): VDom.VirtualElement => {
     const { content, isAuthorized } = this.props;
     return (
-      <div class="page" style={{ height: `${this.state.contentHeight.toString()}px` }}>
+      <div class="page">
         <Sidebar playlist={this.props.playlist} isAuthorized={isAuthorized} />
         <div class="content">{content}</div>
         {this.props.playlist ? <Player playlist={this.props.playlist}></Player> : ''}

@@ -35,3 +35,11 @@ export function userSignup(form: any): (dispatch: Function) => void {
     });
   };
 }
+
+export function updateSelf(form: any): (dispatch: Function) => void {
+  return (dispatch: Function): void => {
+    user.updateUser(form).then((payload: any) => {
+      dispatch({ type: 'update/user', payload });
+    });
+  };
+}

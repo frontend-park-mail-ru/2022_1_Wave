@@ -1,6 +1,7 @@
-const config = {
+export const config = {
   url: 'http://localhost:8080',
   csrfHeader: 'X-CSRF-TOKEN',
+  files: 'http://localhost/',
 };
 
 export default class Client {
@@ -53,6 +54,26 @@ export default class Client {
         [config.csrfHeader]: localStorage.getItem('csrf'),
         'Content-Type': 'application/json',
       } as HeadersInit,
+    })
+      .then((response) => {
+        status = response.status;
+        return response.json().catch(() => null);
+      })
+      .then((body) => ({
+        status,
+        body,
+      }));
+  }
+
+  static put(path: string, requestBody: any) {
+    let status: any = null;
+
+    return fetch(this.fullUrl(path), {
+      method: 'PUT',
+      body: requestBody,
+      headers: {
+        [config.csrfHeader]: localStorage.getItem('csrf'),
+      },
     })
       .then((response) => {
         status = response.status;

@@ -89,4 +89,13 @@ export default class User {
       return response.body;
     });
   }
+
+  static updateUser(form: any) {
+    return HTTPClient.put(UserPaths.update, form).then((response) => {
+      if (response.status !== 200) {
+        return Promise.reject(response.body);
+      }
+      return response.body;
+    });
+  }
 }

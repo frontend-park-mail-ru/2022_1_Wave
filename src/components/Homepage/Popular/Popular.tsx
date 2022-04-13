@@ -1,23 +1,16 @@
-import Component from '../../../modules/VDom/Component';
-import VirtualElement from '../../../modules/VDom/VirtualElement';
 import '../../../index.css';
 import './Popular.scss';
 import CarouselRow from '../../common/CarouselRow/CarouselRow';
 import AlbumCard from '../../common/AlbumCard/AlbumCard';
 import ArtistCard from '../../common/ArtistCard/ArtistCard';
 import VDom from '../../../modules/VDom';
-import album from '../../../assets/playlist-track-icon-dummy.png';
 import { Map } from '../../../modules/Store/types';
 import { connect } from '../../../modules/Connect';
 import { albumGetPopular } from '../../../actions/Album';
 import { artistGetPopular } from '../../../actions/Artist';
 import { IProps } from '../../../modules/VDom/Interfaces';
-import artistPopular from '../../../reducers/artist';
-import { PlayerClass } from '../../../modules/Media/player';
 import Link from '../../../modules/Router/Link';
-import Router from '../../../modules/Router/Router';
-import RouteSwitch from '../../../modules/Router/RouteSwitch';
-import { userLogin, userSignup } from '../../../actions/User';
+import { config } from '../../../modules/Client/Client';
 
 class Popular extends VDom.Component {
   constructor(props: IProps) {
@@ -34,7 +27,7 @@ class Popular extends VDom.Component {
         <CarouselRow>
           {this.props.albums
             ? this.props.albums.map((v: any) => (
-                <AlbumCard cover={v.cover} title={v.title} artist={v.artist} />
+                <AlbumCard cover={config.files + v.cover} title={v.title} artist={v.artist} />
               ))
             : ''}
         </CarouselRow>
@@ -44,7 +37,12 @@ class Popular extends VDom.Component {
         <CarouselRow>
           {this.props.artists
             ? this.props.artists.map((v: any) => (
-                <Link to="/artist" as={ArtistCard} cover={v.cover} name={v.name} />
+                <Link
+                  to={`/artist/${v.cover.split('_')[1].split('.')[0]}`}
+                  as={ArtistCard}
+                  cover={config.files + v.cover}
+                  name={v.name}
+                />
               ))
             : ''}
         </CarouselRow>

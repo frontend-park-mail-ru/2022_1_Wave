@@ -13,9 +13,10 @@ import { StoreContext } from '../../modules/Connect';
 import Route from '../../modules/Router/Route';
 import RouteSwitch from '../../modules/Router/RouteSwitch';
 import Router from '../../modules/Router/Router';
-import ArtistPage from '../ArtistPage/ArtistPage';
 import LoginPage from '../LoginPage/LoginPage';
 import PersonalPage from '../PersonalPage/PersonalPage';
+import ArtistConnected from '../ArtistPage/ArtistPage';
+import PersonalConnected from '../PersonalPage/PersonalPage';
 
 //
 // const onclickTest = (e) => {
@@ -95,11 +96,11 @@ export default class App extends VDom.Component {
                     <Route to="" exact>
                       <Homepage isAuthorized={true} />
                     </Route>
-                    <Route to="/artist">
-                      <ArtistPage isAuthorized={true} />
+                    <Route to="/artist/:slug">
+                      <ArtistConnected isAuthorized={true} />
                     </Route>
                     <Route to="/settings">
-                      <PersonalPage />
+                      <PersonalConnected />
                     </Route>
                   </RouteSwitch>
                 }

@@ -5,6 +5,7 @@ import marker from '../../../assets/player_marker.png';
 import { IPlayerClass } from '../../../modules/Media/media';
 import { IProps } from '../../../modules/VDom/Interfaces';
 import { PlayerClass } from '../../../modules/Media/player';
+import { config } from '../../../modules/Client/Client';
 
 class Player extends VDom.Component {
   #player: IPlayerClass;
@@ -33,7 +34,7 @@ class Player extends VDom.Component {
       trackData: {
         title: this.#player.currentTrack.title,
         author: this.#player.currentTrack.artist,
-        cover: this.#player.currentTrack.cover,
+        cover: config.files + this.#player.currentTrack.cover,
       },
       freqArray: freqArr,
       waveHeights: [0, 0, 0, 0],
@@ -67,7 +68,7 @@ class Player extends VDom.Component {
       trackData: {
         title: this.#player.currentTrack.title,
         author: this.#player.currentTrack.artist,
-        cover: this.#player.currentTrack.cover,
+        cover: config.files + this.#player.currentTrack.cover,
       },
     });
   }

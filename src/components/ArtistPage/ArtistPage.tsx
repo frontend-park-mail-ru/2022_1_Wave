@@ -12,7 +12,6 @@ import { IProps } from '../../modules/VDom/Interfaces';
 import RouterContext from '../../modules/Router/RouterContext';
 import RouteNavigator from '../../modules/Router/RouteNavigator';
 import { config } from '../../modules/Client/Client';
-import { artistPopularTracks } from '../../reducers/artist';
 
 class ArtistPage extends VDom.Component<any, any, null, RouteNavigator> {
   static contextType = RouterContext;
@@ -27,6 +26,7 @@ class ArtistPage extends VDom.Component<any, any, null, RouteNavigator> {
       isLiked: false,
     };
     this.setLikeToArtist = this.setLikeToArtist.bind(this);
+    this.addPopularToPlaylist = this.addPopularToPlaylist.bind(this);
   }
 
   didMount(): void {
@@ -60,6 +60,11 @@ class ArtistPage extends VDom.Component<any, any, null, RouteNavigator> {
     this.setState({ albumLikes: likes, isLiked });
   }
 
+  addPopularToPlaylist(e: Event): void {
+    console.log("event:",e)
+    console.log("addPopularToPlaylist:",this.state)
+  }
+
   render = (): VDom.VirtualElement => {
     const { slug }: { slug: string } = this.context.params;
     if (!this.props.artist || !this.props.popularTracks) {
@@ -86,8 +91,8 @@ class ArtistPage extends VDom.Component<any, any, null, RouteNavigator> {
               Artist
               <div class="artist__name">{artist.name}</div>
               <div class="artist__controls">
-                <div class="button controls__btn-play">
-                  <div class="text">Play</div>
+                <div onclick={this.addPopularToPlaylist} class="button controls__btn-play">
+                  <div  class="text">Play</div>
                 </div>
                 <div class="text controls__likes">
                   <div
@@ -119,10 +124,13 @@ class ArtistPage extends VDom.Component<any, any, null, RouteNavigator> {
   };
 }
 
-const mapStateToProps = (state: any): Map => ({
-  artist: state.artist ? state.artist : null,
-  popularTracks: state.artistPopularTracks ? state.artistPopularTracks : null,
-});
+const mapStateToProps = (state: any): Map => {
+    console.log("mapStateToProps:",state)
+  return ({
+    artist: state.artist ? state.artist : null,
+    popularTracks: state.artistPopularTracks ? state.artistPopularTracks : null,
+  });
+}
 
 const mapDispatchToProps = (dispatch: any): Map => ({
   getArtist: (id: string): void => {

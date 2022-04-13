@@ -6,7 +6,7 @@
 // const track = context.createMediaElementSource(mySound)
 
 import { Dic } from './media';
-import {config} from "../Client/Client";
+import { config } from '../Client/Client';
 
 export type Track = {
   title: string;
@@ -44,7 +44,7 @@ export class PlayerClass {
     }
     this.#playlist = tracks;
     this.currentTrack = this.#playlist[this.#playlistIndex];
-    this.audio = new Audio(config.files +this.currentTrack.src);
+    this.audio = new Audio(config.files + this.currentTrack.src);
     this.audio.preload = 'metadata';
     this.audio.volume = initVolume;
     this.#audioCtx = new AudioContext();

@@ -18,7 +18,7 @@ export const artist = (state: Map, action: Map): Map => {
 export const artistPopularTracks = (state: Map, action: Map): Map => {
   if (action.type === 'get/artist/popular') {
     for (const [key, value] of Object.entries(action.payload)) {
-      console.log("key",key,value)
+      console.log('key', key, value);
       state[key] = value;
     }
   }

@@ -16,7 +16,7 @@ import Router from '../../modules/Router/Router';
 import LoginPage from '../LoginPage/LoginPage';
 import PersonalPage from '../PersonalPage/PersonalPage';
 import ArtistConnected from '../ArtistPage/ArtistPage';
-import PersonalConnected from "../PersonalPage/PersonalPage";
+import PersonalConnected from '../PersonalPage/PersonalPage';
 
 //
 // const onclickTest = (e) => {
@@ -77,35 +77,36 @@ import PersonalConnected from "../PersonalPage/PersonalPage";
 const store = createStore();
 
 export default class App extends VDom.Component {
-
   render(): VDom.VirtualElement {
     return (
       <Router>
         <StoreContext.Provider value={store}>
           <RouteSwitch>
             <Route exact to="/login">
-              <LoginPage isSignup={false}/>
+              <LoginPage isSignup={false} />
             </Route>
             <Route exact to="/signup">
-              <LoginPage isSignup={true}/>
+              <LoginPage isSignup={true} />
             </Route>
             <Route to="/">
-              <PageConnected isAuthorized={true} content={
-                <RouteSwitch>
-                  <Route to="" exact>
-                    <Homepage isAuthorized={true}/>
-                  </Route>
-                  <Route to="/artist/:slug">
-                    <ArtistConnected isAuthorized={true} />
-                  </Route>
-                  <Route to="/settings">
-                    <PersonalConnected/>
-                  </Route>
-                </RouteSwitch>
-              }/>
+              <PageConnected
+                isAuthorized={true}
+                content={
+                  <RouteSwitch>
+                    <Route to="" exact>
+                      <Homepage isAuthorized={true} />
+                    </Route>
+                    <Route to="/artist/:slug">
+                      <ArtistConnected isAuthorized={true} />
+                    </Route>
+                    <Route to="/settings">
+                      <PersonalConnected />
+                    </Route>
+                  </RouteSwitch>
+                }
+              />
             </Route>
           </RouteSwitch>
-
         </StoreContext.Provider>
       </Router>
     );

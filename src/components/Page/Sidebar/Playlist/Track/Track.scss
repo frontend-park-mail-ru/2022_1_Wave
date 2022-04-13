@@ -1,59 +1,54 @@
-
-$hoverColor: #37B8D6;
+$hoverColor: #37b8d6;
 
 .track-block {
-    height: auto;
-    overflow: hidden;
-    padding-left: 0;
-    margin-top: 20px;
-    .track-block__number{
-        color: #6D7184;
-        letter-spacing: 0.055em;
-        float: left;
-        width: 1.5em;
-        text-align: center;
-    }
+  height: auto;
+  overflow: hidden;
+  padding-left: 0;
+  margin-top: 20px;
+  .track-block__number {
+    color: #6d7184;
+    letter-spacing: 0.055em;
+    float: left;
+    width: 1.5em;
+    text-align: center;
+  }
 
-    .track-block__icon{
-        float: left;
-        width: 47px;
-        height: 47px;
-        border-radius: 4px;
-        margin-left: 20px;
-        object-fit: cover;
-    }
-    .track-block__track-info{
-        float: left;
-        margin-left: 14px;
+  .track-block__icon {
+    float: left;
+    width: 47px;
+    height: 47px;
+    border-radius: 4px;
+    margin-left: 20px;
+    object-fit: cover;
+  }
+  .track-block__track-info {
+    float: left;
+    margin-left: 14px;
 
-        .track-info__title{
-            color: #FFFFFF;
-            line-height: 18px;
-            letter-spacing: 0.02em;
-            margin-top: 4px;
-            margin-bottom: 0;
-        }
-        .track-info__artist{
-            font-size: 13px;
-            line-height: 16px;
-            letter-spacing: 0.05em;
-            margin-top: 5px;
-            margin-bottom: 0;
-            color: rgba(255, 255, 255, 0.5);
-        }
+    .track-info__title {
+      color: #ffffff;
+      line-height: 18px;
+      letter-spacing: 0.02em;
+      margin-top: 4px;
+      margin-bottom: 0;
     }
-
-    &:hover {
-        cursor: pointer;
-        .track-block__number{
-            color: $hoverColor;
-        }
-        .track-info__title{
-            color: $hoverColor;
-        }
+    .track-info__artist {
+      font-size: 13px;
+      line-height: 16px;
+      letter-spacing: 0.05em;
+      margin-top: 5px;
+      margin-bottom: 0;
+      color: rgba(255, 255, 255, 0.5);
     }
+  }
 
+  &:hover {
+    cursor: pointer;
+    .track-block__number {
+      color: $hoverColor;
+    }
+    .track-info__title {
+      color: $hoverColor;
+    }
+  }
 }
-
-
-

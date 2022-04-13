@@ -4,11 +4,11 @@ import VDom from '../../modules/VDom';
 import '../../index.css';
 import './PersonalPage.scss';
 import avatar from '../../assets/avatar.jpeg';
-import {IProps} from "../../modules/VDom/Interfaces";
-import {validatePassword, validateUsername} from '../../utils/User';
-import {Map} from "../../modules/Store/types";
-import {updateSelf} from "../../actions/User";
-import {connect} from "../../modules/Connect";
+import { IProps } from '../../modules/VDom/Interfaces';
+import { validatePassword, validateUsername } from '../../utils/User';
+import { Map } from '../../modules/Store/types';
+import { updateSelf } from '../../actions/User';
+import { connect } from '../../modules/Connect';
 
 class PersonalPage extends VDom.Component {
   constructor(props: IProps) {
@@ -30,16 +30,18 @@ class PersonalPage extends VDom.Component {
 
   submitForm(e: Event): void {
     e.preventDefault();
-    if (!this.state.confirmPassword
-            || !this.state.userNameChecked
-            || !this.state.passwordChecked
-            || !this.state.fileLoaded) {
+    if (
+      !this.state.confirmPassword ||
+      !this.state.userNameChecked ||
+      !this.state.passwordChecked ||
+      !this.state.fileLoaded
+    ) {
       return;
     }
     const formData = new FormData();
-    formData.append('username',e.target.username.value);
-    formData.append('password',e.target.password.value);
-    formData.append('avatar',e.target.avatar.files[0]);
+    formData.append('username', e.target.username.value);
+    formData.append('password', e.target.password.value);
+    formData.append('avatar', e.target.avatar.files[0]);
     this.props.updateUser(formData);
   }
 
@@ -48,10 +50,10 @@ class PersonalPage extends VDom.Component {
     if (!validateUsername(uname)) {
       e.target.classList.add('input__wrong');
       document.getElementById('form__username-label_danger').classList.remove('invisible');
-      this.setState({userNameChecked: false, password});
+      this.setState({ userNameChecked: false, password });
       return;
     }
-    this.setState({userNameChecked: true, username: uname});
+    this.setState({ userNameChecked: true, username: uname });
   }
 
   tryAcceptPassword(e: Event): void {
@@ -59,10 +61,10 @@ class PersonalPage extends VDom.Component {
     if (!validatePassword(password)) {
       e.target.classList.add('input__wrong');
       document.getElementById('form__password-label_danger').classList.remove('invisible');
-      this.setState({passwordChecked: false, password});
+      this.setState({ passwordChecked: false, password });
       return;
     }
-    this.setState({passwordChecked: true, password});
+    this.setState({ passwordChecked: true, password });
   }
 
   tryAcceptPasswordRepeat(e: Event): void {
@@ -70,23 +72,23 @@ class PersonalPage extends VDom.Component {
     if (password !== this.state.password) {
       e.target.classList.add('input__wrong');
       document.getElementById('form__confirm-label_danger').classList.remove('invisible');
-      this.setState({confirmPassword: false});
+      this.setState({ confirmPassword: false });
       return;
     }
-    this.setState({confirmPassword: true});
+    this.setState({ confirmPassword: true });
   }
 
   tryAcceptAvatar(e: Event): void {
-    const file = e.target.files[0]
+    const file = e.target.files[0];
     if (!file) {
       return;
     }
     if (file.type !== 'image/png') {
       e.target.classList.add('input__wrong');
       document.getElementById('form__avatar-label_danger').classList.remove('invisible');
-      this.setState({fileLoaded: false})
+      this.setState({ fileLoaded: false });
     }
-    this.setState({fileLoaded: true})
+    this.setState({ fileLoaded: true });
   }
 
   clearUName(e: Event): void {
@@ -110,15 +112,15 @@ class PersonalPage extends VDom.Component {
   }
 
   render = (): VirtualElement => {
-    const {isAuthorized} = this.props;
+    const { isAuthorized } = this.props;
     return (
       <div class="personal-page">
-        <Navbar isAuthorized={true}/>
+        <Navbar isAuthorized={true} />
         <form onsubmit={this.submitForm} class="text personal-page__settings-form">
           <div class="settings-form__title">Settings</div>
           <div class="settings-form__form">
             <label htmlFor="username" class="input-label form__username-label">
-                            New username:
+              New username:
             </label>
             <input
               onblur={this.tryAcceptUName}
@@ -133,15 +135,14 @@ class PersonalPage extends VDom.Component {
               id="form__username-label_danger"
               class="input-label from__tooltip_danger invisible"
             >
-                            Username have to contain at least 3 charecters (digits, letters or &#171;_&#187;)
+              Username have to contain at least 3 charecters (digits, letters or &#171;_&#187;)
             </label>
           </div>
           <div class="settings-form__form">
             <label htmlFor="password" class="input-label form__password-label">
-                            New password:
+              New password:
             </label>
             <input
-
               onblur={this.tryAcceptPassword}
               value={this.state.password}
               onfocus={this.clearPassword}
@@ -154,15 +155,14 @@ class PersonalPage extends VDom.Component {
               id="form__password-label_danger"
               class="input-label from__tooltip_danger invisible"
             >
-                            Password have to contain at least 6 charecters (digits and letters)
+              Password have to contain at least 6 charecters (digits and letters)
             </label>
           </div>
           <div class="settings-form__form">
             <label htmlFor="confirm" class="input-label form__confirm-label">
-                            Confirm password:
+              Confirm password:
             </label>
             <input
-
               onblur={this.tryAcceptPasswordRepeat}
               onfocus={this.clearPasswordRepeat}
               type="password"
@@ -174,14 +174,14 @@ class PersonalPage extends VDom.Component {
               id="form__confirm-label_danger"
               class="input-label from__tooltip_danger invisible"
             >
-                            Passwords are different!
+              Passwords are different!
             </label>
           </div>
           <div class="settings-form__form">
             <label htmlFor="avatar" class="input-label form__avatar-label">
-                            Load new avatar:
+              Load new avatar:
             </label>
-            <label class="form__upload" style={{'background-image': `url(${avatar})`}}>
+            <label class="form__upload" style={{ 'background-image': `url(${avatar})` }}>
               <input
                 onchange={this.tryAcceptAvatar}
                 onfocus={this.clearAvatar}
@@ -195,11 +195,11 @@ class PersonalPage extends VDom.Component {
               id="form__avatar-label_danger"
               class="input-label from__tooltip_danger invisible"
             >
-                            It must be .png!
+              It must be .png!
             </label>
           </div>
           <div class="settings-form__form">
-            <input type="submit" value="Submit" class="text form__submit-button"/>
+            <input type="submit" value="Submit" class="text form__submit-button" />
           </div>
         </form>
       </div>
@@ -207,15 +207,13 @@ class PersonalPage extends VDom.Component {
   };
 }
 
-const mapStateToProps = (state: any):Map => ({
-});
+const mapStateToProps = (state: any): Map => ({});
 
-const mapDispatchToProps = (dispatch:any):Map => ({
-  updateUser: (form:any):void => {
+const mapDispatchToProps = (dispatch: any): Map => ({
+  updateUser: (form: any): void => {
     dispatch(updateSelf(form));
   },
 });
-
 
 const PersonalConnected = connect(mapStateToProps, mapDispatchToProps)(PersonalPage);
 export default PersonalConnected;

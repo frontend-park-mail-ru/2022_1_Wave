@@ -55,6 +55,15 @@ $hoverColor: #37b8d6;
 
 .track-block_current {
   background: #37b8d6;
+  width: 90%;
   border-radius: 10px;
-  opacity: 70%;
+  &:hover {
+    cursor: pointer;
+    .track-block__number {
+      color: #0b1220;
+    }
+    .track-info__title {
+      color: #0b1220;
+    }
+  }
 }

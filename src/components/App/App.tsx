@@ -28,14 +28,14 @@ class App extends VDom.Component {
         </Route>
         <Route to="/">
           <PageConnected
-            isAuthorized={true}
+            isAuthorized={this.props.isAuth}
             content={
               <RouteSwitch>
                 <Route to="" exact>
-                  <Homepage isAuthorized={true} />
+                  <Homepage isAuthorized={this.props.isAuth} />
                 </Route>
                 <Route to="/artist/:slug">
-                  <ArtistConnected isAuthorized={true} />
+                  <ArtistConnected isAuthorized={this.props.isAuth} />
                 </Route>
                 <Route to="/settings">
                   <PersonalConnected />

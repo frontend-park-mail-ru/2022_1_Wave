@@ -7,8 +7,11 @@ import avatar from '../../../assets/avatar.jpeg';
 import { IProps } from '../../../modules/VDom/Interfaces';
 import ArtistCard from '../ArtistCard/ArtistCard';
 import Link from '../../../modules/Router/Link';
+import { Map } from '../../../modules/Store/types';
+import { userLogout } from '../../../actions/User';
+import { connect } from '../../../modules/Connect';
 
-export default class Navbar extends Component {
+class Navbar extends Component {
   constructor(props: IProps) {
     super(props);
     this.state = {
@@ -18,7 +21,7 @@ export default class Navbar extends Component {
   }
 
   logout = (): void => {
-    this.setState({ isPopupShow: !this.state.isPopupShow });
+    this.props.logout();
   };
 
   render = (): VirtualElement => {
@@ -36,7 +39,7 @@ export default class Navbar extends Component {
             <Link as="div" to="/settings" class="text popup__text">
               Settings
             </Link>
-            <div class="text popup__text popup__logout">Log out</div>
+            <div onClick={this.logout} class="text popup__text popup__logout">Log out</div>
           </div>
         </div>
       </div>
@@ -76,3 +79,15 @@ export default class Navbar extends Component {
     );
   };
 }
+
+const mapStateToProps = (state: any): Map => ({
+  user: state.user,
+});
+
+const mapDispatchToProps = (dispatch: any): Map => ({
+  logout: (): void => {
+    dispatch(userLogout());
+  },
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Navbar);

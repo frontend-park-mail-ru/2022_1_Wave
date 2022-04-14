@@ -10,7 +10,6 @@ export default class User {
    */
   static getCSRFToken() {
     return HTTPClient.get(UserPaths.csrf).then((response) => {
-      console.log(response);
       return response;
     });
   }
@@ -29,6 +28,11 @@ export default class User {
         return Promise.reject(response.body);
       }
       return response.body;
+    }).then((body: any) => {
+      if (body.status !== 'OK') {
+        return Promise.reject(body.result);
+      }
+      return body.result;
     });
   }
 
@@ -36,18 +40,14 @@ export default class User {
    * Perform logout
    */
   static logout() {
-    let body = null;
-
     return HTTPClient.post(UserPaths.logout, null)
       .then((response) => {
         if (response.status !== 200) {
           return Promise.reject(response.body);
         }
-        body = response.body;
 
         return User.getCSRFToken();
-      })
-      .then(() => body);
+      });
   }
 
   /*
@@ -69,11 +69,6 @@ export default class User {
         return Promise.reject(response.body);
       }
       return User.getUser();
-    }).then((body: any) => {
-      if (body.status !== 'OK') {
-        return Promise.reject(body.result);
-      }
-      return body.result;
     });
   }
 
@@ -92,11 +87,6 @@ export default class User {
         return Promise.reject(response.body);
       }
       return User.getUser();
-    }).then((body: any) => {
-      if (body.status !== 'OK') {
-        return Promise.reject(body.result);
-      }
-      return body.result;
     });
   }
 

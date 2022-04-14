@@ -70,7 +70,7 @@ export default class User {
       }
       return User.getUser();
     }).then((body: any) => {
-      if (body.status !== 200) {
+      if (body.status !== 'OK') {
         return Promise.reject(body.result);
       }
       return body.result;

@@ -8,13 +8,9 @@ import { IComponentProps } from '../../modules/VDom/IComponentProps';
 import Link from '../../modules/Router/Link';
 import '../../index.css';
 import './LoginPage.scss';
-import RouterContext from '../../modules/Router/RouterContext';
-import RouteNavigator from '../../modules/Router/RouteNavigator';
 import Redirect from '../../modules/Router/Redirect';
 
 class LoginPage extends VDom.Component<any, any, null, RouteNavigator> {
-  static contextType = RouterContext;
-
   private readonly usernameInputRef = new VDom.Ref<ValidatableInput>();
 
   private readonly passwordInputRef = new VDom.Ref<ValidatableInput>();
@@ -44,8 +40,6 @@ class LoginPage extends VDom.Component<any, any, null, RouteNavigator> {
         username,
         password,
       });
-
-      this.context.go('/');
     }
   }
 

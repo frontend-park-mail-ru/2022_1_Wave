@@ -3,9 +3,8 @@ import VirtualElement from '../../../modules/VDom/VirtualElement';
 import VDom from '../../../modules/VDom';
 import '../../../index.css';
 import './Navbar.scss';
-import avatar from '../../../assets/avatar.jpeg';
+import avatar from '../../../assets/avatar.png';
 import { IProps } from '../../../modules/VDom/Interfaces';
-import ArtistCard from '../ArtistCard/ArtistCard';
 import Link from '../../../modules/Router/Link';
 import { Map } from '../../../modules/Store/types';
 import { userLogout } from '../../../actions/User';
@@ -29,7 +28,6 @@ class Navbar extends Component {
       <div class="navbar__avatar">
         <div class="navbar__avatar__wrapper">
           <img
-            onClick={this.logout}
             class="navbar__avatar__img_round"
             src={this.props.user.avatar ?? avatar}
             alt="avatar.png"

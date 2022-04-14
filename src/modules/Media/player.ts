@@ -68,7 +68,7 @@ export class PlayerClass {
   }
 
   next(): void {
-    if (this.#playedCount > this.playlist.length - 1) {
+    if (this.currentIndex > this.playlist.length - 1) {
       return;
     }
     if (this.isPlayRand) {
@@ -89,10 +89,10 @@ export class PlayerClass {
   }
 
   setPosition(index: number): void {
-    if (this.#playedCount > this.playlist.length - 1) {
+    if (this.currentIndex > this.playlist.length - 1) {
       return;
     }
-    this.#playedCount += 1;
+    //this.#playedCount += 1;
     this.currentIndex = index;
     const nextTrack = this.playlist[this.currentIndex];
     this.audio.src = config.files + nextTrack.src;

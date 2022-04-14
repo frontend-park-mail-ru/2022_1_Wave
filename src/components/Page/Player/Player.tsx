@@ -132,10 +132,10 @@ class Player extends VDom.Component {
   }
 
   runPrev(): void {
-    if (this.#player.audio.currentTime !== 0) {
-      this.#player.audio.currentTime = 0;
-      return;
-    }
+    // if (this.#player.audio.currentTime !== 0) {
+    //   this.#player.audio.currentTime = 0;
+    //   return;
+    // }
     this.#player.prev();
     this.props.setPos(this.#player.currentIndex);
     this.checkPlay();

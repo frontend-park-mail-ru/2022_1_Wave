@@ -3,11 +3,11 @@ import Navbar from '../common/Navbar/Navbar';
 import VDom from '../../modules/VDom';
 import '../../index.css';
 import './PersonalPage.scss';
-import avatar from '../../assets/avatar.jpeg';
+import avatar from '../../assets/avatar.png';
 import { IProps } from '../../modules/VDom/Interfaces';
 import { validatePassword, validateUsername } from '../../utils/User';
 import { Map } from '../../modules/Store/types';
-import {updateAvatar, updateSelf} from '../../actions/User';
+import {updateAvatar, updateSelf, userGetSelf} from '../../actions/User';
 import { connect } from '../../modules/Connect';
 
 class PersonalPage extends VDom.Component {
@@ -26,6 +26,7 @@ class PersonalPage extends VDom.Component {
     this.tryAcceptUName = this.tryAcceptUName.bind(this);
     this.tryAcceptAvatar = this.tryAcceptAvatar.bind(this);
     this.submitForm = this.submitForm.bind(this);
+    this.props.userGetSelf();
   }
 
   submitForm(e: Event): void {
@@ -33,7 +34,6 @@ class PersonalPage extends VDom.Component {
     const passwordCondition = (this.state.confirmPassword && this.state.passwordChecked);
     const unameCondition = this.state.userNameChecked;
     const fileCondition = this.state.fileLoaded;
-    console.log("password:",passwordCondition, "uname:",unameCondition,"file:",fileCondition )
     if( !passwordCondition &&
         !unameCondition &&
         !fileCondition ){
@@ -43,21 +43,19 @@ class PersonalPage extends VDom.Component {
     if(fileCondition){
       const formData = new FormData();
       formData.append('avatar', e.target.avatar.files[0]);
-      for (let value of formData.values()) {
-        console.log("form:",value);
-      }
       this.props.setNewAvatar(formData);
     }
-    if(!passwordCondition && !unameCondition){
-      return;
+    if(passwordCondition && unameCondition) {
+
+      if (unameCondition) {
+        newSet.username = e.target.username.value;
+      }
+      if (passwordCondition) {
+        newSet.password = e.target.password.value;
+      }
+      this.props.setNewUser(newSet);
     }
-    if(unameCondition){
-      newSet.username = e.target.username.value;
-    }
-    if(passwordCondition){
-      newSet.password = e.target.password.value;
-    }
-    this.props.setNewUser(newSet);
+    this.props.userGetSelf();
   }
 
   tryAcceptUName(e: Event): void {
@@ -98,7 +96,7 @@ class PersonalPage extends VDom.Component {
     if (!file) {
       return;
     }
-    if (file.type !== 'image/png') {
+    if (file.fize > 1048576) {
       e.target.classList.add('input__wrong');
       document.getElementById('form__avatar-label_danger').classList.remove('invisible');
       this.setState({ fileLoaded: false });
@@ -127,7 +125,7 @@ class PersonalPage extends VDom.Component {
   }
 
   render = (): VirtualElement => {
-    const { isAuthorized } = this.props;
+    const { isAuthorized,user } = this.props;
     return (
       <div class="personal-page">
         <Navbar isAuthorized={true} />
@@ -196,7 +194,8 @@ class PersonalPage extends VDom.Component {
             <label htmlFor="avatar" class="input-label form__avatar-label">
               Load new avatar:
             </label>
-            <label class="form__upload" style={{ 'background-image': `url(${avatar})` }}>
+            <label class="form__upload" style={{ 'background-image': `url(${
+              this.props.user ? this.props.user.avatar ? this.props.user.avatar : avatar : avatar})` }}>
               <input
                 onchange={this.tryAcceptAvatar}
                 onfocus={this.clearAvatar}
@@ -210,7 +209,7 @@ class PersonalPage extends VDom.Component {
               id="form__avatar-label_danger"
               class="input-label from__tooltip_danger invisible"
             >
-              It must be .png!
+              It must be less 1MB!
             </label>
           </div>
           <div class="settings-form__form">
@@ -222,7 +221,10 @@ class PersonalPage extends VDom.Component {
   };
 }
 
-const mapStateToProps = (state: any): Map => ({});
+const mapStateToProps = (state: any): Map => ({
+  user: state.user? state.user : null,
+
+});
 
 const mapDispatchToProps = (dispatch: any): Map => ({
   setNewUser: (form: any): void => {
@@ -230,7 +232,11 @@ const mapDispatchToProps = (dispatch: any): Map => ({
   },
   setNewAvatar: (form: any): void => {
     dispatch(updateAvatar(form))
-  }
+  },
+  userGetSelf: (): void => {
+    console.log("get user!!")
+    dispatch(userGetSelf());
+  },
 });
 
 const PersonalConnected = connect(mapStateToProps, mapDispatchToProps)(PersonalPage);

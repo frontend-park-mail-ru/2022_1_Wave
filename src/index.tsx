@@ -11,11 +11,12 @@ import configureStore from './store';
 const store = configureStore();
 
 User.getCSRFToken().then((): void => {
-  VDom.render((
+  VDom.render(
     <Router>
       <StoreContext.Provider value={store}>
         <App />
       </StoreContext.Provider>
-    </Router>
-  ), document.getElementById('root')!);
+    </Router>,
+    document.getElementById('root')!,
+  );
 });

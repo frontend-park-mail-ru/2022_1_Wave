@@ -23,31 +23,32 @@ export default class User {
    * }
    */
   static getUser() {
-    return HTTPClient.get(UserPaths.info).then((response) => {
-      if (response.status !== 200) {
-        return Promise.reject(response.body);
-      }
-      return response.body;
-    }).then((body: any) => {
-      if (body.status !== 'OK') {
-        return Promise.reject(body.result);
-      }
-      return body.result;
-    });
+    return HTTPClient.get(UserPaths.info)
+      .then((response) => {
+        if (response.status !== 200) {
+          return Promise.reject(response.body);
+        }
+        return response.body;
+      })
+      .then((body: any) => {
+        if (body.status !== 'OK') {
+          return Promise.reject(body.result);
+        }
+        return body.result;
+      });
   }
 
   /*
    * Perform logout
    */
   static logout() {
-    return HTTPClient.post(UserPaths.logout, null)
-      .then((response) => {
-        if (response.status !== 200) {
-          return Promise.reject(response.body);
-        }
+    return HTTPClient.post(UserPaths.logout, null).then((response) => {
+      if (response.status !== 200) {
+        return Promise.reject(response.body);
+      }
 
-        return User.getCSRFToken();
-      });
+      return User.getCSRFToken();
+    });
   }
 
   /*

@@ -47,6 +47,10 @@ export class Store {
   }
 }
 
-export const createStore = (reducer: Reducer, initialSate: any, middlewares: MiddlewareFactory[]): Store => {
+export const createStore = (
+  reducer: Reducer,
+  initialSate: any,
+  middlewares: MiddlewareFactory[],
+): Store => {
   return new Store(reducer, middlewares, initialSate);
 };

@@ -76,26 +76,26 @@ export default class Client {
         'Content-Type': 'application/json',
       },
     })
-        .then((response) => {
-          status = response.status;
-          return response.json().catch(() => null);
-        })
-        .then((body) => ({
-          status,
-          body,
-        }));
+      .then((response) => {
+        status = response.status;
+        return response.json().catch(() => null);
+      })
+      .then((body) => ({
+        status,
+        body,
+      }));
   }
 
   static patchForm(path: string, requestBody: any) {
     let status: any = null;
-    const boundary = Math.random().toString().substr(2)
-    console.log(requestBody)
+    const boundary = Math.random().toString().substr(2);
+    console.log(requestBody);
     return fetch(this.fullUrl(path), {
       method: 'PATCH',
       body: requestBody,
       headers: {
         [config.csrfHeader]: localStorage.getItem('csrf'),
-        enctype:"multipart/form-data",
+        enctype: 'multipart/form-data',
       },
     })
       .then((response) => {

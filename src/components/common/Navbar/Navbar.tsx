@@ -36,7 +36,9 @@ class Navbar extends Component {
             <Link as="div" to="/settings" class="text popup__text">
               Settings
             </Link>
-            <div onClick={this.logout} class="text popup__text popup__logout">Log out</div>
+            <div onClick={this.logout} class="text popup__text popup__logout">
+              Log out
+            </div>
           </div>
         </div>
       </div>
@@ -44,12 +46,16 @@ class Navbar extends Component {
       <div class="navbar__menu navbar__auth__menu  ">
         <div class="navbar__menu__button">
           <a class="navbar__link-new-page" href="/login">
-            <Link to="/login" as="div" class="text button__text">LOG IN</Link>
+            <Link to="/login" as="div" class="text button__text">
+              LOG IN
+            </Link>
           </a>
         </div>
         <div class="navbar__menu__button">
           <a class="navbar__link-new-page" href="/signup">
-            <Link to="/signup" as="div" class="text button__text">SIGN UP</Link>
+            <Link to="/signup" as="div" class="text button__text">
+              SIGN UP
+            </Link>
           </a>
         </div>
       </div>

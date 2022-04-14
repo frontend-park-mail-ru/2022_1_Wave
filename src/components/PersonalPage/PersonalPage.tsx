@@ -7,7 +7,7 @@ import avatar from '../../assets/avatar.png';
 import { IProps } from '../../modules/VDom/Interfaces';
 import { validatePassword, validateUsername } from '../../utils/User';
 import { Map } from '../../modules/Store/types';
-import {updateAvatar, updateSelf, userGetSelf} from '../../actions/User';
+import { updateAvatar, updateSelf, userGetSelf } from '../../actions/User';
 import { connect } from '../../modules/Connect';
 
 class PersonalPage extends VDom.Component {
@@ -32,22 +32,19 @@ class PersonalPage extends VDom.Component {
 
   submitForm(e: Event): void {
     e.preventDefault();
-    const passwordCondition = (this.state.confirmPassword && this.state.passwordChecked);
+    const passwordCondition = this.state.confirmPassword && this.state.passwordChecked;
     const unameCondition = this.state.userNameChecked;
     const fileCondition = this.state.fileLoaded;
-    if( !passwordCondition &&
-        !unameCondition &&
-        !fileCondition ){
+    if (!passwordCondition && !unameCondition && !fileCondition) {
       return;
     }
-    const newSet = {}
-    if(fileCondition){
+    const newSet = {};
+    if (fileCondition) {
       const formData = new FormData();
       formData.append('avatar', e.target.avatar.files[0]);
       this.props.setNewAvatar(formData);
     }
-    if(passwordCondition && unameCondition) {
-
+    if (passwordCondition && unameCondition) {
       if (unameCondition) {
         newSet.username = e.target.username.value;
       }
@@ -97,12 +94,12 @@ class PersonalPage extends VDom.Component {
     if (!file) {
       return;
     }
-    if ( file.type.split("/")[0] !== 'image' || file.fize > 1048576) {
+    if (file.type.split('/')[0] !== 'image' || file.fize > 1048576) {
       e.target.classList.add('input__wrong');
       document.getElementById('form__avatar-label_danger').classList.remove('invisible');
       this.setState({ fileLoaded: false });
     }
-    this.setState({fileLoaded: true, fileSrc: URL.createObjectURL(file)})
+    this.setState({ fileLoaded: true, fileSrc: URL.createObjectURL(file) });
   }
 
   clearUName(e: Event): void {
@@ -125,21 +122,21 @@ class PersonalPage extends VDom.Component {
     document.getElementById('form__avatar-label_danger').classList.add('invisible');
   }
   didMount(snapshot: any) {
-    console.log("di:",this.props.user)
-    if(this.props.user){
-      if(this.props.user.avatar){
-        this.setState({fileSrc:this.props.user.avatar})
+    console.log('di:', this.props.user);
+    if (this.props.user) {
+      if (this.props.user.avatar) {
+        this.setState({ fileSrc: this.props.user.avatar });
       }
     }
   }
 
   didUpdate(snapshot: any) {
-    console.log("up:",this.props.user)
-    if(this.props.user){
-      if(this.props.user.avatar){
-        if (this.state.fileSrc != this.props.user.avatar){
-          if(this.state.fileSrc.split(':')[0] !== 'blob'){
-            this.setState({fileSrc:this.props.user.avatar})
+    console.log('up:', this.props.user);
+    if (this.props.user) {
+      if (this.props.user.avatar) {
+        if (this.state.fileSrc != this.props.user.avatar) {
+          if (this.state.fileSrc.split(':')[0] !== 'blob') {
+            this.setState({ fileSrc: this.props.user.avatar });
           }
         }
       }
@@ -147,8 +144,8 @@ class PersonalPage extends VDom.Component {
   }
 
   render = (): VirtualElement => {
-    const { isAuthorized,user } = this.props;
-    console.log("img:",this.state.fileSrc)
+    const { isAuthorized, user } = this.props;
+    console.log('img:', this.state.fileSrc);
     return (
       <div class="personal-page">
         <Navbar isAuthorized={true} />
@@ -217,8 +214,10 @@ class PersonalPage extends VDom.Component {
             <label htmlFor="avatar" class="input-label form__avatar-label">
               Load new avatar:
             </label>
-            <label class="form__upload" style={{ 'background-image': `url(${
-              this.state.fileSrc})` }}>
+            <label
+              class="form__upload"
+              style={{ 'background-image': `url(${this.state.fileSrc})` }}
+            >
               <input
                 onchange={this.tryAcceptAvatar}
                 onfocus={this.clearAvatar}
@@ -245,8 +244,7 @@ class PersonalPage extends VDom.Component {
 }
 
 const mapStateToProps = (state: any): Map => ({
-  user: state.user? state.user : null,
-
+  user: state.user ? state.user : null,
 });
 
 const mapDispatchToProps = (dispatch: any): Map => ({
@@ -254,10 +252,10 @@ const mapDispatchToProps = (dispatch: any): Map => ({
     dispatch(updateSelf(form));
   },
   setNewAvatar: (form: any): void => {
-    dispatch(updateAvatar(form))
+    dispatch(updateAvatar(form));
   },
   userGetSelf: (): void => {
-    console.log("get user!!")
+    console.log('get user!!');
     dispatch(userGetSelf());
   },
 });

@@ -64,19 +64,17 @@ export default class User {
       email,
       username,
       password,
-    })
-      .then((response) => {
-        if (response.status !== 200) {
-          return Promise.reject(response.body);
-        }
-        return User.getUser();
-      })
-      .then((body: any) => {
-        if (body.status !== 200) {
-          return Promise.reject(body.result);
-        }
-        return body.result;
-      });
+    }).then((response) => {
+      if (response.status !== 200) {
+        return Promise.reject(response.body);
+      }
+      return User.getUser();
+    }).then((body: any) => {
+      if (body.status !== 'OK') {
+        return Promise.reject(body.result);
+      }
+      return body.result;
+    });
   }
 
   /*
@@ -89,19 +87,17 @@ export default class User {
    * }
    */
   static signup(data: { email: string; username: string; password: string }) {
-    return HTTPClient.post(UserPaths.signup, data)
-      .then((response) => {
-        if (response.status !== 200) {
-          return Promise.reject(response.body);
-        }
-        return User.getUser();
-      })
-      .then((body: any) => {
-        if (body.status !== 'OK') {
-          return Promise.reject(body.result);
-        }
-        return body.result;
-      });
+    return HTTPClient.post(UserPaths.signup, data).then((response) => {
+      if (response.status !== 200) {
+        return Promise.reject(response.body);
+      }
+      return User.getUser();
+    }).then((body: any) => {
+      if (body.status !== 'OK') {
+        return Promise.reject(body.result);
+      }
+      return body.result;
+    });
   }
 
   static updateUser(form: any) {

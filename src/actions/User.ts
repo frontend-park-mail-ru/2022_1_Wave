@@ -23,7 +23,7 @@ export function userLogout(dispatch: Function): void {
 export function userLogin(form: any): (dispatch: Function) => void {
   return (dispatch: Function): void => {
     user.login(form).then((payload: any) => {
-      dispatch({ type: 'logout/user', payload });
+      dispatch({ type: 'login/user', payload });
     });
   };
 }

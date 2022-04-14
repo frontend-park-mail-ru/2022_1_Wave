@@ -8,14 +8,9 @@ import { IComponentProps } from '../../modules/VDom/IComponentProps';
 import Link from '../../modules/Router/Link';
 import '../../index.css';
 import './SignupPage.scss';
-import { Ref } from '../../modules/VDom/all';
 import Redirect from '../../modules/Router/Redirect';
-import RouterContext from '../../modules/Router/RouterContext';
-import RouteNavigator from '../../modules/Router/RouteNavigator';
 
 class SignupPage extends VDom.Component<any, any, null, RouteNavigator> {
-  static contextType = RouterContext;
-
   private readonly usernameInputRef = new VDom.Ref<ValidatableInput>();
 
   private readonly emailInputRef = new VDom.Ref<ValidatableInput>();
@@ -63,8 +58,6 @@ class SignupPage extends VDom.Component<any, any, null, RouteNavigator> {
         email,
         password,
       });
-
-      this.context.go('/');
     }
   }
 

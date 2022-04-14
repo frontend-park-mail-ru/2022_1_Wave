@@ -101,7 +101,16 @@ export default class User {
   }
 
   static updateUser(form: any) {
-    return HTTPClient.put(UserPaths.update, form).then((response) => {
+    return HTTPClient.patch(UserPaths.update, form).then((response) => {
+      if (response.status !== 200) {
+        return Promise.reject(response.body);
+      }
+      return response.body;
+    });
+  }
+
+  static uploadAvatar(form: any) {
+    return HTTPClient.patchForm(UserPaths.update, form).then((response) => {
       if (response.status !== 200) {
         return Promise.reject(response.body);
       }

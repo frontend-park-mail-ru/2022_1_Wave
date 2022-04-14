@@ -44,8 +44,8 @@ class LoginPage extends VDom.Component<any, any, null, RouteNavigator> {
   }
 
   render(): VDom.VirtualElement {
-    if (this.props.user) {
-      return <Redirect to="/" />;
+    if (this.props.isAuth) {
+      return <Redirect to='/' />
     }
 
     return (
@@ -106,11 +106,17 @@ class LoginPage extends VDom.Component<any, any, null, RouteNavigator> {
 }
 
 const mapStateToProps = (state: any): Map => ({
-  user: state.user,
+  isAuth: state.user?.id != null,
 });
 
 const mapDispatchToProps = (dispatch: any): Map => ({
-  login: ({ username, password }: { username: string; password: string }): void => {
+  login: ({
+    username,
+    password,
+  }: {
+    username: string;
+    password: string;
+  }): void => {
     dispatch(userLogin({ username, password }));
   },
 });

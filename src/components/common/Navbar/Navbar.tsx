@@ -25,14 +25,13 @@ class Navbar extends Component {
   };
 
   render = (): VirtualElement => {
-    const { isAuthorized } = this.props;
-    const content = isAuthorized ? (
+    const content = this.props.isAuth ? (
       <div class="navbar__avatar">
         <div class="navbar__avatar__wrapper">
           <img
             onClick={this.logout}
             class="navbar__avatar__img_round"
-            src={avatar}
+            src={this.props.user.avatar ?? avatar}
             alt="avatar.png"
           />
           <div class="popup">
@@ -47,12 +46,12 @@ class Navbar extends Component {
       <div class="navbar__menu navbar__auth__menu  ">
         <div class="navbar__menu__button">
           <a class="navbar__link-new-page" href="/login">
-            <div class="text button__text">LOG IN</div>
+            <Link to="/login" as="div" class="text button__text">LOG IN</Link>
           </a>
         </div>
         <div class="navbar__menu__button">
           <a class="navbar__link-new-page" href="/signup">
-            <div class="text button__text">SIGN UP</div>
+            <Link to="/signup" as="div" class="text button__text">SIGN UP</Link>
           </a>
         </div>
       </div>
@@ -81,7 +80,8 @@ class Navbar extends Component {
 }
 
 const mapStateToProps = (state: any): Map => ({
-  user: state.user,
+  isAuth: state.user?.id != null,
+  user: state.user ?? {},
 });
 
 const mapDispatchToProps = (dispatch: any): Map => ({

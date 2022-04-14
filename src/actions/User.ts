@@ -8,16 +8,20 @@ export function userGetCSRF(dispatch: Function): void {
   });
 }
 
-export function userGetSelf(dispatch: Function): void {
-  user.getUser().then((payload: any) => {
-    dispatch({ type: 'self/user', payload });
-  });
+export function userGetSelf(): (dispatch: Function) => void {
+  return (dispatch: Function): void => {
+    user.getUser().then((payload: any) => {
+      dispatch({ type: 'self/user', payload });
+    });
+  }
 }
 
-export function userLogout(dispatch: Function): void {
-  user.logout().then(() => {
-    dispatch({ type: 'logout/user', payload: null });
-  });
+export function userLogout(): (dispatch: Function) => void {
+  return (dispatch: Function): void => {
+    user.logout().then(() => {
+      dispatch({ type: 'logout/user', payload: null });
+    });
+  }
 }
 
 export function userLogin(form: any): (dispatch: Function) => void {

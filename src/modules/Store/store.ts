@@ -1,6 +1,4 @@
 import { IStore, Map } from './types';
-import { createLoggerMiddleware, createThunkMiddleware } from './middleware';
-import rootReducer from '../../reducers';
 
 // eslint-disable-next-line no-unused-vars
 export type MiddlewareFactory = (store: IStore) => (dispatch: Function) => () => void;
@@ -50,8 +48,6 @@ export class Store {
   }
 }
 
-export const createStore = (): Store => {
-  const middleWares: MiddlewareFactory[] = [createLoggerMiddleware, createThunkMiddleware];
-  const initStore: Store = new Store(rootReducer, middleWares, {});
-  return initStore;
+export const createStore = (reducer: Reducer, initialSate: any, middlewares: MiddlewareFactory[]): Store => {
+  return new Store(reducer, middlewares, initialSate);
 };

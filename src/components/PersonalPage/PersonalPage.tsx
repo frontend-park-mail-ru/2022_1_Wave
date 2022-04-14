@@ -122,7 +122,6 @@ class PersonalPage extends VDom.Component {
     document.getElementById('form__avatar-label_danger').classList.add('invisible');
   }
   didMount(snapshot: any) {
-    console.log('di:', this.props.user);
     if (this.props.user) {
       if (this.props.user.avatar) {
         this.setState({ fileSrc: this.props.user.avatar });
@@ -131,7 +130,6 @@ class PersonalPage extends VDom.Component {
   }
 
   didUpdate(snapshot: any) {
-    console.log('up:', this.props.user);
     if (this.props.user) {
       if (this.props.user.avatar) {
         if (this.state.fileSrc != this.props.user.avatar) {
@@ -142,10 +140,8 @@ class PersonalPage extends VDom.Component {
       }
     }
   }
-
   render = (): VirtualElement => {
     const { isAuthorized, user } = this.props;
-    console.log('img:', this.state.fileSrc);
     return (
       <div class="personal-page">
         <Navbar isAuthorized={true} />

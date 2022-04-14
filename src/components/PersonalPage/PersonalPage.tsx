@@ -20,6 +20,7 @@ class PersonalPage extends VDom.Component {
       userNameChecked: false,
       passwordChecked: false,
       fileLoaded: false,
+      fileSrc: avatar,
     };
     this.tryAcceptPassword = this.tryAcceptPassword.bind(this);
     this.tryAcceptPasswordRepeat = this.tryAcceptPasswordRepeat.bind(this);
@@ -96,12 +97,12 @@ class PersonalPage extends VDom.Component {
     if (!file) {
       return;
     }
-    if (file.fize > 1048576) {
+    if ( file.type.split("/")[0] !== 'image' || file.fize > 1048576) {
       e.target.classList.add('input__wrong');
       document.getElementById('form__avatar-label_danger').classList.remove('invisible');
       this.setState({ fileLoaded: false });
     }
-    this.setState({ fileLoaded: true });
+    this.setState({fileLoaded: true, fileSrc: URL.createObjectURL(file)})
   }
 
   clearUName(e: Event): void {
@@ -123,9 +124,31 @@ class PersonalPage extends VDom.Component {
     e.target.classList.remove('input__wrong');
     document.getElementById('form__avatar-label_danger').classList.add('invisible');
   }
+  didMount(snapshot: any) {
+    console.log("di:",this.props.user)
+    if(this.props.user){
+      if(this.props.user.avatar){
+        this.setState({fileSrc:this.props.user.avatar})
+      }
+    }
+  }
+
+  didUpdate(snapshot: any) {
+    console.log("up:",this.props.user)
+    if(this.props.user){
+      if(this.props.user.avatar){
+        if (this.state.fileSrc != this.props.user.avatar){
+          if(this.state.fileSrc.split(':')[0] !== 'blob'){
+            this.setState({fileSrc:this.props.user.avatar})
+          }
+        }
+      }
+    }
+  }
 
   render = (): VirtualElement => {
     const { isAuthorized,user } = this.props;
+    console.log("img:",this.state.fileSrc)
     return (
       <div class="personal-page">
         <Navbar isAuthorized={true} />
@@ -195,7 +218,7 @@ class PersonalPage extends VDom.Component {
               Load new avatar:
             </label>
             <label class="form__upload" style={{ 'background-image': `url(${
-              this.props.user ? this.props.user.avatar ? this.props.user.avatar : avatar : avatar})` }}>
+              this.state.fileSrc})` }}>
               <input
                 onchange={this.tryAcceptAvatar}
                 onfocus={this.clearAvatar}
@@ -209,7 +232,7 @@ class PersonalPage extends VDom.Component {
               id="form__avatar-label_danger"
               class="input-label from__tooltip_danger invisible"
             >
-              It must be less 1MB!
+              It must be image less 1MB!
             </label>
           </div>
           <div class="settings-form__form">

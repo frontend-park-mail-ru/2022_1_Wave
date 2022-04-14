@@ -31,7 +31,10 @@ class Sidebar extends VDom.Component {
 
   render = (): VDom.VirtualElement => {
     const { isAuthorized } = this.props;
-    console.log(this.props);
+    if(!this.props){
+      return (<div class="sidebar"/>);
+    }
+    console.log(this.props.playlist);
     const content = isAuthorized ? (
       <div>
         <Navigation title="My playlist" />

@@ -6,10 +6,9 @@ import Track from './Track/Track';
 export default class Playlist extends VDom.Component {
   render = (): VDom.VirtualElement => {
     let n = 1;
-    console.log(this.props.highlite);
     return (
       <ul class="sidebar__my-playlist">
-        {this.props.playlist
+        {this.props.playlist && this.props.playlist.length > 0
           ? this.props.playlist.map((v: any) => {
               if (this.props.highlite === n - 1) {
                 return (

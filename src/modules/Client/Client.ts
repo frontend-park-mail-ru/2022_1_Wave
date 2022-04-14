@@ -87,12 +87,14 @@ export default class Client {
 
   static patchForm(path: string, requestBody: any) {
     let status: any = null;
-
+    const boundary = Math.random().toString().substr(2)
+    console.log(requestBody)
     return fetch(this.fullUrl(path), {
       method: 'PATCH',
       body: requestBody,
       headers: {
         [config.csrfHeader]: localStorage.getItem('csrf'),
+        "Content-Type": "multipart/form-data; boundary=------------------------" + boundary,
       },
     })
       .then((response) => {

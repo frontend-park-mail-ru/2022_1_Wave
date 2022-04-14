@@ -43,6 +43,9 @@ class PersonalPage extends VDom.Component {
     if(fileCondition){
       const formData = new FormData();
       formData.append('avatar', e.target.avatar.files[0]);
+      for (let value of formData.values()) {
+        console.log("form:",value);
+      }
       this.props.setNewAvatar(formData);
     }
     if(!passwordCondition && !unameCondition){

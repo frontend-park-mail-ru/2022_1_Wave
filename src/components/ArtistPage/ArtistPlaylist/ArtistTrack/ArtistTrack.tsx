@@ -32,7 +32,7 @@ export default class ArtistTrack extends Component {
     };
     const heartState = this.state.isLiked ? 'fa-solid' : 'fa-regular';
     return (
-      <div class="text artist-track">
+      <div onclick={this.props.handleClick} class="text artist-track">
         <div class="artist-track__info">
           {num}
           <img class="artist-track__cover" src={cover} />

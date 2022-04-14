@@ -27,8 +27,8 @@ class Popular extends VDom.Component {
         <CarouselRow>
           {this.props.albums
             ? this.props.albums.map((v: any) => (
-                <AlbumCard cover={config.files + v.cover} title={v.title} artist={v.artist} />
-              ))
+              <AlbumCard cover={config.files + v.cover} title={v.title} artist={v.artist} />
+            ))
             : ''}
         </CarouselRow>
       </div>
@@ -37,13 +37,13 @@ class Popular extends VDom.Component {
         <CarouselRow>
           {this.props.artists
             ? this.props.artists.map((v: any) => (
-                <Link
-                  to={`/artist/${v.cover.split('_')[1].split('.')[0]}`}
-                  as={ArtistCard}
-                  cover={config.files + v.cover}
-                  name={v.name}
-                />
-              ))
+              <Link
+                to={`/artist/${v.cover.split('_')[1].split('.')[0]}`}
+                as={ArtistCard}
+                cover={config.files + v.cover}
+                name={v.name}
+              />
+            ))
             : ''}
         </CarouselRow>
       </div>

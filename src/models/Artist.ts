@@ -27,7 +27,6 @@ export default class Artist {
       if (response.status !== 200) {
         return Promise.reject(response.body);
       }
-      console.log('req id:', id);
       const res: Map = {};
       res[id] = response.body.Result;
       return res;
@@ -40,7 +39,6 @@ export default class Artist {
       if (response.status !== 200) {
         return Promise.reject(response.body);
       }
-      console.log('req id:', id);
       const res: Map = {};
       res[id] = response.body.Result;
       return res;

@@ -1,13 +1,22 @@
-import { Track } from './player';
-
 export interface Dic {
   [key: number]: Object;
 }
 
+export interface ITrack {
+  title: string;
+  artist: string;
+  album: string;
+  src: string;
+  cover: string;
+}
 export interface IPlayerClass {
   audio: HTMLAudioElement;
 
-  currentTrack: Track;
+  playlist: ITrack[];
+
+  currentTrack: ITrack;
+
+  currentIndex: number;
 
   isPlayRand: boolean;
 
@@ -16,6 +25,10 @@ export interface IPlayerClass {
   addTrack(): void;
 
   popTrack(): void;
+
+  setPosition(index: number):void;
+
+  updatePlaylist(tracks: ITrack[]):void;
 
   play(): void;
 

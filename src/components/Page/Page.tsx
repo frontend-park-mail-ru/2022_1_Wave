@@ -6,8 +6,9 @@ import '../../index.css';
 import './Page.scss';
 import { Map } from '../../modules/Store/types';
 import { connect } from '../../modules/Connect';
-import { trackGetPopular } from '../../actions/Track';
 import { IProps } from '../../modules/VDom/Interfaces';
+import PlayerConnected from "./Player/Player";
+import {getPopularTracks} from "../../actions/Playlist";
 
 class Page extends VDom.Component {
   constructor(props: IProps) {
@@ -21,7 +22,7 @@ class Page extends VDom.Component {
       <div class="page">
         <Sidebar playlist={this.props.playlist} isAuthorized={isAuthorized} />
         <div class="content">{content}</div>
-        {this.props.playlist ? <Player playlist={this.props.playlist}></Player> : ''}
+        <PlayerConnected/>
       </div>
     );
   };
@@ -34,7 +35,7 @@ const mapStateToProps = (state: any): Map => ({
 
 const mapDispatchToProps = (dispatch: any): Map => ({
   getPlaylist: (): void => {
-    dispatch(trackGetPopular);
+    dispatch(getPopularTracks);
   },
 });
 

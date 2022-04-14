@@ -6,6 +6,9 @@ import { IPlayerClass } from '../../../modules/Media/media';
 import { IProps } from '../../../modules/VDom/Interfaces';
 import { PlayerClass } from '../../../modules/Media/player';
 import { config } from '../../../modules/Client/Client';
+import {Map} from "../../../modules/Store/types";
+import {connect} from "../../../modules/Connect";
+import {setPosition, startPlay, stopPlay} from "../../../actions/Player";
 
 class Player extends VDom.Component {
   #player: IPlayerClass;
@@ -16,29 +19,23 @@ class Player extends VDom.Component {
 
   constructor(props: IProps) {
     super(props);
-    const { playlist } = this.props;
-    this.#player = new PlayerClass(playlist);
-    console.log(this.#player);
-    const freqArr = this.#player.analyser
-      ? new Uint8Array(this.#player.analyser.frequencyBinCount)
-      : null;
-    const volume = this.#player.audio ? this.#player.audio.volume : 0.5;
     this.state = {
       playState: false,
       trackTime: 0,
       trackFilled: 0,
       trackFetched: 0,
       trackBuffered: 0,
-      trackVolume: volume * 100,
+      trackVolume: 50,
       playRand: false,
       trackData: {
-        title: this.#player.currentTrack.title,
-        author: this.#player.currentTrack.artist,
-        cover: config.files + this.#player.currentTrack.cover,
+        title: '',
+        author: '',
+        cover: '',
       },
-      freqArray: freqArr,
+      freqArray: [],
       waveHeights: [0, 0, 0, 0],
     };
+    this.initPlayer = this.initPlayer.bind(this);
     this.loadTrackData = this.loadTrackData.bind(this);
     this.tooglePlay = this.tooglePlay.bind(this);
     this.checkPlay = this.checkPlay.bind(this);
@@ -51,6 +48,42 @@ class Player extends VDom.Component {
     this.setVolume = this.setVolume.bind(this);
     this.toogleShuffle = this.toogleShuffle.bind(this);
     this.toogleMute = this.toogleMute.bind(this);
+    this.props.stop();
+  }
+
+  didUpdate():void {
+    console.log("update!!");
+    if(!this.#player) {
+      this.initPlayer();
+      return;
+    }
+    if( this.#player.playlist !== this.props.playlist) {
+      this.setState({trackTime:0,trackFilled:0,trackFetched:0,trackBuffered:0});
+      this.#player.updatePlaylist(this.props.playlist);
+      this.props.setPos(0);
+    }
+    if( typeof this.props.position === 'number' &&
+        this.#player.currentIndex !== this.props.position){
+      this.#player.setPosition(this.props.position);
+    }
+    if ( this.#player && this.#player.audio.paused === this.props.isPlay){
+      this.checkPlay();
+    }
+  }
+
+  didMount():void {
+    if(!this.#player && this.props.playlist && this.props.playlist.length > 0){
+      this.initPlayer();
+    }
+  }
+
+  initPlayer():void{
+    this.#player = new PlayerClass(this.props.playlist);
+    const freqArray = this.#player.analyser
+      ? new Uint8Array(this.#player.analyser.frequencyBinCount)
+      : null;
+    const volume = this.#player.audio ? this.#player.audio.volume : 0.5;
+    this.setState({trackVolume:volume*100,freqArray})
     if (this.#player.audio) {
       this.#player.audio.addEventListener('timeupdate', this.timeUpdater);
       this.#player.audio.addEventListener('progress', this.fetchedUpdater);
@@ -74,7 +107,7 @@ class Player extends VDom.Component {
   }
 
   checkPlay(): void {
-    if (this.state.playState) {
+    if (this.props.isPlay) {
       this.#player.play();
       return;
     }
@@ -82,13 +115,17 @@ class Player extends VDom.Component {
   }
 
   tooglePlay(): void {
-    this.setState({ playState: !this.state.playState });
-    this.checkPlay();
+    if(this.props.isPlay){
+      this.props.stop();
+      return;
+    }
+    this.props.play();
   }
 
   runNext(): void {
     this.setState({ trackFilled: 100, playState: true });
     this.#player.next();
+    this.props.setPos(this.#player.currentIndex);
     this.checkPlay();
   }
 
@@ -98,6 +135,7 @@ class Player extends VDom.Component {
       return;
     }
     this.#player.prev();
+    this.props.setPos(this.#player.currentIndex);
     this.checkPlay();
   }
 
@@ -115,11 +153,11 @@ class Player extends VDom.Component {
     }
     this.#player.analyser.getByteFrequencyData(currFreq);
     const barsHeight: Array<number> = [0, 0, 0, 0];
-    const hzStep: number = 24;
-    const lowFreq: Array<number> = [100, 700];
-    const midFreq: Array<number> = [1000, 3000];
+    const hzStep: number = 32;
+    const lowFreq: Array<number> = [500, 700];
+    const midFreq: Array<number> = [1000, 2500];
     const midUpFreq: Array<number> = [4000, 6000];
-    const highFreq: Array<number> = [7000, 10000];
+    const highFreq: Array<number> = [7000, 9000];
     const freqRanges: Array<Array<number>> = [lowFreq, midFreq, midUpFreq, highFreq];
 
     for (let i = 0; i < barsHeight.length; i += 1) {
@@ -181,18 +219,21 @@ class Player extends VDom.Component {
     };
     let volIcon: string;
     switch (true) {
-      case this.state.trackVolume === 0:
-        volIcon = 'fa-volume-xmark';
-        break;
-      case this.state.trackVolume < 25:
-        volIcon = 'fa-volume-off';
-        break;
-      case this.state.trackVolume < 60:
-        volIcon = 'fa-volume-low';
-        break;
-      default:
-        volIcon = 'fa-volume-high';
-        break;
+    case this.state.trackVolume === 0:
+      volIcon = 'fa-volume-xmark';
+      break;
+    case this.state.trackVolume < 25:
+      volIcon = 'fa-volume-off';
+      break;
+    case this.state.trackVolume < 60:
+      volIcon = 'fa-volume-low';
+      break;
+    default:
+      volIcon = 'fa-volume-high';
+      break;
+    }
+    if (!this.#player){
+      return (<div class="player"/>)
     }
     return (
       <div class="player">
@@ -214,7 +255,7 @@ class Player extends VDom.Component {
             <div class="fa-solid fa-backward-step"></div>
           </div>
           <div onclick={this.tooglePlay} class="control__play_pause">
-            {this.state.playState ? this.#pauseIcon : this.#playIcon}
+            {this.props.isPlay ? this.#pauseIcon : this.#playIcon}
           </div>
 
           <div onclick={this.runNext} class="control__next">
@@ -273,4 +314,24 @@ class Player extends VDom.Component {
   }
 }
 
-export default Player;
+// export default Player;
+const mapDispatchToProps = (dispatch: any): Map =>({
+  setPos:  (num: number):void => {
+    dispatch(setPosition(num))
+  },
+  play:  ():void => {
+    dispatch(startPlay)
+  },
+  stop:  ():void => {
+    dispatch(stopPlay)
+  }
+});
+
+const mapStateToProps = (state: any): Map => ({
+  playlist: state.playerPlaylist ? state.playerPlaylist:null,
+  position: state.playerPosition ? state.playerPosition.value : 0,
+  isPlay: state.playerPlay ? state.playerPlay.value : false,
+});
+
+const PlayerConnected = connect(mapStateToProps, mapDispatchToProps)(Player);
+export default PlayerConnected;

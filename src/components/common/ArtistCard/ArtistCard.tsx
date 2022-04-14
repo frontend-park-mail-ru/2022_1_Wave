@@ -2,10 +2,6 @@ import VDom from '../../../modules/VDom';
 import './ArtistCard.scss';
 
 export default class ArtistCard extends VDom.Component {
-  someHandler(): void {
-    console.log('hui');
-  }
-
   render = (): VDom.VirtualElement => {
     const { cover, name } = this.props;
     return (

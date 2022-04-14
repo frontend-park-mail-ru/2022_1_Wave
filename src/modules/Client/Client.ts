@@ -1,7 +1,7 @@
 export const config = {
   url: 'http://localhost:8080',
   csrfHeader: 'X-CSRF-TOKEN',
-  files: 'http://localhost/',
+  files: 'http://localhost:8080/',
 };
 
 export default class Client {

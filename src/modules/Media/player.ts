@@ -1,25 +1,11 @@
-// import soundfile from '../../music.mp3';
-
-// export const mySound = new Audio(soundfile);
-// mySound.preload = 'metadata';
-// const context = new AudioContext()
-// const track = context.createMediaElementSource(mySound)
-
-import { Dic } from './media';
+import {Dic, ITrack} from './media';
 import { config } from '../Client/Client';
 
-export type Track = {
-  title: string;
-  artist: string;
-  album: string;
-  src: string;
-  cover: string;
-};
 
 export class PlayerClass {
-  #playlist: Track[];
+  playlist: ITrack[];
 
-  #playlistIndex: number = 0;
+  currentIndex: number = 0;
 
   #playedCount: number = 0;
 
@@ -29,26 +15,27 @@ export class PlayerClass {
 
   audio: HTMLAudioElement;
 
-  currentTrack: Track;
+  currentTrack: ITrack;
 
   analyser: AnalyserNode;
 
   #audioCtx: AudioContext;
 
-  #mediaMetadata: MediaMetadata;
 
-  constructor(tracks: Track[] = [], initVolume: number = 0.5) {
-    console.log(tracks);
+  constructor(tracks: ITrack[] = [], initVolume: number = 0.5) {
     if (!tracks || tracks.length === 0) {
       return;
     }
-    this.#playlist = tracks;
-    this.currentTrack = this.#playlist[this.#playlistIndex];
+    this.playlist = tracks;
+    this.currentTrack = this.playlist[this.currentIndex];
     this.audio = new Audio(config.files + this.currentTrack.src);
+    this.audio.crossOrigin = "anonymous";
     this.audio.preload = 'metadata';
     this.audio.volume = initVolume;
     this.#audioCtx = new AudioContext();
     this.analyser = this.#audioCtx.createAnalyser();
+    this.analyser.maxDecibels = -10;
+    this.analyser.minDecibels = -80;
     this.analyser.fftSize = 2048;
     const source = this.#audioCtx.createMediaElementSource(this.audio);
     source.connect(this.analyser);
@@ -56,12 +43,21 @@ export class PlayerClass {
     this.#initMetadata(this.currentTrack);
   }
 
-  addTrack(track: Track): void {
-    this.#playlist.push(track);
+  updatePlaylist(tracks: ITrack[]):void{
+    this.audio.pause();
+    this.currentIndex = 0;
+    this.playlist = tracks;
+    this.currentTrack = this.playlist[this.currentIndex];
+    this.audio.src = config.files + this.currentTrack.src;
+    this.#initMetadata(this.currentTrack);
+  }
+
+  addTrack(track: ITrack): void {
+    this.playlist.push(track);
   }
 
   popTrack(): void {
-    this.#playlist.pop();
+    this.playlist.pop();
   }
 
   play(): void {
@@ -74,38 +70,50 @@ export class PlayerClass {
   }
 
   next(): void {
-    if (this.#playedCount > this.#playlist.length - 1) {
+    if (this.#playedCount > this.playlist.length - 1) {
       return;
     }
     if (this.isPlayRand) {
-      let idx: number = Math.trunc(Math.random() * this.#playlist.length);
+      let idx: number = Math.trunc(Math.random() * this.playlist.length);
       while (this.#randPlayed.hasOwnProperty(idx)) {
-        idx = Math.trunc(Math.random() * this.#playlist.length);
+        idx = Math.trunc(Math.random() * this.playlist.length);
       }
-      this.#randPlayed[idx] = this.#playlist[idx];
-      this.#playlistIndex = idx;
+      this.#randPlayed[idx] = this.playlist[idx];
+      this.currentIndex = idx;
     } else {
-      this.#playlistIndex += 1;
+      this.currentIndex += 1;
     }
     this.#playedCount += 1;
-    const nextTrack = this.#playlist[this.#playlistIndex];
+    const nextTrack = this.playlist[this.currentIndex];
+    this.audio.src = config.files + nextTrack.src;
+    this.currentTrack = nextTrack;
+    this.#updateMetadata(this.currentTrack);
+  }
+
+  setPosition(index:number):void{
+    if (this.#playedCount > this.playlist.length - 1) {
+      return;
+    }
+    this.#playedCount += 1;
+    this.currentIndex = index;
+    const nextTrack = this.playlist[this.currentIndex];
     this.audio.src = config.files + nextTrack.src;
     this.currentTrack = nextTrack;
     this.#updateMetadata(this.currentTrack);
   }
 
   prev(): void {
-    if (this.#playlistIndex === 0) {
+    if (this.currentIndex === 0) {
       return;
     }
-    this.#playlistIndex -= 1;
-    const prevTrack = this.#playlist[this.#playlistIndex];
+    this.currentIndex -= 1;
+    const prevTrack = this.playlist[this.currentIndex];
     this.audio.src = config.files + prevTrack.src;
     this.currentTrack = prevTrack;
     this.#updateMetadata(this.currentTrack);
   }
 
-  #updateMetadata(track: Track): void {
+  #updateMetadata(track: ITrack): void {
     if (!('mediaSession'! in navigator)) {
       return;
     }
@@ -133,7 +141,7 @@ export class PlayerClass {
     });
   }
 
-  #initMetadata(track: Track): void {
+  #initMetadata(track: ITrack): void {
     if (!('mediaSession' in navigator)) {
       return;
     }

@@ -42,7 +42,6 @@ export class Store {
   }
 
   dispatch(action: Function): void {
-    console.log('dispatch:', this);
     this.#state = this.#reducer(this.#state, action);
     this.#listeners.forEach((listener) => {
       listener(this.#state);

@@ -73,6 +73,7 @@ export default class Client {
       body: JSON.stringify(requestBody),
       headers: {
         [config.csrfHeader]: localStorage.getItem('csrf'),
+        'Content-Type': 'application/json',
       },
     })
         .then((response) => {

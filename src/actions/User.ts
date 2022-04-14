@@ -12,7 +12,7 @@ export function userGetSelf(): (dispatch: Function) => void {
   return (dispatch: Function): void => {
     user.getUser().then((payload: any) => {
       dispatch({ type: 'self/user', payload });
-    });
+    }).catch(() => ({type: 'self/user', payload: null}));
   }
 }
 

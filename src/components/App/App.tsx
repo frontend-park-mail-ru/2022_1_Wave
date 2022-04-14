@@ -50,7 +50,7 @@ class App extends VDom.Component {
 }
 
 const mapStateToProps = (state: any): Map => ({
-  user: state.user,
+  isAuth: state.user?.id != null,
 });
 
 const mapDispatchToProps = (dispatch: any): Map => ({

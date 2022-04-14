@@ -62,7 +62,7 @@ class SignupPage extends VDom.Component<any, any, null, RouteNavigator> {
   }
 
   render(): VDom.VirtualElement {
-    if (this.props.user) {
+    if (this.props.isAuth) {
       return <Redirect to='/' />
     }
 
@@ -156,7 +156,7 @@ class SignupPage extends VDom.Component<any, any, null, RouteNavigator> {
 
 
 const mapStateToProps = (state: any): Map => ({
-  user: state.user,
+  isAuth: state.user?.id != null,
 });
 
 const mapDispatchToProps = (dispatch: any): Map => ({

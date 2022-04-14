@@ -7,7 +7,7 @@ import avatar from '../../assets/avatar.jpeg';
 import { IProps } from '../../modules/VDom/Interfaces';
 import { validatePassword, validateUsername } from '../../utils/User';
 import { Map } from '../../modules/Store/types';
-import { updateSelf } from '../../actions/User';
+import {updateAvatar, updateSelf} from '../../actions/User';
 import { connect } from '../../modules/Connect';
 
 class PersonalPage extends VDom.Component {
@@ -30,19 +30,31 @@ class PersonalPage extends VDom.Component {
 
   submitForm(e: Event): void {
     e.preventDefault();
-    if (
-      !this.state.confirmPassword ||
-      !this.state.userNameChecked ||
-      !this.state.passwordChecked ||
-      !this.state.fileLoaded
-    ) {
+    const passwordCondition = (this.state.confirmPassword && this.state.passwordChecked);
+    const unameCondition = this.state.userNameChecked;
+    const fileCondition = this.state.fileLoaded;
+    console.log("password:",passwordCondition, "uname:",unameCondition,"file:",fileCondition )
+    if( !passwordCondition &&
+        !unameCondition &&
+        !fileCondition ){
       return;
     }
-    const formData = new FormData();
-    formData.append('username', e.target.username.value);
-    formData.append('password', e.target.password.value);
-    formData.append('avatar', e.target.avatar.files[0]);
-    this.props.updateUser(formData);
+    const newSet = {}
+    if(fileCondition){
+      const formData = new FormData();
+      formData.append('avatar', e.target.avatar.files[0]);
+      this.props.setNewAvatar(formData);
+    }
+    if(!passwordCondition && !unameCondition){
+      return;
+    }
+    if(unameCondition){
+      newSet.username = e.target.username.value;
+    }
+    if(passwordCondition){
+      newSet.password = e.target.password.value;
+    }
+    this.props.setNewUser(newSet);
   }
 
   tryAcceptUName(e: Event): void {
@@ -210,9 +222,12 @@ class PersonalPage extends VDom.Component {
 const mapStateToProps = (state: any): Map => ({});
 
 const mapDispatchToProps = (dispatch: any): Map => ({
-  updateUser: (form: any): void => {
+  setNewUser: (form: any): void => {
     dispatch(updateSelf(form));
   },
+  setNewAvatar: (form: any): void => {
+    dispatch(updateAvatar(form))
+  }
 });
 
 const PersonalConnected = connect(mapStateToProps, mapDispatchToProps)(PersonalPage);

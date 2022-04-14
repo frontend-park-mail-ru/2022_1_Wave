@@ -65,11 +65,31 @@ export default class Client {
       }));
   }
 
-  static put(path: string, requestBody: any) {
+  static patch(path: string, requestBody: any) {
     let status: any = null;
 
     return fetch(this.fullUrl(path), {
-      method: 'PUT',
+      method: 'PATCH',
+      body: JSON.stringify(requestBody),
+      headers: {
+        [config.csrfHeader]: localStorage.getItem('csrf'),
+      },
+    })
+        .then((response) => {
+          status = response.status;
+          return response.json().catch(() => null);
+        })
+        .then((body) => ({
+          status,
+          body,
+        }));
+  }
+
+  static patchForm(path: string, requestBody: any) {
+    let status: any = null;
+
+    return fetch(this.fullUrl(path), {
+      method: 'PATCH',
       body: requestBody,
       headers: {
         [config.csrfHeader]: localStorage.getItem('csrf'),

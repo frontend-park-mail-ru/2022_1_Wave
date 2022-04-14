@@ -7,7 +7,7 @@ interface ValidatableInputProps extends IComponentPropsCommon {
   type: string;
   placeholder: string;
   onInput?: (_e: InputEvent) => void;
-  class?: string,
+  class?: string;
   checker: (_value: string) => boolean;
   errorMessage: string;
 }

@@ -33,7 +33,7 @@ class SignupPage extends VDom.Component<any, any, null, RouteNavigator> {
   }
 
   isEqualToPassword(repeatPassword: string): boolean {
-    return  repeatPassword === this.passwordInputRef.instance.value;
+    return repeatPassword === this.passwordInputRef.instance.value;
   }
 
   additionalPasswordValidator(_e: InputEvent): void {
@@ -70,7 +70,7 @@ class SignupPage extends VDom.Component<any, any, null, RouteNavigator> {
 
   render(): VDom.VirtualElement {
     if (this.props.user) {
-      return <Redirect to='/' />
+      return <Redirect to="/" />;
     }
 
     return (
@@ -132,7 +132,7 @@ class SignupPage extends VDom.Component<any, any, null, RouteNavigator> {
               class="register-form__input-line"
               placeholder="Confirm password"
               checker={this.isEqualToPassword}
-              errorMessage={'Passwords don\'t match'}
+              errorMessage={"Passwords don't match"}
             />
           </div>
 
@@ -159,8 +159,7 @@ class SignupPage extends VDom.Component<any, any, null, RouteNavigator> {
       </div>
     );
   }
-};
-
+}
 
 const mapStateToProps = (state: any): Map => ({
   user: state.user,

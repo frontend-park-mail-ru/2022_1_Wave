@@ -7,7 +7,12 @@ interface RedirectProps extends IComponentPropsCommon {
   to: string;
 }
 
-export default class Redirect extends VDom.Component<RedirectProps, any, any, RouteNavigator | null> {
+export default class Redirect extends VDom.Component<
+  RedirectProps,
+  any,
+  any,
+  RouteNavigator | null
+> {
   static contextType = RouterContext;
 
   render(): VDom.VirtualElement {

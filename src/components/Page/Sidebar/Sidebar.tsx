@@ -4,7 +4,7 @@ import '../../../index.css';
 import logo from '../../../assets/logo_img.png';
 import Navigation from './Navigation/Navigation';
 import Link from '../../../modules/Router/Link';
-import PlaylistConnected from "./Playlist/Playlist";
+import PlaylistConnected from './Playlist/Playlist';
 
 export default class Sidebar extends VDom.Component {
   render = (): VDom.VirtualElement => {
@@ -28,7 +28,7 @@ export default class Sidebar extends VDom.Component {
           </Link>
         </div>
         {content}
-        <PlaylistConnected/>
+        <PlaylistConnected />
       </div>
     );
   };

@@ -1,6 +1,5 @@
-import {Dic, ITrack} from './media';
+import { Dic, ITrack } from './media';
 import { config } from '../Client/Client';
-
 
 export class PlayerClass {
   playlist: ITrack[];
@@ -21,7 +20,6 @@ export class PlayerClass {
 
   #audioCtx: AudioContext;
 
-
   constructor(tracks: ITrack[] = [], initVolume: number = 0.5) {
     if (!tracks || tracks.length === 0) {
       return;
@@ -29,7 +27,7 @@ export class PlayerClass {
     this.playlist = tracks;
     this.currentTrack = this.playlist[this.currentIndex];
     this.audio = new Audio(config.files + this.currentTrack.src);
-    this.audio.crossOrigin = "anonymous";
+    this.audio.crossOrigin = 'anonymous';
     this.audio.preload = 'metadata';
     this.audio.volume = initVolume;
     this.#audioCtx = new AudioContext();
@@ -43,7 +41,7 @@ export class PlayerClass {
     this.#initMetadata(this.currentTrack);
   }
 
-  updatePlaylist(tracks: ITrack[]):void{
+  updatePlaylist(tracks: ITrack[]): void {
     this.audio.pause();
     this.currentIndex = 0;
     this.playlist = tracks;
@@ -90,7 +88,7 @@ export class PlayerClass {
     this.#updateMetadata(this.currentTrack);
   }
 
-  setPosition(index:number):void{
+  setPosition(index: number): void {
     if (this.#playedCount > this.playlist.length - 1) {
       return;
     }

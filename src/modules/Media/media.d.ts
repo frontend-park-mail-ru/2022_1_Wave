@@ -26,9 +26,9 @@ export interface IPlayerClass {
 
   popTrack(): void;
 
-  setPosition(index: number):void;
+  setPosition(index: number): void;
 
-  updatePlaylist(tracks: ITrack[]):void;
+  updatePlaylist(tracks: ITrack[]): void;
 
   play(): void;
 

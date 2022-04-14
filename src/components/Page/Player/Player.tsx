@@ -6,9 +6,9 @@ import { IPlayerClass } from '../../../modules/Media/media';
 import { IProps } from '../../../modules/VDom/Interfaces';
 import { PlayerClass } from '../../../modules/Media/player';
 import { config } from '../../../modules/Client/Client';
-import {Map} from "../../../modules/Store/types";
-import {connect} from "../../../modules/Connect";
-import {setPosition, startPlay, stopPlay} from "../../../actions/Player";
+import { Map } from '../../../modules/Store/types';
+import { connect } from '../../../modules/Connect';
+import { setPosition, startPlay, stopPlay } from '../../../actions/Player';
 
 class Player extends VDom.Component {
   #player: IPlayerClass;
@@ -51,39 +51,41 @@ class Player extends VDom.Component {
     this.props.stop();
   }
 
-  didUpdate():void {
-    console.log("update!!");
-    if(!this.#player) {
+  didUpdate(): void {
+    console.log('update!!');
+    if (!this.#player) {
       this.initPlayer();
       return;
     }
-    if( this.#player.playlist !== this.props.playlist) {
-      this.setState({trackTime:0,trackFilled:0,trackFetched:0,trackBuffered:0});
+    if (this.#player.playlist !== this.props.playlist) {
+      this.setState({ trackTime: 0, trackFilled: 0, trackFetched: 0, trackBuffered: 0 });
       this.#player.updatePlaylist(this.props.playlist);
       this.props.setPos(0);
     }
-    if( typeof this.props.position === 'number' &&
-        this.#player.currentIndex !== this.props.position){
+    if (
+      typeof this.props.position === 'number' &&
+      this.#player.currentIndex !== this.props.position
+    ) {
       this.#player.setPosition(this.props.position);
     }
-    if ( this.#player && this.#player.audio.paused === this.props.isPlay){
+    if (this.#player && this.#player.audio.paused === this.props.isPlay) {
       this.checkPlay();
     }
   }
 
-  didMount():void {
-    if(!this.#player && this.props.playlist && this.props.playlist.length > 0){
+  didMount(): void {
+    if (!this.#player && this.props.playlist && this.props.playlist.length > 0) {
       this.initPlayer();
     }
   }
 
-  initPlayer():void{
+  initPlayer(): void {
     this.#player = new PlayerClass(this.props.playlist);
     const freqArray = this.#player.analyser
       ? new Uint8Array(this.#player.analyser.frequencyBinCount)
       : null;
     const volume = this.#player.audio ? this.#player.audio.volume : 0.5;
-    this.setState({trackVolume:volume*100,freqArray})
+    this.setState({ trackVolume: volume * 100, freqArray });
     if (this.#player.audio) {
       this.#player.audio.addEventListener('timeupdate', this.timeUpdater);
       this.#player.audio.addEventListener('progress', this.fetchedUpdater);
@@ -115,7 +117,7 @@ class Player extends VDom.Component {
   }
 
   tooglePlay(): void {
-    if(this.props.isPlay){
+    if (this.props.isPlay) {
       this.props.stop();
       return;
     }
@@ -219,21 +221,21 @@ class Player extends VDom.Component {
     };
     let volIcon: string;
     switch (true) {
-    case this.state.trackVolume === 0:
-      volIcon = 'fa-volume-xmark';
-      break;
-    case this.state.trackVolume < 25:
-      volIcon = 'fa-volume-off';
-      break;
-    case this.state.trackVolume < 60:
-      volIcon = 'fa-volume-low';
-      break;
-    default:
-      volIcon = 'fa-volume-high';
-      break;
+      case this.state.trackVolume === 0:
+        volIcon = 'fa-volume-xmark';
+        break;
+      case this.state.trackVolume < 25:
+        volIcon = 'fa-volume-off';
+        break;
+      case this.state.trackVolume < 60:
+        volIcon = 'fa-volume-low';
+        break;
+      default:
+        volIcon = 'fa-volume-high';
+        break;
     }
-    if (!this.#player){
-      return (<div class="player"/>)
+    if (!this.#player) {
+      return <div class="player" />;
     }
     return (
       <div class="player">
@@ -315,20 +317,20 @@ class Player extends VDom.Component {
 }
 
 // export default Player;
-const mapDispatchToProps = (dispatch: any): Map =>({
-  setPos:  (num: number):void => {
-    dispatch(setPosition(num))
+const mapDispatchToProps = (dispatch: any): Map => ({
+  setPos: (num: number): void => {
+    dispatch(setPosition(num));
   },
-  play:  ():void => {
-    dispatch(startPlay)
+  play: (): void => {
+    dispatch(startPlay);
   },
-  stop:  ():void => {
-    dispatch(stopPlay)
-  }
+  stop: (): void => {
+    dispatch(stopPlay);
+  },
 });
 
 const mapStateToProps = (state: any): Map => ({
-  playlist: state.playerPlaylist ? state.playerPlaylist:null,
+  playlist: state.playerPlaylist ? state.playerPlaylist : null,
   position: state.playerPosition ? state.playerPosition.value : 0,
   isPlay: state.playerPlay ? state.playerPlay.value : false,
 });

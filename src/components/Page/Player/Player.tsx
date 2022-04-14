@@ -52,7 +52,6 @@ class Player extends VDom.Component {
   }
 
   didUpdate(): void {
-    console.log('update!!');
     if (!this.#player) {
       this.initPlayer();
       return;
@@ -74,6 +73,7 @@ class Player extends VDom.Component {
   }
 
   didMount(): void {
+    this.props.setPos(0);
     if (!this.#player && this.props.playlist && this.props.playlist.length > 0) {
       this.initPlayer();
     }

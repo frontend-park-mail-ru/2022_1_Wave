@@ -4,7 +4,7 @@ import './Navigation.scss';
 
 export default class Navigation extends VDom.Component {
   render = (): VDom.VirtualElement => (
-    <div class="nav-block">
+    <div onclick={this.props.clickHandler} class="nav-block">
       <div class="nav-block__icon__wrapper">
         <div class="fa-brands fa-itunes-note icon__wrapper__icon-fa"></div>
         <div class="icon__wrapper__icon-default"></div>

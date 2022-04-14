@@ -1,5 +1,4 @@
 import './App.scss';
-import PageConnected from '../Page/Page';
 import Homepage from '../Homepage/Homepage';
 import VDom from '../../modules/VDom';
 import { createStore } from '../../modules/Store/store';
@@ -11,6 +10,7 @@ import LoginPage from '../LoginPage/LoginPage';
 import SignupPage from '../SignupPage/SignupPage';
 import ArtistConnected from '../ArtistPage/ArtistPage';
 import PersonalConnected from '../PersonalPage/PersonalPage';
+import Page from '../Page/Page';
 
 const store = createStore();
 
@@ -27,7 +27,7 @@ export default class App extends VDom.Component {
               <SignupPage isSignup={true} />
             </Route>
             <Route to="/">
-              <PageConnected
+              <Page
                 isAuthorized={true}
                 content={
                   <RouteSwitch>

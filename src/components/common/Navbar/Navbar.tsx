@@ -31,7 +31,7 @@ class Navbar extends Component {
           <img
             onClick={this.logout}
             class="navbar__avatar__img_round"
-            src={avatar}
+            src={this.props.user.avatar ?? avatar}
             alt="avatar.png"
           />
           <div class="popup">
@@ -81,6 +81,7 @@ class Navbar extends Component {
 
 const mapStateToProps = (state: any): Map => ({
   isAuth: state.user?.id != null,
+  user: state.user ?? {},
 });
 
 const mapDispatchToProps = (dispatch: any): Map => ({

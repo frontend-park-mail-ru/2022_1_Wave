@@ -3,11 +3,7 @@ import Route from './Route';
 import RouteNavigator from './RouteNavigator';
 import RouterContext from './RouterContext';
 import match from './match';
-
-type RouteProps = {
-  to: string;
-  exact: boolean;
-};
+import RouteProps from './RouteProps';
 
 export default class RouteSwitch extends VDom.Component<any, any, any, RouteNavigator | null> {
   static contextType = RouterContext;
@@ -40,7 +36,7 @@ export default class RouteSwitch extends VDom.Component<any, any, any, RouteNavi
       const route = child as VDom.VirtualElement;
       const { to: path, exact: isExact } = route.props as RouteProps;
 
-      const matchResult = match(path, navigator.unhandledPath, isExact);
+      const matchResult = match(path, navigator.unhandledPath, isExact ?? false);
 
       if (matchResult) {
         const { params, handled, rest } = matchResult;

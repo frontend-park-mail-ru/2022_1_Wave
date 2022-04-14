@@ -197,6 +197,7 @@ function patchNode(args: {
             const prevProps = component.props;
             component.setProps({
               ...newVNode.props,
+              ref: newVNode.ref,
               parentDomNode,
               leftSibling,
               vNode: newVNode,
@@ -214,6 +215,7 @@ function patchNode(args: {
         if (!componentAlreadyExists) {
           component = new (newVNode.type as new (props: any) => Component)({
             ...newVNode.props,
+            ref: newVNode.ref,
             parentDomNode,
             leftSibling,
             vNode: newVNode,

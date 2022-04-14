@@ -68,7 +68,12 @@ export default class User {
       if (response.status !== 200) {
         return Promise.reject(response.body);
       }
-      return response.body;
+      return User.getUser();
+    }).then((body: any) => {
+      if (body.status !== 200) {
+        return Promise.reject(body.result);
+      }
+      return body.result;
     });
   }
 
@@ -86,7 +91,12 @@ export default class User {
       if (response.status !== 200) {
         return Promise.reject(response.body);
       }
-      return response.body;
+      return User.getUser();
+    }).then((body: any) => {
+      if (body.status !== 'OK') {
+        return Promise.reject(body.result);
+      }
+      return body.result;
     });
   }
 

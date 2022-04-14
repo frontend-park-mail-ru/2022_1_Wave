@@ -4,8 +4,6 @@ interface Decorator {
 }
 
 export function Debounce(ms: number): Decorator {
-  let timeoutID: NodeJS.Timeout | null = null;
-
   // eslint-disable-next-line func-names
   return function (
     target: any,
@@ -15,15 +13,17 @@ export function Debounce(ms: number): Decorator {
     const originalFunc = descriptor.value;
 
     // eslint-disable-next-line no-param-reassign
-    descriptor.value = function (...args: any) {
-      if (timeoutID != null) {
-        clearTimeout(timeoutID);
+    descriptor.value = function decorated(...args: any): void {
+      if ((decorated as any).timeoutID != null) {
+        clearTimeout(descriptor.value.timeoutID);
       }
 
-      timeoutID = setTimeout((): void => {
+      (originalFunc as any).timeoutID = setTimeout((): void => {
         originalFunc.apply(this, args);
+        (originalFunc as any).timeoutID = null;
       }, ms);
     };
+    (originalFunc as any).timeoutID = null;
 
     return descriptor;
   };

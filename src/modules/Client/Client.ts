@@ -94,7 +94,7 @@ export default class Client {
       body: requestBody,
       headers: {
         [config.csrfHeader]: localStorage.getItem('csrf'),
-        "Content-Type": "multipart/form-data; boundary=------------------------" + boundary,
+        enctype:"multipart/form-data",
       },
     })
       .then((response) => {

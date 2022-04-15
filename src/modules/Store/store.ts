@@ -35,8 +35,15 @@ export class Store {
     return this.#state;
   }
 
-  subscribe(listener: (key: any) => void): void {
+  subscribe(listener: (key: any) => void): () => void {
     this.#listeners.push(listener);
+
+    return () => {
+      const removeIdx = this.#listeners.indexOf(listener);
+      if (removeIdx >= 0) {
+        this.#listeners.splice(removeIdx, 1);
+      }
+    }
   }
 
   dispatch(action: Function): void {

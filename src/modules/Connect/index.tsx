@@ -23,15 +23,23 @@ export function connect<Props, State, Snapshot, ContextValue>(
     class Connect extends VDom.Component<Props, Map, Snapshot, Store> {
       static contextType = StoreContext;
 
+      private unsubscribe: () => void;
+
       constructor(props: Props) {
         super(props);
         this.state = this.context.getState();
       }
 
       didMount(): void {
-        this.context.subscribe((state: any): void => {
+        this.unsubscribe =  this.context.subscribe((state: any): void => {
           this.setState(state);
         });
+      }
+
+      willUmount(): void {
+        if (this.unsubscribe) {
+          this.unsubscribe();
+        }
       }
 
       render(): VDom.VirtualElement {

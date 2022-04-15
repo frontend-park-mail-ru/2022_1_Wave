@@ -9,11 +9,9 @@ import PopularConnected from './Popular/Popular';
 
 export default class Homepage extends Component {
   render = (): VirtualElement => {
-    const { isAuthorized } = this.props;
-
     return (
       <div class="main__page">
-        <Navbar isAuthorized={isAuthorized} />
+        <Navbar />
         <div class="main__top-chart__album">
           <div class="main__top-chart__album__name">
             <div class="text main__top-chart__album__name">Flume: Skin</div>

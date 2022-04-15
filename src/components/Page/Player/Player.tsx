@@ -179,8 +179,10 @@ class Player extends VDom.Component {
   }
 
   fetchedUpdater(): void {
-    const fetchedEnd = this.#player.audio.buffered.end(this.#player.audio.buffered.length - 1);
-    this.setState({ trackBuffered: (fetchedEnd / this.#player.audio.duration) * 100 });
+    if(this.#player.audio.buffered.length > 0) {
+      const fetchedEnd = this.#player.audio.buffered.end(this.#player.audio.buffered.length - 1);
+      this.setState({trackBuffered: (fetchedEnd / this.#player.audio.duration) * 100});
+    }
   }
 
   setTime(e: MouseEvent): void {

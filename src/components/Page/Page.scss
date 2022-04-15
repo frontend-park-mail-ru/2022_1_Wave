@@ -5,7 +5,7 @@
 
 .content {
   position: absolute;
-  width: calc(100% - 340px);
+  width: calc(100% - 330px);
   box-sizing: border-box;
   display: inline-flex;
   flex-direction: column;
@@ -23,6 +23,8 @@ body {
   width: 100%;
   overflow-x: hidden;
   overflow-y: hidden;
+  margin-top: 0px;
+  margin-left: 0px;
 }
 
 html {

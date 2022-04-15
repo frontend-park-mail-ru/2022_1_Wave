@@ -68,6 +68,9 @@ export default class RouteSwitch extends VDom.Component<any, any, any, RouteNavi
       throw Error('RouteSwitch no match');
     }
 
+    console.log(this.props.children[this.toRenderIdx]);
+    console.log(navigator);
+
     return (
       <RouterContext.Provider value={navigator}>
         {this.props.children[this.toRenderIdx]}

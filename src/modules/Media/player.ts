@@ -38,7 +38,7 @@ export class PlayerClass {
     const source = this.#audioCtx.createMediaElementSource(this.audio);
     source.connect(this.analyser);
     this.analyser.connect(this.#audioCtx.destination);
-    this.#initMetadata(this.currentTrack);
+    this.#updateMetadata(this.currentTrack);
   }
 
   updatePlaylist(tracks: ITrack[]): void {
@@ -47,7 +47,7 @@ export class PlayerClass {
     this.playlist = tracks;
     this.currentTrack = this.playlist[this.currentIndex];
     this.audio.src = config.files + this.currentTrack.src;
-    this.#initMetadata(this.currentTrack);
+    this.#updateMetadata(this.currentTrack);
   }
 
   addTrack(track: ITrack): void {
@@ -92,7 +92,6 @@ export class PlayerClass {
     if (this.currentIndex > this.playlist.length - 1) {
       return;
     }
-    //this.#playedCount += 1;
     this.currentIndex = index;
     const nextTrack = this.playlist[this.currentIndex];
     this.audio.src = config.files + nextTrack.src;
@@ -139,24 +138,5 @@ export class PlayerClass {
     });
   }
 
-  #initMetadata(track: ITrack): void {
-    if (!('mediaSession' in navigator)) {
-      return;
-    }
-    this.#updateMetadata(track);
-    navigator.mediaSession.setActionHandler('play', () => {
-      this.play();
-    });
-    navigator.mediaSession.setActionHandler('pause', () => {
-      this.stop();
-    });
 
-    navigator.mediaSession.setActionHandler('previoustrack', () => {
-      this.prev();
-    });
-
-    navigator.mediaSession.setActionHandler('nexttrack', () => {
-      this.next();
-    });
-  }
 }

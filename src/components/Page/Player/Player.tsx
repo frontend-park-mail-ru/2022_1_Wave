@@ -155,8 +155,8 @@ class Player extends VDom.Component {
     }
     this.#player.analyser.getByteFrequencyData(currFreq);
     const barsHeight: Array<number> = [0, 0, 0, 0];
-    const hzStep: number = 12;
-    const lowFreq: Array<number> = [500, 700];
+    const hzStep: number = 24;
+    const lowFreq: Array<number> = [0, 700];
     const midFreq: Array<number> = [1000, 2500];
     const midUpFreq: Array<number> = [4000, 6000];
     const highFreq: Array<number> = [7000, 9000];

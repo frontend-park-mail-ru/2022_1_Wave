@@ -2,13 +2,13 @@ import './Player.scss';
 import VDom from '../../../modules/VDom';
 import '../../App/App.scss';
 import marker from '../../../assets/player_marker.png';
-import { IPlayerClass } from '../../../modules/Media/media';
-import { IProps } from '../../../modules/VDom/Interfaces';
-import { PlayerClass } from '../../../modules/Media/player';
-import { config } from '../../../modules/Client/Client';
-import { Map } from '../../../modules/Store/types';
-import { connect } from '../../../modules/Connect';
-import { setPosition, startPlay, stopPlay } from '../../../actions/Player';
+import {IPlayerClass} from '../../../modules/Media/media';
+import {IProps} from '../../../modules/VDom/Interfaces';
+import {PlayerClass} from '../../../modules/Media/player';
+import {config} from '../../../modules/Client/Client';
+import {Map} from '../../../modules/Store/types';
+import {connect} from '../../../modules/Connect';
+import {setPosition, startPlay, stopPlay} from '../../../actions/Player';
 
 class Player extends VDom.Component {
   #player: IPlayerClass;
@@ -34,6 +34,8 @@ class Player extends VDom.Component {
       },
       freqArray: [],
       waveHeights: [0, 0, 0, 0],
+      isPlayerDragged: false,
+      isVolumeDragged: false,
     };
     this.initPlayer = this.initPlayer.bind(this);
     this.loadTrackData = this.loadTrackData.bind(this);
@@ -48,6 +50,7 @@ class Player extends VDom.Component {
     this.setVolume = this.setVolume.bind(this);
     this.toogleShuffle = this.toogleShuffle.bind(this);
     this.toogleMute = this.toogleMute.bind(this);
+    this.setPlayerDrag = this.setPlayerDrag.bind(this);
     this.props.stop();
   }
 
@@ -57,13 +60,13 @@ class Player extends VDom.Component {
       return;
     }
     if (this.#player.playlist !== this.props.playlist) {
-      this.setState({ trackTime: 0, trackFilled: 0, trackFetched: 0, trackBuffered: 0 });
+      this.setState({trackTime: 0, trackFilled: 0, trackFetched: 0, trackBuffered: 0});
       this.#player.updatePlaylist(this.props.playlist);
       this.props.setPos(0);
     }
     if (
       typeof this.props.position === 'number' &&
-      this.#player.currentIndex !== this.props.position
+            this.#player.currentIndex !== this.props.position
     ) {
       this.#player.setPosition(this.props.position);
     }
@@ -85,7 +88,7 @@ class Player extends VDom.Component {
       ? new Uint8Array(this.#player.analyser.frequencyBinCount)
       : null;
     const volume = this.#player.audio ? this.#player.audio.volume : 0.5;
-    this.setState({ trackVolume: volume * 100, freqArray });
+    this.setState({trackVolume: volume * 100, freqArray});
     if (this.#player.audio) {
       this.#player.audio.addEventListener('timeupdate', this.timeUpdater);
       this.#player.audio.addEventListener('progress', this.fetchedUpdater);
@@ -125,17 +128,13 @@ class Player extends VDom.Component {
   }
 
   runNext(): void {
-    this.setState({ trackFilled: 100, playState: true });
+    this.setState({trackFilled: 100, playState: true});
     this.#player.next();
     this.props.setPos(this.#player.currentIndex);
     this.checkPlay();
   }
 
   runPrev(): void {
-    // if (this.#player.audio.currentTime !== 0) {
-    //   this.#player.audio.currentTime = 0;
-    //   return;
-    // }
     this.#player.prev();
     this.props.setPos(this.#player.currentIndex);
     this.checkPlay();
@@ -145,7 +144,7 @@ class Player extends VDom.Component {
     this.fetchedUpdater(e);
     this.updateWaveFront();
     const filled = (this.#player.audio.currentTime / this.#player.audio.duration) * 100;
-    this.setState({ trackTime: this.#player.audio.currentTime, trackFilled: filled });
+    this.setState({trackTime: this.#player.audio.currentTime, trackFilled: filled});
   }
 
   updateWaveFront(): void {
@@ -175,31 +174,57 @@ class Player extends VDom.Component {
       const interpolated = sum / elNums;
       barsHeight[i] = (interpolated / 256) * 100;
     }
-    this.setState({ freqArray: currFreq, waveHeights: barsHeight });
+    this.setState({freqArray: currFreq, waveHeights: barsHeight});
   }
 
   fetchedUpdater(): void {
     if (this.#player.audio.buffered.length > 0) {
       const fetchedEnd = this.#player.audio.buffered.end(this.#player.audio.buffered.length - 1);
-      this.setState({ trackBuffered: (fetchedEnd / this.#player.audio.duration) * 100 });
+      this.setState({trackBuffered: (fetchedEnd / this.#player.audio.duration) * 100});
     }
   }
 
   setTime(e: MouseEvent): void {
+    if ((e.type === 'mousemove' || e.type === 'touchmove') && !this.state.isPlayerDragged) {
+      return;
+    }
     const relativePosition = this.getRelativePosition(e);
     this.#player.audio.currentTime = relativePosition * this.#player.audio.duration;
   }
 
+  setPlayerDrag(e: Event): void {
+    let target = 'isPlayerDragged';
+    if (e.currentTarget.className === 'volume__state__marker') {
+      target = 'isVolumeDragged';
+    }
+    const state: Map = {};
+    switch (e.type) {
+    case 'mousedown':
+      state[target] = true;
+      break;
+    case 'touchstart':
+      state[target] = true;
+      break;
+    default:
+      state[target] = false;
+    }
+    this.setState(state);
+  }
+
   setVolume(e: MouseEvent): void {
+    if ((e.type === 'mousemove' || 'touchmove') && !this.state.isVolumeDragged) {
+      return;
+    }
     const relativePosition = this.getRelativePosition(e);
-    this.setState({ trackVolume: relativePosition * 100 });
+    this.setState({trackVolume: relativePosition * 100});
     this.#player.audio.volume = relativePosition;
   }
 
   getRelativePosition(e: MouseEvent): number {
     e.preventDefault();
     const rect = e.currentTarget.getBoundingClientRect();
-    const relativePosition = (e.x - rect.left) / (rect.right - rect.left);
+    const x = e.touches ? e.touches[0].clientX : e.clientX;
+    const relativePosition = (x - rect.left) / (rect.right - rect.left);
     if (relativePosition < 0) {
       return 0;
     }
@@ -208,44 +233,48 @@ class Player extends VDom.Component {
 
   toogleShuffle(): void {
     this.#player.isPlayRand = !this.#player.isPlayRand;
-    this.setState({ playRand: this.#player.isPlayRand });
+    this.setState({playRand: this.#player.isPlayRand});
   }
 
-  toogleMute(): void {
+  toogleMute()
+        :
+        void {
     this.#player.audio.volume = this.state.trackVolume > 0 ? 0 : 0.5;
-    this.setState({ trackVolume: this.state.trackVolume > 0 ? 0 : 50 });
+    this.setState({trackVolume: this.state.trackVolume > 0 ? 0 : 50});
   }
 
-  render(): VDom.VirtualElement {
+  render()
+        :
+        VDom.VirtualElement {
     const formatInt = (n: number): string => {
       const res = Math.trunc(n).toString();
       return n >= 10 ? res : `0${res}`;
     };
     let volIcon: string;
     switch (true) {
-      case this.state.trackVolume === 0:
-        volIcon = 'fa-volume-xmark';
-        break;
-      case this.state.trackVolume < 25:
-        volIcon = 'fa-volume-off';
-        break;
-      case this.state.trackVolume < 60:
-        volIcon = 'fa-volume-low';
-        break;
-      default:
-        volIcon = 'fa-volume-high';
-        break;
+    case this.state.trackVolume === 0:
+      volIcon = 'fa-volume-xmark';
+      break;
+    case this.state.trackVolume < 25:
+      volIcon = 'fa-volume-off';
+      break;
+    case this.state.trackVolume < 60:
+      volIcon = 'fa-volume-low';
+      break;
+    default:
+      volIcon = 'fa-volume-high';
+      break;
     }
     if (!this.#player) {
-      return <div class="player" />;
+      return <div class="player"/>;
     }
     return (
       <div class="player">
         <div class="player__waves">
-          <div class="bar" id="1" style={{ height: `${this.state.waveHeights[0]}%` }}></div>
-          <div class="bar" id="2" style={{ height: `${this.state.waveHeights[1]}%` }}></div>
-          <div class="bar" id="3" style={{ height: `${this.state.waveHeights[2]}%` }}></div>
-          <div class="bar" id="4" style={{ height: `${this.state.waveHeights[3]}%` }}></div>
+          <div class="bar" id="1" style={{height: `${this.state.waveHeights[0]}%`}}></div>
+          <div class="bar" id="2" style={{height: `${this.state.waveHeights[1]}%`}}></div>
+          <div class="bar" id="3" style={{height: `${this.state.waveHeights[2]}%`}}></div>
+          <div class="bar" id="4" style={{height: `${this.state.waveHeights[3]}%`}}></div>
         </div>
         <div class="player__track">
           <img class="track__picture" src={this.state.trackData.cover}></img>
@@ -268,24 +297,33 @@ class Player extends VDom.Component {
         </div>
         <div class="player__progressbar">
           <div
-            class="progressbar"
             onclick={this.setTime}
-            ondrag={this.setTime}
-            ondragend={this.setTime}
-          >
-            <div
-              class="progressbar__prefetched"
-              style={{ width: `${this.state.trackBuffered.toString()}%` }}
-            ></div>
-            <div class="progressbar__state">
+            onmousemove={this.setTime}
+            ontouchmove={this.setTime}
+            onmouseleave={this.setPlayerDrag}
+            class="progressbar__wrapper">
+            <div class="progressbar">
               <div
-                class="progressbar__state__line"
-                style={{ width: `${this.state.trackFilled.toString()}%` }}
+                class="progressbar__prefetched"
+                style={{width: `${this.state.trackBuffered.toString()}%`}}
               ></div>
-              <div
-                class="progressbar__state__marker"
-                style={{ 'background-image': `url("${marker}")` }}
-              ></div>
+              <div class="progressbar__state">
+                <div
+                  class="progressbar__state__line"
+                  style={{width: `${this.state.trackFilled.toString()}%`}}
+                ></div>
+                <div draggable={false}
+                  onmousedown={this.setPlayerDrag}
+                  onmouseup={this.setPlayerDrag}
+                  ontouchstart={this.setPlayerDrag}
+                  ontouchend={this.setPlayerDrag}
+                  class="progressbar__state__marker">
+                  <div
+                    class="marker__img"
+                    style={{'background-image': `url("${marker}")`}}
+                  />
+                </div>
+              </div>
             </div>
           </div>
           <div class="text player__progressbar__time">
@@ -296,21 +334,29 @@ class Player extends VDom.Component {
         <div onclick={this.toogleShuffle} class="player__shuffle">
           <div
             class="fa-solid fa-shuffle"
-            style={{ color: this.state.playRand ? '#5D4099' : '#BEB7DF' }}
+            style={{color: this.state.playRand ? '#5D4099' : '#BEB7DF'}}
           ></div>
         </div>
         <div class="player__volume">
           <div onclick={this.toogleMute} class={`fa-solid ${volIcon} volume__icon`}></div>
           <div
-            class="volume__input"
             onclick={this.setVolume}
-            ondrag={this.setVolume}
-            ondragend={this.setVolume}
-          >
-            <div
-              class="volume__input__state"
-              style={{ width: `${this.state.trackVolume.toString()}%` }}
-            ></div>
+            onmousemove={this.setVolume}
+            ontouchmove={this.setVolume}
+            onmouseleave={this.setPlayerDrag}
+            class="volume__wrapper">
+            <div class="volume__input">
+              <div
+                class="volume__input__state"
+                style={{width: `${this.state.trackVolume.toString()}%`}}
+              ></div>
+              <div
+                onmousedown={this.setPlayerDrag}
+                onmouseup={this.setPlayerDrag}
+                ontouchstart={this.setPlayerDrag}
+                ontouchend={this.setPlayerDrag}
+                class="volume__state__marker"></div>
+            </div>
           </div>
         </div>
       </div>
@@ -319,23 +365,26 @@ class Player extends VDom.Component {
 }
 
 // export default Player;
-const mapDispatchToProps = (dispatch: any): Map => ({
-  setPos: (num: number): void => {
-    dispatch(setPosition(num));
-  },
-  play: (): void => {
-    dispatch(startPlay);
-  },
-  stop: (): void => {
-    dispatch(stopPlay);
-  },
-});
+const
+  mapDispatchToProps = (dispatch: any): Map => ({
+    setPos: (num: number): void => {
+      dispatch(setPosition(num));
+    },
+    play: (): void => {
+      dispatch(startPlay);
+    },
+    stop: (): void => {
+      dispatch(stopPlay);
+    },
+  });
 
-const mapStateToProps = (state: any): Map => ({
-  playlist: state.playerPlaylist ? state.playerPlaylist : null,
-  position: state.playerPosition ? state.playerPosition.value : 0,
-  isPlay: state.playerPlay ? state.playerPlay.value : false,
-});
+const
+  mapStateToProps = (state: any): Map => ({
+    playlist: state.playerPlaylist ? state.playerPlaylist : null,
+    position: state.playerPosition ? state.playerPosition.value : 0,
+    isPlay: state.playerPlay ? state.playerPlay.value : false,
+  });
 
-const PlayerConnected = connect(mapStateToProps, mapDispatchToProps)(Player);
+const
+  PlayerConnected = connect(mapStateToProps, mapDispatchToProps)(Player);
 export default PlayerConnected;

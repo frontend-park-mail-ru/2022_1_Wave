@@ -5,6 +5,7 @@ $hoverColor: #37b8d6;
   overflow: hidden;
   padding-left: 0;
   margin-top: 20px;
+  margin-left: 10px;
   .track-block__number {
     color: #6d7184;
     letter-spacing: 0.055em;
@@ -55,8 +56,14 @@ $hoverColor: #37b8d6;
 
 .track-block_current {
   background: #37b8d6;
-  width: 90%;
   border-radius: 10px;
+  width: 90%;
+  margin-left: 5px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  .track-block__number {
+    margin-left: 5px;
+  }
   &:hover {
     cursor: pointer;
     .track-block__number {

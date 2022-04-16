@@ -18,7 +18,7 @@ export default class AlbumCard extends VDom.Component {
     const { cover, title, artist } = this.props;
 
     return (
-      <div class="album">
+      <div onclick={this.props.onClick} class="album">
         <img class="album__image" src={cover} />
         <div class="text album__title">{title}</div>
         <div class="text album__artist">{artist}</div>

@@ -43,7 +43,7 @@ export class Store {
       if (removeIdx >= 0) {
         this.#listeners.splice(removeIdx, 1);
       }
-    }
+    };
   }
 
   dispatch(action: Function): void {

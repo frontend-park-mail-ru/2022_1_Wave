@@ -179,9 +179,9 @@ class Player extends VDom.Component {
   }
 
   fetchedUpdater(): void {
-    if(this.#player.audio.buffered.length > 0) {
+    if (this.#player.audio.buffered.length > 0) {
       const fetchedEnd = this.#player.audio.buffered.end(this.#player.audio.buffered.length - 1);
-      this.setState({trackBuffered: (fetchedEnd / this.#player.audio.duration) * 100});
+      this.setState({ trackBuffered: (fetchedEnd / this.#player.audio.duration) * 100 });
     }
   }
 

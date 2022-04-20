@@ -7,8 +7,21 @@ import User from './models/User';
 import Router from './modules/Router/Router';
 import { StoreContext } from './modules/Connect';
 import configureStore from './store';
-
 const store = configureStore();
+
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker
+    .register('sw.js', { scope: '/' })
+    .then((registration) => {
+      console.log(
+        'sw available on scope:',
+        registration.scope
+      );
+    })
+    .catch((err) => {
+      console.error(err);
+    });
+}
 
 User.getCSRFToken().then((): void => {
   VDom.render(

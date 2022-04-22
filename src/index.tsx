@@ -7,10 +7,11 @@ import User from './models/User';
 import Router from './modules/Router/Router';
 import { StoreContext } from './modules/Connect';
 import configureStore from './store';
+
 const store = configureStore();
 
 if ('serviceWorker' in navigator) {
-    navigator.serviceWorker
+  navigator.serviceWorker
     .register('sw.js', { scope: '/' })
     .then((registration) => {
       console.log(

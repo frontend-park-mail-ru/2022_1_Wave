@@ -51,6 +51,8 @@ class Player extends VDom.Component {
     this.toogleShuffle = this.toogleShuffle.bind(this);
     this.toogleMute = this.toogleMute.bind(this);
     this.setDrag = this.setDrag.bind(this);
+    this.onDragVolume = this.onDragVolume.bind(this);
+    this.onDragPlayer = this.onDragPlayer.bind(this);
     this.props.stop();
   }
 
@@ -210,11 +212,18 @@ class Player extends VDom.Component {
     this.#player.audio.currentTime = relativePosition * this.#player.audio.duration;
   }
 
-  setDrag(e: Event): void {
-    let target = 'isPlayerDragged';
-    if (e.currentTarget.className === 'volume__state__marker') {
-      target = 'isVolumeDragged';
-    }
+  onDragVolume(e:Event):void {
+    const target = 'isVolumeDragged';
+    this.setDrag(target,e);
+  }
+
+  onDragPlayer(e:Event):void {
+    const target = 'isPlayerDragged';
+    this.setDrag(target,e);
+  }
+
+  setDrag(target: string, e: Event): void {
+    console.log(target)
     const state: Map = {};
     switch (e.type) {
     case 'mousedown':
@@ -233,7 +242,8 @@ class Player extends VDom.Component {
     if ((e.type === 'mousemove' || e.type === 'touchmove') && !this.state.isVolumeDragged) {
       return;
     }
-    const relativePosition = this.getRelativePosition(e);
+    let relativePosition = this.getRelativePosition(e);
+    relativePosition = relativePosition > 1 ? 1 : relativePosition;
     this.setState({trackVolume: relativePosition * 100});
     this.#player.audio.volume = relativePosition;
   }
@@ -254,16 +264,12 @@ class Player extends VDom.Component {
     this.setState({playRand: this.#player.isPlayRand});
   }
 
-  toogleMute()
-        :
-        void {
+  toogleMute(): void {
     this.#player.audio.volume = this.state.trackVolume > 0 ? 0 : 0.5;
     this.setState({trackVolume: this.state.trackVolume > 0 ? 0 : 50});
   }
 
-  render()
-        :
-        VDom.VirtualElement {
+  render(): VDom.VirtualElement {
     const formatInt = (n: number): string => {
       const res = Math.trunc(n).toString();
       return n >= 10 ? res : `0${res}`;
@@ -318,7 +324,7 @@ class Player extends VDom.Component {
             onclick={this.setTime}
             onmousemove={this.setTime}
             ontouchmove={this.setTime}
-            onmouseleave={this.setDrag}
+            onmouseleave={this.onDragPlayer}
             class="progressbar__wrapper">
             <div class="progressbar">
               <div
@@ -331,21 +337,24 @@ class Player extends VDom.Component {
                   style={{width: `${this.state.trackFilled.toString()}%`}}
                 ></div>
                 <div draggable={false}
-                  onmousedown={this.setDrag}
-                  onmouseup={this.setDrag}
-                  ontouchstart={this.setDrag}
-                  ontouchend={this.setDrag}
+                  onmousedown={this.onDragPlayer}
+                  onmouseup={this.onDragPlayer}
+                  ontouchstart={this.onDragPlayer}
+                  ontouchend={this.onDragPlayer}
+                  style={{
+                    'margin-left': `calc(${this.state.trackFilled}% - 2%)`
+                  }}
                   class="progressbar__state__marker">
                   <div
                     class="marker__img"
-                    style={{'background-image': `url("${marker}")`}}
+                    style={{'background-image': `url("${marker}")`,
+                      'cursor':`${this.state.isPlayerDragged?"grabbing":"pointer"}`}}
                   />
                 </div>
               </div>
             </div>
           </div>
           <div class="text player__progressbar__time">
-            {' '}
             {`${formatInt(this.state.trackTime / 60)}:${formatInt(this.state.trackTime % 60)}`}
           </div>
         </div>
@@ -358,21 +367,23 @@ class Player extends VDom.Component {
         <div class="player__volume">
           <div onclick={this.toogleMute} class={`fa-solid ${volIcon} volume__icon`}></div>
           <div
-            onclick={this.setVolume}
-            onmousemove={this.setVolume}
-            ontouchmove={this.setVolume}
-            onmouseleave={this.setDrag}
             class="volume__wrapper">
-            <div class="volume__input">
+            <div
+              onclick={this.setVolume}
+              onmousemove={this.setVolume}
+              ontouchmove={this.setVolume}
+              onmouseleave={this.onDragVolume}
+              class="volume__input">
               <div
                 class="volume__input__state"
                 style={{width: `${this.state.trackVolume.toString()}%`}}
               ></div>
-              <div
-                onmousedown={this.setDrag}
-                onmouseup={this.setDrag}
-                ontouchstart={this.setDrag}
-                ontouchend={this.setDrag}
+              <div draggable={false}
+                onmousedown={this.onDragVolume}
+                onmouseup={this.onDragVolume}
+                ontouchstart={this.onDragVolume}
+                ontouchend={this.onDragVolume}
+                style={{'margin-left': `calc(${this.state.trackVolume}% - 10px)`, 'cursor':`${this.state.isVolumeDragged?"grabbing":"pointer"}`}}
                 class="volume__state__marker"></div>
             </div>
           </div>

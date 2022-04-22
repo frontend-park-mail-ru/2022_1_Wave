@@ -111,6 +111,7 @@
           display: flex;
           margin-top: -2px;
           margin-right: -11px;
+          position: relative;
 
           .progressbar__state__line {
             background-color: #beb7df;
@@ -121,7 +122,8 @@
               margin-top: -15px;
               margin-left: -2%;
               display: flex;
-              z-index: 10;
+              position: absolute;
+            transition: height 1ms ease;
             .marker__img {
               height: 22px;
               width: 22px;
@@ -169,6 +171,7 @@
 
     .volume__icon {
       height: 20px;
+      width: 20px;
 
       &:hover {
         cursor: pointer;
@@ -182,14 +185,16 @@
 
       .volume__input {
         height: 2px;
-        width: 100px;
+        width: 100%;
         background-color: #5d4099;
         margin: auto;
         display: flex;
+        position: relative;
 
         .volume__input__state {
           background-color: #beb7df;
           height: inherit;
+          max-width: 100%;
         }
 
         .volume__state__marker {
@@ -197,6 +202,7 @@
           height: 20px;
           margin-left: -10px;
           margin-top: -10px;
+          position: absolute;
         }
       }
 

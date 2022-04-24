@@ -1,6 +1,6 @@
 import VDom from '../../modules/VDom';
 import './Homepage.scss';
-import PopularConnected from './Popular/Popular';
+import Popular from "./Popular/Popular";
 
 export default class Homepage extends VDom.Component {
   render = (): VDom.VirtualElement => (
@@ -22,7 +22,7 @@ export default class Homepage extends VDom.Component {
           </div>
         </div>
       </div>
-      <PopularConnected />
+      <Popular />
     </div>
   );
 }

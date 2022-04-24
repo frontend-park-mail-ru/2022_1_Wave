@@ -8,16 +8,22 @@ import { Map } from '../../../modules/Store/types';
 import { connect } from '../../../modules/Connect';
 import { albumGetPopular } from '../../../actions/Album';
 import { artistGetPopular } from '../../../actions/Artist';
-import { IProps } from '../../../modules/VDom/Interfaces';
 import Link from '../../../modules/Router/Link';
 import { config } from '../../../modules/Client/Client';
+import {IComponentPropsCommon} from "../../../modules/VDom/IComponentProps";
 
-class PopularComponent extends VDom.Component {
-  constructor(props: IProps) {
+interface PopularComponentProps extends IComponentPropsCommon {
+  albums?: Array<object>;
+  artists?: Array<object>;
+  getAlbums: () => void;
+  getArtist: () => void;
+}
+
+class PopularComponent extends VDom.Component<PopularComponentProps> {
+  constructor(props: PopularComponentProps) {
     super(props);
     this.props.getAlbums();
     this.props.getArtist();
-    console.log(this.props);
   }
 
   render = (): VDom.VirtualElement => (
@@ -27,9 +33,7 @@ class PopularComponent extends VDom.Component {
         <CarouselRow>
           {this.props.albums
             ? this.props.albums.map((v: any) => (
-              <Link
-                to={`/artist/${v.cover.split('_')[1].split('.')[0]}`}
-                as={AlbumCard}
+              <AlbumCard
                 cover={config.files + v.cover}
                 title={v.title}
                 artist={v.artist}
@@ -43,10 +47,10 @@ class PopularComponent extends VDom.Component {
         <CarouselRow>
           {this.props.artists
             ? this.props.artists.map((v: any) => (
-                <ArtistCard
-                    cover={config.files + v.cover}
-                    name={v.name}
-                />
+              <ArtistCard
+                cover={config.files + v.cover}
+                name={v.name}
+              />
             ))
             : ''}
         </CarouselRow>

@@ -21,16 +21,16 @@ export default class ArtistPlaylist extends Component {
       <div class="artist-playlist">
         {playlist
           ? playlist.map((v: any) => (
-              <ArtistTrack
-                handleClick={this.props.runTrack(playlist[n - 1])}
-                num={n++}
-                cover={config.files + v.cover}
-                name={v.title}
-                listenedCnt={v.listenings}
-                isLiked={false}
-                duration={v.duration}
-              />
-            ))
+            <ArtistTrack
+              handleClick={this.props.runTrack(playlist[n - 1])}
+              num={n++}
+              cover={config.files + v.cover}
+              name={v.title}
+              listenedCnt={v.listenings}
+              isLiked={false}
+              duration={v.duration}
+            />
+          ))
           : ''}
       </div>
     );

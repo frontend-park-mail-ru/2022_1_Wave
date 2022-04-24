@@ -2,16 +2,16 @@
   width: 100%;
   display: flex;
   flex-direction: column;
+  margin-bottom: 40px;
 
   .artist-page__main {
     background-repeat: no-repeat;
     background-size: cover;
     object-fit: cover;
     background-position: 50%;
-    background-position-y: 50%;
+    background-position-y: 0%;
     display: flex;
     flex-direction: column;
-    height: 60%;
 
     .artist-page__artist {
       display: flex;
@@ -71,15 +71,16 @@
         .likes__num {
           padding-left: 10px;
         }
-        .likes__icon{
-          &:hover{
+
+        .likes__icon {
+          &:hover {
             cursor: pointer;
           }
         }
       }
     }
-  }
 
+  }
   .artist__title {
     font-size: 26px;
   }
@@ -89,13 +90,17 @@
     margin-top: 20px;
     flex-grow: 1;
   }
-
   .artist-page__albums {
+    margin-top: 20px;
     padding-left: 40px;
     height: 250px;
     margin-bottom: 100px;
+
     .carousel-row {
       height: 250px;
     }
   }
+
+
+
 }

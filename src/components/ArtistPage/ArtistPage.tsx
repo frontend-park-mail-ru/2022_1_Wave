@@ -89,7 +89,8 @@ class ArtistPage extends VDom.Component<any, any, null, RouteNavigator> {
       <div class="artist-page">
         <div
           class="artist-page__main"
-          style={{ 'background-image': `url(${config.files + artist.cover})` }}
+          style={{ 'background-image': `linear-gradient(180deg, rgba(1, 208, 234, 0.2) 0%, rgba(0, 0, 0, 0) 48.44%),
+    linear-gradient(180deg, rgba(11, 18, 32, 0.7) 0%, rgba(11, 18, 32, 0.9) 72.92%, #0B1220 93.23%),url(${config.files + artist.cover})` }}
         >
           <div class="artist-page__artist">
             <div class="artist__related">
@@ -113,18 +114,19 @@ class ArtistPage extends VDom.Component<any, any, null, RouteNavigator> {
               </div>
             </div>
           </div>
+          <div class="artist-page__popular">
+            <div class="text artist__title">Popular songs</div>
+            <ArtistPlaylist runTrack={this.runTrack} playlist={popularTracks}/>
+          </div>
         </div>
-        <div class="artist-page__popular">
-          <div class="text artist__title">Popular songs</div>
-          <ArtistPlaylist runTrack={this.runTrack} playlist={popularTracks} />
-        </div>
+
         <div class="artist-page__albums">
           <div class="text artist__title">Albums</div>
           <CarouselRow>
             {artist.albums
               ? artist.albums.map((v: any) => (
-                  <AlbumCard cover={config.files + v.cover} title={v.title} artist={v.artist} />
-                ))
+                <AlbumCard cover={config.files + v.cover} title={v.title} artist={v.artist} />
+              ))
               : ''}
           </CarouselRow>
         </div>
@@ -133,12 +135,10 @@ class ArtistPage extends VDom.Component<any, any, null, RouteNavigator> {
   };
 }
 
-const mapStateToProps = (state: any): Map => {
-  return {
-    artist: state.artist ? state.artist : null,
-    popularTracks: state.artistPopularTracks ? state.artistPopularTracks : null,
-  };
-};
+const mapStateToProps = (state: any): Map => ({
+  artist: state.artist ? state.artist : null,
+  popularTracks: state.artistPopularTracks ? state.artistPopularTracks : null,
+});
 
 const mapDispatchToProps = (dispatch: any): Map => ({
   getArtist: (id: string): void => {

@@ -12,7 +12,7 @@ import { IProps } from '../../../modules/VDom/Interfaces';
 import Link from '../../../modules/Router/Link';
 import { config } from '../../../modules/Client/Client';
 
-class Popular extends VDom.Component {
+class PopularComponent extends VDom.Component {
   constructor(props: IProps) {
     super(props);
     this.props.getAlbums();
@@ -27,14 +27,14 @@ class Popular extends VDom.Component {
         <CarouselRow>
           {this.props.albums
             ? this.props.albums.map((v: any) => (
-                <Link
-                  to={`/artist/${v.cover.split('_')[1].split('.')[0]}`}
-                  as={AlbumCard}
-                  cover={config.files + v.cover}
-                  title={v.title}
-                  artist={v.artist}
-                />
-              ))
+              <Link
+                to={`/artist/${v.cover.split('_')[1].split('.')[0]}`}
+                as={AlbumCard}
+                cover={config.files + v.cover}
+                title={v.title}
+                artist={v.artist}
+              />
+            ))
             : ''}
         </CarouselRow>
       </div>
@@ -43,13 +43,11 @@ class Popular extends VDom.Component {
         <CarouselRow>
           {this.props.artists
             ? this.props.artists.map((v: any) => (
-                <Link
-                  to={`/artist/${v.cover.split('_')[1].split('.')[0]}`}
-                  as={ArtistCard}
-                  cover={config.files + v.cover}
-                  name={v.name}
+                <ArtistCard
+                    cover={config.files + v.cover}
+                    name={v.name}
                 />
-              ))
+            ))
             : ''}
         </CarouselRow>
       </div>
@@ -70,5 +68,5 @@ const mapDispatchToProps = (dispatch: any): Map => ({
   },
 });
 
-const PopularConnected = connect(mapStateToProps, mapDispatchToProps)(Popular);
-export default PopularConnected;
+const Popular = connect(mapStateToProps, mapDispatchToProps)(PopularComponent);
+export default Popular;

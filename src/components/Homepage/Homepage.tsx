@@ -1,7 +1,7 @@
 import VDom from '../../modules/VDom';
 import './Homepage.scss';
-import Popular from "./Popular/Popular";
-import Notifier from "../App/Notifier/Notifier";
+import Popular from './Popular/Popular';
+import Notifier from '../App/Notifier/Notifier';
 
 export default class Homepage extends VDom.Component {
   render = (): VDom.VirtualElement => (
@@ -10,8 +10,8 @@ export default class Homepage extends VDom.Component {
         <div class="main__top-chart__album__name">
           <div class="text main__top-chart__album__name">Flume: Skin</div>
           <div class="text main__top-chart__album__quote">
-              Flume walks us through his ‘weird’ new album, ‘Skin’. He has one goal: “I wanna make
-              weird stuff.”
+            Flume walks us through his ‘weird’ new album, ‘Skin’. He has one goal: “I wanna make
+            weird stuff.”
           </div>
         </div>
         <div class="main__top-chart__album__controls">
@@ -23,7 +23,7 @@ export default class Homepage extends VDom.Component {
           </div>
         </div>
       </div>
-      <Popular/>
+      <Popular />
     </div>
   );
 }

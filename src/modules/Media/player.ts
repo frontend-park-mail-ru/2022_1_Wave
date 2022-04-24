@@ -137,6 +137,4 @@ export class PlayerClass {
       position: this.audio.currentTime,
     });
   }
-
-
 }

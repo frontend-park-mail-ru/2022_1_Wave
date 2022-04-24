@@ -5,7 +5,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 // eslint-disable-next-line no-undef
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
-const CopyPlugin = require("copy-webpack-plugin");
+const CopyPlugin = require('copy-webpack-plugin');
 
 class EmitDeclarationOnly {
   apply(compiler) {
@@ -36,10 +36,7 @@ module.exports = (env = {}) => {
       filename: '[name]-[hash:8].css',
     }),
     new CopyPlugin({
-      patterns: [
-        { from: path.resolve(__dirname, "src/sw.js")
-        },
-      ],
+      patterns: [{ from: path.resolve(__dirname, 'src/sw.js') }],
     }),
   ];
 

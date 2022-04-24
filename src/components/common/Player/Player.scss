@@ -118,12 +118,12 @@
             background-color: #beb7df;
           }
           .progressbar__state__marker {
-              height: 30px;
-              width: 4%;
-              margin-top: -15px;
-              margin-left: -2%;
-              display: flex;
-              position: absolute;
+            height: 30px;
+            width: 4%;
+            margin-top: -15px;
+            margin-left: -2%;
+            display: flex;
+            position: absolute;
             transition: height 1ms ease;
             .marker__img {
               height: 22px;

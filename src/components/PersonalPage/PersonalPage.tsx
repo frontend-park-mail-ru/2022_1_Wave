@@ -7,14 +7,13 @@ import { validatePassword, validateUsername } from '../../utils/User';
 import { Map } from '../../modules/Store/types';
 import { updateAvatar, updateSelf, userGetSelf } from '../../actions/User';
 import { connect } from '../../modules/Connect';
-import ValidatableInput from "../common/ValidatableInput/ValidatableInput";
-import {IComponentPropsCommon} from "../../modules/VDom/IComponentProps";
-
+import ValidatableInput from '../common/ValidatableInput/ValidatableInput';
+import { IComponentPropsCommon } from '../../modules/VDom/IComponentProps';
 
 interface PersonalPageComponentProps extends IComponentPropsCommon {
   user: any;
-  setNewAvatar: (form:any) => void;
-  setNewUser: (form:any) => void;
+  setNewAvatar: (form: any) => void;
+  setNewUser: (form: any) => void;
   userGetSelf: () => void;
 }
 
@@ -23,7 +22,10 @@ type PersonalPageComponenState = {
   fileSrc: string;
 };
 
-class PersonalPageComponent extends VDom.Component<PersonalPageComponentProps,PersonalPageComponenState> {
+class PersonalPageComponent extends VDom.Component<
+  PersonalPageComponentProps,
+  PersonalPageComponenState
+> {
   private readonly usernameInputRef = new VDom.Ref<ValidatableInput>();
 
   private readonly passwordInputRef = new VDom.Ref<ValidatableInput>();
@@ -72,14 +74,17 @@ class PersonalPageComponent extends VDom.Component<PersonalPageComponentProps,Pe
       return;
     }
 
-    const newSet:any = {};
+    const newSet: any = {};
     if (avatarIsValid) {
-      const file:File = (((e.target as HTMLElement)?.querySelector('input[type=file]') as HTMLInputElement)?.files as FileList)[0]
-      const formData:any = new FormData();
+      const file: File = (
+        ((e.target as HTMLElement)?.querySelector('input[type=file]') as HTMLInputElement)
+          ?.files as FileList
+      )[0];
+      const formData: any = new FormData();
       formData.append('avatar', file);
       this.props.setNewAvatar(formData);
     }
-    if (passwordIsValid && repeatPasswordIsValid || usernameIsValid) {
+    if ((passwordIsValid && repeatPasswordIsValid) || usernameIsValid) {
       if (usernameIsValid) {
         newSet.username = usernameInput.value;
       }
@@ -91,7 +96,7 @@ class PersonalPageComponent extends VDom.Component<PersonalPageComponentProps,Pe
     this.props.userGetSelf();
   }
 
-  checkAvatar():boolean {
+  checkAvatar(): boolean {
     return this.state?.fileLoaded;
   }
 
@@ -100,14 +105,14 @@ class PersonalPageComponent extends VDom.Component<PersonalPageComponentProps,Pe
     if (!file) {
       return;
     }
-    const MB:number = 1048576
+    const MB: number = 1048576;
     if (file.type.split('/')[0] !== 'image' || file.fize > MB) {
       this.setState({ fileLoaded: false });
     }
     this.setState({ fileLoaded: true, fileSrc: URL.createObjectURL(file) });
   }
 
-  didMount():void {
+  didMount(): void {
     if (this.props.user) {
       if (this.props.user.avatar) {
         this.setState({ fileSrc: this.props.user.avatar });
@@ -115,7 +120,7 @@ class PersonalPageComponent extends VDom.Component<PersonalPageComponentProps,Pe
     }
   }
 
-  didUpdate():void {
+  didUpdate(): void {
     if (this.props.user) {
       if (this.props.user.avatar) {
         if (this.state.fileSrc !== this.props.user.avatar) {
@@ -140,7 +145,7 @@ class PersonalPageComponent extends VDom.Component<PersonalPageComponentProps,Pe
             </label>
             <label
               class="form__upload"
-              style={{'background-image': `url(${this.state.fileSrc})`}}
+              style={{ 'background-image': `url(${this.state.fileSrc})` }}
             >
               <ValidatableInput
                 ref={this.avatarInputRef}
@@ -149,7 +154,7 @@ class PersonalPageComponent extends VDom.Component<PersonalPageComponentProps,Pe
                 placeholder="Avatar"
                 onInput={this.onInputAvatar}
                 checker={this.checkAvatar}
-                errorMessage={"Avatar is greater 1 MB"}
+                errorMessage={'Avatar is greater 1 MB'}
               />
             </label>
           </div>
@@ -170,7 +175,6 @@ class PersonalPageComponent extends VDom.Component<PersonalPageComponentProps,Pe
               Password
             </label>
             <div class="form__password-inputs">
-
               <ValidatableInput
                 ref={this.passwordInputRef}
                 type="password"
@@ -189,12 +193,15 @@ class PersonalPageComponent extends VDom.Component<PersonalPageComponentProps,Pe
                 errorMessage={"Passwords don't match"}
               />
             </div>
-
           </div>
           <div class="settings-form__form _border-none">
             <div class="form__controls">
-              <button type="cancel" class="text form__cancel-button">Cancel</button>
-              <button type="submit" class="text form__submit-button">Save changes</button>
+              <button type="cancel" class="text form__cancel-button">
+                Cancel
+              </button>
+              <button type="submit" class="text form__submit-button">
+                Save changes
+              </button>
             </div>
           </div>
         </form>

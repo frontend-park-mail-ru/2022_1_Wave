@@ -76,5 +76,5 @@ const mapStateToProps = (state: any): Map => ({
   position: state.playerPosition ? state.playerPosition.value : 0,
 });
 
-const Sidebar= connect(mapStateToProps, mapDispatchToProps)(SidebarComponent);
+const Sidebar = connect(mapStateToProps, mapDispatchToProps)(SidebarComponent);
 export default Sidebar;

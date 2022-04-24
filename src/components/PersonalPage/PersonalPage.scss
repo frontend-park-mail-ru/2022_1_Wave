@@ -15,7 +15,6 @@
     width: 60%;
     margin: auto;
 
-
     .settings-form__form {
       margin-top: 20px;
       margin-left: 50px;
@@ -35,7 +34,6 @@
         border-radius: 4px;
         color: #ffffff;
         text-indent: 10px;
-
       }
 
       input[type='file'] {
@@ -59,14 +57,14 @@
         }
       }
 
-      .form__password-inputs{
+      .form__password-inputs {
         height: 150px;
         display: flex;
         flex-direction: column;
         justify-content: space-around;
       }
 
-      .form__controls{
+      .form__controls {
         width: 40%;
         margin: auto calc(100% - 40%);
         display: flex;
@@ -88,7 +86,7 @@
           }
         }
 
-        .form__cancel-button{
+        .form__cancel-button {
           background-color: #6d7184;
           height: 35px;
           width: 95px;
@@ -104,7 +102,6 @@
             cursor: pointer;
           }
         }
-
       }
 
       .input__wrong {
@@ -123,7 +120,7 @@
       color: #ff6464;
       overflow-wrap: break-word;
     }
-    ._border-none{
+    ._border-none {
       border-width: 0px;
     }
   }

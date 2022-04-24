@@ -91,7 +91,6 @@ class ArtistPage extends VDom.Component<any, any, null, RouteNavigator> {
           class="artist-page__main"
           style={{ 'background-image': `url(${config.files + artist.cover})` }}
         >
-          <Navbar isAuthorized={true} />
           <div class="artist-page__artist">
             <div class="artist__related">
               <div class="text related__title">Related artists:</div>

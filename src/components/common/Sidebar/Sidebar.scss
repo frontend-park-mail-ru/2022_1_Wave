@@ -1,20 +1,18 @@
 .sidebar {
-  width: 330px;
-  height: 100%;
-  position: relative;
-  top: 0;
-  display: inline-flex;
+  grid-area: side;
+  display: flex;
   flex-direction: column;
-  padding-bottom: 80px;
+  height: 100%;
   .sidebar__header {
-    height: 80px;
-
+    height: 100px;
+    flex-direction: column;
+    position: relative;
     .header__logo {
-      height: 100px;
+      height: 88%;
       display: flex;
       .logo__picture {
-        height: 70%;
-        width: 70%;
+        height: 100%;
+        margin-bottom: 0px;
         &:hover {
           cursor: pointer;
         }

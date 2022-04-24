@@ -61,7 +61,7 @@ class Navbar extends Component {
       </div>
     );
     return (
-      <div class="navbar main__top-chart__header">
+      <div class="navbar">
         <div class="navbar__menu">
           <div class="navbar__menu__button">
             <div class="text button__text ">DISCOVER</div>

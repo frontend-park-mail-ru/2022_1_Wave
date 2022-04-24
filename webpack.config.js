@@ -63,10 +63,6 @@ module.exports = (env = {}) => {
           exclude: /(node_modules)/,
           resolve: {
             extensions: ['.ts', '.tsx', '.js', '.json'],
-            alias: {
-              // eslint-disable-next-line no-undef
-              factory: path.resolve(__dirname, 'src/modules/VDom/createElement'),
-            },
           },
           use: [
             // { loader: 'ts-loader' },

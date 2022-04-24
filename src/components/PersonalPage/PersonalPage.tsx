@@ -144,7 +144,6 @@ class PersonalPage extends VDom.Component {
     const { isAuthorized, user } = this.props;
     return (
       <div class="personal-page">
-        <Navbar isAuthorized={true} />
         <form onsubmit={this.submitForm} class="text personal-page__settings-form">
           <div class="settings-form__title">Settings</div>
           <div class="settings-form__form">

@@ -1,5 +1,4 @@
 import './App.scss';
-import PageConnected from '../Page/Page';
 import Homepage from '../Homepage/Homepage';
 import VDom from '../../modules/VDom';
 import { connect } from '../../modules/Connect';
@@ -11,6 +10,9 @@ import ArtistConnected from '../ArtistPage/ArtistPage';
 import PersonalConnected from '../PersonalPage/PersonalPage';
 import { Map } from '../../modules/Store/types';
 import { userGetSelf, userLogin } from '../../actions/User';
+import SidebarConnected from "../common/Sidebar/Sidebar";
+import PlayerConnected from "../common/Player/Player";
+import Navbar from "../common/Navbar/Navbar";
 
 class App extends VDom.Component {
   didMount(): void {
@@ -27,22 +29,24 @@ class App extends VDom.Component {
           <SignupPage isSignup={true} />
         </Route>
         <Route to="/">
-          <PageConnected
-            isAuthorized={this.props.isAuth}
-            content={
+          <div class="page">
+            <SidebarConnected/>
+            <div class="content">
+              <Navbar/>
               <RouteSwitch>
                 <Route to="" exact>
-                  <Homepage isAuthorized={this.props.isAuth} />
+                  <Homepage />
                 </Route>
                 <Route to="/artist/:slug">
-                  <ArtistConnected isAuthorized={this.props.isAuth} />
+                  <ArtistConnected/>
                 </Route>
                 <Route to="/settings">
                   <PersonalConnected />
                 </Route>
               </RouteSwitch>
-            }
-          />
+            </div>
+            <PlayerConnected/>
+          </div>
         </Route>
       </RouteSwitch>
     );

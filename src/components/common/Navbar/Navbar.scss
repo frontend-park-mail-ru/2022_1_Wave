@@ -16,8 +16,9 @@
 
 .navbar {
   height: 100px;
-  padding-top: 20px;
   display: flex;
+  position: absolute;
+  width: 100%;
   background-image: var(--linear-gradient-blue-dark);
 
   .navbar__menu {

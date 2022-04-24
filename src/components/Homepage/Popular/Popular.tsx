@@ -8,7 +8,6 @@ import { Map } from '../../../modules/Store/types';
 import { connect } from '../../../modules/Connect';
 import { albumGetPopular } from '../../../actions/Album';
 import { artistGetPopular } from '../../../actions/Artist';
-import Link from '../../../modules/Router/Link';
 import { config } from '../../../modules/Client/Client';
 import {IComponentPropsCommon} from "../../../modules/VDom/IComponentProps";
 

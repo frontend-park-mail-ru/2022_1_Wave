@@ -5,6 +5,7 @@ import { artistPopular, artist, artistPopularTracks } from './artist';
 import user from './user';
 import { playerPlaylist } from './playlist';
 import { playerPlay, playerPosition } from './player';
+import notification from './notification';
 
 export default combineReducers({
   tracksPopular,
@@ -16,4 +17,5 @@ export default combineReducers({
   playerPlaylist,
   playerPlay,
   playerPosition,
+  notification,
 });

@@ -1,0 +1,25 @@
+.notification{
+  position: absolute;
+  right: 10px;
+  top:10px;
+  width: 300px;
+  height: 100px;
+  padding-left: 20px;
+  z-index: 999;
+  display: flex;
+  background: #5d4099;
+  align-items: center;
+  border-radius: 10px;
+  opacity: 50%;
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.error {
+  background-color: #ff6464;
+}
+
+.success {
+  background-color: #37b8d6;
+}

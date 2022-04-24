@@ -22,11 +22,6 @@ class PersonalPageComponent extends VDom.Component {
   constructor(props: IProps) {
     super(props);
     this.state = {
-      username: '',
-      password: '',
-      confirmPassword: false,
-      userNameChecked: false,
-      passwordChecked: false,
       fileLoaded: false,
       fileSrc: avatar,
     };
@@ -73,10 +68,10 @@ class PersonalPageComponent extends VDom.Component {
     }
     if (passwordIsValid && repeatPasswordIsValid || usernameIsValid) {
       if (usernameIsValid) {
-        newSet.username = e.target.username.value;
+        newSet.username = usernameInput.value;
       }
       if (passwordIsValid && repeatPasswordIsValid) {
-        newSet.password = e.target.password.value;
+        newSet.password = passwordInput.value;
       }
       this.props.setNewUser(newSet);
     }

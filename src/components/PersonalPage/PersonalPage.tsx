@@ -3,14 +3,27 @@ import VDom from '../../modules/VDom';
 import '../../index.css';
 import './PersonalPage.scss';
 import avatar from '../../assets/avatar.png';
-import { IProps } from '../../modules/VDom/Interfaces';
 import { validatePassword, validateUsername } from '../../utils/User';
 import { Map } from '../../modules/Store/types';
 import { updateAvatar, updateSelf, userGetSelf } from '../../actions/User';
 import { connect } from '../../modules/Connect';
 import ValidatableInput from "../common/ValidatableInput/ValidatableInput";
+import {IComponentPropsCommon} from "../../modules/VDom/IComponentProps";
 
-class PersonalPageComponent extends VDom.Component {
+
+interface PersonalPageComponentProps extends IComponentPropsCommon {
+  user: any;
+  setNewAvatar: (form:any) => void;
+  setNewUser: (form:any) => void;
+  userGetSelf: () => void;
+}
+
+type PersonalPageComponenState = {
+  fileLoaded: boolean;
+  fileSrc: string;
+};
+
+class PersonalPageComponent extends VDom.Component<PersonalPageComponentProps,PersonalPageComponenState> {
   private readonly usernameInputRef = new VDom.Ref<ValidatableInput>();
 
   private readonly passwordInputRef = new VDom.Ref<ValidatableInput>();
@@ -19,7 +32,7 @@ class PersonalPageComponent extends VDom.Component {
 
   private readonly repeatPasswordInputRef = new VDom.Ref<ValidatableInput>();
 
-  constructor(props: IProps) {
+  constructor(props: PersonalPageComponentProps) {
     super(props);
     this.state = {
       fileLoaded: false,
@@ -59,10 +72,10 @@ class PersonalPageComponent extends VDom.Component {
       return;
     }
 
-    const newSet = {};
+    const newSet:any = {};
     if (avatarIsValid) {
-      const file = e.target.querySelector('input[type=file]').files[0]
-      const formData = new FormData();
+      const file:File = (((e.target as HTMLElement)?.querySelector('input[type=file]') as HTMLInputElement)?.files as FileList)[0]
+      const formData:any = new FormData();
       formData.append('avatar', file);
       this.props.setNewAvatar(formData);
     }
@@ -78,25 +91,23 @@ class PersonalPageComponent extends VDom.Component {
     this.props.userGetSelf();
   }
 
-  checkAvatar():void {
+  checkAvatar():boolean {
     return this.state?.fileLoaded;
   }
 
   onInputAvatar(e: Event): void {
-    const file = e.target.files[0];
+    const file: File = ((e.target as HTMLInputElement)?.files as FileList)[0];
     if (!file) {
       return;
     }
     const MB:number = 1048576
     if (file.type.split('/')[0] !== 'image' || file.fize > MB) {
-      e.target.classList.add('input__wrong');
-      document.getElementById('form__avatar-label_danger').classList.remove('invisible');
       this.setState({ fileLoaded: false });
     }
     this.setState({ fileLoaded: true, fileSrc: URL.createObjectURL(file) });
   }
 
-  didMount(snapshot: any) {
+  didMount():void {
     if (this.props.user) {
       if (this.props.user.avatar) {
         this.setState({ fileSrc: this.props.user.avatar });
@@ -104,10 +115,10 @@ class PersonalPageComponent extends VDom.Component {
     }
   }
 
-  didUpdate(snapshot: any) {
+  didUpdate():void {
     if (this.props.user) {
       if (this.props.user.avatar) {
-        if (this.state.fileSrc != this.props.user.avatar) {
+        if (this.state.fileSrc !== this.props.user.avatar) {
           if (this.state.fileSrc.split(':')[0] !== 'blob') {
             this.setState({ fileSrc: this.props.user.avatar });
           }

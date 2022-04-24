@@ -10,7 +10,7 @@ import {Map} from '../../../modules/Store/types';
 import {connect} from '../../../modules/Connect';
 import {setPosition, startPlay, stopPlay} from '../../../actions/Player';
 
-class Player extends VDom.Component {
+class PlayerComponent extends VDom.Component {
   #player: IPlayerClass;
 
   #playIcon: HTMLElement = (<div class="fa-regular fa-circle-play"></div>);
@@ -415,5 +415,5 @@ const
   });
 
 const
-  PlayerConnected = connect(mapStateToProps, mapDispatchToProps)(Player);
-export default PlayerConnected;
+  Player = connect(mapStateToProps, mapDispatchToProps)(PlayerComponent);
+export default Player;

@@ -1,4 +1,3 @@
-import Navbar from '../common/Navbar/Navbar';
 import VDom from '../../modules/VDom';
 import '../../index.css';
 import './ArtistPage.scss';
@@ -16,19 +15,18 @@ import { setTrack, setTracks } from '../../actions/Playlist';
 import { startPlay } from '../../actions/Player';
 import ArtistPlaylist from './ArtistPlaylist/ArtistPlaylist';
 
-class ArtistPage extends VDom.Component<any, any, null, RouteNavigator> {
+class ArtistPageComponent extends VDom.Component<any, any, null, RouteNavigator> {
   static contextType = RouterContext;
 
   constructor(props: IProps) {
     super(props);
-    console.log(this.props);
     this.getArtist = this.getArtist.bind(this);
     this.getTracks = this.getTracks.bind(this);
     this.state = {
       albumLikes: 12511,
       isLiked: false,
-      artistID: this.context.params.slug,
     };
+
     this.setLikeToArtist = this.setLikeToArtist.bind(this);
     this.addPopularToPlaylist = this.addPopularToPlaylist.bind(this);
     this.runTrack = this.runTrack.bind(this);
@@ -45,14 +43,14 @@ class ArtistPage extends VDom.Component<any, any, null, RouteNavigator> {
   }
 
   getArtist(): void {
-    if (!this.props.artist || !this.props.artist[this.state.artistID]) {
-      this.props.getArtist(this.state.artistID);
+    if (!this.props.artist || !this.props.artist[this.context.params.slug]) {
+      this.props.getArtist(this.context.params.slug);
     }
   }
 
   getTracks(): void {
-    if (!this.props.popularTracks || !this.props.popularTracks[this.state.artistID]) {
-      this.props.getArtistPopularTracks(this.state.artistID);
+    if (!this.props.popularTracks || !this.props.popularTracks[this.context.params.slug]) {
+      this.props.getArtistPopularTracks(this.context.params.slug);
     }
   }
 
@@ -64,7 +62,7 @@ class ArtistPage extends VDom.Component<any, any, null, RouteNavigator> {
   }
 
   addPopularToPlaylist(e: Event): void {
-    this.props.setArtistPlaylist(this.props.popularTracks[this.state.artistID]);
+    this.props.setArtistPlaylist(this.props.popularTracks[this.context.params.slug]);
     this.props.runMusic();
   }
 
@@ -161,5 +159,5 @@ const mapDispatchToProps = (dispatch: any): Map => ({
   },
 });
 
-const ArtistConnected = connect(mapStateToProps, mapDispatchToProps)(ArtistPage);
-export default ArtistConnected;
+const ArtistPage = connect(mapStateToProps, mapDispatchToProps)(ArtistPageComponent);
+export default ArtistPage;

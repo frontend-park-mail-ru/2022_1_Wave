@@ -33,7 +33,7 @@ class Navbar extends Component {
             alt="avatar.png"
           />
           <div class="popup">
-            <Link as="div" to="/settings" class="text popup__text">
+            <Link as="div" to="/settings" class="text popup__text popup__settings">
               Settings
             </Link>
             <div onClick={this.logout} class="text popup__text popup__logout">

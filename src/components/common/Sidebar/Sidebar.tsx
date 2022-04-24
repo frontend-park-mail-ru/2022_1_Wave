@@ -11,7 +11,7 @@ import { IProps } from '../../../modules/VDom/Interfaces';
 import Playlist from './Playlist/Playlist';
 import { getPopularTracks } from '../../../actions/Playlist';
 
-class Sidebar extends VDom.Component {
+class SidebarComponent extends VDom.Component {
   constructor(props: IProps) {
     super(props);
     this.setTrack = this.setTrack.bind(this);
@@ -30,11 +30,10 @@ class Sidebar extends VDom.Component {
   }
 
   render = (): VDom.VirtualElement => {
-    const { isAuthorized } = this.props;
     if (!this.props) {
       return <div class="sidebar" />;
     }
-    const content = isAuthorized ? (
+    const content = this.props.isAuth ? (
       <div>
         <Navigation title="My playlist" />
         <Navigation title="Last listening" />
@@ -72,9 +71,10 @@ const mapDispatchToProps = (dispatch: any): Map => ({
   },
 });
 const mapStateToProps = (state: any): Map => ({
+  isAuth: state.user?.id != null,
   playlist: state.playerPlaylist ? state.playerPlaylist : null,
   position: state.playerPosition ? state.playerPosition.value : 0,
 });
 
-const SidebarConnected = connect(mapStateToProps, mapDispatchToProps)(Sidebar);
-export default SidebarConnected;
+const Sidebar= connect(mapStateToProps, mapDispatchToProps)(SidebarComponent);
+export default Sidebar;

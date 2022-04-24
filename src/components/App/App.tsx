@@ -6,13 +6,15 @@ import Route from '../../modules/Router/Route';
 import RouteSwitch from '../../modules/Router/RouteSwitch';
 import LoginPage from '../LoginPage/LoginPage';
 import SignupPage from '../SignupPage/SignupPage';
-import ArtistConnected from '../ArtistPage/ArtistPage';
 import PersonalConnected from '../PersonalPage/PersonalPage';
 import { Map } from '../../modules/Store/types';
 import { userGetSelf, userLogin } from '../../actions/User';
-import SidebarConnected from "../common/Sidebar/Sidebar";
 import PlayerConnected from "../common/Player/Player";
 import Navbar from "../common/Navbar/Navbar";
+import Sidebar from "../common/Sidebar/Sidebar";
+import ArtistPage from "../ArtistPage/ArtistPage";
+import PersonalPage from "../PersonalPage/PersonalPage";
+import Player from "../common/Player/Player";
 
 class App extends VDom.Component {
   didMount(): void {
@@ -30,7 +32,7 @@ class App extends VDom.Component {
         </Route>
         <Route to="/">
           <div class="page">
-            <SidebarConnected/>
+            <Sidebar/>
             <div class="content">
               <Navbar/>
               <RouteSwitch>
@@ -38,14 +40,14 @@ class App extends VDom.Component {
                   <Homepage />
                 </Route>
                 <Route to="/artist/:slug">
-                  <ArtistConnected/>
+                  <ArtistPage/>
                 </Route>
                 <Route to="/settings">
-                  <PersonalConnected />
+                  <PersonalPage />
                 </Route>
               </RouteSwitch>
             </div>
-            <PlayerConnected/>
+            <Player/>
           </div>
         </Route>
       </RouteSwitch>

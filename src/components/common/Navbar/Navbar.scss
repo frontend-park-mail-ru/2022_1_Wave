@@ -108,27 +108,33 @@
         width: 180px;
         height: 80px;
         background-color: #06123b;
+        border-radius: 10px;
         position: absolute;
         top: 80px;
         right: 50px;
         display: none;
         flex-direction: column;
         justify-content: space-evenly;
+        box-shadow: 0 0 10px #37b8d6;
         a {
           text-decoration: none;
         }
         .popup__text {
           color: #dbd9d9;
           font-size: 14px;
-          padding-left: 20px;
+          margin: auto;
+          width: 80%;
           &:hover {
             color: #37b8d6;
             cursor: pointer;
           }
         }
+        .popup__settings{
+          border-bottom: solid 2px #5d4099;
+          padding-bottom: 10px;
+        }
       }
       &:hover {
-        cursor: pointer;
         .popup {
           display: flex;
         }

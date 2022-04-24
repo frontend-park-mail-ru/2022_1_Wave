@@ -1,5 +1,4 @@
 import VirtualElement from '../../modules/VDom/VirtualElement';
-import Navbar from '../common/Navbar/Navbar';
 import VDom from '../../modules/VDom';
 import '../../index.css';
 import './PersonalPage.scss';
@@ -9,8 +8,17 @@ import { validatePassword, validateUsername } from '../../utils/User';
 import { Map } from '../../modules/Store/types';
 import { updateAvatar, updateSelf, userGetSelf } from '../../actions/User';
 import { connect } from '../../modules/Connect';
+import ValidatableInput from "../common/ValidatableInput/ValidatableInput";
 
-class PersonalPage extends VDom.Component {
+class PersonalPageComponent extends VDom.Component {
+  private readonly usernameInputRef = new VDom.Ref<ValidatableInput>();
+
+  private readonly passwordInputRef = new VDom.Ref<ValidatableInput>();
+
+  private readonly avatarInputRef = new VDom.Ref<ValidatableInput>();
+
+  private readonly repeatPasswordInputRef = new VDom.Ref<ValidatableInput>();
+
   constructor(props: IProps) {
     super(props);
     this.state = {
@@ -22,33 +30,52 @@ class PersonalPage extends VDom.Component {
       fileLoaded: false,
       fileSrc: avatar,
     };
-    this.tryAcceptPassword = this.tryAcceptPassword.bind(this);
-    this.tryAcceptPasswordRepeat = this.tryAcceptPasswordRepeat.bind(this);
-    this.tryAcceptUName = this.tryAcceptUName.bind(this);
-    this.tryAcceptAvatar = this.tryAcceptAvatar.bind(this);
-    this.submitForm = this.submitForm.bind(this);
     this.props.userGetSelf();
+
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.isEqualToPassword = this.isEqualToPassword.bind(this);
+    this.additionalPasswordValidator = this.additionalPasswordValidator.bind(this);
+    this.onInputAvatar = this.onInputAvatar.bind(this);
+    this.checkAvatar = this.checkAvatar.bind(this);
   }
 
-  submitForm(e: Event): void {
+  isEqualToPassword(repeatPassword: string): boolean {
+    return repeatPassword === this.passwordInputRef.instance.value;
+  }
+
+  additionalPasswordValidator(_e: InputEvent): void {
+    this.repeatPasswordInputRef.instance.validateDebounced();
+  }
+
+  handleSubmit(e: Event): void {
     e.preventDefault();
-    const passwordCondition = this.state.confirmPassword && this.state.passwordChecked;
-    const unameCondition = this.state.userNameChecked;
-    const fileCondition = this.state.fileLoaded;
-    if (!passwordCondition && !unameCondition && !fileCondition) {
+
+    const { instance: usernameInput } = this.usernameInputRef;
+    const { instance: passwordInput } = this.passwordInputRef;
+    const { instance: avatarInput } = this.avatarInputRef;
+    const { instance: repeatPasswordInput } = this.repeatPasswordInputRef;
+
+    const usernameIsValid = usernameInput.validate();
+    const passwordIsValid = passwordInput.validate();
+    const repeatPasswordIsValid = repeatPasswordInput.validate();
+    const avatarIsValid = avatarInput.validate();
+
+    if (!usernameIsValid && !passwordIsValid && !repeatPasswordIsValid && !avatarIsValid) {
       return;
     }
+
     const newSet = {};
-    if (fileCondition) {
+    if (avatarIsValid) {
+      const file = e.target.querySelector('input[type=file]').files[0]
       const formData = new FormData();
-      formData.append('avatar', e.target.avatar.files[0]);
+      formData.append('avatar', file);
       this.props.setNewAvatar(formData);
     }
-    if (passwordCondition && unameCondition) {
-      if (unameCondition) {
+    if (passwordIsValid && repeatPasswordIsValid || usernameIsValid) {
+      if (usernameIsValid) {
         newSet.username = e.target.username.value;
       }
-      if (passwordCondition) {
+      if (passwordIsValid && repeatPasswordIsValid) {
         newSet.password = e.target.password.value;
       }
       this.props.setNewUser(newSet);
@@ -56,45 +83,17 @@ class PersonalPage extends VDom.Component {
     this.props.userGetSelf();
   }
 
-  tryAcceptUName(e: Event): void {
-    const uname: string = e.target.value;
-    if (!validateUsername(uname)) {
-      e.target.classList.add('input__wrong');
-      document.getElementById('form__username-label_danger').classList.remove('invisible');
-      this.setState({ userNameChecked: false, password });
-      return;
-    }
-    this.setState({ userNameChecked: true, username: uname });
+  checkAvatar():void {
+    return this.state?.fileLoaded;
   }
 
-  tryAcceptPassword(e: Event): void {
-    const password: string = e.target.value;
-    if (!validatePassword(password)) {
-      e.target.classList.add('input__wrong');
-      document.getElementById('form__password-label_danger').classList.remove('invisible');
-      this.setState({ passwordChecked: false, password });
-      return;
-    }
-    this.setState({ passwordChecked: true, password });
-  }
-
-  tryAcceptPasswordRepeat(e: Event): void {
-    const password: string = e.target.value;
-    if (password !== this.state.password) {
-      e.target.classList.add('input__wrong');
-      document.getElementById('form__confirm-label_danger').classList.remove('invisible');
-      this.setState({ confirmPassword: false });
-      return;
-    }
-    this.setState({ confirmPassword: true });
-  }
-
-  tryAcceptAvatar(e: Event): void {
+  onInputAvatar(e: Event): void {
     const file = e.target.files[0];
     if (!file) {
       return;
     }
-    if (file.type.split('/')[0] !== 'image' || file.fize > 1048576) {
+    const MB:number = 1048576
+    if (file.type.split('/')[0] !== 'image' || file.fize > MB) {
       e.target.classList.add('input__wrong');
       document.getElementById('form__avatar-label_danger').classList.remove('invisible');
       this.setState({ fileLoaded: false });
@@ -102,25 +101,6 @@ class PersonalPage extends VDom.Component {
     this.setState({ fileLoaded: true, fileSrc: URL.createObjectURL(file) });
   }
 
-  clearUName(e: Event): void {
-    e.target.classList.remove('input__wrong');
-    document.getElementById('form__username-label_danger').classList.add('invisible');
-  }
-
-  clearPassword(e: Event): void {
-    e.target.classList.remove('input__wrong');
-    document.getElementById('form__password-label_danger').classList.add('invisible');
-  }
-
-  clearPasswordRepeat(e: Event): void {
-    e.target.classList.remove('input__wrong');
-    document.getElementById('form__confirm-label_danger').classList.add('invisible');
-  }
-
-  clearAvatar(e: Event): void {
-    e.target.classList.remove('input__wrong');
-    document.getElementById('form__avatar-label_danger').classList.add('invisible');
-  }
   didMount(snapshot: any) {
     if (this.props.user) {
       if (this.props.user.avatar) {
@@ -140,97 +120,76 @@ class PersonalPage extends VDom.Component {
       }
     }
   }
+
   render = (): VirtualElement => {
-    const { isAuthorized, user } = this.props;
+    const { user } = this.props;
+
     return (
-      <div class="personal-page">
-        <form onsubmit={this.submitForm} class="text personal-page__settings-form">
-          <div class="settings-form__title">Settings</div>
+      <div class="text personal-page">
+        <div class="personal-page__title">Settings</div>
+        <form onsubmit={this.handleSubmit} class="personal-page__settings-form">
+          <div class="settings-form__form">
+            <label htmlFor="avatar" className="input-label form__avatar-label">
+              Your photo
+            </label>
+            <label
+              class="form__upload"
+              style={{'background-image': `url(${this.state.fileSrc})`}}
+            >
+              <ValidatableInput
+                ref={this.avatarInputRef}
+                type="file"
+                class="input-line form__avatar-label"
+                placeholder="Avatar"
+                onInput={this.onInputAvatar}
+                checker={this.checkAvatar}
+                errorMessage={"Avatar is greater 1 MB"}
+              />
+            </label>
+          </div>
           <div class="settings-form__form">
             <label htmlFor="username" class="input-label form__username-label">
               New username:
             </label>
-            <input
-              onblur={this.tryAcceptUName}
-              value={this.state.username}
-              onfocus={this.clearUName}
+            <ValidatableInput
+              ref={this.usernameInputRef}
               type="text"
-              placeholder="Username"
-              class="input-line form__username-label"
-              id="username"
+              placeholder={user?.username ?? 'Username'}
+              checker={validateUsername}
+              errorMessage={'Username have to contain at 3-16 characters (digits, letters or _)'}
             />
-            <label
-              id="form__username-label_danger"
-              class="input-label from__tooltip_danger invisible"
-            >
-              Username have to contain at least 3 charecters (digits, letters or &#171;_&#187;)
-            </label>
           </div>
           <div class="settings-form__form">
             <label htmlFor="password" class="input-label form__password-label">
-              New password:
+              Password
             </label>
-            <input
-              onblur={this.tryAcceptPassword}
-              value={this.state.password}
-              onfocus={this.clearPassword}
-              type="password"
-              placeholder="Password"
-              class="input-line form__password-input"
-              id="password"
-            />
-            <label
-              id="form__password-label_danger"
-              class="input-label from__tooltip_danger invisible"
-            >
-              Password have to contain at least 6 charecters (digits and letters)
-            </label>
-          </div>
-          <div class="settings-form__form">
-            <label htmlFor="confirm" class="input-label form__confirm-label">
-              Confirm password:
-            </label>
-            <input
-              onblur={this.tryAcceptPasswordRepeat}
-              onfocus={this.clearPasswordRepeat}
-              type="password"
-              placeholder="Confirm"
-              class="input-line form__confirm-label"
-              id="confirm"
-            />
-            <label
-              id="form__confirm-label_danger"
-              class="input-label from__tooltip_danger invisible"
-            >
-              Passwords are different!
-            </label>
-          </div>
-          <div class="settings-form__form">
-            <label htmlFor="avatar" class="input-label form__avatar-label">
-              Load new avatar:
-            </label>
-            <label
-              class="form__upload"
-              style={{ 'background-image': `url(${this.state.fileSrc})` }}
-            >
-              <input
-                onchange={this.tryAcceptAvatar}
-                onfocus={this.clearAvatar}
-                type="file"
-                placeholder="Avatar"
-                class="input-line form__avatar-label"
-                id="avatar"
+            <div class="form__password-inputs">
+
+              <ValidatableInput
+                ref={this.passwordInputRef}
+                type="password"
+                class="login-form__input-line"
+                placeholder="Password"
+                checker={validatePassword}
+                errorMessage={'Password have to contain at least 6 characters (digits and letters)'}
+                onInput={this.additionalPasswordValidator}
               />
-            </label>
-            <label
-              id="form__avatar-label_danger"
-              class="input-label from__tooltip_danger invisible"
-            >
-              It must be image less 1MB!
-            </label>
+              <ValidatableInput
+                ref={this.repeatPasswordInputRef}
+                type="password"
+                class="register-form__input-line"
+                placeholder="Confirm password"
+                checker={this.isEqualToPassword}
+                errorMessage={"Passwords don't match"}
+              />
+            </div>
+
           </div>
-          <div class="settings-form__form">
-            <input type="submit" value="Submit" class="text form__submit-button" />
+          <div class="settings-form__form _border-none">
+            <div class="form__controls">
+              <button type="cancel" class="text form__cancel-button">Cancel</button>
+              <button type="submit" class="text form__submit-button">Save changes</button>
+            </div>
           </div>
         </form>
       </div>
@@ -250,10 +209,9 @@ const mapDispatchToProps = (dispatch: any): Map => ({
     dispatch(updateAvatar(form));
   },
   userGetSelf: (): void => {
-    console.log('get user!!');
     dispatch(userGetSelf());
   },
 });
 
-const PersonalConnected = connect(mapStateToProps, mapDispatchToProps)(PersonalPage);
-export default PersonalConnected;
+const PersonalPage = connect(mapStateToProps, mapDispatchToProps)(PersonalPageComponent);
+export default PersonalPage;

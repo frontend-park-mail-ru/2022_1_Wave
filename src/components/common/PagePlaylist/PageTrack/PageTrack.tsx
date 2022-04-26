@@ -1,12 +1,20 @@
-import Component from '../../../../modules/VDom/Component';
-import VirtualElement from '../../../../modules/VDom/VirtualElement';
 import VDom from '../../../../modules/VDom';
 import '../../../../index.css';
-import './ArtistTrack.scss';
-import { IProps } from '../../../../modules/VDom/Interfaces';
+import './PageTrack.scss';
+import {IComponentPropsCommon} from "../../../../modules/VDom/IComponentProps";
 
-export default class ArtistTrack extends Component {
-  constructor(props: IProps) {
+interface PageTrackProps extends IComponentPropsCommon{
+  num:number;
+  cover: string;
+  listenedCnt: number;
+  name: string;
+  duration: number;
+  isLiked: boolean;
+  handleClick: (e: Event) => void;
+}
+
+export default class PageTrack extends VDom.Component<PageTrackProps> {
+  constructor(props: PageTrackProps) {
     super(props);
     this.state = {
       isLiked: false,
@@ -23,7 +31,7 @@ export default class ArtistTrack extends Component {
     this.setState({ isLiked });
   }
 
-  render = (): VirtualElement => {
+  render = (): VDom.VirtualElement => {
     const { num, cover, listenedCnt, name, duration } = this.props;
 
     const formatInt = (n: number): string => {

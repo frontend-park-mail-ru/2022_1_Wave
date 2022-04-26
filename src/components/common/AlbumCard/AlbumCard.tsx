@@ -15,8 +15,12 @@ export default class AlbumCard extends VDom.Component<AlbumCardProps> {
 
     return (
       <div class="album">
-        <img class="album__image" src={cover} />
-        <div class="text album__title">{title}</div>
+        <Link to={`/album/${cover.split('_')[1].split('.')[0]}`}
+          as='img' class="album__image" src={cover} />
+        <Link to={`/album/${cover.split('_')[1].split('.')[0]}`}
+          as='div'
+          class="text album__title">{title}
+        </Link>
         <Link to={`/artist/${cover.split('_')[1].split('.')[0]}`} class="text album__artist">
           {artist}
         </Link>

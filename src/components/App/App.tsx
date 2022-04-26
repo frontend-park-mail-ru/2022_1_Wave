@@ -7,28 +7,19 @@ import RouteSwitch from '../../modules/Router/RouteSwitch';
 import LoginPage from '../LoginPage/LoginPage';
 import SignupPage from '../SignupPage/SignupPage';
 import { Map } from '../../modules/Store/types';
-import { userGetSelf, userLogin } from '../../actions/User';
+import { userGetSelf } from '../../actions/User';
 import Navbar from '../common/Navbar/Navbar';
 import Sidebar from '../common/Sidebar/Sidebar';
 import ArtistPage from '../ArtistPage/ArtistPage';
 import PersonalPage from '../PersonalPage/PersonalPage';
 import Player from '../common/Player/Player';
-import Notifier from './Notifier/Notifier';
+import Notifier from '../common/Notifier/Notifier';
 import { NotifyType, notify } from '../../actions/Notifier';
+import AlbumPage from "../AlbumPage/AlbumPage";
 
 class App extends VDom.Component {
   didMount(): void {
     this.props.userGetSelf();
-    this.props.notifyErr({
-      status: 'error',
-      msg: 'test err',
-    });
-    setTimeout(() => {
-      this.props.notifyErr({
-        status: 'success',
-        msg: 'test success',
-      });
-    }, 5500);
   }
 
   render(): VDom.VirtualElement {
@@ -52,6 +43,9 @@ class App extends VDom.Component {
                 </Route>
                 <Route to="/artist/:slug">
                   <ArtistPage />
+                </Route>
+                <Route to="/album/:slug">
+                  <AlbumPage />
                 </Route>
                 <Route to="/settings">
                   <PersonalPage />

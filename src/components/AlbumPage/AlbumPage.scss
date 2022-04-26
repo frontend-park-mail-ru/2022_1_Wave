@@ -1,10 +1,10 @@
-.artist-page {
+.album-page {
   width: 100%;
   display: flex;
   flex-direction: column;
   margin-bottom: 40px;
 
-  .artist-page__main {
+  .album-page__main {
     background-repeat: no-repeat;
     background-size: cover;
     object-fit: cover;
@@ -13,7 +13,7 @@
     display: flex;
     flex-direction: column;
 
-    .artist-page__artist {
+    .album-page__album {
       display: flex;
       flex-direction: column;
       height: 100%;
@@ -21,7 +21,7 @@
       margin-top: 100px;
       justify-content: space-between;
 
-      .artist__related {
+      .album__related {
         display: flex;
 
         .related__title {
@@ -33,18 +33,24 @@
         }
       }
 
-      .artist__main {
+      .album__main {
         font-size: 25px;
-
-        .artist__name {
+        width: 50%;
+        .album__name {
           margin-bottom: 25px;
           margin-top: 4px;
           font-size: 84px;
         }
+
+        .album__quote{
+          font-size: 18px;
+          opacity: 50%;
+          padding: 10px;
+        }
       }
     }
 
-    .artist__controls {
+    .album__controls {
       display: flex;
       margin-bottom: 20px;
 
@@ -82,23 +88,14 @@
       }
     }
   }
-  .artist__title {
+  .album__title {
     font-size: 26px;
   }
 
-  .artist-page__popular {
+  .album-page__popular {
     padding-left: 40px;
     margin-top: 20px;
     flex-grow: 1;
-  }
-  .artist-page__albums {
-    margin-top: 20px;
-    padding-left: 40px;
-    height: 250px;
     margin-bottom: 100px;
-
-    .carousel-row {
-      height: 250px;
-    }
   }
 }

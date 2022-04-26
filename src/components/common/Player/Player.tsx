@@ -2,22 +2,31 @@ import './Player.scss';
 import VDom from '../../../modules/VDom';
 import '../../App/App.scss';
 import marker from '../../../assets/player_marker.png';
-import { IPlayerClass } from '../../../modules/Media/media';
-import { IProps } from '../../../modules/VDom/Interfaces';
+import {IPlayerClass, ITrack} from '../../../modules/Media/media';
 import { PlayerClass } from '../../../modules/Media/player';
 import { config } from '../../../modules/Client/Client';
 import { Map } from '../../../modules/Store/types';
 import { connect } from '../../../modules/Connect';
 import { setPosition, startPlay, stopPlay } from '../../../actions/Player';
+import {IComponentPropsCommon} from "../../../modules/VDom/IComponentProps";
 
-class PlayerComponent extends VDom.Component {
+interface PlayerComponentProps extends IComponentPropsCommon {
+  play: ()=>void;
+  stop: ()=>void;
+  setPos: (n:number)=>void;
+  playlist: Array<ITrack>;
+  position:number;
+  isPlay:boolean;
+}
+
+class PlayerComponent extends VDom.Component<PlayerComponentProps> {
   #player: IPlayerClass;
 
   #playIcon: HTMLElement = (<div class="fa-regular fa-circle-play"></div>);
 
   #pauseIcon: HTMLElement = (<div class="fa-regular fa-circle-pause"></div>);
 
-  constructor(props: IProps) {
+  constructor(props: PlayerComponentProps) {
     super(props);
     this.state = {
       playState: false,
@@ -223,17 +232,20 @@ class PlayerComponent extends VDom.Component {
   }
 
   setDrag(target: string, e: Event): void {
-    console.log(target);
     const state: Map = {};
     switch (e.type) {
-      case 'mousedown':
-        state[target] = true;
-        break;
-      case 'touchstart':
-        state[target] = true;
-        break;
-      default:
-        state[target] = false;
+    case 'mousedown':
+    case 'touchstart':
+      state[target] = true;
+      this.props.stop();
+      break;
+    case 'mouseup':
+    case 'touchend':
+      this.props.play();
+      state[target] = false;
+      break
+    default:
+      state[target] = false;
     }
     this.setState(state);
   }
@@ -276,18 +288,18 @@ class PlayerComponent extends VDom.Component {
     };
     let volIcon: string;
     switch (true) {
-      case this.state.trackVolume === 0:
-        volIcon = 'fa-volume-xmark';
-        break;
-      case this.state.trackVolume < 25:
-        volIcon = 'fa-volume-off';
-        break;
-      case this.state.trackVolume < 60:
-        volIcon = 'fa-volume-low';
-        break;
-      default:
-        volIcon = 'fa-volume-high';
-        break;
+    case this.state.trackVolume === 0:
+      volIcon = 'fa-volume-xmark';
+      break;
+    case this.state.trackVolume < 25:
+      volIcon = 'fa-volume-off';
+      break;
+    case this.state.trackVolume < 60:
+      volIcon = 'fa-volume-low';
+      break;
+    default:
+      volIcon = 'fa-volume-high';
+      break;
     }
     if (!this.#player) {
       return <div class="player" />;

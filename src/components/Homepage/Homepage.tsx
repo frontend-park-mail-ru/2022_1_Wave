@@ -1,7 +1,6 @@
 import VDom from '../../modules/VDom';
 import './Homepage.scss';
 import Popular from './Popular/Popular';
-import Notifier from '../App/Notifier/Notifier';
 
 export default class Homepage extends VDom.Component {
   render = (): VDom.VirtualElement => (

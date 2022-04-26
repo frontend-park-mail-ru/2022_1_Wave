@@ -24,17 +24,17 @@ class NotifierComponent extends VDom.Component<NotifierComponentProps> {
 
   didUpdate(): void {
     switch (this.props.notification?.status) {
-      case 'error':
-        setTimeout(() => {
-          this.hideNotifier();
-        }, this.props.errActiveTime * 1000);
-        break;
-      case 'success':
-        setTimeout(() => {
-          this.hideNotifier();
-        }, this.props.successActiveTime * 1000);
-        break;
-      default:
+    case 'error':
+      setTimeout(() => {
+        this.hideNotifier();
+      }, this.props.errActiveTime * 1000);
+      break;
+    case 'success':
+      setTimeout(() => {
+        this.hideNotifier();
+      }, this.props.successActiveTime * 1000);
+      break;
+    default:
     }
   }
 
@@ -42,9 +42,11 @@ class NotifierComponent extends VDom.Component<NotifierComponentProps> {
     <div
       onclick={this.hideNotifier}
       style={{ display: this.props.notification ? 'flex' : 'none' }}
-      class={`text notification ${this.props?.notification?.status}`}
+      class={`notification ${this.props?.notification?.status}`}
     >
-      {this.props?.notification?.msg ?? ''}
+      <div class="text notification__text">
+        {this.props?.notification?.msg ?? ''}
+      </div>
     </div>
   );
 }

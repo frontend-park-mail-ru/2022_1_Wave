@@ -13,7 +13,7 @@ import { config } from '../../modules/Client/Client';
 import { ITrack } from '../../modules/Media/media';
 import { setTrack, setTracks } from '../../actions/Playlist';
 import { startPlay } from '../../actions/Player';
-import ArtistPlaylist from './ArtistPlaylist/ArtistPlaylist';
+import PagePlaylist from "../common/PagePlaylist/PagePlaylist";
 
 class ArtistPageComponent extends VDom.Component<any, any, null, RouteNavigator> {
   static contextType = RouterContext;
@@ -91,7 +91,7 @@ class ArtistPageComponent extends VDom.Component<any, any, null, RouteNavigator>
             'background-image': `linear-gradient(180deg, rgba(1, 208, 234, 0.2) 0%, rgba(0, 0, 0, 0) 48.44%),
     linear-gradient(180deg, rgba(11, 18, 32, 0.7) 0%, rgba(11, 18, 32, 0.9) 72.92%, #0B1220 93.23%),url(${
       config.files + artist.cover
-    })`,
+      })`,
           }}
         >
           <div class="artist-page__artist">
@@ -118,7 +118,7 @@ class ArtistPageComponent extends VDom.Component<any, any, null, RouteNavigator>
           </div>
           <div class="artist-page__popular">
             <div class="text artist__title">Popular songs</div>
-            <ArtistPlaylist runTrack={this.runTrack} playlist={popularTracks} />
+            <PagePlaylist runTrack={this.runTrack} playlist={popularTracks} />
           </div>
         </div>
 
@@ -127,8 +127,8 @@ class ArtistPageComponent extends VDom.Component<any, any, null, RouteNavigator>
           <CarouselRow>
             {artist.albums
               ? artist.albums.map((v: any) => (
-                  <AlbumCard cover={config.files + v.cover} title={v.title} artist={v.artist} />
-                ))
+                <AlbumCard cover={config.files + v.cover} title={v.title} artist={v.artist} />
+              ))
               : ''}
           </CarouselRow>
         </div>

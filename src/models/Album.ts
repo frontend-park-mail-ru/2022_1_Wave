@@ -1,5 +1,6 @@
 import HTTPClient from '../modules/Client/Client';
 import Paths from '../config/Album';
+import {Map} from "../modules/Store/types";
 
 /*
  * Requests for album domain
@@ -20,6 +21,28 @@ export default class Album {
         return Promise.reject(response.body);
       }
       return response.body.Result;
+    });
+  }
+
+  static getAlbumById(id: string) {
+    return HTTPClient.get(Paths.albumID + id.toString()).then((response) => {
+      if (response.status !== 200) {
+        return Promise.reject(response.body);
+      }
+      const res: Map = {};
+      res[id] = response.body.Result;
+      return res;
+    });
+  }
+
+  static getAlbumCoverById(id: string) {
+    return HTTPClient.get(Paths.albumCoverID + id.toString()).then((response) => {
+      if (response.status !== 200) {
+        return Promise.reject(response.body);
+      }
+      const res: Map = {};
+      res[id] = response.body.Result;
+      return res;
     });
   }
 }

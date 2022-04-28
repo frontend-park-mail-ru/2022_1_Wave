@@ -38,14 +38,12 @@ this.addEventListener('fetch', (event) => {
 
     return fetch(event.request);
   }
-  if (event.request.method === 'GET'){
-    event.respondWith(
-        caches
-            .match(event.request)
-            .then((cachedResponse) => cachedResponse)
-            .catch((err) => {
-              console.error('smth went wrong with caches.match: ', err);
-            }),
-    );
-  }
+  event.respondWith(
+    caches
+      .match(event.request)
+      .then((cachedResponse) => cachedResponse)
+      .catch((err) => {
+        console.error('smth went wrong with caches.match: ', err);
+      }),
+  );
 });

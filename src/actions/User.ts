@@ -29,9 +29,21 @@ export function userLogout(): (dispatch: Function) => void {
 
 export function userLogin(form: any): (dispatch: Function) => void {
   return (dispatch: Function): void => {
-    user.login(form).then((payload: any) => {
-      dispatch({ type: 'login/user', payload });
-    });
+    user
+      .login(form)
+      .then((payload: any) => {
+        dispatch({ type: 'login/user', payload });
+        dispatch({
+          type: `notifier/message`,
+          payload: { status: 'success', msg: 'Success' },
+        });
+      })
+      .catch(() => {
+        dispatch({
+          type: `notifier/message`,
+          payload: { status: 'error', msg: 'Invalid login or password' },
+        });
+      });
   };
 }
 
@@ -39,7 +51,17 @@ export function userSignup(form: any): (dispatch: Function) => void {
   return (dispatch: Function): void => {
     user.signup(form).then((payload: any) => {
       dispatch({ type: 'signup/user', payload });
-    });
+      dispatch({
+        type: `notifier/message`,
+        payload: { status: 'success', msg: 'Success' },
+      });
+    })
+      .catch(() => {
+        dispatch({
+          type: `notifier/message`,
+          payload: {status: 'error', msg: 'User already exists'},
+        });
+      });
   };
 }
 

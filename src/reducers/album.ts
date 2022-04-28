@@ -7,7 +7,6 @@ export const albumPopular = (state: Map, action: Map): Map => {
   return state;
 };
 
-
 export const album = (state: Map, action: Map): Map => {
   if (action.type === 'get/album') {
     for (const [key, value] of Object.entries(action.payload)) {
@@ -25,4 +24,3 @@ export const albumCover = (state: Map, action: Map): Map => {
   }
   return state;
 };
-

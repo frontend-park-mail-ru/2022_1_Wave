@@ -1,6 +1,6 @@
 import HTTPClient from '../modules/Client/Client';
 import Paths from '../config/Album';
-import {Map} from "../modules/Store/types";
+import { Map } from '../modules/Store/types';
 
 /*
  * Requests for album domain

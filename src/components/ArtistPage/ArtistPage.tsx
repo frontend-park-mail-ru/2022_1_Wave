@@ -13,7 +13,7 @@ import { config } from '../../modules/Client/Client';
 import { ITrack } from '../../modules/Media/media';
 import { setTrack, setTracks } from '../../actions/Playlist';
 import { startPlay } from '../../actions/Player';
-import PagePlaylist from "../common/PagePlaylist/PagePlaylist";
+import PagePlaylist from '../common/PagePlaylist/PagePlaylist';
 
 class ArtistPageComponent extends VDom.Component<any, any, null, RouteNavigator> {
   static contextType = RouterContext;
@@ -127,8 +127,8 @@ class ArtistPageComponent extends VDom.Component<any, any, null, RouteNavigator>
           <CarouselRow>
             {artist.albums
               ? artist.albums.map((v: any) => (
-                <AlbumCard cover={config.files + v.cover} title={v.title} artist={v.artist} />
-              ))
+                  <AlbumCard cover={config.files + v.cover} title={v.title} artist={v.artist} />
+                ))
               : ''}
           </CarouselRow>
         </div>

@@ -10,9 +10,8 @@ import { config } from '../../modules/Client/Client';
 import { ITrack } from '../../modules/Media/media';
 import { setTrack, setTracks } from '../../actions/Playlist';
 import { startPlay } from '../../actions/Player';
-import PagePlaylist from "../common/PagePlaylist/PagePlaylist";
-import {albumGetById, albumGetCoverById} from "../../actions/Album";
-
+import PagePlaylist from '../common/PagePlaylist/PagePlaylist';
+import { albumGetById, albumGetCoverById } from '../../actions/Album';
 
 class ArtistPageComponent extends VDom.Component<any, any, null, RouteNavigator> {
   static contextType = RouterContext;
@@ -65,44 +64,45 @@ class ArtistPageComponent extends VDom.Component<any, any, null, RouteNavigator>
     const { slug }: { slug: string } = this.context.params;
     const album = this.props?.album?.[slug];
     const cover = this.props?.cover?.[slug];
-    return !album ? (<div class="album-page"/>) :
-      (
-        <div class="album-page">
-          <div
-            class="album-page__main"
-            style={{
-              'background-image': `linear-gradient(180deg, rgba(1, 208, 234, 0.2) 0%, rgba(0, 0, 0, 0) 48.44%),
+    return !album ? (
+      <div class="album-page" />
+    ) : (
+      <div class="album-page">
+        <div
+          class="album-page__main"
+          style={{
+            'background-image': `linear-gradient(180deg, rgba(1, 208, 234, 0.2) 0%, rgba(0, 0, 0, 0) 48.44%),
     linear-gradient(180deg, rgba(11, 18, 32, 0.7) 0%, rgba(11, 18, 32, 0.9) 72.92%, #0B1220 93.23%),url(${
-        config.files + album.cover
-        })`,
-            }}
-          >
-            <div class="album-page__album">
-              <div class="text album__main">
+      config.files + album.cover
+    })`,
+          }}
+        >
+          <div class="album-page__album">
+            <div class="text album__main">
               Album
-                <div class="album__name">{album.title}</div>
-                <div class="album__quote">{cover ? cover.quote : ''}</div>
-                <div class="album__controls">
-                  <div onclick={this.addAlbumToPlaylist} class="button controls__btn-play">
-                    <div class="text">Play</div>
-                  </div>
-                  <div class="text controls__likes">
-                    <div
-                      onclick={this.setLikeToArtist}
-                      class={`${this.state.isLiked ? 'fa-solid' : 'fa-regular'} fa-heart likes__icon`}
-                    ></div>
-                    <div class="likes__num">{this.state.albumLikes}</div>
-                  </div>
+              <div class="album__name">{album.title}</div>
+              <div class="album__quote">{cover ? cover.quote : ''}</div>
+              <div class="album__controls">
+                <div onclick={this.addAlbumToPlaylist} class="button controls__btn-play">
+                  <div class="text">Play</div>
+                </div>
+                <div class="text controls__likes">
+                  <div
+                    onclick={this.setLikeToArtist}
+                    class={`${this.state.isLiked ? 'fa-solid' : 'fa-regular'} fa-heart likes__icon`}
+                  ></div>
+                  <div class="likes__num">{this.state.albumLikes}</div>
                 </div>
               </div>
             </div>
-            <div class="album-page__popular">
-              <div class="text album__title">Songs</div>
-              <PagePlaylist runTrack={this.runTrack} playlist={album.tracks} />
-            </div>
+          </div>
+          <div class="album-page__popular">
+            <div class="text album__title">Songs</div>
+            <PagePlaylist runTrack={this.runTrack} playlist={album.tracks} />
           </div>
         </div>
-      );
+      </div>
+    );
   };
 }
 

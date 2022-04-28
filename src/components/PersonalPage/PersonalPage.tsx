@@ -95,7 +95,7 @@ class PersonalPageComponent extends VDom.Component<
     }
     setTimeout(() => {
       this.props.userGetSelf();
-    },1000)
+    }, 1000);
   }
 
   checkAvatar(): boolean {

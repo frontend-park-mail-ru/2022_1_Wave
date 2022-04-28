@@ -1,10 +1,10 @@
 import VDom from '../../../../modules/VDom';
 import '../../../../index.css';
 import './PageTrack.scss';
-import {IComponentPropsCommon} from "../../../../modules/VDom/IComponentProps";
+import { IComponentPropsCommon } from '../../../../modules/VDom/IComponentProps';
 
-interface PageTrackProps extends IComponentPropsCommon{
-  num:number;
+interface PageTrackProps extends IComponentPropsCommon {
+  num: number;
   cover: string;
   listenedCnt: number;
   name: string;

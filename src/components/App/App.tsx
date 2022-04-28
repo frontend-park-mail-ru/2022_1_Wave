@@ -15,7 +15,7 @@ import PersonalPage from '../PersonalPage/PersonalPage';
 import Player from '../common/Player/Player';
 import Notifier from '../common/Notifier/Notifier';
 import { NotifyType, notify } from '../../actions/Notifier';
-import AlbumPage from "../AlbumPage/AlbumPage";
+import AlbumPage from '../AlbumPage/AlbumPage';
 
 class App extends VDom.Component {
   didMount(): void {

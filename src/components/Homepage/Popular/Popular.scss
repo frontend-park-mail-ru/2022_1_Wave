@@ -5,31 +5,32 @@
   flex-direction: column;
   padding-bottom: 80px;
   margin-left: 40px;
+
+  .main__popular .carousel-row {
+  }
+
+  .main__popular_slider {
+  }
+
+  .main__popular_slider-hidden {
+    overflow: hidden;
+  }
+
+  .main__popular__albums {
+    padding-top: 30px;
+    height: 300px;
+  }
+
+  .main__popular__artists {
+    padding-top: 30px;
+    height: 200px;
+  }
+
+  .main__popular > .text {
+  }
+
+  .main__popular__title {
+    font-size: 24px;
+  }
 }
 
-.main__popular .carousel-row {
-}
-
-.main__popular_slider {
-}
-
-.main__popular_slider-hidden {
-  overflow: hidden;
-}
-
-.main__popular__albums {
-  padding-top: 30px;
-  height: 300px;
-}
-
-.main__popular__artists {
-  padding-top: 30px;
-  height: 200px;
-}
-
-.main__popular > .text {
-}
-
-.main__popular__title {
-  font-size: 24px;
-}

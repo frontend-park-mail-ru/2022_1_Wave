@@ -24,6 +24,20 @@
   grid-template-rows: 100% 100px;
 }
 
+@media (max-width: 720px) {
+  .page{
+    grid-template-areas:
+    'main'
+    'play';
+    grid-template-columns: 1fr;
+    grid-template-rows: 100% 200px;
+    .sidebar{
+      display: none;
+    }
+  }
+}
+
+
 .content {
   grid-area: main;
   width: 100%;

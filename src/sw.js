@@ -35,17 +35,12 @@ this.addEventListener('fetch', (event) => {
         cache.add(event.request.url);
       });
     }
-
-    return fetch(event.request);
+    return;
   }
   if (event.request.method === 'GET'){
     event.respondWith(
       caches
         .match(event.request)
         .then((cachedResponse) => cachedResponse)
-        .catch((err) => {
-          console.error('smth went wrong with caches.match: ', err);
-        }),
-    );
-  }
+    )}
 });

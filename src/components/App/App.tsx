@@ -13,7 +13,6 @@ import Sidebar from '../common/Sidebar/Sidebar';
 import ArtistPage from '../ArtistPage/ArtistPage';
 import PersonalPage from '../PersonalPage/PersonalPage';
 import Player from '../common/Player/Player';
-import Notifier from '../common/Notifier/Notifier';
 import { NotifyType, notify } from '../../actions/Notifier';
 import AlbumPage from '../AlbumPage/AlbumPage';
 
@@ -32,7 +31,6 @@ class App extends VDom.Component {
           <SignupPage isSignup={true} />
         </Route>
         <Route to="/">
-          <Notifier errActiveTime={5} successActiveTime={3} />
           <div class="page">
             <Sidebar />
             <div class="content">

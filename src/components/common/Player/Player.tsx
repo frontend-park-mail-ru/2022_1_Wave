@@ -70,7 +70,10 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
       this.initPlayer();
       return;
     }
-    if (this.#player.playlist !== this.props.playlist) {
+    if (!this.props.playlist){
+      return;
+    }
+    if (this.#player.playlist !== this.props.playlist ) {
       this.setState({ trackTime: 0, trackFilled: 0, trackFetched: 0, trackBuffered: 0 });
       this.#player.updatePlaylist(this.props.playlist);
       this.props.setPos(0);

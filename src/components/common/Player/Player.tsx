@@ -84,7 +84,9 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
     ) {
       this.#player.setPosition(this.props.position);
     }
-    if (this.#player && this.#player.audio.paused === this.props.isPlay) {
+    console.log('Player',this.#player)
+    if (this.#player && this.#player.audio &&
+        this.#player.audio.paused === this.props.isPlay) {
       this.checkPlay();
     }
   }
@@ -237,22 +239,22 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
   setDrag(target: string, e: Event): void {
     const state: Map = {};
     switch (e.type) {
-      case 'mousedown':
-      case 'touchstart':
-        state[target] = true;
-        if (target === 'isPlayerDragged' ){
-          this.props.stop();
-        }
-        break;
-      case 'mouseup':
-      case 'touchend':
-        if (target === 'isPlayerDragged' ) {
-          this.props.play();
-        }
-        state[target] = false;
-        break;
-      default:
-        state[target] = false;
+    case 'mousedown':
+    case 'touchstart':
+      state[target] = true;
+      if (target === 'isPlayerDragged' ){
+        this.props.stop();
+      }
+      break;
+    case 'mouseup':
+    case 'touchend':
+      if (target === 'isPlayerDragged' ) {
+        this.props.play();
+      }
+      state[target] = false;
+      break;
+    default:
+      state[target] = false;
     }
     this.setState(state);
   }
@@ -295,18 +297,18 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
     };
     let volIcon: string;
     switch (true) {
-      case this.state.trackVolume === 0:
-        volIcon = 'fa-volume-xmark';
-        break;
-      case this.state.trackVolume < 25:
-        volIcon = 'fa-volume-off';
-        break;
-      case this.state.trackVolume < 60:
-        volIcon = 'fa-volume-low';
-        break;
-      default:
-        volIcon = 'fa-volume-high';
-        break;
+    case this.state.trackVolume === 0:
+      volIcon = 'fa-volume-xmark';
+      break;
+    case this.state.trackVolume < 25:
+      volIcon = 'fa-volume-off';
+      break;
+    case this.state.trackVolume < 60:
+      volIcon = 'fa-volume-low';
+      break;
+    default:
+      volIcon = 'fa-volume-high';
+      break;
     }
     if (!this.#player) {
       return <div class="player" />;
@@ -363,7 +365,7 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
                   ontouchstart={this.onDragPlayer}
                   ontouchend={this.onDragPlayer}
                   style={{
-                    'margin-left': `calc(${this.state.trackFilled}% - 2%)`,
+                    'margin-left': `calc(${this.state.trackFilled}% - 1em)`,
                   }}
                   class="progressbar__state__marker"
                 >
@@ -390,14 +392,13 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
         </div>
         <div class="player__volume">
           <div onclick={this.toogleMute} class={`fa-solid ${volIcon} volume__icon`}></div>
-          <div class="volume__wrapper">
-            <div
-              onclick={this.setVolume}
-              onmousemove={this.setVolume}
-              ontouchmove={this.setVolume}
-              onmouseleave={this.onDragVolume}
-              class="volume__input"
-            >
+          <div
+            onclick={this.setVolume}
+            onmousemove={this.setVolume}
+            ontouchmove={this.setVolume}
+            onmouseleave={this.onDragVolume}
+            class="volume__wrapper">
+            <div class="volume__input">
               <div
                 class="volume__input__state"
                 style={{ width: `${this.state.trackVolume.toString()}%` }}
@@ -409,7 +410,7 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
                 ontouchstart={this.onDragVolume}
                 ontouchend={this.onDragVolume}
                 style={{
-                  'margin-left': `calc(${this.state.trackVolume}% - 10px)`,
+                  'margin-left': `calc(${this.state.trackVolume}% - 0.5em)`,
                   cursor: `${this.state.isVolumeDragged ? 'grabbing' : 'pointer'}`,
                 }}
                 class="volume__state__marker"

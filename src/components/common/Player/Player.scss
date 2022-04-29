@@ -29,24 +29,24 @@
   }
 
   .player__track {
-    width: 250px;
     display: inline-flex;
     cursor: default;
+    font-size: 25px;
     .track__picture {
-      height: 50px;
-      width: 50px;
-      border-radius: 5px;
+      height: 2em;
+      width: 2em;
+      border-radius: 0.2em;
       object-fit: cover;
     }
 
     .track__name {
-      padding-left: 15px;
+      padding-left: 0.6em;
 
       * {
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
-        max-width: 150px;
+        max-width: 5em;
       }
 
       .track__name__title {
@@ -60,7 +60,7 @@
   }
 
   .player__control {
-    width: 130px;
+    width: 5.2em;
     display: inline-flex;
     justify-content: space-between;
 
@@ -70,15 +70,15 @@
     }
 
     .control__prev {
-      font-size: 25px;
+      font-size: 1.2em;
     }
 
     .control__play_pause {
-      font-size: 35px;
+      font-size: 30px;
     }
 
     .control__next {
-      font-size: 25px;
+      font-size: 1.2em;
     }
   }
 
@@ -86,8 +86,8 @@
     flex-grow: 1;
     display: inline-flex;
     align-self: center;
-    margin-left: 20px;
-    margin-right: 15px;
+    margin-left: 1em;
+    margin-right: 0.6em;
 
     .progressbar__wrapper {
       height: 20px;
@@ -118,10 +118,10 @@
             background-color: #beb7df;
           }
           .progressbar__state__marker {
-            height: 30px;
-            width: 4%;
-            margin-top: -15px;
-            margin-left: -2%;
+            height: 1.5em;
+            width: 2em;
+            margin-top: -0.75em;
+            margin-left: -1em;
             display: flex;
             position: absolute;
             transition: height 1ms ease;
@@ -144,7 +144,7 @@
     }
 
     .player__progressbar__time {
-      margin-left: 20px;
+      margin-left: 0.8em;
     }
   }
 
@@ -156,7 +156,7 @@
 
     * {
       color: #beb7df;
-      font-size: 20px;
+      font-size: 1.2em;
     }
     &:hover {
       cursor: pointer;
@@ -171,9 +171,8 @@
     color: #beb7df;
 
     .volume__icon {
-      height: 20px;
-      width: 20px;
-
+      font-size: 1.2em;
+      width: 1.2em;
       &:hover {
         cursor: pointer;
       }
@@ -187,6 +186,7 @@
       .volume__input {
         height: 2px;
         width: 100%;
+        max-width: 100%;
         background-color: #5d4099;
         margin: auto;
         display: flex;
@@ -199,10 +199,10 @@
         }
 
         .volume__state__marker {
-          width: 20px;
-          height: 20px;
-          margin-left: -10px;
-          margin-top: -10px;
+          width: 1em;
+          height: 0.8em;
+          margin-left: -0.4em;
+          margin-top: -0.4em;
           position: absolute;
           transition: height 1ms ease;
         }
@@ -211,6 +211,48 @@
       &:hover {
         cursor: pointer;
       }
+    }
+  }
+
+  @media (max-width: 580px) {
+
+    .player__track {
+      font-size: 20px;
+      margin-left: 0.8em;
+    }
+    .player__volume{
+      display: none !important;
+    }
+    .player__waves {
+      display: none !important;
+    }
+    .control__next{
+      display: none !important;
+
+    }
+    .control__prev{
+      display: none !important;
+    }
+    .player__control{
+      width: 40px !important;
+    }
+    .control__play_pause{
+      width: 100% !important;
+    }
+    .player__shuffle{
+      display: none !important;
+    }
+    .player__control{
+      width: auto;
+    }
+  }
+
+  @media (max-width: 340px) {
+    .player__progressbar__time{
+      display: none !important;
+    }
+    .player__track {
+      font-size: 12px;
     }
   }
 }

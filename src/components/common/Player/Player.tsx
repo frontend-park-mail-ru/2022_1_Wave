@@ -84,7 +84,6 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
     ) {
       this.#player.setPosition(this.props.position);
     }
-    console.log('Player',this.#player)
     if (this.#player && this.#player.audio &&
         this.#player.audio.paused === this.props.isPlay) {
       this.checkPlay();

@@ -12,15 +12,17 @@
   --btn-inactive: #6d7184;
   --input-color: #0000002b;
   --btn-hover: #37b8d6;
-}
 
+}
 .navbar {
   height: 100px;
   display: flex;
   position: absolute;
   width: 100%;
   background-image: var(--linear-gradient-blue-dark);
-
+  &:focus-within .search{
+    display: flex;
+  }
   .navbar__menu {
     width: 400px;
     padding-left: 10px;
@@ -34,7 +36,6 @@
     flex-direction: column;
     align-items: center;
     position: relative;
-
     input {
       padding: 5px;
       width: 100%;

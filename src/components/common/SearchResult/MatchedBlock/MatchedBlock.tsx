@@ -18,7 +18,8 @@ export default class MatchedBlock extends VDom.Component<MatchedBlockProps> {
       <div class="text matched-title"> {this.props?.title ?? ''} </div>
       <div onclick={this.props.drop} class="text matched-list">
         {this.props.array.map((v) => (
-          <Link to={`/${this.props.type !== 'track' ? this.props.type : 'album'}/${v.cover.split('_')[1].split('.')[0]}`} as='div' class="text matched-element">
+          <Link to={`/${this.props.type !== 'track' ? this.props.type : 'album'}/${v.cover.split('_')[1].split('.')[0]}`}
+            as='div' class="text matched-element">
             <img class="element-cover" alt={`${v.title ?? v.name}`} src={config.files + v.cover}></img>
             <div class="element-name">{v.title ?? v.name}</div>
           </Link>

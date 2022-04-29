@@ -8,7 +8,7 @@ import { userLogout } from '../../../actions/User';
 import { connect } from '../../../modules/Connect';
 import { IComponentPropsCommon } from '../../../modules/VDom/IComponentProps';
 import SearchInput from '../SearchInput/SearchInput';
-import {SearchRequest} from "../../../actions/Search";
+import {Clear, SearchRequest} from "../../../actions/Search";
 import SearchResult from "../SearchResult/SearchResult";
 
 interface NavbarProps extends IComponentPropsCommon {
@@ -21,6 +21,8 @@ interface NavbarProps extends IComponentPropsCommon {
 const debounceTimeMS: number = 500;
 
 class Navbar extends VDom.Component<NavbarProps> {
+  private refSearch = new VDom.Ref<HTMLInputElement>();
+
   constructor(props: NavbarProps) {
     super(props);
     this.state = {
@@ -31,6 +33,11 @@ class Navbar extends VDom.Component<NavbarProps> {
     this.onTypeRequest = this.onTypeRequest.bind(this);
   }
 
+  clear = ():void => {
+    this.refSearch.instance.value = '';
+    this.props.dropSearch();
+  }
+
   logout = (): void => {
     this.props.logout();
   };
@@ -39,6 +46,7 @@ class Navbar extends VDom.Component<NavbarProps> {
   onTypeRequest(e: Event): void {
     const searchRequest = (e.target as HTMLInputElement).value;
     if (searchRequest === ''){
+      this.props.dropSearch();
       return
     }
     this.props.search(searchRequest);
@@ -97,13 +105,13 @@ class Navbar extends VDom.Component<NavbarProps> {
         <div class="navbar__search">
           <input
             oninput={this.onTypeRequest}
+            ref = {this.refSearch}
             class="search__input"
             type="text"
             placeholder="Search artists, albums..."
-            value={ this.props.searched ? this.state.searchRequest : ''}
           />
           <span class="fa-solid fa-magnifying-glass navbar__search__icon"></span>
-          <SearchResult/>
+          <SearchResult dropSearch={this.clear}/>
         </div>
         {content}
       </div>
@@ -123,6 +131,9 @@ const mapDispatchToProps = (dispatch: any): Map => ({
   },
   search: (request: string): void => {
     dispatch(SearchRequest(request));
+  },
+  dropSearch: (): void => {
+    dispatch(Clear);
   }
 });
 

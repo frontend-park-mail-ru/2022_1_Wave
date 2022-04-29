@@ -4,7 +4,6 @@ import { connect } from '../../../modules/Connect';
 import { IComponentPropsCommon } from '../../../modules/VDom/IComponentProps';
 import './SearchResult.scss';
 import MatchedBlock from './MatchedBlock/MatchedBlock';
-import {Clear} from "../../../actions/Search";
 
 interface SearchInputProps extends IComponentPropsCommon {
     searched: Map;
@@ -28,9 +27,6 @@ const mapStateToProps = (state: any): Map => ({
 });
 
 const mapDispatchToProps = (dispatch: any): Map => ({
-  dropSearch: (): void => {
-    dispatch(Clear);
-  }
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SearchResult);

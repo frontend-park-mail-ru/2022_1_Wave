@@ -1,29 +1,51 @@
-import Component from '../../../modules/VDom/Component';
-import VirtualElement from '../../../modules/VDom/VirtualElement';
 import VDom from '../../../modules/VDom';
 import '../../../index.css';
 import './Navbar.scss';
 import avatar from '../../../assets/avatar.png';
-import { IProps } from '../../../modules/VDom/Interfaces';
 import Link from '../../../modules/Router/Link';
 import { Map } from '../../../modules/Store/types';
 import { userLogout } from '../../../actions/User';
 import { connect } from '../../../modules/Connect';
+import { IComponentPropsCommon } from '../../../modules/VDom/IComponentProps';
+import SearchInput from '../SearchInput/SearchInput';
+import {SearchRequest} from "../../../actions/Search";
+import SearchResult from "../SearchResult/SearchResult";
 
-class Navbar extends Component {
-  constructor(props: IProps) {
+interface NavbarProps extends IComponentPropsCommon {
+  logout: () => void;
+  isAuth: boolean;
+  user: Map;
+  search: (req: string) => void;
+}
+
+const debounceTimeMS: number = 500;
+
+class Navbar extends VDom.Component<NavbarProps> {
+  constructor(props: NavbarProps) {
     super(props);
     this.state = {
       isPopupShow: false,
+      searchRequest: '',
     };
     this.logout = this.logout.bind(this);
+    this.onTypeRequest = this.onTypeRequest.bind(this);
   }
 
   logout = (): void => {
     this.props.logout();
   };
 
-  render = (): VirtualElement => {
+  @VDom.util.Debounce(debounceTimeMS)
+  onTypeRequest(e: Event): void {
+    const searchRequest = (e.target as HTMLInputElement).value;
+    if (searchRequest === ''){
+      return
+    }
+    this.props.search(searchRequest);
+    this.setState({searchRequest})
+  }
+
+  render = (): VDom.VirtualElement => {
     const content = this.props.isAuth ? (
       <div class="navbar__avatar">
         <div class="navbar__avatar__wrapper">
@@ -64,18 +86,24 @@ class Navbar extends Component {
       <div class="navbar">
         <div class="navbar__menu">
           <div class="navbar__menu__button">
-            <div class="text button__text ">DISCOVER</div>
+            <Link to="/" class="text button__text ">
+              DISCOVER
+            </Link>
           </div>
           <div class="navbar__menu__button">
             <div class="text button__text">MY LIBRARY</div>
           </div>
-          <div class="navbar__menu__button">
-            <div class="text button__text">RADIO</div>
-          </div>
         </div>
         <div class="navbar__search">
-          <input class="search__input" type="text" placeholder="Search artists, albums..." />
+          <input
+            oninput={this.onTypeRequest}
+            class="search__input"
+            type="text"
+            placeholder="Search artists, albums..."
+            value={ this.props.searched ? this.state.searchRequest : ''}
+          />
           <span class="fa-solid fa-magnifying-glass navbar__search__icon"></span>
+          <SearchResult/>
         </div>
         {content}
       </div>
@@ -86,12 +114,16 @@ class Navbar extends Component {
 const mapStateToProps = (state: any): Map => ({
   isAuth: state.user?.id != null,
   user: state.user ?? {},
+  searched: state.search ?? null,
 });
 
 const mapDispatchToProps = (dispatch: any): Map => ({
   logout: (): void => {
     dispatch(userLogout());
   },
+  search: (request: string): void => {
+    dispatch(SearchRequest(request));
+  }
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Navbar);

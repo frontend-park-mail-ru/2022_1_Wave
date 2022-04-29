@@ -70,10 +70,10 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
       this.initPlayer();
       return;
     }
-    if (!this.props.playlist){
+    if (!this.props.playlist) {
       return;
     }
-    if (this.#player.playlist !== this.props.playlist ) {
+    if (this.#player.playlist !== this.props.playlist) {
       this.setState({ trackTime: 0, trackFilled: 0, trackFetched: 0, trackBuffered: 0 });
       this.#player.updatePlaylist(this.props.playlist);
       this.props.setPos(0);
@@ -84,8 +84,7 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
     ) {
       this.#player.setPosition(this.props.position);
     }
-    if (this.#player && this.#player.audio &&
-        this.#player.audio.paused === this.props.isPlay) {
+    if (this.#player && this.#player.audio && this.#player.audio.paused === this.props.isPlay) {
       this.checkPlay();
     }
   }
@@ -238,22 +237,22 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
   setDrag(target: string, e: Event): void {
     const state: Map = {};
     switch (e.type) {
-    case 'mousedown':
-    case 'touchstart':
-      state[target] = true;
-      if (target === 'isPlayerDragged' ){
-        this.props.stop();
-      }
-      break;
-    case 'mouseup':
-    case 'touchend':
-      if (target === 'isPlayerDragged' ) {
-        this.props.play();
-      }
-      state[target] = false;
-      break;
-    default:
-      state[target] = false;
+      case 'mousedown':
+      case 'touchstart':
+        state[target] = true;
+        if (target === 'isPlayerDragged') {
+          this.props.stop();
+        }
+        break;
+      case 'mouseup':
+      case 'touchend':
+        if (target === 'isPlayerDragged') {
+          this.props.play();
+        }
+        state[target] = false;
+        break;
+      default:
+        state[target] = false;
     }
     this.setState(state);
   }
@@ -296,18 +295,18 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
     };
     let volIcon: string;
     switch (true) {
-    case this.state.trackVolume === 0:
-      volIcon = 'fa-volume-xmark';
-      break;
-    case this.state.trackVolume < 25:
-      volIcon = 'fa-volume-off';
-      break;
-    case this.state.trackVolume < 60:
-      volIcon = 'fa-volume-low';
-      break;
-    default:
-      volIcon = 'fa-volume-high';
-      break;
+      case this.state.trackVolume === 0:
+        volIcon = 'fa-volume-xmark';
+        break;
+      case this.state.trackVolume < 25:
+        volIcon = 'fa-volume-off';
+        break;
+      case this.state.trackVolume < 60:
+        volIcon = 'fa-volume-low';
+        break;
+      default:
+        volIcon = 'fa-volume-high';
+        break;
     }
     if (!this.#player) {
       return <div class="player" />;
@@ -396,7 +395,8 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
             onmousemove={this.setVolume}
             ontouchmove={this.setVolume}
             onmouseleave={this.onDragVolume}
-            class="volume__wrapper">
+            class="volume__wrapper"
+          >
             <div class="volume__input">
               <div
                 class="volume__input__state"

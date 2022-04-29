@@ -32,8 +32,8 @@ class PopularComponent extends VDom.Component<PopularComponentProps> {
           <CarouselRow>
             {this.props.albums
               ? this.props.albums.map((v: any) => (
-                <AlbumCard cover={config.files + v.cover} title={v.title} artist={v.artist}/>
-              ))
+                  <AlbumCard cover={config.files + v.cover} title={v.title} artist={v.artist} />
+                ))
               : ''}
           </CarouselRow>
         </div>
@@ -42,22 +42,21 @@ class PopularComponent extends VDom.Component<PopularComponentProps> {
           <CarouselRow>
             {this.props.artists
               ? this.props.artists.map((v: any) => (
-                <ArtistCard cover={config.files + v.cover} name={v.name}/>
-              ))
+                  <ArtistCard cover={config.files + v.cover} name={v.name} />
+                ))
               : ''}
           </CarouselRow>
         </div>
       </div>
     );
-  }
-  
+  };
 }
 const mapStateToProps = (state: any): Map => {
-  return ({
+  return {
     artists: Array.isArray(state.artistPopular) ? state.artistPopular : null,
     albums: Array.isArray(state.albumPopular) ? state.albumPopular : null,
-  });
-}
+  };
+};
 
 const mapDispatchToProps = (dispatch: any): Map => ({
   getArtist: (): void => {

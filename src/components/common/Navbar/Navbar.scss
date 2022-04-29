@@ -12,7 +12,6 @@
   --btn-inactive: #6d7184;
   --input-color: #0000002b;
   --btn-hover: #37b8d6;
-
 }
 .navbar {
   height: 100px;
@@ -20,7 +19,7 @@
   position: absolute;
   width: 100%;
   background-image: var(--linear-gradient-blue-dark);
-  &:focus-within .search{
+  &:focus-within .search {
     display: flex;
   }
   .navbar__menu {

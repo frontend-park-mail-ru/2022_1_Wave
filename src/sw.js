@@ -37,10 +37,7 @@ this.addEventListener('fetch', (event) => {
     }
     return;
   }
-  if (event.request.method === 'GET'){
-    event.respondWith(
-      caches
-        .match(event.request)
-        .then((cachedResponse) => cachedResponse)
-    )}
+  if (event.request.method === 'GET') {
+    event.respondWith(caches.match(event.request).then((cachedResponse) => cachedResponse));
+  }
 });

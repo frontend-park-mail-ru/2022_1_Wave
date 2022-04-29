@@ -49,17 +49,19 @@ export function userLogin(form: any): (dispatch: Function) => void {
 
 export function userSignup(form: any): (dispatch: Function) => void {
   return (dispatch: Function): void => {
-    user.signup(form).then((payload: any) => {
-      dispatch({ type: 'signup/user', payload });
-      dispatch({
-        type: `notifier/message`,
-        payload: { status: 'success', msg: 'Success' },
-      });
-    })
+    user
+      .signup(form)
+      .then((payload: any) => {
+        dispatch({ type: 'signup/user', payload });
+        dispatch({
+          type: `notifier/message`,
+          payload: { status: 'success', msg: 'Success' },
+        });
+      })
       .catch(() => {
         dispatch({
           type: `notifier/message`,
-          payload: {status: 'error', msg: 'User already exists'},
+          payload: { status: 'error', msg: 'User already exists' },
         });
       });
   };

@@ -7,7 +7,7 @@ import User from './models/User';
 import Router from './modules/Router/Router';
 import { StoreContext } from './modules/Connect';
 import configureStore from './store';
-import Notifier from "./components/common/Notifier/Notifier";
+import Notifier from './components/common/Notifier/Notifier';
 
 const store = configureStore();
 
@@ -26,7 +26,7 @@ User.getCSRFToken().then((): void => {
   VDom.render(
     <Router>
       <StoreContext.Provider value={store}>
-        <Notifier errActiveTime={3} successActiveTime={2}/>
+        <Notifier errActiveTime={3} successActiveTime={2} />
         <App />
       </StoreContext.Provider>
     </Router>,

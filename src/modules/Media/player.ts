@@ -42,7 +42,7 @@ export class PlayerClass {
   }
 
   updatePlaylist(tracks: ITrack[]): void {
-    if (this.audio){
+    if (this.audio) {
       this.audio.pause();
     }
     this.currentIndex = 0;
@@ -85,8 +85,7 @@ export class PlayerClass {
     }
     this.#playedCount += 1;
     const nextTrack = this.playlist[this.currentIndex];
-    this.audio.src = nextTrack ?
-      config.files + nextTrack.src : this.audio.src;
+    this.audio.src = nextTrack ? config.files + nextTrack.src : this.audio.src;
     this.currentTrack = nextTrack;
     this.#updateMetadata(this.currentTrack);
   }
@@ -97,8 +96,7 @@ export class PlayerClass {
     }
     this.currentIndex = index;
     const nextTrack = this.playlist[this.currentIndex];
-    this.audio.src = nextTrack ?
-      config.files + nextTrack.src : this.audio.src;
+    this.audio.src = nextTrack ? config.files + nextTrack.src : this.audio.src;
     this.currentTrack = nextTrack;
     this.#updateMetadata(this.currentTrack);
   }
@@ -110,8 +108,7 @@ export class PlayerClass {
     this.currentIndex -= 1;
     const prevTrack = this.playlist[this.currentIndex];
     this.audio.src = config.files + prevTrack.src;
-    this.audio.src = prevTrack ?
-      config.files + prevTrack.src : this.audio.src;
+    this.audio.src = prevTrack ? config.files + prevTrack.src : this.audio.src;
     this.currentTrack = prevTrack;
     this.#updateMetadata(this.currentTrack);
   }

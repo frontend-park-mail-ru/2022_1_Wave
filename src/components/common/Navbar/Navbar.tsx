@@ -7,10 +7,10 @@ import { Map } from '../../../modules/Store/types';
 import { userLogout } from '../../../actions/User';
 import { connect } from '../../../modules/Connect';
 import { IComponentPropsCommon } from '../../../modules/VDom/IComponentProps';
-import {Clear, SearchRequest} from "../../../actions/Search";
-import SearchResult from "../SearchResult/SearchResult";
-import Search from "./Search/Search";
-import ModMenu from "./Menu/Menu";
+import { Clear, SearchRequest } from '../../../actions/Search';
+import SearchResult from '../SearchResult/SearchResult';
+import Search from './Search/Search';
+import ModMenu from './Menu/Menu';
 
 interface NavbarProps extends IComponentPropsCommon {
   logout: () => void;
@@ -18,7 +18,6 @@ interface NavbarProps extends IComponentPropsCommon {
   user: Map;
   search: (req: string) => void;
 }
-
 
 class Navbar extends VDom.Component<NavbarProps> {
   constructor(props: NavbarProps) {
@@ -30,15 +29,12 @@ class Navbar extends VDom.Component<NavbarProps> {
     this.logout = this.logout.bind(this);
   }
 
-
   logout = (): void => {
     this.props.logout();
   };
 
-
-
   render = (): VDom.VirtualElement => {
-    console.log('screen width:',this.state.screenWidth)
+    console.log('screen width:', this.state.screenWidth);
     if (this.state.screenWidth > 720) {
       const content = this.props.isAuth ? (
         <div class="navbar__avatar">
@@ -50,10 +46,10 @@ class Navbar extends VDom.Component<NavbarProps> {
             />
             <div class="popup">
               <Link as="div" to="/settings" class="text popup__text popup__settings">
-                    Settings
+                Settings
               </Link>
               <div onClick={this.logout} class="text popup__text popup__logout">
-                    Log out
+                Log out
               </div>
             </div>
           </div>
@@ -63,14 +59,14 @@ class Navbar extends VDom.Component<NavbarProps> {
           <div class="navbar__menu__button">
             <a class="navbar__link-new-page" href="/login">
               <Link to="/login" as="div" class="text button__text">
-                    LOG IN
+                LOG IN
               </Link>
             </a>
           </div>
           <div class="navbar__menu__button">
             <a class="navbar__link-new-page" href="/signup">
               <Link to="/signup" as="div" class="text button__text">
-                    SIGN UP
+                SIGN UP
               </Link>
             </a>
           </div>
@@ -81,28 +77,25 @@ class Navbar extends VDom.Component<NavbarProps> {
           <div class="navbar__menu">
             <div class="navbar__menu__button">
               <Link to="/" class="text button__text ">
-                    DISCOVER
+                DISCOVER
               </Link>
             </div>
             <div class="navbar__menu__button">
               <div class="text button__text">MY LIBRARY</div>
             </div>
           </div>
-          <Search/>
+          <Search />
           {content}
         </div>
       );
-    } 
+    }
 
     return (
       <div class="navbar">
-        <ModMenu/>
-        <Search/>
+        <ModMenu />
+        <Search />
       </div>
     );
-      
-      
-    
   };
 }
 
@@ -121,7 +114,7 @@ const mapDispatchToProps = (dispatch: any): Map => ({
   },
   dropSearch: (): void => {
     dispatch(Clear);
-  }
+  },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Navbar);

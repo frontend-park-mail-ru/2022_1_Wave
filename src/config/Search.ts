@@ -1,3 +1,3 @@
 export default {
-    search: 'api/v1/search/',
+  search: 'api/v1/search/',
 };

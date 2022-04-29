@@ -215,40 +215,38 @@
   }
 
   @media (max-width: 580px) {
-
     .player__track {
       font-size: 20px;
       margin-left: 0.8em;
     }
-    .player__volume{
+    .player__volume {
       display: none !important;
     }
     .player__waves {
       display: none !important;
     }
-    .control__next{
-      display: none !important;
-
-    }
-    .control__prev{
+    .control__next {
       display: none !important;
     }
-    .player__control{
+    .control__prev {
+      display: none !important;
+    }
+    .player__control {
       width: 40px !important;
     }
-    .control__play_pause{
+    .control__play_pause {
       width: 100% !important;
     }
-    .player__shuffle{
+    .player__shuffle {
       display: none !important;
     }
-    .player__control{
+    .player__control {
       width: auto;
     }
   }
 
   @media (max-width: 340px) {
-    .player__progressbar__time{
+    .player__progressbar__time {
       display: none !important;
     }
     .player__track {

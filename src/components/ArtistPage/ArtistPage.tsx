@@ -91,7 +91,7 @@ class ArtistPageComponent extends VDom.Component<any, any, null, RouteNavigator>
             'background-image': `linear-gradient(180deg, rgba(1, 208, 234, 0.2) 0%, rgba(0, 0, 0, 0) 48.44%),
     linear-gradient(180deg, rgba(11, 18, 32, 0.7) 0%, rgba(11, 18, 32, 0.9) 72.92%, #0B1220 93.23%),url(${
       config.files + artist.cover
-      })`,
+    })`,
           }}
         >
           <div class="artist-page__artist">

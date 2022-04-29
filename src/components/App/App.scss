@@ -25,18 +25,17 @@
 }
 
 @media (max-width: 720px) {
-  .page{
+  .page {
     grid-template-areas:
-    'main'
-    'play';
+      'main'
+      'play';
     grid-template-columns: 1fr;
     grid-template-rows: 100% 200px;
-    .sidebar{
+    .sidebar {
       display: none;
     }
   }
 }
-
 
 .content {
   grid-area: main;

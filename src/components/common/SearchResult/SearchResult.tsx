@@ -12,7 +12,7 @@ interface SearchInputProps extends IComponentPropsCommon {
 
 class SearchResult extends VDom.Component<SearchInputProps> {
   render = (): VDom.VirtualElement => 
-    this.props.searched ? (<div class="search">
+    this.props.searched ? (<div class="search-result">
       {this.props.searched.MatchedTracks.length > 0 ?
         <MatchedBlock drop={this.props.dropSearch} type='track' title='Tracks' array={this.props.searched.MatchedTracks} /> : <></>}
       {this.props.searched.MatchedAlbums.length > 0 ?

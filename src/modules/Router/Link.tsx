@@ -1,12 +1,11 @@
-import VDom from '../VDom';
+import VDom from '@rflban/vdom';
 import RouterContext from './RouterContext';
 import RouteNavigator from './RouteNavigator';
-import { IComponentPropsCommon } from '../VDom/IComponentProps';
 
-interface LinkProps extends IComponentPropsCommon {
+interface LinkProps {
   to: string;
   class?: string;
-  as?: string | (new (props: any) => VDom.Component);
+  as?: string | (new (_props: any) => VDom.Component);
 }
 
 export default class Link extends VDom.Component<LinkProps, any, null, RouteNavigator> {
@@ -28,7 +27,7 @@ export default class Link extends VDom.Component<LinkProps, any, null, RouteNavi
   }
 
   render(): VDom.VirtualElement {
-    const { as, ...restProps } = this.props;
+    const { as, to: href, ...restProps } = this.props;
 
     let WrappedComponent = as;
     if (WrappedComponent == null) {
@@ -36,7 +35,7 @@ export default class Link extends VDom.Component<LinkProps, any, null, RouteNavi
     }
 
     return (
-      <WrappedComponent {...restProps} onClick={this.handleClick}>
+      <WrappedComponent {...{ ...restProps, href }} onClick={this.handleClick}>
         {this.props.children}
       </WrappedComponent>
     );

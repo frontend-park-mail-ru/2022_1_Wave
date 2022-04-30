@@ -1,7 +1,7 @@
-import VDom from '../../../modules/VDom';
+import VDom from '@rflban/vdom';
 import './ArtistCard.scss';
 
-export default class ArtistCard extends VDom.Component {
+export default class ArtistCard extends VDom.Component<any> {
   render = (): VDom.VirtualElement => {
     const { cover, name } = this.props;
     return (

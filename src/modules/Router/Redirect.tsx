@@ -1,9 +1,8 @@
-import VDom from '../VDom';
+import VDom from '@rflban/vdom';
 import RouteNavigator from './RouteNavigator';
 import RouterContext from './RouterContext';
-import { IComponentPropsCommon } from '../VDom/IComponentProps';
 
-interface RedirectProps extends IComponentPropsCommon {
+interface RedirectProps {
   to: string;
 }
 

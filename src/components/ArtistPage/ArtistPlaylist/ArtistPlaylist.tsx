@@ -1,6 +1,4 @@
-import Component from '../../../modules/VDom/Component';
-import VirtualElement from '../../../modules/VDom/VirtualElement';
-import VDom from '../../../modules/VDom';
+import VDom from '@rflban/vdom';
 import '../../../index.css';
 import './ArtistPlaylist.scss';
 import ArtistTrack from './ArtistTrack/ArtistTrack';
@@ -11,10 +9,9 @@ import { ITrack } from '../../../modules/Media/media';
 import { setTrack, setTracks } from '../../../actions/Playlist';
 import { startPlay, stopPlay } from '../../../actions/Player';
 import { connect } from '../../../modules/Connect';
-import { IProps } from '../../../modules/VDom/Interfaces';
 
-export default class ArtistPlaylist extends Component {
-  render = (): VirtualElement => {
+export default class ArtistPlaylist extends VDom.Component {
+  render = (): VDom.VirtualElement => {
     const { playlist } = this.props;
     let n: number = 1;
     return (

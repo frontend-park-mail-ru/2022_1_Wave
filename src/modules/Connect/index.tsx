@@ -1,9 +1,8 @@
-import VDom from '../VDom';
+import VDom from '@rflban/vdom';
 import { IStore, Map } from '../Store/types';
 import { Store } from '../Store/store';
-import { createContext } from '../VDom/Context';
 
-export const StoreContext = createContext<IStore>(null as unknown as IStore);
+export const StoreContext = VDom.createContext<IStore>(null as unknown as IStore);
 
 type ComponentConstructor<Props, State, Snapshot, ContextValue> = new (
   _props: Props,

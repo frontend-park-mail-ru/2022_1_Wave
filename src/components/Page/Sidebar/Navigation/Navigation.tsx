@@ -1,4 +1,4 @@
-import VDom from '../../../../modules/VDom';
+import VDom from '@rflban/vdom';
 import '../../../../index.css';
 import './Navigation.scss';
 

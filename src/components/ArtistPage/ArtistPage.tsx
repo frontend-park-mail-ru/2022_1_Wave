@@ -1,5 +1,5 @@
+import VDom from '@rflban/vdom';
 import Navbar from '../common/Navbar/Navbar';
-import VDom from '../../modules/VDom';
 import '../../index.css';
 import './ArtistPage.scss';
 import CarouselRow from '../common/CarouselRow/CarouselRow';
@@ -7,7 +7,6 @@ import AlbumCard from '../common/AlbumCard/AlbumCard';
 import { Map } from '../../modules/Store/types';
 import { artistGetById, artistGetPopularById } from '../../actions/Artist';
 import { connect } from '../../modules/Connect';
-import { IProps } from '../../modules/VDom/Interfaces';
 import RouterContext from '../../modules/Router/RouterContext';
 import RouteNavigator from '../../modules/Router/RouteNavigator';
 import { config } from '../../modules/Client/Client';
@@ -19,7 +18,7 @@ import ArtistPlaylist from './ArtistPlaylist/ArtistPlaylist';
 class ArtistPage extends VDom.Component<any, any, null, RouteNavigator> {
   static contextType = RouterContext;
 
-  constructor(props: IProps) {
+  constructor(props: any) {
     super(props);
     console.log(this.props);
     this.getArtist = this.getArtist.bind(this);

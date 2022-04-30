@@ -1,5 +1,5 @@
 import './Track.scss';
-import VDom from '../../../../../modules/VDom';
+import VDom from '@rflban/vdom';
 
 export default class Track extends VDom.Component {
   render = (): VDom.VirtualElement => (

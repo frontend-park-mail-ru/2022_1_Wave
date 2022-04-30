@@ -1,14 +1,14 @@
-import VDom from '../../modules/VDom';
+import VDom from '@rflban/vdom';
 import { Map } from '../../modules/Store/types';
 import { connect } from '../../modules/Connect';
 import { userSignup } from '../../actions/User';
 import { validatePassword, validateUsername, validateEmail } from '../../utils/User';
 import ValidatableInput from '../common/ValidatableInput/ValidatableInput';
-import { IComponentProps } from '../../modules/VDom/IComponentProps';
 import Link from '../../modules/Router/Link';
 import '../../index.css';
 import './SignupPage.scss';
 import Redirect from '../../modules/Router/Redirect';
+import RouteNavigator from '../../modules/Router/RouteNavigator';
 
 class SignupPage extends VDom.Component<any, any, null, RouteNavigator> {
   private readonly usernameInputRef = new VDom.Ref<ValidatableInput>();
@@ -19,7 +19,7 @@ class SignupPage extends VDom.Component<any, any, null, RouteNavigator> {
 
   private readonly repeatPasswordInputRef = new VDom.Ref<ValidatableInput>();
 
-  constructor(props: IComponentProps) {
+  constructor(props: any) {
     super(props);
 
     this.handleSubmit = this.handleSubmit.bind(this);

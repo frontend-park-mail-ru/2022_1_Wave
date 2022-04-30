@@ -1,9 +1,8 @@
 import './Player.scss';
-import VDom from '../../../modules/VDom';
+import VDom from '@rflban/vdom';
 import '../../App/App.scss';
 import marker from '../../../assets/player_marker.png';
 import { IPlayerClass } from '../../../modules/Media/media';
-import { IProps } from '../../../modules/VDom/Interfaces';
 import { PlayerClass } from '../../../modules/Media/player';
 import { config } from '../../../modules/Client/Client';
 import { Map } from '../../../modules/Store/types';
@@ -17,7 +16,7 @@ class Player extends VDom.Component {
 
   #pauseIcon: HTMLElement = (<div class="fa-regular fa-circle-pause"></div>);
 
-  constructor(props: IProps) {
+  constructor(props: any) {
     super(props);
     this.state = {
       playState: false,

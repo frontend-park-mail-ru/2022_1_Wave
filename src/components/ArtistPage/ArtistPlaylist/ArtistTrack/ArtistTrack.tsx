@@ -1,12 +1,9 @@
-import Component from '../../../../modules/VDom/Component';
-import VirtualElement from '../../../../modules/VDom/VirtualElement';
-import VDom from '../../../../modules/VDom';
+import VDom from '@rflban/vdom';
 import '../../../../index.css';
 import './ArtistTrack.scss';
-import { IProps } from '../../../../modules/VDom/Interfaces';
 
-export default class ArtistTrack extends Component {
-  constructor(props: IProps) {
+export default class ArtistTrack extends VDom.Component {
+  constructor(props: any) {
     super(props);
     this.state = {
       isLiked: false,
@@ -23,7 +20,7 @@ export default class ArtistTrack extends Component {
     this.setState({ isLiked });
   }
 
-  render = (): VirtualElement => {
+  render = (): VDom.VirtualElement => {
     const { num, cover, listenedCnt, name, duration } = this.props;
 
     const formatInt = (n: number): string => {

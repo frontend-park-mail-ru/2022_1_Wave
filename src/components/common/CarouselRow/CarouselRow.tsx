@@ -1,8 +1,6 @@
-import Component from '../../../modules/VDom/Component';
-import VirtualElement from '../../../modules/VDom/VirtualElement';
-import VDom from '../../../modules/VDom';
+import VDom from '@rflban/vdom';
 import './CarouselRow.scss';
 
-export default class CarouselRow extends Component {
-  render = (): VirtualElement => <div class="carousel-row">{this.children}</div>;
+export default class CarouselRow extends VDom.Component {
+  render = (): VDom.VirtualElement => <div class="carousel-row">{this.children}</div>;
 }

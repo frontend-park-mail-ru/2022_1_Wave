@@ -1,11 +1,8 @@
-import Component from '../../../modules/VDom/Component';
-import VirtualElement from '../../../modules/VDom/VirtualElement';
-import { IProps } from '../../../modules/VDom/Interfaces';
-import VDom from '../../../modules/VDom';
+import VDom from '@rflban/vdom';
 import './AlbumCard.scss';
 
-export default class AlbumCard extends VDom.Component {
-  constructor(props: IProps) {
+export default class AlbumCard extends VDom.Component<any> {
+  constructor(props: any) {
     super(props);
     this.state = {
       cover: '',

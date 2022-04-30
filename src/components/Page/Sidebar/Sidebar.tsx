@@ -1,5 +1,5 @@
 import './Sidebar.scss';
-import VDom from '../../../modules/VDom';
+import VDom from '@rflban/vdom';
 import '../../../index.css';
 import logo from '../../../assets/logo_img.png';
 import Navigation from './Navigation/Navigation';
@@ -7,12 +7,11 @@ import Link from '../../../modules/Router/Link';
 import { Map } from '../../../modules/Store/types';
 import { setPosition } from '../../../actions/Player';
 import { connect } from '../../../modules/Connect';
-import { IProps } from '../../../modules/VDom/Interfaces';
 import Playlist from './Playlist/Playlist';
 import { getPopularTracks } from '../../../actions/Playlist';
 
-class Sidebar extends VDom.Component {
-  constructor(props: IProps) {
+class Sidebar extends VDom.Component<any> {
+  constructor(props: any) {
     super(props);
     this.setTrack = this.setTrack.bind(this);
     this.clickRecomended = this.clickRecomended.bind(this);

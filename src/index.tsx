@@ -1,7 +1,7 @@
 // eslint-disable-next-line max-classes-per-file
 // noinspection RequiredAttributes
 
-import VDom from './modules/VDom';
+import VDom from '@rflban/vdom';
 import App from './components/App/App';
 import User from './models/User';
 import Router from './modules/Router/Router';

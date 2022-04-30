@@ -1,18 +1,15 @@
-import Component from '../../../modules/VDom/Component';
-import VirtualElement from '../../../modules/VDom/VirtualElement';
-import VDom from '../../../modules/VDom';
+import VDom from '@rflban/vdom';
 import '../../../index.css';
 import './Navbar.scss';
 import avatar from '../../../assets/avatar.jpeg';
-import { IProps } from '../../../modules/VDom/Interfaces';
 import ArtistCard from '../ArtistCard/ArtistCard';
 import Link from '../../../modules/Router/Link';
 import { Map } from '../../../modules/Store/types';
 import { userLogout } from '../../../actions/User';
 import { connect } from '../../../modules/Connect';
 
-class Navbar extends Component {
-  constructor(props: IProps) {
+class Navbar extends VDom.Component {
+  constructor(props: any) {
     super(props);
     this.state = {
       isPopupShow: false,
@@ -24,7 +21,7 @@ class Navbar extends Component {
     this.props.logout();
   };
 
-  render = (): VirtualElement => {
+  render = (): VDom.VirtualElement => {
     const content = this.props.isAuth ? (
       <div class="navbar__avatar">
         <div class="navbar__avatar__wrapper">

@@ -1,6 +1,4 @@
-import { IComponentPropsCommon } from '../VDom/IComponentProps';
-
-export default interface RouteProps extends IComponentPropsCommon {
+export default interface RouteProps {
   to: string;
   exact?: boolean;
 }

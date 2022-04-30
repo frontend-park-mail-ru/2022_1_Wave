@@ -1,15 +1,19 @@
-import VDom from '../../modules/VDom';
+import VDom from '@rflban/vdom';
 import '../../index.css';
 import './Page.scss';
 import PlayerConnected from './Player/Player';
 import SidebarConnected from './Sidebar/Sidebar';
 
-export default class Page extends VDom.Component {
+interface PageProps {
+  content: VDom.VirtualElement;
+}
+
+export default class Page extends VDom.Component<PageProps> {
   render = (): VDom.VirtualElement => {
-    const { content, isAuthorized } = this.props;
+    const { content } = this.props;
     return (
       <div class="page">
-        <SidebarConnected isAuthorized={isAuthorized} />
+        <SidebarConnected />
         <div class="content">{content}</div>
         <PlayerConnected />
       </div>

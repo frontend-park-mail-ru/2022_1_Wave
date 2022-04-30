@@ -1,11 +1,10 @@
-import { Component } from '../VDom/all';
+import VDom from '@rflban/vdom';
 import Router from './Router';
-import { zip } from '../VDom/util';
 
 export default class RouteNavigator {
   handledSwitchers: {
     path: string;
-    switcher: Component;
+    switcher: VDom.Component;
     params: object;
   }[];
 
@@ -14,7 +13,7 @@ export default class RouteNavigator {
   router: Router;
 
   get params(): any {
-    return zip(...this.handledSwitchers.map((item) => item.params));
+    return VDom.util.zip(...this.handledSwitchers.map((item) => item.params));
   }
 
   constructor(router: Router) {
@@ -39,7 +38,7 @@ export default class RouteNavigator {
     this.rerender(path);
   }
 
-  contains(switcher: Component): boolean {
+  contains(switcher: VDom.Component): boolean {
     return this.handledSwitchers.some((handled) => handled.switcher === switcher);
   }
 

@@ -1,14 +1,11 @@
-import Component from '../../modules/VDom/Component';
-import VirtualElement from '../../modules/VDom/VirtualElement';
+import VDom from '@rflban/vdom';
 import Navbar from '../common/Navbar/Navbar';
-import VDom from '../../modules/VDom';
 import './Homepage.css';
 import Popular from './Popular/Popular';
-import { IProps } from '../../modules/VDom/Interfaces';
 import PopularConnected from './Popular/Popular';
 
-export default class Homepage extends Component {
-  render = (): VirtualElement => {
+export default class Homepage extends VDom.Component {
+  render = (): VDom.VirtualElement => {
     return (
       <div class="main__page">
         <Navbar />

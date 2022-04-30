@@ -1,17 +1,15 @@
-import VirtualElement from '../../modules/VDom/VirtualElement';
+import VDom from '@rflban/vdom';
 import Navbar from '../common/Navbar/Navbar';
-import VDom from '../../modules/VDom';
 import '../../index.css';
 import './PersonalPage.scss';
 import avatar from '../../assets/avatar.jpeg';
-import { IProps } from '../../modules/VDom/Interfaces';
 import { validatePassword, validateUsername } from '../../utils/User';
 import { Map } from '../../modules/Store/types';
 import {updateAvatar, updateSelf} from '../../actions/User';
 import { connect } from '../../modules/Connect';
 
 class PersonalPage extends VDom.Component {
-  constructor(props: IProps) {
+  constructor(props: any) {
     super(props);
     this.state = {
       username: '',

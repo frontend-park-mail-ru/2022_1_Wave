@@ -1,19 +1,18 @@
 import '../../../index.css';
 import './Popular.scss';
+import VDom from '@rflban/vdom';
 import CarouselRow from '../../common/CarouselRow/CarouselRow';
 import AlbumCard from '../../common/AlbumCard/AlbumCard';
 import ArtistCard from '../../common/ArtistCard/ArtistCard';
-import VDom from '../../../modules/VDom';
 import { Map } from '../../../modules/Store/types';
 import { connect } from '../../../modules/Connect';
 import { albumGetPopular } from '../../../actions/Album';
 import { artistGetPopular } from '../../../actions/Artist';
-import { IProps } from '../../../modules/VDom/Interfaces';
 import Link from '../../../modules/Router/Link';
 import { config } from '../../../modules/Client/Client';
 
 class Popular extends VDom.Component {
-  constructor(props: IProps) {
+  constructor(props: any) {
     super(props);
     this.props.getAlbums();
     this.props.getArtist();

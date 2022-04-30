@@ -1,4 +1,4 @@
-import VDom from '../VDom';
+import VDom from '@rflban/vdom';
 import Route from './Route';
 import RouteNavigator from './RouteNavigator';
 import RouterContext from './RouterContext';

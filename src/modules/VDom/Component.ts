@@ -1,5 +1,4 @@
 import VirtualElement from './VirtualElement';
-import Ref from './Ref';
 import patch from './patchNode';
 import { ContextType } from './Context';
 import StringWrapper from './StringWrapper';
@@ -7,19 +6,19 @@ import { Debounce } from './util';
 import type { IComponentProps, IComponentPropsCommon } from './IComponentProps';
 import cloneVNode from './cloneVNode';
 
-interface ICComponentPropsInternal {
+interface IComponentPropsInternal {
   parentDomNode: HTMLElement;
   leftSibling: HTMLElement;
   vNode: VirtualElement;
 }
 
 export default abstract class Component<
-  Props extends IComponentPropsCommon = IComponentPropsCommon,
+  Props = {},
   State = any,
   Snapshot = any,
   ContextValueType = null,
 > {
-  public props: Props & IComponentProps & ICComponentPropsInternal;
+  public props: Props & {children?: VirtualElement};
 
   public node: HTMLElement | null;
 
@@ -43,7 +42,8 @@ export default abstract class Component<
     this.#destructListeners.length = 0;
   }
 
-  setProps(props: Props): void {
+  setProps(_props: Props): void {
+    const props = _props as Props & IComponentPropsInternal & IComponentPropsCommon & IComponentProps;
     const { ref } = props;
     if (ref) {
       ref.instance = this as unknown as Component;
@@ -73,7 +73,7 @@ export default abstract class Component<
       }
     }
 
-    this.props = props;
+    this.props = props as Props & {children?: VirtualElement};
   }
 
   abstract render(): VirtualElement;
@@ -85,12 +85,12 @@ export default abstract class Component<
   didMount(): void {}
 
   // eslint-disable-next-line no-unused-vars
-  didUpdate(snapshot: Snapshot | null): void {}
+  didUpdate(_snapshot: Snapshot | null): void {}
 
   willUmount(): void {}
 
   // eslint-disable-next-line no-unused-vars
-  makeSnapshot(prevProps: Props, prevState: State): Snapshot | null {
+  makeSnapshot(_prevProps: Props & {children?: VirtualElement}, _prevState: State): Snapshot | null {
     return null;
   }
 
@@ -102,25 +102,29 @@ export default abstract class Component<
 
   @Debounce(10)
   enqueueUpdate(prevProps?: Props, prevState?: State): void {
-    let { props } = this;
+    let { props: _props } = this;
     let { state } = this;
 
+    const curProps = _props as Props & IComponentPropsInternal & IComponentPropsCommon & IComponentProps;
+
     if (prevProps != null) {
-      props = prevProps;
+      _props = prevProps;
     }
     if (prevState != null) {
       state = prevState;
     }
 
-    const snapshot = this.makeSnapshot(props, state);
+    const props = _props as Props & IComponentPropsInternal & IComponentPropsCommon & IComponentProps;
+
+    const snapshot = this.makeSnapshot(props as Props & {children?: VirtualElement}, state);
 
     const rendered = this.renderAndCopy();
-    const oldVNode = this.props.vNode.children[0];
-    const { parentDomNode, leftSibling } = this.props;
+    const oldVNode = curProps.vNode.children[0];
+    const { parentDomNode, leftSibling } = curProps as IComponentPropsInternal;
 
-    rendered.parent = this.props.vNode;
+    rendered.parent = curProps.vNode;
     rendered.pos = 0;
-    this.props.vNode.children[0] = rendered;
+    curProps.vNode.children[0] = rendered;
 
     patch({
       parentDomNode,
@@ -132,28 +136,4 @@ export default abstract class Component<
     // this.props.vNode.children[0] = rendered;
     this.didUpdate(snapshot);
   }
-  //
-  // update(prevState: State): void {
-  //   const snapshot = this.makeSnapshot(this.props, prevState);
-  //
-  //   const newVNode = this.render();
-  //   const domNode = this.node!;
-  //   const oldVNode = (this.node as any)?.[VNodeAttr] as VirtualElement;
-  //   const parentDom = domNode.parentElement!;
-  //   const pos = oldVNode!.pos!;
-  //   const ctxNode = this.ctxNode;
-  //
-  //   newVNode.component = this;
-  //
-  //   patch({
-  //     newVNode,
-  //     oldVNode,
-  //     domNode,
-  //     parentDom,
-  //     pos,
-  //     ctxNode,
-  //   });
-  //
-  //   this.didUpdate(snapshot);
-  // }
 }

@@ -1,21 +1,21 @@
-import VDom from '../../modules/VDom';
+import VDom from '@rflban/vdom';
 import { Map } from '../../modules/Store/types';
 import { connect } from '../../modules/Connect';
 import { userLogin } from '../../actions/User';
 import { validatePassword, validateUsername } from '../../utils/User';
 import ValidatableInput from '../common/ValidatableInput/ValidatableInput';
-import { IComponentProps } from '../../modules/VDom/IComponentProps';
 import Link from '../../modules/Router/Link';
 import '../../index.css';
 import './LoginPage.scss';
 import Redirect from '../../modules/Router/Redirect';
+import RouteNavigator from '../../modules/Router/RouteNavigator';
 
 class LoginPage extends VDom.Component<any, any, null, RouteNavigator> {
   private readonly usernameInputRef = new VDom.Ref<ValidatableInput>();
 
   private readonly passwordInputRef = new VDom.Ref<ValidatableInput>();
 
-  constructor(props: IComponentProps) {
+  constructor(props: any) {
     super(props);
 
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -93,7 +93,7 @@ class LoginPage extends VDom.Component<any, any, null, RouteNavigator> {
           </div>
 
           <div class="menu-footer login-form_align">
-            <div class="menu-footer__line"></div>
+            <div class="menu-footer__line"/>
             <p class="menu-footer__text">Don't have an account?</p>
             <Link to="/signup" as="div" class="button button_gray menu-footer__button">
               <span>Sign up</span>

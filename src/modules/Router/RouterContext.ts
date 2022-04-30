@@ -1,3 +1,3 @@
-import { createContext } from '../VDom/Context';
+import VDom from '@rflban/vdom';
 
-export default createContext<Navigator | null>(null);
+export default VDom.createContext<Navigator | null>(null);

@@ -1,5 +1,5 @@
 import './Playlist.scss';
-import VDom from '../../../../modules/VDom';
+import VDom from '@rflban/vdom';
 import { config } from '../../../../modules/Client/Client';
 import Track from './Track/Track';
 

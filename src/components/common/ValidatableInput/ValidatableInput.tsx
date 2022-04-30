@@ -1,9 +1,8 @@
-import VDom from '../../../modules/VDom';
-import { IComponentPropsCommon } from '../../../modules/VDom/IComponentProps';
+import VDom from '@rflban/vdom';
 
 const validationTimeGapMS = 600;
 
-interface ValidatableInputProps extends IComponentPropsCommon {
+interface ValidatableInputProps {
   type: string;
   placeholder: string;
   onInput?: (_e: InputEvent) => void;
@@ -50,6 +49,7 @@ export default class ValidatableInput extends VDom.Component<
 
   @VDom.util.Debounce(validationTimeGapMS)
   validateDebounced(): void {
+    console.log('___');
     this.validate();
   }
 

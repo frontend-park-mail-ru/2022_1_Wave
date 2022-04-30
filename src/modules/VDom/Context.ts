@@ -1,5 +1,7 @@
 import VDom from './index';
 import type { IComponentProps } from './IComponentProps';
+import Fragment from './Fragment';
+import { createElement } from './all';
 
 export type ContextType<T> = {
   Provider: Function;
@@ -12,7 +14,7 @@ export const createContext = <T,>(defaultValue: T): ContextType<T> => {
   }
 
   class Provider extends VDom.Component<ProviderProps> {
-    render = (): VDom.VirtualElement => <>{this.props.children}</>;
+    render = (): VDom.VirtualElement => createElement(Fragment, {}, this.props.children);
   }
 
   return {

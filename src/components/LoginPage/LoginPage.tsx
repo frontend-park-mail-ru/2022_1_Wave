@@ -1,20 +1,26 @@
 import VDom from '@rflban/vdom';
-import { Input, FormItem } from '@rflban/waveui';
+import {
+  Input,
+  FormItem,
+  Logo,
+  Button,
+  Divider, Caption,
+} from '@rflban/waveui';
 import { Map } from '../../modules/Store/types';
 import { connect } from '../../modules/Connect';
 import { userLogin } from '../../actions/User';
-import { validatePassword, validateUsername } from '../../utils/User';
-import ValidatableInput from '../common/ValidatableInput/ValidatableInput';
-import Link from '../../modules/Router/Link';
+import Link from '../../modules/Router/Link2';
 import '../../index.css';
 import './LoginPage.scss';
 import Redirect from '../../modules/Router/Redirect';
 import RouteNavigator from '../../modules/Router/RouteNavigator';
 
-class LoginPage extends VDom.Component<any, any, null, RouteNavigator> {
-  private readonly usernameInputRef = new VDom.Ref<ValidatableInput>();
+const isNotEmpty = (val: string): boolean => val !== '';
 
-  private readonly passwordInputRef = new VDom.Ref<ValidatableInput>();
+class LoginPage extends VDom.Component<any, any, null, RouteNavigator> {
+  private readonly usernameInputRef = new VDom.Ref<FormItem>();
+
+  private readonly passwordInputRef = new VDom.Ref<FormItem>();
 
   constructor(props: any) {
     super(props);
@@ -28,10 +34,8 @@ class LoginPage extends VDom.Component<any, any, null, RouteNavigator> {
     const { instance: usernameInput } = this.usernameInputRef;
     const { instance: passwordInput } = this.passwordInputRef;
 
-    const usernameIsValid = usernameInput.validate();
-    const passwordIsValid = passwordInput.validate();
-
-    console.log(usernameIsValid, passwordIsValid);
+    const usernameIsValid = usernameInput.check();
+    const passwordIsValid = passwordInput.check();
 
     if (usernameIsValid && passwordIsValid) {
       const username = usernameInput.value;
@@ -50,59 +54,39 @@ class LoginPage extends VDom.Component<any, any, null, RouteNavigator> {
     }
 
     return (
-      <div class="login-page">
-        <form class="text login-form">
-          <Link class="main__button" to="/">
-            <div class="logo login-form__logo" />
+      <div class="waveLoginPage">
+        <div class="waveLoginPage__inner">
+          <Link to="/">
+            <Logo size="l" class="waveLoginPage__logo"/>
           </Link>
-          <FormItem as={Input} placeholder="Username" label="Username" error="Invalid username" />
-          <FormItem as={Input} placeholder="Password" label="Password" error="Invalid Password" type="password" />
-          <div class="login-form_align">
-            <label htmlFor="username" class="input-label login-form__input-label">
-              Username:
-            </label>
-            <ValidatableInput
+          <form class="waveLoginPage__form" onSubmit={this.handleSubmit}>
+            <FormItem
+              as={Input}
               ref={this.usernameInputRef}
-              type="text"
               placeholder="Username"
-              checker={validateUsername}
-              errorMessage={'Username have to contain at 3-16 characters (digits, letters or _)'}
+              label="Username"
+              error="Empty"
+              checker={isNotEmpty}
             />
-          </div>
-
-          <div class="login-form_align">
-            <label htmlFor="password" class="input-label login-form__input-label">
-              Password:
-            </label>
-            <ValidatableInput
+            <FormItem
+              as={Input}
               ref={this.passwordInputRef}
-              type="password"
               placeholder="Password"
-              checker={validatePassword}
-              errorMessage={'Password have to contain at least 6 characters (digits and letters)'}
+              label="Password"
+              error="Empty"
+              type="password"
+              checker={isNotEmpty}
             />
-          </div>
-
-          <div class="login-form_align">
-            <button onClick={this.handleSubmit} class="button button_blue login-form__button">
-              Log in
-            </button>
-            <label
-              id="login__submit-label_danger"
-              class="input-label login-form__input-label login-from__common-tooltip_danger invisible"
-            >
-              placeholder
-            </label>
-          </div>
-
-          <div class="menu-footer login-form_align">
-            <div class="menu-footer__line"/>
-            <p class="menu-footer__text">Don't have an account?</p>
-            <Link to="/signup" as="div" class="button button_gray menu-footer__button">
-              <span>Sign up</span>
+            <Button stretched size="s" class="waveLoginPage__submit"> Log in </Button>
+          </form>
+          <div class="waveLoginPage__footer">
+            <Divider/>
+            <Caption>Don’t have an account?</Caption>
+            <Link to="/signup">
+              <Button stretched size="s" mode="secondary"> Sign up </Button>
             </Link>
           </div>
-        </form>
+        </div>
       </div>
     );
   }

@@ -31,6 +31,7 @@ module.exports = (env = {}) => {
   const getPlugins = () => [
     new HtmlWebpackPlugin({
       template: './src/index.html',
+      favicon: './src/assets/favicon.png'
     }),
     new MiniCssExtractPlugin({
       filename: '[name]-[hash:8].css',

@@ -14,6 +14,7 @@ import '../../index.css';
 import './LoginPage.scss';
 import Redirect from '../../modules/Router/Redirect';
 import RouteNavigator from '../../modules/Router/RouteNavigator';
+import { entrenceSmallScreen } from '../../mediaQueries';
 
 const isNotEmpty = (val: string): boolean => val !== '';
 
@@ -22,10 +23,28 @@ class LoginPage extends VDom.Component<any, any, null, RouteNavigator> {
 
   private readonly passwordInputRef = new VDom.Ref<FormItem>();
 
+  state = {
+    smallScreen: entrenceSmallScreen.matches,
+  };
+
   constructor(props: any) {
     super(props);
 
     this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  mediaSmallScreenhandler = (e: MediaQueryListEvent): void => {
+    this.setState({
+      smallScreen: e.matches,
+    });
+  }
+
+  didMount(): void {
+    entrenceSmallScreen.addEventListener('change', this.mediaSmallScreenhandler);
+  }
+
+  willUmount(): void {
+    entrenceSmallScreen.removeEventListener('change', this.mediaSmallScreenhandler);
   }
 
   handleSubmit(e: Event): void {
@@ -53,11 +72,13 @@ class LoginPage extends VDom.Component<any, any, null, RouteNavigator> {
       return <Redirect to="/" />;
     }
 
+    const { smallScreen } = this.state;
+
     return (
       <div class="waveLoginPage">
         <div class="waveLoginPage__inner">
           <Link to="/">
-            <Logo size="l" class="waveLoginPage__logo"/>
+            <Logo size={smallScreen ? 'm': 'l'} class="waveLoginPage__logo"/>
           </Link>
           <form class="waveLoginPage__form" onSubmit={this.handleSubmit}>
             <FormItem
@@ -77,13 +98,13 @@ class LoginPage extends VDom.Component<any, any, null, RouteNavigator> {
               type="password"
               checker={isNotEmpty}
             />
-            <Button stretched size="s" class="waveLoginPage__submit"> Log in </Button>
+            <Button stretched size={smallScreen ? 'm' : 's'} class="waveLoginPage__submit"> Log in </Button>
           </form>
           <div class="waveLoginPage__footer">
             <Divider/>
-            <Caption>Don’t have an account?</Caption>
+            <Caption align="center">Don’t have an account?</Caption>
             <Link to="/signup">
-              <Button stretched size="s" mode="secondary"> Sign up </Button>
+              <Button stretched size={smallScreen ? 'm' : 's'} mode="secondary"> Sign up </Button>
             </Link>
           </div>
         </div>

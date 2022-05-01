@@ -1,41 +1,60 @@
 import VDom from '@rflban/vdom';
+import { Button, Caption, Divider, FormItem, Input, Logo } from '@rflban/waveui';
 import { Map } from '../../modules/Store/types';
 import { connect } from '../../modules/Connect';
 import { userSignup } from '../../actions/User';
 import { validatePassword, validateUsername, validateEmail } from '../../utils/User';
-import ValidatableInput from '../common/ValidatableInput/ValidatableInput';
-import Link from '../../modules/Router/Link';
+import Link from '../../modules/Router/Link2';
 import '../../index.css';
 import './SignupPage.scss';
 import Redirect from '../../modules/Router/Redirect';
 import RouteNavigator from '../../modules/Router/RouteNavigator';
+import { entrenceSmallScreen } from '../../mediaQueries';
 
 class SignupPage extends VDom.Component<any, any, null, RouteNavigator> {
-  private readonly usernameInputRef = new VDom.Ref<ValidatableInput>();
+  private readonly usernameInputRef = new VDom.Ref<FormItem>();
 
-  private readonly emailInputRef = new VDom.Ref<ValidatableInput>();
+  private readonly emailInputRef = new VDom.Ref<FormItem>();
 
-  private readonly passwordInputRef = new VDom.Ref<ValidatableInput>();
+  private readonly passwordInputRef = new VDom.Ref<FormItem>();
 
-  private readonly repeatPasswordInputRef = new VDom.Ref<ValidatableInput>();
+  private readonly repeatPasswordInputRef = new VDom.Ref<FormItem>();
 
-  constructor(props: any) {
-    super(props);
+  private repeatPasswordEdited = false;
 
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.isEqualToPassword = this.isEqualToPassword.bind(this);
-    this.additionalPasswordValidator = this.additionalPasswordValidator.bind(this);
+  state = {
+    smallScreen: entrenceSmallScreen.matches,
+  };
+
+  mediaSmallScreenhandler = (e: MediaQueryListEvent): void => {
+    this.setState({
+      smallScreen: e.matches,
+    });
   }
 
-  isEqualToPassword(repeatPassword: string): boolean {
-    return repeatPassword === this.passwordInputRef.instance.value;
+  didMount(): void {
+    entrenceSmallScreen.addEventListener('change', this.mediaSmallScreenhandler);
   }
 
-  additionalPasswordValidator(_e: InputEvent): void {
-    this.repeatPasswordInputRef.instance.validateDebounced();
+  willUmount(): void {
+    entrenceSmallScreen.removeEventListener('change', this.mediaSmallScreenhandler);
   }
 
-  handleSubmit(e: Event): void {
+  isEqualToPassword = (repeatPassword: string): boolean => (
+    repeatPassword === this.passwordInputRef.instance.value
+  )
+
+  passwordInputHandler = (_e: InputEvent): void => {
+    if (this.repeatPasswordEdited) {
+      this.repeatPasswordInputRef.instance.validate();
+    }
+  }
+
+  repeatPasswordInputHandler = (_e: InputEvent): void => {
+    this.repeatPasswordEdited = true;
+  }
+
+  handleSubmit = (e: Event): void => {
     e.preventDefault();
 
     const { instance: usernameInput } = this.usernameInputRef;
@@ -43,10 +62,10 @@ class SignupPage extends VDom.Component<any, any, null, RouteNavigator> {
     const { instance: passwordInput } = this.passwordInputRef;
     const { instance: repeatPasswordInput } = this.repeatPasswordInputRef;
 
-    const usernameIsValid = usernameInput.validate();
-    const emailIsValid = emailInput.validate();
-    const passwordIsValid = passwordInput.validate();
-    const repeatPasswordIsValid = repeatPasswordInput.validate();
+    const usernameIsValid = usernameInput.check();
+    const emailIsValid = emailInput.check();
+    const passwordIsValid = passwordInput.check();
+    const repeatPasswordIsValid = repeatPasswordInput.check();
 
     if (usernameIsValid && emailIsValid && passwordIsValid && repeatPasswordIsValid) {
       const username = usernameInput.value;
@@ -66,89 +85,61 @@ class SignupPage extends VDom.Component<any, any, null, RouteNavigator> {
       return <Redirect to="/" />;
     }
 
+    const { smallScreen } = this.state;
+
     return (
-      <div class="login-page">
-        <form class="text login-form">
-          <Link class="main__button" to="/">
-            <div class="logo login-form__logo" />
+      <div class="waveLoginPage">
+        <div class="waveLoginPage__inner">
+          <Link to="/">
+            <Logo size={smallScreen ? 'm': 'l'} class="waveLoginPage__logo"/>
           </Link>
-          <div class="login-form_align">
-            <label htmlFor="username" class="input-label login-form__input-label">
-              Username:
-            </label>
-            <ValidatableInput
+          <form class="waveLoginPage__form" onSubmit={this.handleSubmit}>
+            <FormItem
+              as={Input}
               ref={this.usernameInputRef}
-              type="text"
-              class="register-form__input-line"
               placeholder="Username"
+              label="Username"
+              error="Username have to contain at 3-16 characters (digits, letters or _)"
               checker={validateUsername}
-              errorMessage={'Username have to contain at 3-16 characters (digits, letters or _)'}
             />
-          </div>
-
-          <div class="login-form_align">
-            <label htmlFor="username" class="input-label login-form__input-label">
-              Email:
-            </label>
-            <ValidatableInput
+            <FormItem
+              as={Input}
               ref={this.emailInputRef}
-              class="register-form__input-line"
-              type="email"
               placeholder="Email"
+              label="Email"
+              error="Wrong email format"
               checker={validateEmail}
-              errorMessage={'Wrong email format'}
             />
-          </div>
-
-          <div class="login-form_align">
-            <label htmlFor="password" class="input-label register-form__input-label">
-              Password:
-            </label>
-            <ValidatableInput
+            <FormItem
+              as={Input}
               ref={this.passwordInputRef}
-              type="password"
-              class="login-form__input-line"
               placeholder="Password"
-              checker={validatePassword}
-              errorMessage={'Password have to contain at least 6 characters (digits and letters)'}
-              onInput={this.additionalPasswordValidator}
-            />
-          </div>
-
-          <div class="login-form_align">
-            <label htmlFor="password" class="input-label login-form__input-label">
-              Confirm password:
-            </label>
-            <ValidatableInput
-              ref={this.repeatPasswordInputRef}
+              label="Password"
+              error="Password have to contain at least 6 characters (digits and letters)"
               type="password"
-              class="register-form__input-line"
-              placeholder="Confirm password"
-              checker={this.isEqualToPassword}
-              errorMessage={"Passwords don't match"}
+              checker={validatePassword}
+              onInput={this.passwordInputHandler}
             />
-          </div>
-
-          <div class="login-form_align">
-            <button onClick={this.handleSubmit} class="button button_blue login-form__button">
-              Sign up
-            </button>
-            <label
-              id="login__submit-label_danger"
-              class="input-label login-form__input-label login-from__common-tooltip_danger invisible"
-            >
-              placeholder
-            </label>
-          </div>
-
-          <div class="menu-footer login-form_align">
-            <div class="menu-footer__line"></div>
-            <p class="menu-footer__text">Don't have an account?</p>
-            <Link to="/login" as="div" class="button button_gray menu-footer__button">
-              <span>Log in</span>
+            <FormItem
+              as={Input}
+              ref={this.repeatPasswordInputRef}
+              placeholder="Confirm password"
+              label="Confirm password"
+              error="Passwords don't match"
+              type="password"
+              checker={this.isEqualToPassword}
+              onInput={this.repeatPasswordInputHandler}
+            />
+            <Button stretched size={smallScreen ? 'm' : 's'} class="waveLoginPage__submit"> Sign up </Button>
+          </form>
+          <div class="waveLoginPage__footer">
+            <Divider/>
+            <Caption align="center">Already have an account?</Caption>
+            <Link to="/login">
+              <Button stretched size={smallScreen ? 'm' : 's'} mode="secondary"> Log in </Button>
             </Link>
           </div>
-        </form>
+        </div>
       </div>
     );
   }

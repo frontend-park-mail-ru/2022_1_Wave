@@ -1,6 +1,3 @@
-// eslint-disable-next-line max-classes-per-file
-// noinspection RequiredAttributes
-
 import VDom from '@rflban/vdom';
 import App from './components/App/App';
 import User from './models/User';
@@ -8,8 +5,8 @@ import Router from './modules/Router/Router';
 import { StoreContext } from './modules/Connect';
 import configureStore from './store';
 import Notifier from './components/common/Notifier/Notifier';
-import '@rflban/waveui/src/index.scss';
-import '@rflban/waveui/src/tokens/default-dark.css';
+import '@rflban/waveui/dist/default-dark';
+import '@rflban/waveui/dist/styles';
 
 const store = configureStore();
 

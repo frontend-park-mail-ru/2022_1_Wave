@@ -7,6 +7,7 @@
   background: url('../../assets/auth.png') no-repeat 50%;
   background-size: cover;
   object-fit: cover;
+  font-family: sans-serif;
 
   .login-form {
     box-sizing: border-box;
@@ -24,6 +25,7 @@
     background: url('../../assets/logo.png') no-repeat;
     width: 273px;
     height: 30%;
+    background-size: contain;
   }
 
   .login-form_align {
@@ -32,7 +34,6 @@
   }
 
   .input-label {
-    font-family: Montserrat, serif;
     font-style: normal;
     font-weight: normal;
     font-size: 14px;
@@ -47,7 +48,6 @@
     border-radius: 3px;
     border: none;
     color: #fff;
-    font-family: Montserrat, serif;
     font-style: normal;
     font-weight: normal;
     font-size: 18px;
@@ -61,7 +61,6 @@
     border: none;
     cursor: pointer;
     height: 40px;
-    font-family: Montserrat, serif;
     font-style: normal;
     font-weight: normal;
     font-size: 18px;
@@ -132,7 +131,6 @@
 
   .menu-footer__text {
     text-align: center;
-    font-family: Montserrat, serif;
     font-style: normal;
     font-weight: normal;
     font-size: 14px;

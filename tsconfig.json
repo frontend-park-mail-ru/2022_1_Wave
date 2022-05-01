@@ -1,26 +1,24 @@
 {
   "compilerOptions": {
     "experimentalDecorators": true,
-    "typeRoots": ["./node_modules/@types"],
+    "typeRoots": ["./node_modules/@rflban"],
     "outDir": "./build",
     "target": "es6",
     "module": "es6",
     "jsx": "preserve",
     "checkJs": false,
     "jsxFactory": "VDom.createElement",
+    "jsxFragmentFactory": "VDom.Fragment",
     "allowJs": false,
     "noImplicitAny": true,
     "strictNullChecks": true,
     "moduleResolution": "node",
     "baseUrl": ".",
-    "paths": {
-      "factory": ["src/modules/VDom/createElement"]
-    },
+    "types": ["vdom/dist"],
     // Ensure that .d.ts files are created by tsc, but not .js files
     "declaration": true,
     "emitDeclarationOnly": true,
     // Ensure that Babel can safely transpile files in the TypeScript project
     "isolatedModules": true
-  },
-  "types": ["src/typings/**/*.d.ts"]
+  }
 }

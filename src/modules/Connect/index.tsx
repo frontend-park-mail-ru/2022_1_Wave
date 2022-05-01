@@ -30,7 +30,7 @@ export function connect<Props, State, Snapshot, ContextValue>(
       }
 
       didMount(): void {
-        this.unsubscribe =  this.context.subscribe((state: any): void => {
+        this.unsubscribe = this.context.subscribe((state: any): void => {
           this.setState(state);
         });
       }

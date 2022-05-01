@@ -9,6 +9,7 @@ interface ValidatableInputProps {
   class?: string;
   checker: (_value: string) => boolean;
   errorMessage: string;
+  ref?: VDom.Ref<VDom.RefTypes>;
 }
 
 type ValidatableInputState = {

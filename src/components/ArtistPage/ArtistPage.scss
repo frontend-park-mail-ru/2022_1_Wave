@@ -2,22 +2,23 @@
   width: 100%;
   display: flex;
   flex-direction: column;
-  padding-bottom: 80px;
+  margin-bottom: 40px;
+
   .artist-page__main {
     background-repeat: no-repeat;
     background-size: cover;
     object-fit: cover;
     background-position: 50%;
-    background-position-y: 50%;
+    background-position-y: 0%;
     display: flex;
     flex-direction: column;
-    height: 40%;
 
     .artist-page__artist {
       display: flex;
       flex-direction: column;
       height: 100%;
       padding-left: 50px;
+      margin-top: 100px;
       justify-content: space-between;
 
       .artist__related {
@@ -57,7 +58,9 @@
         width: 150px;
         height: 40px;
         border-radius: 21px;
-
+        &:hover {
+          cursor: pointer;
+        }
         .text {
           margin: auto;
         }
@@ -70,10 +73,15 @@
         .likes__num {
           padding-left: 10px;
         }
+
+        .likes__icon {
+          &:hover {
+            cursor: pointer;
+          }
+        }
       }
     }
   }
-
   .artist__title {
     font-size: 26px;
   }
@@ -83,11 +91,12 @@
     margin-top: 20px;
     flex-grow: 1;
   }
-
   .artist-page__albums {
+    margin-top: 20px;
     padding-left: 40px;
     height: 250px;
     margin-bottom: 100px;
+
     .carousel-row {
       height: 250px;
     }

@@ -43,7 +43,7 @@ export class Store {
       if (removeIdx >= 0) {
         this.#listeners.splice(removeIdx, 1);
       }
-    }
+    };
   }
 
   dispatch(action: Function): void {
@@ -54,6 +54,10 @@ export class Store {
   }
 }
 
-export const createStore = (reducer: Reducer, initialSate: any, middlewares: MiddlewareFactory[]): Store => {
+export const createStore = (
+  reducer: Reducer,
+  initialSate: any,
+  middlewares: MiddlewareFactory[],
+): Store => {
   return new Store(reducer, middlewares, initialSate);
 };

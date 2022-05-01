@@ -1,0 +1,256 @@
+.player {
+  grid-area: play;
+  background-color: #17132c;
+  height: 85px;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+
+  & > * {
+    height: 100%;
+    align-items: center;
+  }
+
+  .player__waves {
+    margin-left: 20px;
+    margin-right: 10px;
+    width: 32px;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+
+    .bar {
+      background-color: #beb7df;
+      width: 2px;
+      transition: height 0.2s ease;
+    }
+  }
+
+  .player__track {
+    display: inline-flex;
+    cursor: default;
+    font-size: 25px;
+    .track__picture {
+      height: 2em;
+      width: 2em;
+      border-radius: 0.2em;
+      object-fit: cover;
+    }
+
+    .track__name {
+      padding-left: 0.6em;
+
+      * {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 5em;
+      }
+
+      .track__name__title {
+      }
+
+      .track__name__author {
+        font-size: 12px;
+        color: #6d7184;
+      }
+    }
+  }
+
+  .player__control {
+    width: 5.2em;
+    display: inline-flex;
+    justify-content: space-between;
+
+    & > * {
+      color: #beb7df;
+      cursor: pointer;
+    }
+
+    .control__prev {
+      font-size: 1.2em;
+    }
+
+    .control__play_pause {
+      font-size: 30px;
+    }
+
+    .control__next {
+      font-size: 1.2em;
+    }
+  }
+
+  .player__progressbar {
+    flex-grow: 1;
+    display: inline-flex;
+    align-self: center;
+    margin-left: 1em;
+    margin-right: 0.6em;
+
+    .progressbar__wrapper {
+      height: 20px;
+      flex-grow: 1;
+      display: flex;
+
+      .progressbar {
+        background-color: #5d4099;
+        flex-grow: 1;
+        height: 2px;
+        margin: auto;
+
+        & > * {
+          height: 100%;
+        }
+
+        .progressbar__prefetched {
+          background-color: #6d7184;
+        }
+
+        .progressbar__state {
+          display: flex;
+          margin-top: -2px;
+          margin-right: -11px;
+          position: relative;
+
+          .progressbar__state__line {
+            background-color: #beb7df;
+          }
+          .progressbar__state__marker {
+            height: 1.5em;
+            width: 2em;
+            margin-top: -0.75em;
+            margin-left: -1em;
+            display: flex;
+            position: absolute;
+            transition: height 1ms ease;
+            .marker__img {
+              height: 22px;
+              width: 22px;
+              position: relative;
+              margin: auto;
+              object-fit: cover;
+              background-repeat: no-repeat;
+              background-size: cover;
+            }
+          }
+        }
+      }
+
+      &:hover {
+        cursor: pointer;
+      }
+    }
+
+    .player__progressbar__time {
+      margin-left: 0.8em;
+    }
+  }
+
+  .player__shuffle {
+    width: 60px;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+
+    * {
+      color: #beb7df;
+      font-size: 1.2em;
+    }
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  .player__volume {
+    display: inline-flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 10%;
+    color: #beb7df;
+
+    .volume__icon {
+      font-size: 1.2em;
+      width: 1.2em;
+      &:hover {
+        cursor: pointer;
+      }
+    }
+
+    .volume__wrapper {
+      width: 60%;
+      display: flex;
+      height: 20px;
+
+      .volume__input {
+        height: 2px;
+        width: 100%;
+        max-width: 100%;
+        background-color: #5d4099;
+        margin: auto;
+        display: flex;
+        position: relative;
+
+        .volume__input__state {
+          background-color: #beb7df;
+          height: inherit;
+          max-width: 100%;
+        }
+
+        .volume__state__marker {
+          width: 1em;
+          height: 0.8em;
+          margin-left: -0.4em;
+          margin-top: -0.4em;
+          position: absolute;
+          transition: height 1ms ease;
+        }
+      }
+
+      &:hover {
+        cursor: pointer;
+      }
+    }
+  }
+
+  @media (max-width: 580px) {
+    .player__track {
+      font-size: 20px;
+      margin-left: 0.8em;
+    }
+    .player__volume {
+      display: none !important;
+    }
+    .player__waves {
+      display: none !important;
+    }
+    .control__next {
+      display: none !important;
+    }
+    .control__prev {
+      display: none !important;
+    }
+    .player__control {
+      width: 40px !important;
+    }
+    .control__play_pause {
+      width: 100% !important;
+    }
+    .player__shuffle {
+      display: none !important;
+    }
+    .player__control {
+      width: auto;
+    }
+  }
+
+  @media (max-width: 340px) {
+    .player__progressbar__time {
+      display: none !important;
+    }
+    .player__track {
+      font-size: 12px;
+    }
+  }
+}

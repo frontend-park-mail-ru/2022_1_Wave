@@ -38,16 +38,18 @@ export class PlayerClass {
     const source = this.#audioCtx.createMediaElementSource(this.audio);
     source.connect(this.analyser);
     this.analyser.connect(this.#audioCtx.destination);
-    this.#initMetadata(this.currentTrack);
+    this.#updateMetadata(this.currentTrack);
   }
 
   updatePlaylist(tracks: ITrack[]): void {
-    this.audio.pause();
+    if (this.audio) {
+      this.audio.pause();
+    }
     this.currentIndex = 0;
     this.playlist = tracks;
     this.currentTrack = this.playlist[this.currentIndex];
     this.audio.src = config.files + this.currentTrack.src;
-    this.#initMetadata(this.currentTrack);
+    this.#updateMetadata(this.currentTrack);
   }
 
   addTrack(track: ITrack): void {
@@ -68,7 +70,7 @@ export class PlayerClass {
   }
 
   next(): void {
-    if (this.#playedCount > this.playlist.length - 1) {
+    if (this.currentIndex > this.playlist.length - 1) {
       return;
     }
     if (this.isPlayRand) {
@@ -83,19 +85,18 @@ export class PlayerClass {
     }
     this.#playedCount += 1;
     const nextTrack = this.playlist[this.currentIndex];
-    this.audio.src = config.files + nextTrack.src;
+    this.audio.src = nextTrack ? config.files + nextTrack.src : this.audio.src;
     this.currentTrack = nextTrack;
     this.#updateMetadata(this.currentTrack);
   }
 
   setPosition(index: number): void {
-    if (this.#playedCount > this.playlist.length - 1) {
+    if (this.currentIndex > this.playlist.length - 1) {
       return;
     }
-    this.#playedCount += 1;
     this.currentIndex = index;
     const nextTrack = this.playlist[this.currentIndex];
-    this.audio.src = config.files + nextTrack.src;
+    this.audio.src = nextTrack ? config.files + nextTrack.src : this.audio.src;
     this.currentTrack = nextTrack;
     this.#updateMetadata(this.currentTrack);
   }
@@ -107,6 +108,7 @@ export class PlayerClass {
     this.currentIndex -= 1;
     const prevTrack = this.playlist[this.currentIndex];
     this.audio.src = config.files + prevTrack.src;
+    this.audio.src = prevTrack ? config.files + prevTrack.src : this.audio.src;
     this.currentTrack = prevTrack;
     this.#updateMetadata(this.currentTrack);
   }
@@ -136,27 +138,6 @@ export class PlayerClass {
       duration: this.audio.duration,
       playbackRate: this.audio.playbackRate,
       position: this.audio.currentTime,
-    });
-  }
-
-  #initMetadata(track: ITrack): void {
-    if (!('mediaSession' in navigator)) {
-      return;
-    }
-    this.#updateMetadata(track);
-    navigator.mediaSession.setActionHandler('play', () => {
-      this.play();
-    });
-    navigator.mediaSession.setActionHandler('pause', () => {
-      this.stop();
-    });
-
-    navigator.mediaSession.setActionHandler('previoustrack', () => {
-      this.prev();
-    });
-
-    navigator.mediaSession.setActionHandler('nexttrack', () => {
-      this.next();
     });
   }
 }

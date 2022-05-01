@@ -1,0 +1,65 @@
+.artist-track {
+  display: flex;
+  justify-content: space-between;
+  font-size: 18px;
+  width: 100%;
+  padding: 10px 15px;
+  &:hover {
+    background-color: #37b8d6;
+    border-radius: 10px;
+  }
+
+  .artist-track__info {
+    display: flex;
+    align-items: center;
+
+    .artist-track__cover {
+      padding-left: 16px;
+      border-radius: 5px;
+      width: 50px;
+      height: 50px;
+      object-fit: cover;
+    }
+
+    .artist-track__name {
+      padding-left: 12px;
+    }
+  }
+
+  .artist-track__meta {
+    display: flex;
+    align-items: center;
+    width: 50%;
+    justify-content: flex-end;
+
+    .artist-track__listened {
+      font-size: 13px;
+      margin-right: 25%;
+      display: flex;
+
+      .listened__dot {
+        height: 4px;
+        width: 4px;
+        background-color: #ffffff;
+        border-radius: 50%;
+        margin: auto auto auto 5px;
+      }
+    }
+
+    .liked-icon {
+      width: 20px;
+      height: 20px;
+      margin-right: 20px;
+      &:hover {
+        cursor: pointer;
+      }
+    }
+
+    .artist-track__duration {
+      font-size: 13px;
+    }
+  }
+  &:hover {
+    cursor: pointer;
+  }
+}

@@ -1,10 +1,22 @@
 import { Map } from '../modules/Store/types';
 
-const albumPopular = (state: Map, action: Map): Map => {
+export const albumPopular = (state: Map, action: Map): Map => {
   if (action.type === 'popular/album') {
-    state.popular = action.payload;
+    return action.payload;
   }
   return state;
 };
 
-export default albumPopular;
+export const album = (state: Map, action: Map): Map => {
+  if (action.type === 'get/album') {
+    return action.payload;
+  }
+  return state;
+};
+
+export const albumCover = (state: Map, action: Map): Map => {
+  if (action.type === 'get/albumCover') {
+    return action.payload;
+  }
+  return state;
+};

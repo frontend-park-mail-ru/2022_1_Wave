@@ -1,5 +1,4 @@
 import VDom from '@rflban/vdom';
-import Navbar from '../common/Navbar/Navbar';
 import '../../index.css';
 import './ArtistPage.scss';
 import CarouselRow from '../common/CarouselRow/CarouselRow';
@@ -13,21 +12,20 @@ import { config } from '../../modules/Client/Client';
 import { ITrack } from '../../modules/Media/media';
 import { setTrack, setTracks } from '../../actions/Playlist';
 import { startPlay } from '../../actions/Player';
-import ArtistPlaylist from './ArtistPlaylist/ArtistPlaylist';
+import PagePlaylist from '../common/PagePlaylist/PagePlaylist';
 
-class ArtistPage extends VDom.Component<any, any, null, RouteNavigator> {
+class ArtistPageComponent extends VDom.Component<any, any, null, RouteNavigator> {
   static contextType = RouterContext;
 
   constructor(props: any) {
     super(props);
-    console.log(this.props);
     this.getArtist = this.getArtist.bind(this);
     this.getTracks = this.getTracks.bind(this);
     this.state = {
       albumLikes: 12511,
       isLiked: false,
-      artistID: this.context.params.slug,
     };
+
     this.setLikeToArtist = this.setLikeToArtist.bind(this);
     this.addPopularToPlaylist = this.addPopularToPlaylist.bind(this);
     this.runTrack = this.runTrack.bind(this);
@@ -44,14 +42,14 @@ class ArtistPage extends VDom.Component<any, any, null, RouteNavigator> {
   }
 
   getArtist(): void {
-    if (!this.props.artist || !this.props.artist[this.state.artistID]) {
-      this.props.getArtist(this.state.artistID);
+    if (!this.props.artist || !this.props.artist[this.context.params.slug]) {
+      this.props.getArtist(this.context.params.slug);
     }
   }
 
   getTracks(): void {
-    if (!this.props.popularTracks || !this.props.popularTracks[this.state.artistID]) {
-      this.props.getArtistPopularTracks(this.state.artistID);
+    if (!this.props.popularTracks || !this.props.popularTracks[this.context.params.slug]) {
+      this.props.getArtistPopularTracks(this.context.params.slug);
     }
   }
 
@@ -62,13 +60,13 @@ class ArtistPage extends VDom.Component<any, any, null, RouteNavigator> {
     this.setState({ albumLikes: likes, isLiked });
   }
 
-  addPopularToPlaylist(e: Event): void {
-    this.props.setArtistPlaylist(this.props.popularTracks[this.state.artistID]);
+  addPopularToPlaylist(_e: Event): void {
+    this.props.setArtistPlaylist(this.props.popularTracks[this.context.params.slug]);
     this.props.runMusic();
   }
 
-  runTrack(track: ITrack): (e: Event) => void {
-    return (e: Event) => {
+  runTrack(track: ITrack): (_e: Event) => void {
+    return (_e: Event) => {
       this.props.setTrackFromArtist(track);
       this.props.runMusic();
     };
@@ -88,9 +86,13 @@ class ArtistPage extends VDom.Component<any, any, null, RouteNavigator> {
       <div class="artist-page">
         <div
           class="artist-page__main"
-          style={{ 'background-image': `url(${config.files + artist.cover})` }}
+          style={{
+            'background-image': `linear-gradient(180deg, rgba(1, 208, 234, 0.2) 0%, rgba(0, 0, 0, 0) 48.44%),
+    linear-gradient(180deg, rgba(11, 18, 32, 0.7) 0%, rgba(11, 18, 32, 0.9) 72.92%, #0B1220 93.23%),url(${
+      config.files + artist.cover
+      })`,
+          }}
         >
-          <Navbar isAuthorized={true} />
           <div class="artist-page__artist">
             <div class="artist__related">
               <div class="text related__title">Related artists:</div>
@@ -113,18 +115,19 @@ class ArtistPage extends VDom.Component<any, any, null, RouteNavigator> {
               </div>
             </div>
           </div>
+          <div class="artist-page__popular">
+            <div class="text artist__title">Popular songs</div>
+            <PagePlaylist runTrack={this.runTrack} playlist={popularTracks} />
+          </div>
         </div>
-        <div class="artist-page__popular">
-          <div class="text artist__title">Popular songs</div>
-          <ArtistPlaylist runTrack={this.runTrack} playlist={popularTracks} />
-        </div>
+
         <div class="artist-page__albums">
           <div class="text artist__title">Albums</div>
           <CarouselRow>
             {artist.albums
               ? artist.albums.map((v: any) => (
-                  <AlbumCard cover={config.files + v.cover} title={v.title} artist={v.artist} />
-                ))
+                <AlbumCard cover={config.files + v.cover} title={v.title} artist={v.artist} />
+              ))
               : ''}
           </CarouselRow>
         </div>
@@ -133,12 +136,10 @@ class ArtistPage extends VDom.Component<any, any, null, RouteNavigator> {
   };
 }
 
-const mapStateToProps = (state: any): Map => {
-  return {
-    artist: state.artist ? state.artist : null,
-    popularTracks: state.artistPopularTracks ? state.artistPopularTracks : null,
-  };
-};
+const mapStateToProps = (state: any): Map => ({
+  artist: state.artist ? state.artist : null,
+  popularTracks: state.artistPopularTracks ? state.artistPopularTracks : null,
+});
 
 const mapDispatchToProps = (dispatch: any): Map => ({
   getArtist: (id: string): void => {
@@ -161,5 +162,5 @@ const mapDispatchToProps = (dispatch: any): Map => ({
   },
 });
 
-const ArtistConnected = connect(mapStateToProps, mapDispatchToProps)(ArtistPage);
-export default ArtistConnected;
+const ArtistPage = connect(mapStateToProps, mapDispatchToProps)(ArtistPageComponent);
+export default ArtistPage;

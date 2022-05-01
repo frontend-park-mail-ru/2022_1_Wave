@@ -5,6 +5,8 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 // eslint-disable-next-line no-undef
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
+const CopyPlugin = require('copy-webpack-plugin');
+
 class EmitDeclarationOnly {
   apply(compiler) {
     compiler.hooks.shouldEmit.tap('EmitDeclarationOnly', (compilation) =>
@@ -33,7 +35,9 @@ module.exports = (env = {}) => {
     new MiniCssExtractPlugin({
       filename: '[name]-[hash:8].css',
     }),
-    // new EmitDeclarationOnly(),
+    new CopyPlugin({
+      patterns: [{ from: path.resolve(__dirname, 'src/sw.js') }],
+    }),
   ];
 
   return {
@@ -56,10 +60,6 @@ module.exports = (env = {}) => {
           exclude: /(node_modules)/,
           resolve: {
             extensions: ['.ts', '.tsx', '.js', '.json'],
-            alias: {
-              // eslint-disable-next-line no-undef
-              factory: path.resolve(__dirname, 'src/modules/VDom/createElement'),
-            },
           },
           use: [
             // { loader: 'ts-loader' },

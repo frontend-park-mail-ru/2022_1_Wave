@@ -13,44 +13,18 @@
   --input-color: #0000002b;
   --btn-hover: #37b8d6;
 }
-
 .navbar {
   height: 100px;
   display: flex;
+  position: absolute;
+  width: 100%;
   background-image: var(--linear-gradient-blue-dark);
-
-  .navbar__menu {
-    width: 400px;
-  }
-
-  .navbar__search {
-    flex-grow: 1;
-    min-width: 25%;
+  &:focus-within .search {
     display: flex;
-    justify-content: center;
-    flex-direction: column;
-    align-items: center;
-    position: relative;
-
-    input {
-      padding: 5px;
-      width: 100%;
-      border-radius: 19px;
-      height: 40px;
-      text-indent: 35px;
-      border: solid 0px;
-      background-color: var(--input-color);
-      font-size: 16px;
-      color: var(--btn-inactive);
-      outline: none;
-    }
-
-    .navbar__search__icon {
-      position: absolute;
-      color: var(--btn-inactive);
-      left: 12px;
-      font-size: 16px;
-    }
+  }
+  .navbar__menu {
+    width: 30%;
+    padding-left: 10px;
   }
 
   .navbar__menu {
@@ -104,7 +78,8 @@
       .popup {
         width: 180px;
         height: 80px;
-        background-color: #080d21;
+        background-color: #06123b;
+        border-radius: 10px;
         position: absolute;
         top: 80px;
         right: 50px;
@@ -117,15 +92,19 @@
         .popup__text {
           color: #dbd9d9;
           font-size: 14px;
-          padding-left: 20px;
+          margin: auto;
+          width: 80%;
           &:hover {
             color: #37b8d6;
             cursor: pointer;
           }
         }
+        .popup__settings {
+          border-bottom: solid 2px #5d4099;
+          padding-bottom: 10px;
+        }
       }
       &:hover {
-        cursor: pointer;
         .popup {
           display: flex;
         }
@@ -136,7 +115,7 @@
   .navbar__auth__menu {
     display: flex;
     justify-content: space-evenly;
-    width: 200px;
+    width: 20%;
     text-align: center;
     margin: auto 0;
   }

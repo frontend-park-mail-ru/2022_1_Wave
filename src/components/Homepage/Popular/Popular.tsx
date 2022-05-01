@@ -1,4 +1,3 @@
-import '../../../index.css';
 import './Popular.scss';
 import VDom from '@rflban/vdom';
 import CarouselRow from '../../common/CarouselRow/CarouselRow';
@@ -8,15 +7,20 @@ import { Map } from '../../../modules/Store/types';
 import { connect } from '../../../modules/Connect';
 import { albumGetPopular } from '../../../actions/Album';
 import { artistGetPopular } from '../../../actions/Artist';
-import Link from '../../../modules/Router/Link';
 import { config } from '../../../modules/Client/Client';
 
-class Popular extends VDom.Component {
-  constructor(props: any) {
+interface PopularComponentProps {
+  albums?: Array<object>;
+  artists?: Array<object>;
+  getAlbums: () => void;
+  getArtist: () => void;
+}
+
+class PopularComponent extends VDom.Component<PopularComponentProps> {
+  constructor(props: PopularComponentProps) {
     super(props);
     this.props.getAlbums();
     this.props.getArtist();
-    console.log(this.props);
   }
 
   render = (): VDom.VirtualElement => (
@@ -26,8 +30,8 @@ class Popular extends VDom.Component {
         <CarouselRow>
           {this.props.albums
             ? this.props.albums.map((v: any) => (
-                <AlbumCard cover={config.files + v.cover} title={v.title} artist={v.artist} />
-              ))
+              <AlbumCard cover={config.files + v.cover} title={v.title} artist={v.artist} />
+            ))
             : ''}
         </CarouselRow>
       </div>
@@ -36,13 +40,8 @@ class Popular extends VDom.Component {
         <CarouselRow>
           {this.props.artists
             ? this.props.artists.map((v: any) => (
-                <Link
-                  to={`/artist/${v.cover.split('_')[1].split('.')[0]}`}
-                  as={ArtistCard}
-                  cover={config.files + v.cover}
-                  name={v.name}
-                />
-              ))
+              <ArtistCard cover={config.files + v.cover} name={v.name} />
+            ))
             : ''}
         </CarouselRow>
       </div>
@@ -50,8 +49,8 @@ class Popular extends VDom.Component {
   );
 }
 const mapStateToProps = (state: any): Map => ({
-  artists: state.artistPopular ? state.artistPopular.popular : null,
-  albums: state.albumPopular ? state.albumPopular.popular : null,
+  artists: Array.isArray(state.artistPopular) ? state.artistPopular : null,
+  albums: Array.isArray(state.albumPopular) ? state.albumPopular : null,
 });
 
 const mapDispatchToProps = (dispatch: any): Map => ({
@@ -63,5 +62,4 @@ const mapDispatchToProps = (dispatch: any): Map => ({
   },
 });
 
-const PopularConnected = connect(mapStateToProps, mapDispatchToProps)(Popular);
-export default PopularConnected;
+export default connect(mapStateToProps, mapDispatchToProps)(PopularComponent);

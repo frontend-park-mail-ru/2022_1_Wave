@@ -1,0 +1,22 @@
+.sidebar {
+  grid-area: side;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  .sidebar__header {
+    height: 100px;
+    flex-direction: column;
+    position: relative;
+    .header__logo {
+      height: 88%;
+      display: flex;
+      .logo__picture {
+        height: 100%;
+        margin-bottom: 0px;
+        &:hover {
+          cursor: pointer;
+        }
+      }
+    }
+  }
+}

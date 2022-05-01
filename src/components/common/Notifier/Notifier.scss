@@ -1,0 +1,23 @@
+.notification {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  width: 300px;
+  height: 100px;
+  padding-left: 20px;
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  border-radius: 10px;
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.error {
+  background-color: rgba(255, 100, 100, 0.5);
+}
+
+.success {
+  background-color: rgba(55, 184, 214, 0.5);
+}

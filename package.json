@@ -12,7 +12,8 @@
   "dependencies": {
     "@babel/plugin-proposal-decorators": "^7.17.9",
     "@babel/runtime": "^7.17.8",
-    "@rflban/vdom": "^1.0.4",
+    "@rflban/vdom": "^1.0.5",
+    "@rflban/waveui": "^0.2.0",
     "node-sass": "^7.0.1",
     "postcss-cli": "^8.3.1",
     "postcss-loader": "^6.1.1"
@@ -27,6 +28,7 @@
     "@typescript-eslint/parser": "^5.15.0",
     "@typescript-eslint/utils": "^5.16.0",
     "babel-loader": "^8.2.4",
+    "copy-webpack-plugin": "^10.2.4",
     "css-loader": "^5.2.7",
     "eslint": "^8.11.0",
     "eslint-config-airbnb-base": "^15.0.0",

@@ -43,9 +43,10 @@ this.addEventListener('fetch', (event) => {
     // Если что-то закэшировалось, то мы отдаем это в двух случаях:
     // - это не апи конец
     // - нет сетевого соединения
-    if ((!apiRegex.test(event.request.url) || !navigator.onLine) && cached) {
+    const isAPIRequest = apiRegex.test(event.request.url);
+    if ((!isAPIRequest || !navigator.onLine) && cached) {
       // обновляем кэш в фоне
-      if (navigator.onLine) {
+      if (!isAPIRequest) {
         event.waitUntil(cache.add(event.request));
       }
 

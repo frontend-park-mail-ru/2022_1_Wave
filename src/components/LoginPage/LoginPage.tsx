@@ -1,4 +1,5 @@
 import VDom from '@rflban/vdom';
+import { Input, FormItem } from '@rflban/waveui';
 import { Map } from '../../modules/Store/types';
 import { connect } from '../../modules/Connect';
 import { userLogin } from '../../actions/User';
@@ -54,6 +55,8 @@ class LoginPage extends VDom.Component<any, any, null, RouteNavigator> {
           <Link class="main__button" to="/">
             <div class="logo login-form__logo" />
           </Link>
+          <FormItem as={Input} placeholder="Username" label="Username" error="Invalid username" />
+          <FormItem as={Input} placeholder="Password" label="Password" error="Invalid Password" type="password" />
           <div class="login-form_align">
             <label htmlFor="username" class="input-label login-form__input-label">
               Username:

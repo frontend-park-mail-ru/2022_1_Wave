@@ -2,7 +2,7 @@ import VDom from '@rflban/vdom';
 import '../../../index.css';
 import './Navbar.scss';
 import avatar from '../../../assets/avatar.png';
-import Link from '../../../modules/Router/Link';
+import Link from '../../../modules/Router/Link2';
 import { Map } from '../../../modules/Store/types';
 import { userLogout } from '../../../actions/User';
 import { connect } from '../../../modules/Connect';
@@ -43,11 +43,11 @@ class Navbar extends VDom.Component<NavbarProps> {
               alt="avatar.png"
             />
             <div class="popup">
-              <Link as="div" to="/settings" class="text popup__text popup__settings">
-                Settings
+              <Link to="/settings">
+                <div class="text popup__text popup__settings">SignUp</div>
               </Link>
-              <div onClick={this.logout} class="text popup__text popup__logout">
-                Log out
+              <div onClick={this.logout}>
+                <div class="text popup__text popup__logout">Logout</div>
               </div>
             </div>
           </div>
@@ -56,15 +56,15 @@ class Navbar extends VDom.Component<NavbarProps> {
         <div class="navbar__menu navbar__auth__menu  ">
           <div class="navbar__menu__button">
             <a class="navbar__link-new-page" href="/login">
-              <Link to="/login" as="div" class="text button__text">
-                LOG IN
+              <Link to="/login">
+                <div class="text button__text"> LOG IN</div>
               </Link>
             </a>
           </div>
           <div class="navbar__menu__button">
             <a class="navbar__link-new-page" href="/signup">
-              <Link to="/signup" as="div" class="text button__text">
-                SIGN UP
+              <Link to="/signup">
+                <div class="text button__text">SIGN UP</div>
               </Link>
             </a>
           </div>

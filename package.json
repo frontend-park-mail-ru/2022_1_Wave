@@ -7,7 +7,7 @@
     "format": "npx prettier --write .",
     "fix": "npx eslint --fix . && npx prettier --write .",
     "dev": "webpack serve --mode development --hot",
-    "build": "NODE_ENV=production webpack --mode production"
+    "build": "NODE_ENV=production webpack --mode production && node src/utils/generateSW.js"
   },
   "dependencies": {
     "@babel/plugin-proposal-decorators": "^7.17.9",
@@ -16,7 +16,8 @@
     "@rflban/waveui": "^0.3.1",
     "node-sass": "^7.0.1",
     "postcss-cli": "^8.3.1",
-    "postcss-loader": "^6.1.1"
+    "postcss-loader": "^6.1.1",
+    "glob": "^7.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.17.8",

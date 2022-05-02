@@ -46,7 +46,7 @@ this.addEventListener('fetch', (event) => {
     const isAPIRequest = apiRegex.test(event.request.url);
     if ((!isAPIRequest || !navigator.onLine) && cached) {
       // обновляем кэш в фоне
-      if (!isAPIRequest) {
+      if (navigator.onLine) {
         event.waitUntil(cache.add(event.request));
       }
 

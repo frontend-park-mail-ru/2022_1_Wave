@@ -2,7 +2,7 @@ const cachedUrl = ['/'];
 
 const cacheName = 'waveCache';
 
-this.addEventListener('install', (event) => {
+self.addEventListener('install', (event) => {
   event.waitUntil(
     caches
       .open(cacheName)
@@ -21,17 +21,17 @@ const fonts = /(.ttf|.woff2)$/;
 
 const regexes = [apiRegex, assetsRegex, staticHtml, imagesRegex, staticJS, staticCSS, fonts];
 
-this.addEventListener('activate', function (event) {
+self.addEventListener('activate', (_event) => {
   console.log('Claiming control');
   return this.clients.claim();
 });
 
-const match = (url) => regexes.reduce((accum, regex) => regex.test(url) || accum, false);
+const needCache = (url) => regexes.reduce((accum, regex) => regex.test(url) || accum, false);
 
-this.addEventListener('fetch', (event) => {
+self.addEventListener('fetch', (event) => {
   // Кешируем только GET запросы, удовлетворяющие условию
   // иначе выполняем исходный запрос
-  if (event.request.method !== 'GET' || !match(event.request.url)) {
+  if (event.request.method !== 'GET' || !needCache(event.request.url)) {
     return;
   }
 
@@ -67,7 +67,7 @@ this.addEventListener('fetch', (event) => {
   })());
   //
   // if (navigator.onLine) {
-  //   if (event.request.method === 'GET' && match(event.request.url)) {
+  //   if (event.request.method === 'GET' && needCache(event.request.url)) {
   //     caches.open(cacheName).then((cache) => {
   //       cache.add(event.request.url);
   //     });

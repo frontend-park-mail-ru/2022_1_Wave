@@ -48,7 +48,8 @@ export class PlayerClass {
     this.currentIndex = 0;
     this.playlist = tracks;
     this.currentTrack = this.playlist[this.currentIndex];
-    this.audio.src = this.currentTrack ? config.files + this.currentTrack.src : this.audio.src;
+    console.log('try to ad audio src: ',this.currentTrack,'audio:',this.audio);
+    this.audio.src = this.currentTrack? config.files + this.currentTrack.src : '';
     this.#updateMetadata(this.currentTrack);
   }
 

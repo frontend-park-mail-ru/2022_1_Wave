@@ -36,12 +36,23 @@
   .main__top-chart__album__controls {
     padding-top: 40px;
     display: flex;
-    justify-content: space-between;
     *{
+      width: 150px;
       display: flex;
       justify-content: center;
-      width: 45%;
       box-sizing: border-box;
+    }
+    .main__top-chart__album__btn_follow{
+      margin-left: 30px;
+    }
+    @media (max-width: 400px) {
+      justify-content: space-between;
+      *{
+        width: 45%;
+      }
+      .main__top-chart__album__btn_follow {
+        margin-left: 0px;
+      }
     }
   }
 

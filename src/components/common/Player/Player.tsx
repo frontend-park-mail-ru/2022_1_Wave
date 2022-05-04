@@ -8,6 +8,8 @@ import { config } from '../../../modules/Client/Client';
 import { Map } from '../../../modules/Store/types';
 import { connect } from '../../../modules/Connect';
 import { setPosition, startPlay, stopPlay } from '../../../actions/Player';
+import RouteNavigator from '../../../modules/Router/RouteNavigator';
+import RouterContext from '../../../modules/Router/RouterContext';
 
 interface PlayerComponentProps {
   play: () => void;
@@ -18,12 +20,14 @@ interface PlayerComponentProps {
   isPlay: boolean;
 }
 
-class PlayerComponent extends VDom.Component<PlayerComponentProps> {
+class PlayerComponent extends VDom.Component<PlayerComponentProps, any, null, RouteNavigator> {
   #player: IPlayerClass;
 
   #playIcon: HTMLElement = (<div class="fa-regular fa-circle-play"></div>);
 
   #pauseIcon: HTMLElement = (<div class="fa-regular fa-circle-pause"></div>);
+
+  static contextType = RouterContext;
 
   constructor(props: PlayerComponentProps) {
     super(props);
@@ -44,6 +48,7 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
       waveHeights: [0, 0, 0, 0],
       isPlayerDragged: false,
       isVolumeDragged: false,
+      isMobile: false,
     };
     this.initPlayer = this.initPlayer.bind(this);
     this.loadTrackData = this.loadTrackData.bind(this);
@@ -93,6 +98,11 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
     if (!this.#player && this.props.playlist && this.props.playlist.length > 0) {
       this.initPlayer();
     }
+    console.log('ctx params', this.context.unhandledPath === '/player');
+  }
+
+  willUmount() {
+    this.#player = null;
   }
 
   initPlayer(): void {
@@ -150,7 +160,8 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
     this.#player.stop();
   }
 
-  tooglePlay(): void {
+  tooglePlay(e: Event): void {
+    e.stopPropagation();
     if (this.props.isPlay) {
       this.props.stop();
       return;
@@ -158,14 +169,16 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
     this.props.play();
   }
 
-  runNext(): void {
+  runNext(e: Event): void {
+    e.stopPropagation();
     this.setState({ trackFilled: 100, playState: true });
     this.#player.next();
     this.props.setPos(this.#player.currentIndex);
     this.checkPlay();
   }
 
-  runPrev(): void {
+  runPrev(e: Event): void {
+    e.stopPropagation();
     this.#player.prev();
     this.props.setPos(this.#player.currentIndex);
     this.checkPlay();
@@ -216,6 +229,7 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
   }
 
   setTime(e: MouseEvent): void {
+    e.stopPropagation();
     if ((e.type === 'mousemove' || e.type === 'touchmove') && !this.state.isPlayerDragged) {
       return;
     }
@@ -224,16 +238,19 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
   }
 
   onDragVolume(e: Event): void {
+    e.stopPropagation();
     const target = 'isVolumeDragged';
     this.setDrag(target, e);
   }
 
   onDragPlayer(e: Event): void {
+    e.stopPropagation();
     const target = 'isPlayerDragged';
     this.setDrag(target, e);
   }
 
   setDrag(target: string, e: Event): void {
+    e.stopPropagation();
     const state: Map = {};
     switch (e.type) {
     case 'mousedown':
@@ -257,6 +274,7 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
   }
 
   setVolume(e: MouseEvent): void {
+    e.stopPropagation();
     if ((e.type === 'mousemove' || e.type === 'touchmove') && !this.state.isVolumeDragged) {
       return;
     }
@@ -277,12 +295,14 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
     return relativePosition;
   }
 
-  toogleShuffle(): void {
+  toogleShuffle(e: Event): void {
+    e.preventDefault();
     this.#player.isPlayRand = !this.#player.isPlayRand;
     this.setState({ playRand: this.#player.isPlayRand });
   }
 
-  toogleMute(): void {
+  toogleMute(e: Event): void {
+    e.preventDefault();
     this.#player.audio.volume = this.state.trackVolume > 0 ? 0 : 0.5;
     this.setState({ trackVolume: this.state.trackVolume > 0 ? 0 : 50 });
   }
@@ -311,35 +331,36 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
       return <div class="player" />;
     }
     return (
-      <div class="player">
+      <div class={`player ${this.state.isMobile ? 'player_mobile' : ''}`}>
         <div class="player__waves">
-          <div class='bar' id='1' style={{ height: `${this.state.waveHeights[0]}%` }}/>
-          <div class='bar' id='2' style={{ height: `${this.state.waveHeights[1]}%` }}/>
-          <div class='bar' id='3' style={{ height: `${this.state.waveHeights[2]}%` }}/>
-          <div class='bar' id='4' style={{ height: `${this.state.waveHeights[3]}%` }}/>
+          <div class="bar" id="1" style={{ height: `${this.state.waveHeights[0]}%` }} />
+          <div class="bar" id="2" style={{ height: `${this.state.waveHeights[1]}%` }} />
+          <div class="bar" id="3" style={{ height: `${this.state.waveHeights[2]}%` }} />
+          <div class="bar" id="4" style={{ height: `${this.state.waveHeights[3]}%` }} />
         </div>
         <div class="player__track">
-          <img class='track__picture' src={this.state.trackData.cover}/>
+          <img class="track__picture" src={this.state.trackData.cover} />
           <div class="track__name">
             <div class="text track__name__title">{this.state.trackData.title}</div>
             <div class="text track__name__author">{this.state.trackData.author}</div>
           </div>
         </div>
         <div class="player__control">
-          <div onclick={this.runPrev} class="control__prev">
-            <div class='fa-solid fa-backward-step'/>
+          <div onclick={this.runPrev} ontouchend={this.runPrev} class="control__prev">
+            <div class="fa-solid fa-backward-step" />
           </div>
-          <div onclick={this.tooglePlay} class="control__play_pause">
+          <div onclick={this.tooglePlay} ontouchend={this.tooglePlay} class="control__play_pause">
             {this.props.isPlay ? this.#pauseIcon : this.#playIcon}
           </div>
 
-          <div onclick={this.runNext} class="control__next">
-            <div class='fa-solid fa-forward-step'/>
+          <div onclick={this.runNext} ontouchend={this.runNext} class="control__next">
+            <div class="fa-solid fa-forward-step" />
           </div>
         </div>
         <div class="player__progressbar">
           <div
             onclick={this.setTime}
+            ontouchend={this.setTime}
             onmousemove={this.setTime}
             ontouchmove={this.setTime}
             onmouseleave={this.onDragPlayer}
@@ -381,19 +402,20 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
             {`${formatInt(this.state.trackTime / 60)}:${formatInt(this.state.trackTime % 60)}`}
           </div>
         </div>
-        <div onclick={this.toogleShuffle} class="player__shuffle">
+        <div onclick={this.toogleShuffle} ontouchend={this.toogleShuffle} class="player__shuffle">
           <div
             class="fa-solid fa-shuffle"
             style={{ color: this.state.playRand ? '#5D4099' : '#BEB7DF' }}
           ></div>
         </div>
         <div class="player__volume">
-          <div onclick={this.toogleMute} class={`fa-solid ${volIcon} volume__icon`}></div>
+          <div onclick={this.toogleMute}  ontouchend={this.toogleMute} class={`fa-solid ${volIcon} volume__icon`}></div>
           <div
             onclick={this.setVolume}
             onmousemove={this.setVolume}
             ontouchmove={this.setVolume}
             onmouseleave={this.onDragVolume}
+            ontouchend={this.setVolume}
             class="volume__wrapper"
           >
             <div class="volume__input">

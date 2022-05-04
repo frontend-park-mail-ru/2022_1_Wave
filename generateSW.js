@@ -7,7 +7,7 @@ const cachedUrl = [
   '/login',
   '/signup',
 ].flat(Infinity)
-  .map((url) => url.replace('./build', '').replace('./sw.js','/')).join('\',\'');
+  .map((url) => url.replace('./build', '').replace('/sw.js','/')).join('\',\'');
 
 const content = fs.readFileSync('./src/sw.js');
 let contentString = String(content);

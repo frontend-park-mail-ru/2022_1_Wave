@@ -4,6 +4,7 @@ import { Map } from '../../../../modules/Store/types';
 import { Clear, SearchRequest } from '../../../../actions/Search';
 import { connect } from '../../../../modules/Connect';
 import './Search.scss';
+import {SearchLeftIcon} from "@rflban/waveui";
 
 interface SearchProps extends VDom.IComponentProps {
   dropSearch: () => void;
@@ -44,7 +45,7 @@ class Search extends VDom.Component<SearchProps> {
         type="text"
         placeholder="Search artists, albums..."
       />
-      <span class="fa-solid fa-magnifying-glass search__icon"></span>
+      <SearchLeftIcon class="search__icon"/>
       <SearchResult dropSearch={this.clear} />
     </div>
   );

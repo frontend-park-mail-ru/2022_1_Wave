@@ -1,14 +1,16 @@
 import VDom from '@rflban/vdom';
 import '../../../index.css';
 import './Navbar.scss';
-import avatar from '../../../assets/avatar.png';
-import Link from '../../../modules/Router/Link';
-import { Map } from '../../../modules/Store/types';
-import { userLogout } from '../../../actions/User';
-import { connect } from '../../../modules/Connect';
-import { Clear, SearchRequest } from '../../../actions/Search';
+import {Map} from '../../../modules/Store/types';
+import {userLogout} from '../../../actions/User';
+import {connect} from '../../../modules/Connect';
+import {Clear, SearchRequest} from '../../../actions/Search';
 import Search from './Search/Search';
-import ModMenu from './Menu/Menu';
+import MobMenu from './MobMenu/MobMenu';
+import AuthMenu from "./AuthMenu/AuthMenu";
+import NavMenu from "./NavMenu/NavMenu";
+import ProfileMenu from "./ProfileMenu/ProfileMenu";
+import {mainSmallScreen} from "../../../mediaQueries";
 
 interface NavbarProps {
   logout: () => void;
@@ -18,13 +20,30 @@ interface NavbarProps {
 }
 
 class Navbar extends VDom.Component<NavbarProps> {
+  state = {
+    isPopupShow: false,
+    isSmallScreen: mainSmallScreen.matches,
+    isSidebarOpened: false,
+  };
+
   constructor(props: NavbarProps) {
     super(props);
-    this.state = {
-      isPopupShow: false,
-      screenWidth: window.screen.width,
-    };
+
     this.logout = this.logout.bind(this);
+  }
+
+  mediaSmallScreenhandler = (e: MediaQueryListEvent): void => {
+    this.setState({
+      isSmallScreen: e.matches,
+    });
+  }
+
+  didMount(): void {
+    mainSmallScreen.addEventListener('change', this.mediaSmallScreenhandler);
+  }
+
+  willUmount(): void {
+    mainSmallScreen.removeEventListener('change', this.mediaSmallScreenhandler);
   }
 
   logout = (): void => {
@@ -32,66 +51,23 @@ class Navbar extends VDom.Component<NavbarProps> {
   };
 
   render = (): VDom.VirtualElement => {
-    console.log('screen width:', this.state.screenWidth);
-    if (this.state.screenWidth > 720) {
-      const content = this.props.isAuth ? (
-        <div class="navbar__avatar">
-          <div class="navbar__avatar__wrapper">
-            <img
-              class="navbar__avatar__img_round"
-              src={this.props.user.avatar ?? avatar}
-              alt="avatar.png"
-            />
-            <div class="popup">
-              <Link as="div" to="/settings" class="text popup__text popup__settings">
-                Settings
-              </Link>
-              <div onClick={this.logout} class="text popup__text popup__logout">
-                Log out
-              </div>
-            </div>
-          </div>
-        </div>
-      ) : (
-        <div class="navbar__menu navbar__auth__menu  ">
-          <div class="navbar__menu__button">
-            <a class="navbar__link-new-page" href="/login">
-              <Link to="/login" as="div" class="text button__text">
-                LOG IN
-              </Link>
-            </a>
-          </div>
-          <div class="navbar__menu__button">
-            <a class="navbar__link-new-page" href="/signup">
-              <Link to="/signup" as="div" class="text button__text">
-                SIGN UP
-              </Link>
-            </a>
-          </div>
-        </div>
-      );
+    if (!this.state.isSmallScreen) {
       return (
         <div class="navbar">
-          <div class="navbar__menu">
-            <div class="navbar__menu__button">
-              <Link to="/" class="text button__text ">
-                DISCOVER
-              </Link>
-            </div>
-            <div class="navbar__menu__button">
-              <div class="text button__text">MY LIBRARY</div>
-            </div>
-          </div>
-          <Search />
-          {content}
+          <NavMenu/>
+          <Search/>
+          {this.props.isAuth ?
+            <ProfileMenu avatarSrc={this.props.user?.avatar} logout={this.logout}/> :
+            <AuthMenu/>
+          }
         </div>
       );
     }
 
     return (
       <div class="navbar">
-        <ModMenu />
-        <Search />
+        <MobMenu/>
+        <Search/>
       </div>
     );
   };

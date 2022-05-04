@@ -7,7 +7,7 @@ export default class Playlist extends VDom.Component<any> {
   render = (): VDom.VirtualElement => {
     let n = 1;
     return (
-      <ul class="sidebar__my-playlist">
+      <div class="sidebar__my-playlist">
         {this.props.playlist && this.props.playlist.length > 0
           ? this.props.playlist.map((v: any) => {
             if (this.props.highlite === n - 1) {
@@ -33,7 +33,7 @@ export default class Playlist extends VDom.Component<any> {
             );
           })
           : ''}
-      </ul>
+      </div>
     );
   };
 }

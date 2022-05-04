@@ -7,7 +7,7 @@
   left: 0;
   width: 100%;
   display: flex;
-
+  z-index: 980;
   & > * {
     height: 100%;
     align-items: center;
@@ -214,6 +214,11 @@
     }
   }
 
+  @media (max-width: 740px) {
+    .player__shuffle {
+      display: none !important;
+    }
+  }
   @media (max-width: 580px) {
     .player__track {
       font-size: 20px;
@@ -243,14 +248,32 @@
     .player__control {
       width: auto;
     }
+
   }
 
   @media (max-width: 340px) {
+    justify-content: space-between;
     .player__progressbar__time {
       display: none !important;
     }
     .player__track {
-      font-size: 12px;
+      width: 50%;
+      max-width: 50%;
+      font-size: 13px;
+      .track__picture {
+        width: 50px;
+        height: 50px;
+      }
+      .track__name{
+        width: 100%;
+        * {
+          width: 100%;
+          max-width: 100%;
+        }
+      }
+    }
+    .player__progressbar {
+      display: none;
     }
   }
 }

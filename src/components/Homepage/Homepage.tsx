@@ -1,6 +1,7 @@
 import VDom from '@rflban/vdom';
 import './Homepage.scss';
 import Popular from './Popular/Popular';
+import {Button} from "@rflban/waveui";
 
 export default class Homepage extends VDom.Component {
   render = (): VDom.VirtualElement => (
@@ -14,12 +15,8 @@ export default class Homepage extends VDom.Component {
           </div>
         </div>
         <div class="main__top-chart__album__controls">
-          <div class="button main__top-chart__album__btn_play">
-            <div class="text">Play</div>
-          </div>
-          <div class="button main__top-chart__album__btn_follow">
-            <div class="text">Follow</div>
-          </div>
+          <Button class='main__top-chart__album__btn_play' mode='primary'>Play</Button>
+          <Button class='main__top-chart__album__btn_follow' mode='outline'>Follow</Button>
         </div>
       </div>
       <Popular />

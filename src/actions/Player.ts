@@ -19,7 +19,6 @@ export function stopPlay(dispatch: Function): void {
 
 export function setPosition(pos: number): (dispatch: Function) => void {
   return (dispatch: Function): void => {
-    console.log('SesetPositiont:', pos);
     const res: object = {
       value: pos,
     };

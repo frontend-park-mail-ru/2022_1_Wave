@@ -1,6 +1,7 @@
 import VDom from '@rflban/vdom';
 import './AlbumCard.scss';
-import Link from '../../../modules/Router/Link';
+import {Caption} from "@rflban/waveui";
+import Link from '../../../modules/Router/Link2';
 
 interface AlbumCardProps {
   cover: string;
@@ -14,15 +15,13 @@ export default class AlbumCard extends VDom.Component<AlbumCardProps> {
 
     return (
       <div class="album">
-        <Link
-          to={`/album/${cover.split('_')[1].split('.')[0]}`}
-          as="img"
-          class="album__image"
-          src={cover}
-        />
-        <Link to={`/album/${cover.split('_')[1].split('.')[0]}`} as="div" class="text album__title">
-          {title}
+        <Link to={`/album/${cover.split('_')[1].split('.')[0]}`}>
+          <img class="album__image" src={cover}/>
         </Link>
+        <Link to={`/album/${cover.split('_')[1].split('.')[0]}`}>
+          <Caption class='album__title' align='left' size='m'>{title}</Caption>
+        </Link>
+        <br/>
         <Link to={`/artist/${cover.split('_')[1].split('.')[0]}`} class="text album__artist">
           {artist}
         </Link>

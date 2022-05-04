@@ -15,10 +15,41 @@ import Player from '../common/Player/Player';
 import { NotifyType, notify } from '../../actions/Notifier';
 import AlbumPage from '../AlbumPage/AlbumPage';
 import Navbar from '../common/Navbar/Navbar';
+import {mainSmallScreen} from "../../mediaQueries";
+import {closeSidebar, openSidebar, OpenSidebar} from "../../actions/Sidebar";
 
 class App extends VDom.Component<any> {
+  state = {
+    gesture: {
+      startX:0,
+    }
+  }
+
   didMount(): void {
     this.props.userGetSelf();
+    mainSmallScreen.addEventListener('change', this.mediaSmallScreenhandler);
+  }
+
+  mediaSmallScreenhandler = (e: MediaQueryListEvent): void => {
+    this.setState({
+      isSmallScreen: e.matches,
+    });
+  }
+
+  willUmount(): void {
+    mainSmallScreen.removeEventListener('change', this.mediaSmallScreenhandler);
+  }
+
+  handleGesture = (e:TouchEvent):void => {
+    const touchendX = e.changedTouches[0].screenX;
+    if (touchendX <= this.state.gesture.startX) this.props.closeSidebar();
+    if (touchendX > this.state.gesture.startX) this.props.openSidebar();
+    this.setState({gesture: {startX: 0}})
+  }
+
+  catchStart = (e:TouchEvent):void => {
+    const touchstartX = e.changedTouches[0].screenX;
+    this.setState({gesture: {result:null,startX: touchstartX}})
   }
 
   render(): VDom.VirtualElement {
@@ -31,13 +62,13 @@ class App extends VDom.Component<any> {
           <SignupPage />
         </Route>
         <Route to="/">
-          <div class="page">
-            <Sidebar />
+          <div ontouchstart={this.catchStart} ontouchend={this.handleGesture} class="page">
+            <Sidebar/>
             <div class="content">
-              <Navbar />
+              <Navbar/>
               <RouteSwitch>
                 <Route to="" exact>
-                  <Homepage />
+                  <Homepage/>
                 </Route>
                 <Route to="/artist/:slug">
                   <ArtistPage />
@@ -69,6 +100,12 @@ const mapDispatchToProps = (dispatch: any): Map => ({
   },
   notifyErr: (notification: NotifyType): void => {
     dispatch(notify(notification));
+  },
+  openSidebar: ():void =>{
+    dispatch(openSidebar);
+  },
+  closeSidebar: ():void =>{
+    dispatch(closeSidebar)
   },
 });
 

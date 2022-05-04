@@ -17,6 +17,7 @@ import AlbumPage from '../AlbumPage/AlbumPage';
 import Navbar from '../common/Navbar/Navbar';
 import {mainSmallScreen} from "../../mediaQueries";
 import {closeSidebar, openSidebar} from "../../actions/Sidebar";
+import Library from '../Library/Library';
 
 class App extends VDom.Component<any> {
   state = {
@@ -103,6 +104,9 @@ class App extends VDom.Component<any> {
                 </Route>
                 <Route to="/settings">
                   <PersonalPage />
+                </Route>
+                <Route to="/library">
+                  <Library />
                 </Route>
               </RouteSwitch>
             </div>

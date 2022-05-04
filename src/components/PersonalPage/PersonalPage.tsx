@@ -222,7 +222,7 @@ class PersonalPageComponent extends VDom.Component<
 
   render(): VDom.VirtualElement {
     if (!this.props.isAuth) {
-      return <Redirect to="/" />;
+      return <Redirect to="/login" />;
     }
 
     const { smallScreen } = this.state;

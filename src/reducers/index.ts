@@ -8,6 +8,7 @@ import { playerPlay, playerPosition } from './player';
 import search from './search';
 import notification from './notification';
 import sidebar from './sidebar';
+import { userPlaylists } from './userPlaylists';
 
 export default combineReducers({
   tracksPopular,
@@ -24,4 +25,5 @@ export default combineReducers({
   notification,
   search,
   sidebar,
+  userPlaylists,
 });

@@ -24,7 +24,8 @@ class SidebarComponent extends VDom.Component<any> {
   }
 
   setTrack(pos: number): (_e: Event) => void {
-    return (_e: Event): void => {
+    return (e: Event): void => {
+      e.stopPropagation();
       this.props.setPos(pos);
     };
   }
@@ -87,7 +88,7 @@ class SidebarComponent extends VDom.Component<any> {
         : ''}`}>
         <div class="sidebar__header">
           <Link to="/">
-            <Logo size={this.state.isSmallScreen ? 's':'m'} class="header__logo"/>
+            <Logo size={'m'} class="header__logo"/>
           </Link>
         </div>
         {content}

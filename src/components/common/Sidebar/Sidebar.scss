@@ -27,12 +27,18 @@
   background-color: #0b1220;
   z-index: 98;
   transition: margin-left 0.5s ease;
-  width: 60%;
+  width: 330px;
+  @media (max-width: 363px) {
+    width: 90%;
+  }
 }
 
 .sidebar_open{
   margin-left: 0%;
 }
 .sidebar_closed{
-  margin-left: -60%;
+  margin-left: -330px;
+  @media (max-width: 363px) {
+    margin-left: -90%;
+  }
 }

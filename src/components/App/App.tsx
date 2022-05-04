@@ -42,7 +42,7 @@ class App extends VDom.Component<any> {
 
   handleGesture = (e:TouchEvent):void => {
     const touchendX = e.changedTouches[0].screenX;
-    if (touchendX < this.state.gesture.startX) this.props.closeSidebar();
+    if (touchendX <= this.state.gesture.startX) this.props.closeSidebar();
     if (touchendX > this.state.gesture.startX) this.props.openSidebar();
     this.setState({gesture: {startX: 0}})
   }

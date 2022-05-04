@@ -17,6 +17,7 @@ import { updateAvatar, updateSelf, userGetSelf, userSet } from '../../actions/Us
 import { connect } from '../../modules/Connect';
 import ValidatableInput from '../common/ValidatableInput/ValidatableInput';
 import Redirect from '../../modules/Router/Redirect';
+import { entrenceSmallScreen, mainSmallScreen } from '../../mediaQueries';
 
 const validateImage = (image?: File): boolean => (
   image != null && image.size <= 2 * 1024 * 1024
@@ -38,6 +39,7 @@ interface PersonalPageProps {
 type PersonalPageState = {
   fileLoaded: boolean;
   fileSrc: string;
+  smallScreen: boolean;
 };
 
 class PersonalPageComponent extends VDom.Component<
@@ -56,12 +58,14 @@ class PersonalPageComponent extends VDom.Component<
 
   private usernameEdited = false;
 
+  state = {
+    fileLoaded: false,
+    fileSrc: avatar,
+    smallScreen: mainSmallScreen.matches,
+  };
+
   constructor(props: PersonalPageProps) {
     super(props);
-    this.state = {
-      fileLoaded: false,
-      fileSrc: avatar,
-    };
     this.props.userGetSelf();
 
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -112,7 +116,7 @@ class PersonalPageComponent extends VDom.Component<
   handleSubmit = (e: Event): void => {
     e.preventDefault();
 
-    const { user, setNewUser, setNewAvatar, userGetSelf: getSelf, setLocalUser } = this.props;
+    const { user, setNewUser, setNewAvatar, setLocalUser } = this.props;
     let updated = false;
 
     const { instance: usernameInput } = this.usernameInputRef;
@@ -176,7 +180,19 @@ class PersonalPageComponent extends VDom.Component<
     this.setState({ fileLoaded: true, fileSrc: URL.createObjectURL(file) });
   }
 
+  mediaSmallScreenHandler = (e: MediaQueryListEvent): void => {
+    this.setState({
+      smallScreen: e.matches,
+    });
+  }
+
+  willUmount(): void {
+    mainSmallScreen.removeEventListener('change', this.mediaSmallScreenHandler);
+  }
+
   didMount(): void {
+    mainSmallScreen.addEventListener('change', this.mediaSmallScreenHandler);
+
     if (this.props.user) {
       if (!this.usernameEdited) {
         this.usernameInputRef.instance.value = this.props.user.username;
@@ -209,7 +225,7 @@ class PersonalPageComponent extends VDom.Component<
       return <Redirect to="/" />;
     }
 
-    const smallScreen = false;
+    const { smallScreen } = this.state;
     const { user } = this.props;
 
     return (

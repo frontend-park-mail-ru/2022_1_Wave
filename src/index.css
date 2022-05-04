@@ -167,3 +167,11 @@ html {
   height: 100%;
   width: 100%;
 }
+
+a * {
+  cursor: pointer !important;
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}

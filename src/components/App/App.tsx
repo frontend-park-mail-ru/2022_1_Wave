@@ -21,7 +21,8 @@ import {closeSidebar, openSidebar, OpenSidebar} from "../../actions/Sidebar";
 class App extends VDom.Component<any> {
   state = {
     gesture: {
-      startX:0,
+      startX: 0,
+      startY: 0,
     }
   }
 
@@ -42,14 +43,38 @@ class App extends VDom.Component<any> {
 
   handleGesture = (e:TouchEvent):void => {
     const touchendX = e.changedTouches[0].screenX;
-    if (touchendX <= this.state.gesture.startX) this.props.closeSidebar();
-    if (touchendX > this.state.gesture.startX) this.props.openSidebar();
-    this.setState({gesture: {startX: 0}})
+    const touchendY = e.changedTouches[0].screenY;
+
+    const { startX, startY } = this.state.gesture;
+
+    if (Math.abs(startX - touchendX) > Math.abs(startY - touchendY)) {
+      if (touchendX <= this.state.gesture.startX) {
+        this.props.closeSidebar();
+      }
+      if (touchendX > this.state.gesture.startX) {
+        this.props.openSidebar();
+      }
+    }
+
+    this.setState({
+      gesture: {
+        startX: 0,
+        startY: 0,
+      },
+    });
   }
 
   catchStart = (e:TouchEvent):void => {
     const touchstartX = e.changedTouches[0].screenX;
-    this.setState({gesture: {result:null,startX: touchstartX}})
+    const touchstartY = e.changedTouches[0].screenY;
+
+    this.setState({
+      gesture: {
+        result: null,
+        startX: touchstartX,
+        startY: touchstartY,
+      },
+    });
   }
 
   render(): VDom.VirtualElement {

@@ -20,7 +20,6 @@ export class Store {
     initialState: any = {},
   ) {
     this.#state = initialState;
-    console.log('Middleware', middlewareFactories);
     this.dispatch = this.dispatch.bind(this);
     for (let i = 0; i < middlewareFactories.length; i += 1) {
       const factory = middlewareFactories[i];

@@ -1,0 +1,28 @@
+.menu__button {
+  margin: auto 0;
+  font-size: 13px;
+
+  &:hover {
+    cursor: pointer;
+
+    .button__text {
+      color: var(--btn-hover);
+    }
+  }
+  &::after {
+    content: '';
+    display: block;
+    margin-top: 5px;
+    width: 0;
+    height: 2px;
+    background: var(--linear-gradient-blue-white);
+    transition: width 0.5s;
+  }
+  &:hover::after {
+    color: var(--btn-hover);
+    width: 100%;
+  }
+  .button__text {
+    color: var(--btn-inactive);
+  }
+}

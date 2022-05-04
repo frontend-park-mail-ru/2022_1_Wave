@@ -1,0 +1,43 @@
+.menu-navbar {
+  font-size: 30px;
+  margin: auto;
+  padding: 10px;
+  color: #ffffff;
+  z-index: 99;
+  transition: visibility 0.1s ease;
+}
+
+.menu-popup {
+  position: absolute;
+  margin-top: 20px;
+  width: 250px;
+  background-color: #06123b;
+  z-index: 40;
+  border-radius: 25px;
+  .menu-object{
+    padding: 20px 15px;
+    font-size: 20px;
+    width: 40%;
+    margin-left: 0px !important;
+    &:hover {
+      color: #37b8d6;
+    }
+  }
+  .menu-avatar{
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 5px;
+    .menu-avatar__image{
+      padding: 10px;
+      width: 50px;
+      height: 50px;
+      border-radius: 25px;
+      margin: auto;
+    }
+    .menu-avatar__username {
+      margin: auto;
+      color: #6d7184;
+    }
+  }
+
+}

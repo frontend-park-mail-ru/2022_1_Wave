@@ -22,105 +22,14 @@
   &:focus-within .search {
     display: flex;
   }
-  .navbar__menu {
-    width: 300px;
-    padding-left: 10px;
-  }
-
-  .navbar__menu {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-
-    .navbar__menu__button {
-      text-align: center;
-      margin: auto 0;
-      font-size: 13px;
-
-      &:hover {
-        cursor: pointer;
-
-        .button__text {
-          color: var(--btn-hover);
-        }
-      }
-      &::after {
-        content: '';
-        display: block;
-        margin-top: 5px;
-        width: 0;
-        height: 2px;
-        background: var(--linear-gradient-blue-white);
-        transition: width 0.5s;
-      }
-      &:hover::after {
-        color: var(--btn-hover);
-        width: 100%;
-      }
-      .button__text {
-        color: var(--btn-inactive);
-      }
-    }
-  }
-  .navbar__avatar {
-    width: 180px;
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    .navbar__avatar__wrapper {
-      padding: 30px;
-      .navbar__avatar__img_round {
-        width: 50px;
-        height: 50px;
-        border-radius: 25px;
-        object-fit: cover;
-      }
-      .popup {
-        width: 180px;
-        height: 80px;
-        background-color: #06123b;
-        border-radius: 10px;
-        position: absolute;
-        top: 80px;
-        right: 50px;
-        display: none;
-        flex-direction: column;
-        justify-content: space-evenly;
-        a {
-          text-decoration: none;
-        }
-        .popup__text {
-          color: #dbd9d9;
-          font-size: 14px;
-          margin: auto;
-          width: 80%;
-          &:hover {
-            color: #37b8d6;
-            cursor: pointer;
-          }
-        }
-        .popup__settings {
-          border-bottom: solid 2px #5d4099;
-          padding-bottom: 10px;
-        }
-      }
-      &:hover {
-        .popup {
-          display: flex;
-        }
-      }
-    }
-  }
-
-  .navbar__auth__menu {
-    display: flex;
-    justify-content: space-evenly;
-    width: 250px;
-    text-align: center;
-    margin: auto 0;
-  }
 
   .navbar__link-new-page {
     text-decoration: none;
+  }
+  .swipe-navbar{
+    font-size: 30px;
+    margin: auto;
+    padding: 10px;
+    color: #ffffff;
   }
 }

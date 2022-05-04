@@ -2,18 +2,20 @@ $hoverColor: #37b8d6;
 
 .track-block {
   overflow: hidden;
-  padding-left: 0;
   padding-top: 10px;
   padding-bottom: 10px;
   margin-top: auto;
   margin-left: 10px;
   height: 50px;
+  width: 100%;
+  display: flex;
+
   .track-block__number {
     color: #6d7184;
     letter-spacing: 0.055em;
     float: left;
     width: 1.5em;
-    text-align: center;
+    margin-top: auto;
   }
 
   .track-block__icon {
@@ -21,37 +23,58 @@ $hoverColor: #37b8d6;
     width: 50px;
     height: 100%;
     border-radius: 4px;
-    margin-left: 20px;
+    padding-left: 20px;
     object-fit: cover;
     margin-top: auto;
   }
 
   .track-block__track-info {
-    float: left;
-    margin-left: 14px;
-
+    padding-left: 14px;
+    height: 100%;
+    width: 100%;
+    min-width: 0;
     .track-info__title {
       color: #ffffff;
-      line-height: 18px;
       letter-spacing: 0.02em;
-      margin-top: 4px;
-      margin-bottom: 0;
+      width: 100%;
+      margin-top: 0px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 90%;
     }
+
     .track-info__artist {
       font-size: 13px;
-      line-height: 16px;
       letter-spacing: 0.05em;
-      margin-top: 5px;
-      margin-bottom: 0;
       color: rgba(255, 255, 255, 0.5);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 95%;
     }
   }
 
+  @media (max-width: 650px) {
+    .track-info__title {
+      font-size: 13px;
+    }
+    .track-info__artist {
+      font-size: 12px;
+    }
+    .track-block__track-info{
+    }
+    .track-block__icon{
+      padding-left: 10px;
+    }
+  }
   &:hover {
     cursor: pointer;
+
     .track-block__number {
       color: $hoverColor;
     }
+
     .track-info__title {
       color: $hoverColor;
     }
@@ -61,16 +84,20 @@ $hoverColor: #37b8d6;
 .track-block_current {
   background: #37b8d6;
   border-radius: 10px;
-  width: 90%;
+  width: calc(100% - 5px);
   margin-left: 5px;
+
   .track-block__number {
     margin-left: 5px;
   }
+
   &:hover {
     cursor: pointer;
+
     .track-block__number {
       color: #0b1220;
     }
+
     .track-info__title {
       color: #0b1220;
     }

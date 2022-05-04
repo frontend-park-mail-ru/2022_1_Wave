@@ -45,8 +45,6 @@ export default class Client {
   static post(path: string, requestBody: any): Promise<any> {
     let status: any = null;
 
-    console.log(JSON.stringify(requestBody));
-
     return fetch(this.fullUrl(path), {
       method: 'POST',
       body: JSON.stringify(requestBody),
@@ -89,7 +87,6 @@ export default class Client {
   static patchForm(path: string, requestBody: any) {
     let status: any = null;
     const boundary = Math.random().toString().substr(2);
-    console.log(requestBody);
     return fetch(this.fullUrl(path), {
       method: 'PATCH',
       body: requestBody,

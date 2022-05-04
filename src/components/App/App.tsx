@@ -16,7 +16,7 @@ import { NotifyType, notify } from '../../actions/Notifier';
 import AlbumPage from '../AlbumPage/AlbumPage';
 import Navbar from '../common/Navbar/Navbar';
 import {mainSmallScreen} from "../../mediaQueries";
-import {closeSidebar, openSidebar, OpenSidebar} from "../../actions/Sidebar";
+import {closeSidebar, openSidebar} from "../../actions/Sidebar";
 
 class App extends VDom.Component<any> {
   state = {

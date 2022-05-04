@@ -70,7 +70,7 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps, any, null, Ro
   }
 
   didUpdate(): void {
-    if (!this.#player) {
+    if (!this.#player?.audio) {
       this.initPlayer();
       return;
     }

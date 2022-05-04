@@ -47,7 +47,7 @@ class App extends VDom.Component<any> {
 
     const { startX, startY } = this.state.gesture;
 
-    if (Math.abs(startX - touchendX) > Math.abs(startY - touchendY)) {
+    if (Math.abs(startX - touchendX) >= Math.abs(startY - touchendY)) {
       if (touchendX <= this.state.gesture.startX) {
         this.props.closeSidebar();
       }

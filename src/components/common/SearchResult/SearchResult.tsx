@@ -12,7 +12,7 @@ interface SearchInputProps {
 class SearchResult extends VDom.Component<SearchInputProps> {
   render = (): VDom.VirtualElement =>
     this.props.searched ? (
-      <div class="search-result">
+      <div onfocusout={this.props.dropSearch} class="search-result">
         {this.props.searched.MatchedTracks.length > 0 ? (
           <MatchedBlock
             drop={this.props.dropSearch}

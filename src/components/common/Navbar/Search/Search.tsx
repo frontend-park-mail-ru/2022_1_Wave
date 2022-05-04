@@ -39,6 +39,7 @@ class Search extends VDom.Component<SearchProps> {
   render = (): VDom.VirtualElement => (
     <div class="search">
       <input
+        onblur={this.clear}
         onInput={this.onTypeRequest}
         ref={this.refSearch}
         class="search__input"

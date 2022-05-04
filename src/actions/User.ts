@@ -1,7 +1,15 @@
 import user from '../models/User';
+
 /*
  * Actions for artist domain
  */
+
+export function userSet(partialUser: any): (_dispatch: Function) => void {
+  return (dispatch: Function): void => {
+    dispatch({type: 'set/user', payload: partialUser});
+  }
+}
+
 export function userGetCSRF(dispatch: Function): void {
   user.getCSRFToken().then((payload: any) => {
     dispatch({ type: 'csrf/user', payload });

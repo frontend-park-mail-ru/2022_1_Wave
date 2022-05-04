@@ -1,38 +1,62 @@
 import VDom from '@rflban/vdom';
+import {
+  Caption,
+  Headline,
+  FormItem,
+  Input,
+  ImageInput,
+  Button,
+} from '@rflban/waveui';
 import '../../index.css';
 import './PersonalPage.scss';
 import avatar from '../../assets/avatar.png';
-import { validatePassword, validateUsername } from '../../utils/User';
+import avatarPlaceholder from '../../assets/avatar_placeholder.png';
+import { validatePassword as _validatePassword, validateUsername } from '../../utils/User';
 import { Map } from '../../modules/Store/types';
-import { updateAvatar, updateSelf, userGetSelf } from '../../actions/User';
+import { updateAvatar, updateSelf, userGetSelf, userSet } from '../../actions/User';
 import { connect } from '../../modules/Connect';
 import ValidatableInput from '../common/ValidatableInput/ValidatableInput';
+import Redirect from '../../modules/Router/Redirect';
 
-interface PersonalPageComponentProps {
+const validateImage = (image?: File): boolean => (
+  image != null && image.size <= 2 * 1024 * 1024
+);
+
+const validatePassword = (val: string): boolean => (
+  val === '' || _validatePassword(val)
+);
+
+interface PersonalPageProps {
+  isAuth: boolean,
   user: any;
   setNewAvatar: (_form: any) => void;
   setNewUser: (_form: any) => void;
   userGetSelf: () => void;
+  setLocalUser: (_partialUser: any) => void;
 }
 
-type PersonalPageComponenState = {
+type PersonalPageState = {
   fileLoaded: boolean;
   fileSrc: string;
 };
 
 class PersonalPageComponent extends VDom.Component<
-  PersonalPageComponentProps,
-  PersonalPageComponenState
+  PersonalPageProps,
+  PersonalPageState
 > {
-  private readonly usernameInputRef = new VDom.Ref<ValidatableInput>();
+  private readonly usernameInputRef = new VDom.Ref<FormItem>();
 
-  private readonly passwordInputRef = new VDom.Ref<ValidatableInput>();
+  private readonly passwordInputRef = new VDom.Ref<FormItem>();
 
-  private readonly avatarInputRef = new VDom.Ref<ValidatableInput>();
+  private readonly avatarInputRef = new VDom.Ref<FormItem>();
 
-  private readonly repeatPasswordInputRef = new VDom.Ref<ValidatableInput>();
+  private readonly repeatPasswordInputRef = new VDom.Ref<FormItem>();
 
-  constructor(props: PersonalPageComponentProps) {
+  private repeatPasswordEdited = false;
+
+  private usernameEdited = false;
+
+  constructor(props: PersonalPageProps) {
     super(props);
     this.state = {
       fileLoaded: false,
@@ -47,15 +71,29 @@ class PersonalPageComponent extends VDom.Component<
     this.checkAvatar = this.checkAvatar.bind(this);
   }
 
-  isEqualToPassword(repeatPassword: string): boolean {
-    return repeatPassword === this.passwordInputRef.instance.value;
-  }
-
   additionalPasswordValidator(_e: InputEvent): void {
     this.repeatPasswordInputRef.instance.validateDebounced();
   }
 
-  handleSubmit(e: Event): void {
+  isEqualToPassword = (repeatPassword: string): boolean => (
+    repeatPassword === this.passwordInputRef.instance.value
+  )
+
+  passwordInputHandler = (_e: InputEvent): void => {
+    if (this.repeatPasswordEdited) {
+      this.repeatPasswordInputRef.instance.validate();
+    }
+  }
+
+  repeatPasswordInputHandler = (_e: InputEvent): void => {
+    this.repeatPasswordEdited = true;
+  }
+
+  usernameInputHandler = (_e: InputEvent): void => {
+    this.usernameEdited = true;
+  }
+
+  handleReset = (e: Event): void => {
     e.preventDefault();
 
     const { instance: usernameInput } = this.usernameInputRef;
@@ -63,37 +101,63 @@ class PersonalPageComponent extends VDom.Component<
     const { instance: avatarInput } = this.avatarInputRef;
     const { instance: repeatPasswordInput } = this.repeatPasswordInputRef;
 
-    const usernameIsValid = usernameInput.validate();
-    const passwordIsValid = passwordInput.validate();
-    const repeatPasswordIsValid = repeatPasswordInput.validate();
-    const avatarIsValid = avatarInput.validate();
+    usernameInput.reset();
+    passwordInput.reset();
+    repeatPasswordInput.reset();
+    avatarInput.reset();
 
-    if (!usernameIsValid && !passwordIsValid && !repeatPasswordIsValid && !avatarIsValid) {
-      return;
+    usernameInput.value = this.props.user.username;
+  }
+
+  handleSubmit = (e: Event): void => {
+    e.preventDefault();
+
+    const { user, setNewUser, setNewAvatar, userGetSelf: getSelf, setLocalUser } = this.props;
+    let updated = false;
+
+    const { instance: usernameInput } = this.usernameInputRef;
+    const { instance: passwordInput } = this.passwordInputRef;
+    const { instance: avatarInput } = this.avatarInputRef;
+    const { instance: repeatPasswordInput } = this.repeatPasswordInputRef;
+
+    const newUserData: any = {};
+
+    if (usernameInput.value !== user.username && usernameInput.check()) {
+      newUserData.username = usernameInput.value;
+      this.usernameEdited = false;
+      updated = true;
+    }
+    if (passwordInput.value !== '' && passwordInput.check() && repeatPasswordInput.check()) {
+      newUserData.password = passwordInput.value;
+      updated = true;
     }
 
-    const newSet: any = {};
-    if (avatarIsValid) {
-      const file: File = (
-        ((e.target as HTMLElement)?.querySelector('input[type=file]') as HTMLInputElement)
-          ?.files as FileList
-      )[0];
-      const formData: any = new FormData();
-      formData.append('avatar', file);
-      this.props.setNewAvatar(formData);
+    if (updated) {
+      setNewUser(newUserData);
     }
-    if ((passwordIsValid && repeatPasswordIsValid) || usernameIsValid) {
-      if (usernameIsValid) {
-        newSet.username = usernameInput.value;
-      }
-      if (passwordIsValid && repeatPasswordIsValid) {
-        newSet.password = passwordInput.value;
-      }
-      this.props.setNewUser(newSet);
+
+    if (avatarInput.value != null && avatarInput.check()) {
+      const formData = new FormData();
+      formData.append('avatar', avatarInput.value);
+      updated = true;
+      newUserData.avatar = URL.createObjectURL(avatarInput.value);
+
+      setNewAvatar(formData);
     }
-    setTimeout(() => {
-      this.props.userGetSelf();
-    }, 1000);
+
+    if (updated) {
+      // setTimeout(() => getSelf(), 500);
+      const localUser: any = {};
+
+      if (newUserData.username) {
+        localUser.username = newUserData.username;
+      }
+      if (newUserData.avatar) {
+        localUser.avatar = newUserData.avatar;
+      }
+
+      setLocalUser(localUser);
+    }
   }
 
   checkAvatar(): boolean {
@@ -114,6 +178,10 @@ class PersonalPageComponent extends VDom.Component<
 
   didMount(): void {
     if (this.props.user) {
+      if (!this.usernameEdited) {
+        this.usernameInputRef.instance.value = this.props.user.username;
+      }
+
       if (this.props.user.avatar) {
         this.setState({ fileSrc: this.props.user.avatar });
       }
@@ -122,6 +190,10 @@ class PersonalPageComponent extends VDom.Component<
 
   didUpdate(): void {
     if (this.props.user) {
+      if (!this.usernameEdited) {
+        this.usernameInputRef.instance.value = this.props.user.username;
+      }
+
       if (this.props.user.avatar) {
         if (this.state.fileSrc !== this.props.user.avatar) {
           if (this.state.fileSrc.split(':')[0] !== 'blob') {
@@ -132,7 +204,96 @@ class PersonalPageComponent extends VDom.Component<
     }
   }
 
-  render = (): VDom.VirtualElement => {
+  render(): VDom.VirtualElement {
+    if (!this.props.isAuth) {
+      return <Redirect to="/" />;
+    }
+
+    const smallScreen = false;
+    const { user } = this.props;
+
+    return (
+      <div class="wavePersonalPage">
+        <Headline size="s">Settings</Headline>
+        <form class="wavePersonalPage__form" onSubmit={this.handleSubmit}>
+          <div class="wavePersonalPage__form__item">
+            {!smallScreen && (
+              <div class="wavePersonalPage__form__item__label">
+                <Caption>Your photo</Caption>
+              </div>
+            )}
+            <div class="wavePersonalPage__form__item__wrapper">
+              <FormItem
+                ref={this.avatarInputRef}
+                label={smallScreen ? 'Your photo' : undefined}
+                as={ImageInput}
+                size="l"
+                nonValue={user?.avatar ?? avatarPlaceholder}
+                align={smallScreen ? 'center' : 'right'}
+                checker={validateImage}
+                error="Picture max size is 2Mib"
+              />
+            </div>
+          </div>
+          <div class="wavePersonalPage__form__item">
+            {!smallScreen && (
+              <div class="wavePersonalPage__form__item__label">
+                <Caption>Username</Caption>
+              </div>
+            )}
+            <div class="wavePersonalPage__form__item__wrapper">
+              <FormItem
+                ref={this.usernameInputRef}
+                label={smallScreen ? 'Username' : undefined}
+                as={Input}
+                placeholder="Username"
+                error="Username have to contain at 3-16 characters (digits, letters or _)"
+                checker={validateUsername}
+                onInput={this.usernameInputHandler}
+              />
+            </div>
+          </div>
+          <div class="wavePersonalPage__form__item">
+            {!smallScreen && (
+              <div class="wavePersonalPage__form__item__label">
+                <Caption>Password</Caption>
+              </div>
+            )}
+            <div class="wavePersonalPage__form__item__wrapper">
+              <FormItem
+                type="password"
+                ref={this.passwordInputRef}
+                label={smallScreen ? 'New password' : undefined}
+                as={Input}
+                placeholder="New password"
+                error="Password have to contain at least 6 characters (digits and letters)"
+                checker={validatePassword}
+              />
+              <FormItem
+                type="password"
+                ref={this.repeatPasswordInputRef}
+                label={smallScreen ? 'Repeat password' : undefined}
+                as={Input}
+                placeholder="Confirm new password"
+                error="Passwords don't match"
+                checker={this.isEqualToPassword}
+              />
+            </div>
+          </div>
+          <div class="wavePersonalPage__form__controls">
+            <Button mode="secondary" size={smallScreen ? 'm' : 's'} stretched={smallScreen} onClick={this.handleReset}>
+              Reset changes
+            </Button>
+            <Button mode="primary" size={smallScreen ? 'm' : 's'} stretched={smallScreen}>
+              Confirm
+            </Button>
+          </div>
+        </form>
+      </div>
+    );
+  }
+
+  rrender = (): VDom.VirtualElement => {
     const { user } = this.props;
 
     return (
@@ -140,7 +301,7 @@ class PersonalPageComponent extends VDom.Component<
         <div class="personal-page__title">Settings</div>
         <form onsubmit={this.handleSubmit} class="personal-page__settings-form">
           <div class="settings-form__form">
-            <label htmlFor="avatar" className="input-label form__avatar-label">
+            <label htmlFor="avatar" class="input-label form__avatar-label">
               Your photo
             </label>
             <label
@@ -211,6 +372,7 @@ class PersonalPageComponent extends VDom.Component<
 }
 
 const mapStateToProps = (state: any): Map => ({
+  isAuth: state.user?.id != null,
   user: state.user ? state.user : null,
 });
 
@@ -224,6 +386,9 @@ const mapDispatchToProps = (dispatch: any): Map => ({
   userGetSelf: (): void => {
     dispatch(userGetSelf());
   },
+  setLocalUser: (partialUser: any): void => {
+    dispatch(userSet(partialUser));
+  }
 });
 
 const PersonalPage = connect(mapStateToProps, mapDispatchToProps)(PersonalPageComponent);

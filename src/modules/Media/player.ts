@@ -48,7 +48,7 @@ export class PlayerClass {
     this.currentIndex = 0;
     this.playlist = tracks;
     this.currentTrack = this.playlist[this.currentIndex];
-    this.audio.src = config.files + this.currentTrack.src;
+    this.audio.src = this.currentTrack ? config.files + this.currentTrack.src : this.audio.src;
     this.#updateMetadata(this.currentTrack);
   }
 
@@ -91,10 +91,17 @@ export class PlayerClass {
   }
 
   setPosition(index: number): void {
-    if (this.currentIndex > this.playlist.length - 1) {
-      return;
+    if (this.isPlayRand) {
+      let idx: number = Math.trunc(Math.random() * this.playlist.length);
+      console.log(this.#randPlayed)
+      while (this.#randPlayed.hasOwnProperty(idx)) {
+        idx = Math.trunc(Math.random() * this.playlist.length);
+      }
+      this.#randPlayed[idx] = this.playlist[idx];
+      this.currentIndex = idx;
+    } else {
+      this.currentIndex = index;
     }
-    this.currentIndex = index;
     const nextTrack = this.playlist[this.currentIndex];
     this.audio.src = nextTrack ? config.files + nextTrack.src : this.audio.src;
     this.currentTrack = nextTrack;

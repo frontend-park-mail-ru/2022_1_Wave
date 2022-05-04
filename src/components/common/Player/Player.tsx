@@ -171,16 +171,16 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps, any, null, Ro
 
   runNext(e: Event): void {
     e.stopPropagation();
+    if (this.#player.currentIndex + 1 >= this.#player.playlist.length -1) return;
     this.setState({ trackFilled: 100, playState: true });
-    this.#player.next();
-    this.props.setPos(this.#player.currentIndex);
+    this.props.setPos(this.#player.currentIndex +1);
     this.checkPlay();
   }
 
   runPrev(e: Event): void {
     e.stopPropagation();
-    this.#player.prev();
-    this.props.setPos(this.#player.currentIndex);
+    if ( this.#player.currentIndex - 1 < 0 ) return;
+    this.props.setPos(this.#player.currentIndex - 1);
     this.checkPlay();
   }
 
@@ -402,12 +402,12 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps, any, null, Ro
             {`${formatInt(this.state.trackTime / 60)}:${formatInt(this.state.trackTime % 60)}`}
           </div>
         </div>
-        <div onclick={this.toogleShuffle} ontouchend={this.toogleShuffle} class="player__shuffle">
-          <div
-            class="fa-solid fa-shuffle"
-            style={{ color: this.state.playRand ? '#5D4099' : '#BEB7DF' }}
-          ></div>
-        </div>
+        {/*<div onclick={this.toogleShuffle} ontouchend={this.toogleShuffle} class="player__shuffle">*/}
+        {/*  <div*/}
+        {/*    class="fa-solid fa-shuffle"*/}
+        {/*    style={{ color: this.state.playRand ? '#5D4099' : '#BEB7DF' }}*/}
+        {/*  ></div>*/}
+        {/*</div>*/}
         <div class="player__volume">
           <div onclick={this.toogleMute}  ontouchend={this.toogleMute} class={`fa-solid ${volIcon} volume__icon`}></div>
           <div

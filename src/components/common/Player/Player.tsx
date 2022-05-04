@@ -77,6 +77,7 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps, any, null, Ro
     if (!this.props.playlist) {
       return;
     }
+    console.log('current playlist:',this.#player.playlist, 'update with:',this.props.playlist);
     if (this.#player.playlist !== this.props.playlist) {
       this.setState({ trackTime: 0, trackFilled: 0, trackFetched: 0, trackBuffered: 0 });
       this.#player.updatePlaylist(this.props.playlist);

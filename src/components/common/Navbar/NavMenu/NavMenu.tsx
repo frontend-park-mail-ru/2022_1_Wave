@@ -7,7 +7,7 @@ export default class NavMenu extends VDom.Component {
   render = (): VDom.VirtualElement => (
     <div class="nav-menu">
       <LinkedTextButton to='/' text='DISCOVER'/>
-      <LinkedTextButton to='/' text='MY LIBRARY'/>
+      <LinkedTextButton to='/library' text='MY LIBRARY'/>
     </div>
   )
 }

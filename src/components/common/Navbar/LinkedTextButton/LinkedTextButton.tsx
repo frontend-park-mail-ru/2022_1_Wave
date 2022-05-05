@@ -6,7 +6,7 @@ import './LinkedTextButton.scss';
 interface LinkedButtonProps extends IComponentPropsCommon{
     to:string,
     text:string,
-    align:string
+    align?:string
 }
 
 export default class LinkedTextButton extends VDom.Component<LinkedButtonProps> {
@@ -21,6 +21,6 @@ export default class LinkedTextButton extends VDom.Component<LinkedButtonProps> 
           {text}
         </Link>
       </div>
-    )
+    );
   }
 }

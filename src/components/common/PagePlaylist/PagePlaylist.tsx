@@ -18,6 +18,7 @@ export default class PagePlaylist extends VDom.Component<PagePlaylistProps> {
         {playlist
           ? playlist.map((v: any) => (
             <PageTrack
+              id={playlist[n - 1].id}
               handleClick={this.props.runTrack(playlist[n - 1])}
               num={n++}
               cover={config.files + v.cover}

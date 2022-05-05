@@ -81,8 +81,12 @@
 }
 
 .playlist-context{
-  background: #37b8d6;
+  background: #06123b;
+  border-radius: 10px;
   .context__item{
-
+      padding: 10px 15px;
+      &:hover{
+        color: #37b8d6;
+      }
   }
 }

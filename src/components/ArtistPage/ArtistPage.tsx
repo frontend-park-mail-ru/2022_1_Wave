@@ -13,6 +13,7 @@ import { ITrack } from '../../modules/Media/media';
 import { setTrack, setTracks } from '../../actions/Playlist';
 import { startPlay } from '../../actions/Player';
 import PagePlaylist from '../common/PagePlaylist/PagePlaylist';
+import {deleteTrackPlaylist} from "../../actions/UserPlaylist";
 
 class ArtistPageComponent extends VDom.Component<any, any, null, RouteNavigator> {
   static contextType = RouterContext;
@@ -117,7 +118,11 @@ class ArtistPageComponent extends VDom.Component<any, any, null, RouteNavigator>
           </div>
           <div class="artist-page__popular">
             <div class="text artist__title">Popular songs</div>
-            <PagePlaylist runTrack={this.runTrack} playlist={popularTracks} />
+            <PagePlaylist runTrack={this.runTrack} playlist={popularTracks} >
+              <div class="playlist-context">
+                <div class="text context__item">Add</div>
+              </div>
+            </PagePlaylist>
           </div>
         </div>
 

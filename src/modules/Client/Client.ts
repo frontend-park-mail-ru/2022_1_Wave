@@ -67,7 +67,7 @@ export default class Client {
     let status: any = null;
 
     return fetch(this.fullUrl(path), {
-      method: 'POST',
+      method: 'DELETE',
       headers: {
         [config.csrfHeader]: localStorage.getItem('csrf'),
         'Content-Type': 'application/json',

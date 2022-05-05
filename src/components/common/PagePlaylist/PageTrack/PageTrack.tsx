@@ -4,6 +4,7 @@ import './PageTrack.scss';
 import StringWrapper from "@rflban/vdom/dist/StringWrapper";
 
 interface PageTrackProps {
+  id: number;
   num: number;
   cover: string;
   listenedCnt: number;
@@ -15,11 +16,15 @@ interface PageTrackProps {
 }
 
 export default class PageTrack extends VDom.Component<PageTrackProps> {
+  state={
+    contextPosX:0,
+    contextPosY:0,
+    isLiked: false,
+    contextShow: false,
+  }
+
   constructor(props: PageTrackProps) {
     super(props);
-    this.state = {
-      isLiked: false,
-    };
     this.toogleLike = this.toogleLike.bind(this);
   }
 
@@ -32,10 +37,16 @@ export default class PageTrack extends VDom.Component<PageTrackProps> {
     this.setState({ isLiked });
   }
 
-  showContextMenu = (e: Event):void => {
+  showContextMenu = (e: PointerEvent):void => {
     e.preventDefault();
-
+    const rect = e.currentTarget.getBoundingClientRect();
+    this.setState({contextShow:true,contextPosX:e.clientX - rect.left,contextPosY:e.clientY - rect.top})
   }
+
+  closeContextMenu = (e: PointerEvent):void => {
+    this.setState({contextShow:false});
+  }
+
   render = (): VDom.VirtualElement => {
     const { num, cover, listenedCnt, name, duration } = this.props;
 
@@ -45,7 +56,7 @@ export default class PageTrack extends VDom.Component<PageTrackProps> {
     };
     const heartState = this.state.isLiked ? 'fa-solid' : 'fa-regular';
     return (
-      <div onclick={this.props.handleClick} oncontextmenu={this.showContextMenu} class="text artist-track">
+      <div id={this.props.id} onclick={this.props.handleClick} oncontextmenu={this.showContextMenu} class="text artist-track">
         <div class="artist-track__info">
           {num}
           <img class="artist-track__cover" src={cover} />
@@ -62,9 +73,10 @@ export default class PageTrack extends VDom.Component<PageTrackProps> {
             {`${formatInt(duration / 60)}:${formatInt(duration % 60)}`}
           </div>
         </div>
-        {this.props.contextMenu && <div class="context-menu">
-          {this.props.contextMenu}
-        </div>
+        {this.state.contextShow &&
+            <div class="context-menu" onmouseleave={this.closeContextMenu} style={{top:`${this.state.contextPosY}px`, left: `${this.state.contextPosX}px`}}>
+              {this.props.contextMenu}
+            </div>
         }
       </div>
     );

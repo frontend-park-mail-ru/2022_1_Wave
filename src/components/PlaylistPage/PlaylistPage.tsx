@@ -9,7 +9,7 @@ import { ITrack } from '../../modules/Media/media';
 import { setTrack, setTracks } from '../../actions/Playlist';
 import { startPlay } from '../../actions/Player';
 import PagePlaylist from '../common/PagePlaylist/PagePlaylist';
-import {getPlaylists} from "../../actions/UserPlaylist";
+import {deleteTrackPlaylist, getPlaylists} from "../../actions/UserPlaylist";
 import playlist from "../../config/Playlist";
 
 class PlaylistPage extends VDom.Component<any, any, null, RouteNavigator> {
@@ -40,7 +40,8 @@ class PlaylistPage extends VDom.Component<any, any, null, RouteNavigator> {
 
   updatePlaylists():void {
     const { slug }: { slug: string } = this.context.params;
-    const playlist = this.props.playlists?.filter( p => p.id.toString() === slug)
+    if(!this.props.playlists) return;
+    const playlist = this.props.playlists.filter( p => p.id.toString() === slug)
     console.log(playlist,this.state.playlist)
     if (JSON.stringify(playlist) !== JSON.stringify(this.state.playlist)){
       this.setState({playlist})
@@ -62,14 +63,24 @@ class PlaylistPage extends VDom.Component<any, any, null, RouteNavigator> {
     };
   }
 
+  deleteTrack(playlistid:number): (e: Event) => void {
+    return (e: Event) => {
+
+      const trackid = parseInt(e.currentTarget.parentElement.parentElement.parentElement.id);
+      e.preventDefault();
+      e.stopPropagation();
+      this.props.deleteTrack({trackid, playlistid});
+    };
+  }
     
   render = (): VDom.VirtualElement => {
-    let playlist = this.state?.playlist;
+    const playlist = this.state?.playlist;
     if (!playlist) {
       return <div class="playlist-page"/>;
     }
-    const {title,tracks}: {id:number,title:string, tracks:ITrack[]} = playlist[0];
+    const {id,title,tracks}: {id:number,title:string, tracks:ITrack[]} = playlist[0];
     const cover = tracks?.[0] ? tracks[0].cover : null;
+    console.log('playlist!',playlist)
     return (
       <div class="playlist-page">
         <div
@@ -94,12 +105,14 @@ class PlaylistPage extends VDom.Component<any, any, null, RouteNavigator> {
           </div>
           <div class="playlist-page__popular">
             <div class="text playlist__title">Songs</div>
-            <PagePlaylist runTrack={this.runTrack} playlist={tracks}>
-              {/*<div class="playlist-context">*/}
-              {/*  <div class="text context__item">A</div>*/}
-              {/*  <div class="text context__item">B</div>*/}
-              {/*</div>*/}
-            </PagePlaylist>
+            {
+              playlist &&
+              <PagePlaylist runTrack={this.runTrack} playlist={tracks}>
+                <div class="playlist-context">
+                  <div onclick={this.deleteTrack(id)} class="text context__item">Delete</div>
+                </div>
+              </PagePlaylist>
+            }
           </div>
         </div>
       </div>
@@ -126,6 +139,9 @@ const mapDispatchToProps = (dispatch: any): Map => ({
   setTrackFromPlaylist: (track: ITrack): void => {
     dispatch(setTrack(track));
   },
+  deleteTrack: ({trackid,playlistid}: {trackid:number,playlistid:number}): void => {
+    dispatch(deleteTrackPlaylist({trackid,playlistid}))
+  }
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(PlaylistPage);

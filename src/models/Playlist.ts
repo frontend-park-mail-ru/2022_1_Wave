@@ -27,7 +27,7 @@ export default class Playlist {
   }
 
   static getOfUserId( id:number): Promise<any> {
-    return HTTPClient.get(Paths.ofCurrentUser + '/' + id.toString())
+    return HTTPClient.get(`${Paths.ofCurrentUser  }/${  id.toString()}`)
       .then((response) => {
         if (response.status !== 200) {
           return Promise.reject(response.body);
@@ -35,5 +35,27 @@ export default class Playlist {
 
         return response.body.Result;
       });
+  }
+
+  static deleteOfUser({trackid,playlistid}: {trackid:number,playlistid:number}): Promise<any> {
+    return HTTPClient.delete(Paths.ofCurrentUser + "?playlistId="
+        + playlistid.toString() + "&trackId=" + trackid.toString()).then((response) => {
+      if (response.status !== 200) {
+        return Promise.reject(response.body);
+      }
+      return response.body.Result;
+    });
+  }
+
+  static postOfUser({trackid,playlistid}: {trackid:number,playlistid:number}): Promise<any> {
+    return HTTPClient.delete(Paths.ofCurrentUser,{
+      trackid,
+      playlistid
+    }).then((response) => {
+      if (response.status !== 200) {
+        return Promise.reject(response.body);
+      }
+      return response.body.Result;
+    });
   }
 }

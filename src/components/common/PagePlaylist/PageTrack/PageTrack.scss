@@ -4,6 +4,7 @@
   font-size: 18px;
   width: 100%;
   padding: 10px 15px;
+  position: relative;
   &:hover {
     background-color: #37b8d6;
     border-radius: 10px;
@@ -62,4 +63,10 @@
   &:hover {
     cursor: pointer;
   }
+}
+
+.context-menu{
+  position: absolute;
+  width: fit-content;
+  height: fit-content;
 }

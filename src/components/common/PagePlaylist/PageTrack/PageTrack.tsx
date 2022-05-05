@@ -62,6 +62,7 @@ class PageTrack extends VDom.Component<PageTrackProps> {
     if (e.target === this.likeRef.instance) {
       return this.toggleLike();
     }
+  }
 
   render = (): VDom.VirtualElement => {
     const { num, cover, listenedCnt, name, duration, favorites = [] } = this.props;

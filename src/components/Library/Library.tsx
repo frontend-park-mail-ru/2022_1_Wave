@@ -11,8 +11,12 @@ import './Library.scss'
 import Redirect from '../../modules/Router/Redirect';
 import Link from '../../modules/Router/Link2';
 import * as UserPlaylist from '../../actions/UserPlaylist';
-import { validateUsername } from '../../utils/User';
 import { mainSmallScreen } from '../../mediaQueries';
+
+const validatePlaylistName = (value: string): boolean => {
+  const reg = /^[a-z0-9_ ]{1,32}$/;
+  return reg.test(value.toLowerCase());
+}
 
 interface LibraryProps {
   isAuth: boolean;
@@ -64,6 +68,7 @@ class Library extends VDom.Component<LibraryProps, LibraryState> {
     // }
 
     const { smallScreen } = this.state;
+    const { playlists } = this.props;
 
     return (
       <div class="waveLibrary">
@@ -81,18 +86,18 @@ class Library extends VDom.Component<LibraryProps, LibraryState> {
               </div>
             </Link>
             {
-              (Array(20).fill('').map(() => (
-                <Link to="/favorites">
+              playlists && playlists.map((p: any) => (
+                <Link to={`/playlists/${p.id}`}>
                   <div class="waveLibrary__link">
                     <ImageCard
                       src={playlistPlaceholder}
-                      title="Favorites"
+                      title={p.title}
                       direction="row"
                       icon={<PlaylistIcon style={{ height: '25%', }}/>}
                     />
                   </div>
                 </Link>
-              )))
+              ))
             }
           </div>
           <form class="waveLibrary__playlist-form" onSubmit={this.handleSubmit}>
@@ -100,8 +105,8 @@ class Library extends VDom.Component<LibraryProps, LibraryState> {
               as={Input}
               ref={this.inputRef}
               label="New playlist"
-              error="Only 3-16 of latin letters, numbers or _ are allowed"
-              checker={validateUsername}
+              error="Only 1-32 of latin letters, numbers or _ are allowed"
+              checker={validatePlaylistName}
               placeholder="New playlist name"
             />
             <Button

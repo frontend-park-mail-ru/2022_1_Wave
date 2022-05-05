@@ -2,50 +2,71 @@ import VDom from '@rflban/vdom';
 import '../../../../index.css';
 import './PageTrack.scss';
 import StringWrapper from "@rflban/vdom/dist/StringWrapper";
+import { Map } from '../../../../modules/Store/types';
+import { addToFavorites, removeFromFavorites } from '../../../../actions/Favorites';
+import { connect } from '../../../../modules/Connect';
 
 interface PageTrackProps {
+  id: number;
   num: number;
   cover: string;
   listenedCnt: number;
   name: string;
   duration: number;
-  isLiked: boolean;
   handleClick: (_e: Event) => void;
   contextMenu: (VDom.VirtualElement | StringWrapper)[] | undefined;
+  addToFavorites(_trackID: number): void;
+  removeFromFavorites(_trackID: number): void;
+  favorites: any;
 }
 
-export default class PageTrack extends VDom.Component<PageTrackProps> {
+class PageTrack extends VDom.Component<PageTrackProps> {
+  private likeRef = new VDom.Ref<HTMLElement>();
+
   constructor(props: PageTrackProps) {
     super(props);
-    this.state = {
-      isLiked: false,
-    };
-    this.toogleLike = this.toogleLike.bind(this);
+    this.toggleLike = this.toggleLike.bind(this);
   }
 
-  toogleLike(): void {
-    this.setState({ isLiked: !this.state.isLiked });
+  toggleLike(): void {
+    const isLiked = this.props.favorites.some((t: any) => t.id === this.props.id);
+
+    if (isLiked) {
+      this.props.removeFromFavorites(this.props.id);
+    } else {
+      this.props.addToFavorites(this.props.id);
+    }
   }
 
   didMount(): void {
-    const { isLiked } = this.props;
-    this.setState({ isLiked });
   }
 
   showContextMenu = (e: Event):void => {
     e.preventDefault();
-
   }
+
+  handleClick = (e: MouseEvent): void => {
+    if (e.target === this.likeRef.instance) {
+      return this.toggleLike();
+    }
+
+    this.props.handleClick(e);
+  }
+
   render = (): VDom.VirtualElement => {
-    const { num, cover, listenedCnt, name, duration } = this.props;
+    const { num, cover, listenedCnt, name, duration, favorites = [] } = this.props;
+
+    const isLiked = favorites.some((t: any) => t.id === this.props.id);
 
     const formatInt = (n: number): string => {
       const res = Math.trunc(n).toString();
       return n >= 10 ? res : `0${res}`;
     };
-    const heartState = this.state.isLiked ? 'fa-solid' : 'fa-regular';
+
+    const heartState = isLiked ? 'fa-solid' : 'fa-regular';
+
     return (
-      <div onclick={this.props.handleClick} oncontextmenu={this.showContextMenu} class="text artist-track">
+      <div onclick={this.handleClick} oncontextmenu={this.showContextMenu} class="text artist-track">
         <div class="artist-track__info">
           {num}
           <img class="artist-track__cover" src={cover} />
@@ -57,7 +78,7 @@ export default class PageTrack extends VDom.Component<PageTrackProps> {
             {listenedCnt}
             <div class="listened__dot" />
           </div>
-          <div onclick={this.toogleLike} class={`liked-icon ${heartState} fa-heart`} />
+          <div ref={this.likeRef} class={`liked-icon ${heartState} fa-heart`} />
           <div class="artist-track__duration">
             {`${formatInt(duration / 60)}:${formatInt(duration % 60)}`}
           </div>
@@ -70,3 +91,18 @@ export default class PageTrack extends VDom.Component<PageTrackProps> {
     );
   };
 }
+
+const mapStateToProps = (state: any): Map => ({
+  favorites: state.favorites,
+});
+
+const mapDispatchToProps = (dispatch: any): Map => ({
+  addToFavorites: (trackID: number): void => {
+    dispatch(addToFavorites(trackID));
+  },
+  removeFromFavorites: (trackID: number): void => {
+    dispatch(removeFromFavorites(trackID));
+  },
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(PageTrack);

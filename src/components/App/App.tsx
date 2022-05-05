@@ -20,6 +20,7 @@ import {closeSidebar, openSidebar} from "../../actions/Sidebar";
 import Library from '../Library/Library';
 import PlaylistPage from "../PlaylistPage/PlaylistPage";
 import FavoritesPage from "../FavoritesPage/FavoritesPage";
+import { getFavorites } from '../../actions/Favorites';
 
 class App extends VDom.Component<any> {
   state = {
@@ -30,6 +31,7 @@ class App extends VDom.Component<any> {
   }
 
   didMount(): void {
+    this.props.getFavorites();
     this.props.userGetSelf();
     mainSmallScreen.addEventListener('change', this.mediaSmallScreenhandler);
   }
@@ -132,6 +134,9 @@ const mapStateToProps = (state: any): Map => ({
 });
 
 const mapDispatchToProps = (dispatch: any): Map => ({
+  getFavorites: (): void => {
+    dispatch(getFavorites());
+  },
   userGetSelf: (): void => {
     dispatch(userGetSelf());
   },

@@ -25,6 +25,7 @@ export default class PagePlaylist extends VDom.Component<PagePlaylistProps> {
               listenedCnt={v.listenings}
               isLiked={false}
               duration={v.duration}
+              contextMenu={this.props.children}
             />
           ))
           : ''}

@@ -25,4 +25,15 @@ export default class Playlist {
         return response.body.Result;
       });
   }
+
+  static getOfUserId( id:number): Promise<any> {
+    return HTTPClient.get(Paths.ofCurrentUser + '/' + id.toString())
+      .then((response) => {
+        if (response.status !== 200) {
+          return Promise.reject(response.body);
+        }
+
+        return response.body.Result;
+      });
+  }
 }

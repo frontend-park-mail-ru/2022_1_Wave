@@ -1,10 +1,10 @@
-.album-page {
+.playlist-page {
   width: 100%;
   display: flex;
   flex-direction: column;
   margin-bottom: 40px;
 
-  .album-page__main {
+  .playlist-page__main {
     background-repeat: no-repeat;
     background-size: cover;
     object-fit: cover;
@@ -13,7 +13,7 @@
     display: flex;
     flex-direction: column;
 
-    .album-page__album {
+    .playlist-page__playlist {
       display: flex;
       flex-direction: column;
       height: 100%;
@@ -21,47 +21,30 @@
       margin-top: 100px;
       justify-content: space-between;
 
-      .album__related {
-        display: flex;
-
-        .related__title {
-          color: #37b8d6;
-        }
-
-        .related__names {
-          padding-left: 20px;
-        }
-      }
-
-      .album__main {
+      .playlist__main {
         font-size: 25px;
         width: 50%;
-        .album__name {
+        .playlist__name {
           margin-bottom: 25px;
           margin-top: 4px;
           font-size: 84px;
         }
         @media (max-width: 780px) {
           width: 70%;
-          .album__name{
+          .playlist__name{
             font-size: 60px;
           }
         }
         @media (max-width: 400px) {
           width: 100%;
-          .album__name{
+          .playlist__name{
             font-size: 40px;
           }
-        }
-        .album__quote {
-          font-size: 18px;
-          opacity: 50%;
-          padding: 10px;
         }
       }
     }
 
-    .album__controls {
+    .playlist__controls {
       display: flex;
       margin-bottom: 20px;
 
@@ -83,30 +66,23 @@
         }
       }
 
-      .controls__likes {
-        padding-left: 20px;
-        display: flex;
-
-        .likes__num {
-          padding-left: 10px;
-        }
-
-        .likes__icon {
-          &:hover {
-            cursor: pointer;
-          }
-        }
-      }
     }
   }
-  .album__title {
+  .playlist__title {
     font-size: 26px;
   }
 
-  .album-page__popular {
+  .playlist-page__popular {
     padding-left: 40px;
     margin-top: 20px;
     flex-grow: 1;
     margin-bottom: 100px;
+  }
+}
+
+.playlist-context{
+  background: #37b8d6;
+  .context__item{
+
   }
 }

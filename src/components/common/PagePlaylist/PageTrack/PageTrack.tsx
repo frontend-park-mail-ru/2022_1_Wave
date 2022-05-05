@@ -1,6 +1,7 @@
 import VDom from '@rflban/vdom';
 import '../../../../index.css';
 import './PageTrack.scss';
+import StringWrapper from "@rflban/vdom/dist/StringWrapper";
 
 interface PageTrackProps {
   num: number;
@@ -10,6 +11,7 @@ interface PageTrackProps {
   duration: number;
   isLiked: boolean;
   handleClick: (_e: Event) => void;
+  contextMenu: (VDom.VirtualElement | StringWrapper)[] | undefined;
 }
 
 export default class PageTrack extends VDom.Component<PageTrackProps> {
@@ -30,6 +32,10 @@ export default class PageTrack extends VDom.Component<PageTrackProps> {
     this.setState({ isLiked });
   }
 
+  showContextMenu = (e: Event):void => {
+    e.preventDefault();
+
+  }
   render = (): VDom.VirtualElement => {
     const { num, cover, listenedCnt, name, duration } = this.props;
 
@@ -39,7 +45,7 @@ export default class PageTrack extends VDom.Component<PageTrackProps> {
     };
     const heartState = this.state.isLiked ? 'fa-solid' : 'fa-regular';
     return (
-      <div onclick={this.props.handleClick} class="text artist-track">
+      <div onclick={this.props.handleClick} oncontextmenu={this.showContextMenu} class="text artist-track">
         <div class="artist-track__info">
           {num}
           <img class="artist-track__cover" src={cover} />
@@ -56,6 +62,10 @@ export default class PageTrack extends VDom.Component<PageTrackProps> {
             {`${formatInt(duration / 60)}:${formatInt(duration % 60)}`}
           </div>
         </div>
+        {this.props.contextMenu && <div class="context-menu">
+          {this.props.contextMenu}
+        </div>
+        }
       </div>
     );
   };

@@ -30,8 +30,8 @@
       'main'
       'play';
     grid-template-columns: 1fr;
-    grid-template-rows: 100% 200px;
-
+    grid-template-rows: 100% 100px;
+    box-sizing: border-box;
   }
 }
 

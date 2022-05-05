@@ -63,9 +63,9 @@ class Library extends VDom.Component<LibraryProps, LibraryState> {
   }
 
   render(): VDom.VirtualElement {
-    // if (!this.props.isAuth) {
-    //   return <Redirect to="/login" />;
-    // }
+    if (!this.props.isAuth) {
+      return <Redirect to="/login" />;
+    }
 
     const { smallScreen } = this.state;
     const { playlists } = this.props;

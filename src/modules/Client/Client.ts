@@ -47,6 +47,47 @@ export default class Client {
 
     return fetch(this.fullUrl(path), {
       method: 'POST',
+      body: requestBody ? JSON.stringify(requestBody) : undefined,
+      headers: {
+        [config.csrfHeader]: localStorage.getItem('csrf'),
+        'Content-Type': 'application/json',
+      } as HeadersInit,
+    })
+      .then((response) => {
+        status = response.status;
+        return response.json().catch(() => null);
+      })
+      .then((body) => ({
+        status,
+        body,
+      }));
+  }
+
+  static delete(path: string): Promise<any> {
+    let status: any = null;
+
+    return fetch(this.fullUrl(path), {
+      method: 'POST',
+      headers: {
+        [config.csrfHeader]: localStorage.getItem('csrf'),
+        'Content-Type': 'application/json',
+      } as HeadersInit,
+    })
+      .then((response) => {
+        status = response.status;
+        return response.json().catch(() => null);
+      })
+      .then((body) => ({
+        status,
+        body,
+      }));
+  }
+
+  static patch(path: string, requestBody: any): Promise<any> {
+    let status: any = null;
+
+    return fetch(this.fullUrl(path), {
+      method: 'PATCH',
       body: JSON.stringify(requestBody),
       headers: {
         [config.csrfHeader]: localStorage.getItem('csrf'),
@@ -63,37 +104,15 @@ export default class Client {
       }));
   }
 
-  static patch(path: string, requestBody: any) {
+  static patchForm(path: string, requestBody: any): Promise<any> {
     let status: any = null;
-
-    return fetch(this.fullUrl(path), {
-      method: 'PATCH',
-      body: JSON.stringify(requestBody),
-      headers: {
-        [config.csrfHeader]: localStorage.getItem('csrf'),
-        'Content-Type': 'application/json',
-      },
-    })
-      .then((response) => {
-        status = response.status;
-        return response.json().catch(() => null);
-      })
-      .then((body) => ({
-        status,
-        body,
-      }));
-  }
-
-  static patchForm(path: string, requestBody: any) {
-    let status: any = null;
-    const boundary = Math.random().toString().substr(2);
     return fetch(this.fullUrl(path), {
       method: 'PATCH',
       body: requestBody,
       headers: {
         [config.csrfHeader]: localStorage.getItem('csrf'),
         enctype: 'multipart/form-data',
-      },
+      } as HeadersInit,
     })
       .then((response) => {
         status = response.status;

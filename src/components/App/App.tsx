@@ -103,7 +103,7 @@ class App extends VDom.Component<any> {
                 <Route to="/album/:slug">
                   <AlbumPage />
                 </Route>
-                <Route to="/playlist/:slug">
+                <Route to="/playlists/:slug">
                   <PlaylistPage />
                 </Route>
                 <Route to="/settings">

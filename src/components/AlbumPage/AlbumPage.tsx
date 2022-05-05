@@ -28,10 +28,12 @@ class ArtistPageComponent extends VDom.Component<any, any, null, RouteNavigator>
     this.addAlbumToPlaylist = this.addAlbumToPlaylist.bind(this);
     this.runTrack = this.runTrack.bind(this);
     this.addTrack = this.addTrack.bind(this);
+
   }
 
   didMount(): void {
     this.getAlbum();
+    this.props.getPlaylists();
   }
 
   getAlbum(): void {
@@ -110,7 +112,7 @@ class ArtistPageComponent extends VDom.Component<any, any, null, RouteNavigator>
           <div class="album-page__popular">
             <div class="text album__title">Songs</div>
             <PagePlaylist runTrack={this.runTrack} playlist={album.tracks}>
-              <div className="playlist-context">
+              <div class="playlist-context">
                 {/* {!this.state.isShowPlaylistChoose && */}
                 {/* <div onclick={this.showPlaylists} class="text context__item">Add</div> */}
                 {/* } */}
@@ -119,7 +121,7 @@ class ArtistPageComponent extends VDom.Component<any, any, null, RouteNavigator>
                 {
                   this.props.playlists &&
                     this.props.playlists.map((v) => <div onClick={this.addTrack(v.id)}
-                      className="text context__item">{v.title}</div>)
+                      class="text context__item">{v.title}</div>)
                 }
                 {/* ) */}
                 {/* } */}

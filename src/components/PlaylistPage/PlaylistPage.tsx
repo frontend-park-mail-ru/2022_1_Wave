@@ -42,6 +42,7 @@ class PlaylistPage extends VDom.Component<any, any, null, RouteNavigator> {
     const { slug }: { slug: string } = this.context.params;
     if(!this.props.playlists) return;
     const playlist = this.props.playlists.filter( p => p.id.toString() === slug)
+    console.log(playlist,this.state.playlist)
     if (JSON.stringify(playlist) !== JSON.stringify(this.state.playlist)){
       this.setState({playlist})
     }

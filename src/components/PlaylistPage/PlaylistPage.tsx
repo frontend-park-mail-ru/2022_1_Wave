@@ -42,7 +42,6 @@ class PlaylistPage extends VDom.Component<any, any, null, RouteNavigator> {
     const { slug }: { slug: string } = this.context.params;
     if(!this.props.playlists) return;
     const playlist = this.props.playlists.filter( p => p.id.toString() === slug)
-    console.log(playlist,this.state.playlist)
     if (JSON.stringify(playlist) !== JSON.stringify(this.state.playlist)){
       this.setState({playlist})
     }
@@ -65,7 +64,6 @@ class PlaylistPage extends VDom.Component<any, any, null, RouteNavigator> {
 
   deleteTrack(playlistid:number): (e: Event) => void {
     return (e: Event) => {
-
       const trackid = parseInt(e.currentTarget.parentElement.parentElement.parentElement.id);
       e.preventDefault();
       e.stopPropagation();
@@ -80,7 +78,6 @@ class PlaylistPage extends VDom.Component<any, any, null, RouteNavigator> {
     }
     const {id,title,tracks}: {id:number,title:string, tracks:ITrack[]} = playlist[0];
     const cover = tracks?.[0] ? tracks[0].cover : null;
-    console.log('playlist!',playlist)
     return (
       <div class="playlist-page">
         <div

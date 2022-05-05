@@ -11,6 +11,7 @@ import { setTrack, setTracks } from '../../actions/Playlist';
 import { startPlay } from '../../actions/Player';
 import PagePlaylist from '../common/PagePlaylist/PagePlaylist';
 import { albumGetById, albumGetCoverById } from '../../actions/Album';
+import {addTrackPlaylist, getPlaylists} from "../../actions/UserPlaylist";
 
 class ArtistPageComponent extends VDom.Component<any, any, null, RouteNavigator> {
   static contextType = RouterContext;
@@ -26,6 +27,7 @@ class ArtistPageComponent extends VDom.Component<any, any, null, RouteNavigator>
     this.setLikeToArtist = this.setLikeToArtist.bind(this);
     this.addAlbumToPlaylist = this.addAlbumToPlaylist.bind(this);
     this.runTrack = this.runTrack.bind(this);
+    this.addTrack = this.addTrack.bind(this);
   }
 
   didMount(): void {
@@ -56,6 +58,16 @@ class ArtistPageComponent extends VDom.Component<any, any, null, RouteNavigator>
     return (_e: Event) => {
       this.props.setTrackFromAlbum(track);
       this.props.runMusic();
+    };
+  }
+
+  addTrack(playlistid:number): (e: Event) => void {
+    return (e: Event) => {
+      const trackid = parseInt(e.currentTarget.parentElement.parentElement.parentElement.id);
+      e.preventDefault();
+      e.stopPropagation();
+      //console.log('add!!!!',trackid,playlistid)
+      this.props.addTrack({trackid, playlistid});
     };
   }
 
@@ -97,7 +109,22 @@ class ArtistPageComponent extends VDom.Component<any, any, null, RouteNavigator>
           </div>
           <div class="album-page__popular">
             <div class="text album__title">Songs</div>
-            <PagePlaylist runTrack={this.runTrack} playlist={album.tracks} />
+            <PagePlaylist runTrack={this.runTrack} playlist={album.tracks}>
+              <div className="playlist-context">
+                {/* {!this.state.isShowPlaylistChoose && */}
+                {/* <div onclick={this.showPlaylists} class="text context__item">Add</div> */}
+                {/* } */}
+                {/* {this.state.isShowPlaylistChoose && */}
+                {/*    ( */}
+                {
+                  this.props.playlists &&
+                    this.props.playlists.map((v) => <div onClick={this.addTrack(v.id)}
+                      className="text context__item">{v.title}</div>)
+                }
+                {/* ) */}
+                {/* } */}
+              </div>
+            </PagePlaylist>
           </div>
         </div>
       </div>
@@ -108,11 +135,15 @@ class ArtistPageComponent extends VDom.Component<any, any, null, RouteNavigator>
 const mapStateToProps = (state: any): Map => ({
   album: state.album ? state.album : null,
   cover: state.albumCover ? state.albumCover : null,
+  playlists: state.userPlaylists,
 });
 
 const mapDispatchToProps = (dispatch: any): Map => ({
   getAlbum: (id: string): void => {
     dispatch(albumGetById(id));
+  },
+  getPlaylists: (): void => {
+    dispatch(getPlaylists());
   },
   getAlbumCover: (id: string): void => {
     dispatch(albumGetCoverById(id));
@@ -126,6 +157,9 @@ const mapDispatchToProps = (dispatch: any): Map => ({
   setTrackFromAlbum: (track: ITrack): void => {
     dispatch(setTrack(track));
   },
+  addTrack: ({trackid,playlistid}: {trackid:number,playlistid:number}): void => {
+    dispatch(addTrackPlaylist({trackid,playlistid}))
+  }
 });
 
 const ArtistPage = connect(mapStateToProps, mapDispatchToProps)(ArtistPageComponent);

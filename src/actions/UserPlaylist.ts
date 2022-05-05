@@ -41,9 +41,18 @@ export function deleteTrackPlaylist({trackid,playlistid}: {trackid:number,playli
 
 export function addTrackPlaylist({trackid,playlistid}: {trackid:number,playlistid:number}): Function{
   return (dispatch: Function): void => {
-    Playlist.deleteOfUser({trackid,playlistid})
-      .then( (payload) => {
-        dispatch({ type: 'userPlaylist/get', payload });
-      })
+    Playlist.postOfUser({trackid,playlistid})
+      .then( () => {
+        dispatch({
+          type: `notifier/message`,
+          payload: { status: 'success', msg: 'Success' },
+        });;
+      }).then(() => {
+        Playlist.getOfUser()
+          .then((payload) => {
+            dispatch({ type: 'userPlaylist/get', payload });
+          });
+      }
+      )
   }
 }

@@ -13,7 +13,7 @@ import { ITrack } from '../../modules/Media/media';
 import { setTrack, setTracks } from '../../actions/Playlist';
 import { startPlay } from '../../actions/Player';
 import PagePlaylist from '../common/PagePlaylist/PagePlaylist';
-import {deleteTrackPlaylist} from "../../actions/UserPlaylist";
+import {addTrackPlaylist, deleteTrackPlaylist, getPlaylists} from "../../actions/UserPlaylist";
 
 class ArtistPageComponent extends VDom.Component<any, any, null, RouteNavigator> {
   static contextType = RouterContext;
@@ -25,16 +25,29 @@ class ArtistPageComponent extends VDom.Component<any, any, null, RouteNavigator>
     this.state = {
       albumLikes: 12511,
       isLiked: false,
+      isShowPlaylistChoose: false,
     };
 
     this.setLikeToArtist = this.setLikeToArtist.bind(this);
     this.addPopularToPlaylist = this.addPopularToPlaylist.bind(this);
     this.runTrack = this.runTrack.bind(this);
+    this.showPlaylists = this.showPlaylists.bind(this);
+    this.unshowPlaylists = this.unshowPlaylists.bind(this);
+    this.addTrack = this.addTrack.bind(this);
+  }
+
+  showPlaylists():void {
+    this.setState({isShowPlaylistChoose:true});
+  }
+
+  unshowPlaylists():void {
+    this.setState({isShowPlaylistChoose:false});
   }
 
   didMount(): void {
     this.getArtist();
     this.getTracks();
+    this.props.getPlaylists();
   }
 
   didUpdate(): void {
@@ -73,6 +86,16 @@ class ArtistPageComponent extends VDom.Component<any, any, null, RouteNavigator>
     };
   }
 
+  addTrack(playlistid:number): (e: Event) => void {
+    return (e: Event) => {
+      const trackid = parseInt(e.currentTarget.parentElement.parentElement.parentElement.id);
+      e.preventDefault();
+      e.stopPropagation();
+      //console.log('add!!!!',trackid,playlistid)
+      this.props.addTrack({trackid, playlistid});
+    };
+  }
+
   render = (): VDom.VirtualElement => {
     const { slug }: { slug: string } = this.context.params;
     if (!this.props.artist || !this.props.popularTracks) {
@@ -80,6 +103,7 @@ class ArtistPageComponent extends VDom.Component<any, any, null, RouteNavigator>
     }
     const artist = this.props.artist[slug] ? this.props.artist[slug] : null;
     const popularTracks = this.props.popularTracks[slug] ? this.props.popularTracks[slug] : null;
+    console.log('playlists',this.props.playlists)
     if (!artist || !popularTracks) {
       return <div class="artist-page" />;
     }
@@ -120,8 +144,19 @@ class ArtistPageComponent extends VDom.Component<any, any, null, RouteNavigator>
             <div class="text artist__title">Popular songs</div>
             <PagePlaylist runTrack={this.runTrack} playlist={popularTracks} >
               <div class="playlist-context">
-                <div class="text context__item">Add</div>
+                {/* {!this.state.isShowPlaylistChoose && */}
+                {/* <div onclick={this.showPlaylists} class="text context__item">Add</div> */}
+                {/* } */}
+                {/* {this.state.isShowPlaylistChoose && */}
+                {/*    ( */}
+                {
+                  this.props.playlists &&
+                  this.props.playlists.map((v) => <div onclick={this.addTrack(v.id)} class="text context__item">{v.title}</div>)
+                }
+                {/* ) */}
+                {/* } */}
               </div>
+
             </PagePlaylist>
           </div>
         </div>
@@ -144,11 +179,16 @@ class ArtistPageComponent extends VDom.Component<any, any, null, RouteNavigator>
 const mapStateToProps = (state: any): Map => ({
   artist: state.artist ? state.artist : null,
   popularTracks: state.artistPopularTracks ? state.artistPopularTracks : null,
+  playlists: state.userPlaylists,
+
 });
 
 const mapDispatchToProps = (dispatch: any): Map => ({
   getArtist: (id: string): void => {
     dispatch(artistGetById(id));
+  },
+  getPlaylists: (): void => {
+    dispatch(getPlaylists());
   },
   getArtistPopularTracks: (id: string): void => {
     dispatch(artistGetPopularById(id));
@@ -165,6 +205,9 @@ const mapDispatchToProps = (dispatch: any): Map => ({
   setTrackFromArtist: (track: ITrack): void => {
     dispatch(setTrack(track));
   },
+  addTrack: ({trackid,playlistid}: {trackid:number,playlistid:number}): void => {
+    dispatch(addTrackPlaylist({trackid,playlistid}))
+  }
 });
 
 const ArtistPage = connect(mapStateToProps, mapDispatchToProps)(ArtistPageComponent);

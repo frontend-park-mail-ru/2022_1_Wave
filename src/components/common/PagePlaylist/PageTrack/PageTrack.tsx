@@ -47,7 +47,7 @@ class PageTrack extends VDom.Component<PageTrackProps> {
 
 
   showContextMenu = (e: PointerEvent):void => {
-   // e.preventDefault();
+    e.preventDefault();
     const rect = e.currentTarget.getBoundingClientRect();
     this.setState({contextShow:true,contextPosX:e.clientX - rect.left,contextPosY:e.clientY - rect.top})
   }

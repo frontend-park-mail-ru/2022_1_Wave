@@ -102,7 +102,6 @@ class ArtistPageComponent extends VDom.Component<any, any, null, RouteNavigator>
     }
     const artist = this.props.artist[slug] ? this.props.artist[slug] : null;
     const popularTracks = this.props.popularTracks[slug] ? this.props.popularTracks[slug] : null;
-    console.log('playlists',this.props.playlists)
     if (!artist || !popularTracks) {
       return <div class="artist-page" />;
     }

@@ -99,7 +99,6 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps, any, null, Ro
     if (!this.#player && this.props.playlist && this.props.playlist.length > 0) {
       this.initPlayer();
     }
-    console.log('ctx params', this.context.unhandledPath === '/player');
   }
 
   willUmount() {

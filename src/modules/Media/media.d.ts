@@ -22,7 +22,7 @@ export interface IPlayerClass {
 
   analyser: AnalyserNode;
 
-  addTrack(): void;
+  addTrack(track: ITrack): void;
 
   popTrack(): void;
 

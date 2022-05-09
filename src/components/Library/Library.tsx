@@ -85,8 +85,8 @@ class Library extends VDom.Component<LibraryProps, LibraryState> {
                 />
               </div>
             </Link>
-            {
-              playlists && playlists.map((p: any) => (
+            {playlists &&
+              Object.entries(playlists).map(([_,p]:[_:string,p:Map]) => (
                 <Link to={`/playlists/${p.id}`}>
                   <div class="waveLibrary__link">
                     <ImageCard

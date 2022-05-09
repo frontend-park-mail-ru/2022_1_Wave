@@ -68,7 +68,6 @@ class ArtistPageComponent extends VDom.Component<any, any, null, RouteNavigator>
       const trackid = parseInt(e.currentTarget.parentElement.parentElement.parentElement.id);
       e.preventDefault();
       e.stopPropagation();
-      //console.log('add!!!!',trackid,playlistid)
       this.props.addTrack({trackid, playlistid});
     };
   }
@@ -120,7 +119,7 @@ class ArtistPageComponent extends VDom.Component<any, any, null, RouteNavigator>
                 {/*    ( */}
                 {
                   this.props.playlists &&
-                    this.props.playlists.map((v) => <div onClick={this.addTrack(v.id)}
+                    Object.entries(this.props.playlists).map(([_,v]:[k:string,v:Map])  => <div onClick={this.addTrack(v.id)}
                       class="text context__item">{v.title}</div>)
                 }
                 {/* ) */}

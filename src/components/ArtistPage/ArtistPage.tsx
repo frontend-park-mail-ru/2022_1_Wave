@@ -13,7 +13,7 @@ import { ITrack } from '../../modules/Media/media';
 import { setTrack, setTracks } from '../../actions/Playlist';
 import { startPlay } from '../../actions/Player';
 import PagePlaylist from '../common/PagePlaylist/PagePlaylist';
-import {addTrackPlaylist, deleteTrackPlaylist, getPlaylists} from "../../actions/UserPlaylist";
+import {addTrackPlaylist, getPlaylists} from "../../actions/UserPlaylist";
 
 class ArtistPageComponent extends VDom.Component<any, any, null, RouteNavigator> {
   static contextType = RouterContext;
@@ -91,7 +91,6 @@ class ArtistPageComponent extends VDom.Component<any, any, null, RouteNavigator>
       const trackid = parseInt(e.currentTarget.parentElement.parentElement.parentElement.id);
       e.preventDefault();
       e.stopPropagation();
-      //console.log('add!!!!',trackid,playlistid)
       this.props.addTrack({trackid, playlistid});
     };
   }
@@ -151,7 +150,8 @@ class ArtistPageComponent extends VDom.Component<any, any, null, RouteNavigator>
                 {/*    ( */}
                 {
                   this.props.playlists &&
-                  this.props.playlists.map((v) => <div onclick={this.addTrack(v.id)} class="text context__item">{v.title}</div>)
+                  Object.entries(this.props.playlists).map(([_,v]:[k:string,v:Map])  =>
+                    <div onclick={this.addTrack(v.id)} class="text context__item">{v.title}</div>)
                 }
                 {/* ) */}
                 {/* } */}
@@ -164,11 +164,10 @@ class ArtistPageComponent extends VDom.Component<any, any, null, RouteNavigator>
         <div class="artist-page__albums">
           <div class="text artist__title">Albums</div>
           <CarouselRow>
-            {artist.albums
-              ? artist.albums.map((v: any) => (
-                <AlbumCard cover={config.files + v.cover} title={v.title} artist={v.artist} />
-              ))
-              : ''}
+            {artist.albums &&
+                Object.entries(artist.albums).map(([_,v]:[k:string,v:Map])  =>
+                  <AlbumCard cover={config.files + v.cover} title={v.title} artist={v.artist} />)
+            }
           </CarouselRow>
         </div>
       </div>

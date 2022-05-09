@@ -10,8 +10,8 @@ import { artistGetPopular } from '../../../actions/Artist';
 import { config } from '../../../modules/Client/Client';
 
 interface PopularComponentProps {
-  albums?: Array<object>;
-  artists?: Array<object>;
+  albums?: Array<Map>;
+  artists?: Array<Map>;
   getAlbums: () => void;
   getArtist: () => void;
 }
@@ -28,29 +28,27 @@ class PopularComponent extends VDom.Component<PopularComponentProps> {
       <div class="main__popular__albums main__popular_slider-hidden">
         <div class="text main__popular__title">Popular albums</div>
         <CarouselRow>
-          {this.props.albums
-            ? this.props.albums.map((v: any) => (
-              <AlbumCard cover={config.files + v.cover} title={v.title} artist={v.artist} />
-            ))
-            : ''}
+          {this.props.albums &&
+            Object.entries(this.props.albums).map(([_,v]:[k:string,v:Map]) =>
+              <AlbumCard cover={config.files + v.cover} title={v.title} artist={v.artist}/> )
+          }
         </CarouselRow>
       </div>
       <div class="main__popular__artists main__popular_slider-hidden">
         <div class="text main__popular__title">Popular artist</div>
         <CarouselRow>
-          {this.props.artists
-            ? this.props.artists.map((v: any) => (
-              <ArtistCard cover={config.files + v.cover} name={v.name} />
-            ))
-            : ''}
+          {this.props.artists && 
+              Object.entries(this.props.artists).map(([_,v]:[k:string,v:Map]) =>
+                <ArtistCard cover={config.files + v.cover} name={v.name} />)
+          }
         </CarouselRow>
       </div>
     </div>
   );
 }
 const mapStateToProps = (state: any): Map => ({
-  artists: Array.isArray(state.artistPopular) ? state.artistPopular : null,
-  albums: Array.isArray(state.albumPopular) ? state.albumPopular : null,
+  artists: state.artistPopular ?? null,
+  albums: state.albumPopular ?? null,
 });
 
 const mapDispatchToProps = (dispatch: any): Map => ({

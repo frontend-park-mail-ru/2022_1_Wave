@@ -45,11 +45,9 @@ class PageTrack extends VDom.Component<PageTrackProps> {
     }
   }
 
-  didMount(): void {
-  }
 
   showContextMenu = (e: PointerEvent):void => {
-    e.preventDefault();
+   // e.preventDefault();
     const rect = e.currentTarget.getBoundingClientRect();
     this.setState({contextShow:true,contextPosX:e.clientX - rect.left,contextPosY:e.clientY - rect.top})
   }
@@ -62,6 +60,7 @@ class PageTrack extends VDom.Component<PageTrackProps> {
     if (e.target === this.likeRef.instance) {
       return this.toggleLike();
     }
+    this.props.handleClick(e);
   }
 
   render = (): VDom.VirtualElement => {

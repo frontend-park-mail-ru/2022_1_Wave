@@ -10,7 +10,7 @@ import { setTrack, setTracks } from '../../actions/Playlist';
 import { startPlay } from '../../actions/Player';
 import PagePlaylist from '../common/PagePlaylist/PagePlaylist';
 import {deleteTrackPlaylist, getPlaylists} from "../../actions/UserPlaylist";
-import playlist from "../../config/Playlist";
+import { Map } from '../../modules/Store/types';
 
 class PlaylistPage extends VDom.Component<any, any, null, RouteNavigator> {
   static contextType = RouterContext;
@@ -23,30 +23,11 @@ class PlaylistPage extends VDom.Component<any, any, null, RouteNavigator> {
     super(props);
     this.addPlaylistToPlayer = this.addPlaylistToPlayer.bind(this);
     this.runTrack = this.runTrack.bind(this);
-    this.updatePlaylists = this.updatePlaylists.bind(this);
     if (!this.props?.playlists) {
       this.props.getPlaylists();
     }
   }
 
-  didMount(): void {
-    this.updatePlaylists();
-
-  }
-
-  didUpdate(): void {
-    this.updatePlaylists();
-  }
-
-  updatePlaylists():void {
-    const { slug }: { slug: string } = this.context.params;
-    if(!this.props.playlists) return;
-    const playlist = this.props.playlists.filter( p => p.id.toString() === slug)
-    console.log(playlist,this.state.playlist)
-    if (JSON.stringify(playlist) !== JSON.stringify(this.state.playlist)){
-      this.setState({playlist})
-    }
-  }
 
   addPlaylistToPlayer(tracks: ITrack[]): (_e: Event) => void  {
     return (e: Event) => {
@@ -73,11 +54,13 @@ class PlaylistPage extends VDom.Component<any, any, null, RouteNavigator> {
   }
     
   render = (): VDom.VirtualElement => {
-    const playlist = this.state?.playlist;
+    const { slug }: { slug: string } = this.context.params;
+    const playlist:Map = this.props.playlists?.[slug];
     if (!playlist) {
       return <div class="playlist-page"/>;
     }
-    const {id,title,tracks}: {id:number,title:string, tracks:ITrack[]} = playlist[0];
+
+    const {id,title,tracks}: {id:number,title:string, tracks:ITrack[]} = playlist;
     const cover = tracks?.[0] ? tracks[0].cover : null;
     return (
       <div class="playlist-page">

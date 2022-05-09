@@ -21,7 +21,7 @@ interface PlayerComponentProps {
 }
 
 class PlayerComponent extends VDom.Component<PlayerComponentProps, any, null, RouteNavigator> {
-  #player: IPlayerClass;
+  #player: IPlayerClass | null;
 
   #playIcon: HTMLElement = (<div class="fa-regular fa-circle-play"></div>);
 
@@ -77,19 +77,19 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps, any, null, Ro
     if (!this.props.playlist) {
       return;
     }
-    console.log('current playlist:',this.#player.playlist, 'update with:',this.props.playlist);
-    if (JSON.stringify(this.#player.playlist) !== JSON.stringify(this.props.playlist)) {
+    console.log('current playlist:',this.#player?.playlist, 'update with:',this.props.playlist);
+    if (JSON.stringify(this.#player?.playlist) !== JSON.stringify(this.props.playlist)) {
       this.setState({ trackTime: 0, trackFilled: 0, trackFetched: 0, trackBuffered: 0 });
-      this.#player.updatePlaylist(this.props.playlist);
+      this.#player?.updatePlaylist(this.props.playlist);
       this.props.setPos(0);
     }
     if (
       typeof this.props.position === 'number' &&
-      this.#player.currentIndex !== this.props.position
+      this.#player?.currentIndex !== this.props.position
     ) {
-      this.#player.setPosition(this.props.position);
+      this.#player?.setPosition(this.props.position);
     }
-    if (this.#player && this.#player.audio && this.#player.audio.paused === this.props.isPlay) {
+    if (this.#player?.audio?.paused === this.props.isPlay) {
       this.checkPlay();
     }
   }
@@ -101,7 +101,7 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps, any, null, Ro
     }
   }
 
-  willUmount() {
+  willUmount():void {
     this.#player = null;
   }
 
@@ -143,6 +143,7 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps, any, null, Ro
   }
 
   loadTrackData(): void {
+    if (!this.#player?.currentTrack) return;
     this.setState({
       trackData: {
         title: this.#player.currentTrack.title,
@@ -154,10 +155,10 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps, any, null, Ro
 
   checkPlay(): void {
     if (this.props.isPlay) {
-      this.#player.play();
+      this.#player?.play();
       return;
     }
-    this.#player.stop();
+    this.#player?.stop();
   }
 
   tooglePlay(e: Event): void {
@@ -169,26 +170,29 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps, any, null, Ro
     this.props.play();
   }
 
-  runNext(e: Event): void {
-    e.stopPropagation();
+  runNext(e: Event | undefined =  undefined): void {
+    if(e instanceof Event) e.stopPropagation();
+    if(!this.#player) return;
     if (this.#player.currentIndex + 1 > this.#player.playlist.length -1) return;
     this.setState({ trackFilled: 100, playState: true });
     this.props.setPos(this.#player.currentIndex +1);
     this.checkPlay();
   }
 
-  runPrev(e: Event): void {
-    e.stopPropagation();
+  runPrev(e: Event | undefined =  undefined): void {
+    if(e instanceof Event) e.stopPropagation();
+    if(!this.#player) return;
     if ( this.#player.currentIndex - 1 < 0 ) return;
     this.props.setPos(this.#player.currentIndex - 1);
     this.checkPlay();
   }
 
   timeUpdater(_e: Event): void {
+    if(!this.#player) return;
     this.fetchedUpdater();
     this.updateWaveFront();
     const filled = (this.#player.audio.currentTime / this.#player.audio.duration) * 100;
-    this.setState({ trackTime: this.#player.audio.currentTime, trackFilled: filled });
+    this.setState({ trackTime: this.#player?.audio.currentTime, trackFilled: filled });
   }
 
   updateWaveFront(): void {
@@ -196,7 +200,7 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps, any, null, Ro
     if (!currFreq) {
       return;
     }
-    this.#player.analyser.getByteFrequencyData(currFreq);
+    this.#player?.analyser.getByteFrequencyData(currFreq);
     const barsHeight: Array<number> = [0, 0, 0, 0];
     const hzStep: number = 24;
     const lowFreq: Array<number> = [0, 700];
@@ -222,14 +226,16 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps, any, null, Ro
   }
 
   fetchedUpdater(): void {
+    if(!this.#player) return;
     if (this.#player.audio.buffered.length > 0) {
-      const fetchedEnd = this.#player.audio.buffered.end(this.#player.audio.buffered.length - 1);
+      const fetchedEnd = this.#player?.audio.buffered.end(this.#player.audio.buffered.length - 1);
       this.setState({ trackBuffered: (fetchedEnd / this.#player.audio.duration) * 100 });
     }
   }
 
   setTime(e: MouseEvent): void {
     e.stopPropagation();
+    if(!this.#player) return;
     if ((e.type === 'mousemove' || e.type === 'touchmove') && !this.state.isPlayerDragged) {
       return;
     }
@@ -275,6 +281,7 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps, any, null, Ro
 
   setVolume(e: MouseEvent): void {
     e.stopPropagation();
+    if(!this.#player) return;
     if ((e.type === 'mousemove' || e.type === 'touchmove') && !this.state.isVolumeDragged) {
       return;
     }
@@ -284,10 +291,10 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps, any, null, Ro
     this.#player.audio.volume = relativePosition;
   }
 
-  getRelativePosition(e: MouseEvent): number {
+  getRelativePosition(e: MouseEvent| TouchEvent): number {
     e.preventDefault();
-    const rect = e.currentTarget.getBoundingClientRect();
-    const x = e.touches ? e.touches[0].clientX : e.clientX;
+    const rect = (e.currentTarget as HTMLDivElement).getBoundingClientRect();
+    const x = e instanceof TouchEvent ? (e as TouchEvent).touches[0].clientX : e.clientX;
     const relativePosition = (x - rect.left) / (rect.right - rect.left);
     if (relativePosition < 0) {
       return 0;
@@ -297,12 +304,14 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps, any, null, Ro
 
   toogleShuffle(e: Event): void {
     e.preventDefault();
-    this.#player.isPlayRand = !this.#player.isPlayRand;
-    this.setState({ playRand: this.#player.isPlayRand });
+    if(!this.#player) return;
+    this.#player.isPlayRand = !this.#player?.isPlayRand;
+    this.setState({ playRand: this.#player?.isPlayRand });
   }
 
   toogleMute(e: Event): void {
     e.preventDefault();
+    if(!this.#player?.audio) return;
     this.#player.audio.volume = this.state.trackVolume > 0 ? 0 : 0.5;
     this.setState({ trackVolume: this.state.trackVolume > 0 ? 0 : 50 });
   }
@@ -402,12 +411,12 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps, any, null, Ro
             {`${formatInt(this.state.trackTime / 60)}:${formatInt(this.state.trackTime % 60)}`}
           </div>
         </div>
-        {/*<div onclick={this.toogleShuffle} ontouchend={this.toogleShuffle} class="player__shuffle">*/}
-        {/*  <div*/}
-        {/*    class="fa-solid fa-shuffle"*/}
-        {/*    style={{ color: this.state.playRand ? '#5D4099' : '#BEB7DF' }}*/}
-        {/*  ></div>*/}
-        {/*</div>*/}
+        {/* <div onclick={this.toogleShuffle} ontouchend={this.toogleShuffle} class="player__shuffle"> */}
+        {/*  <div */}
+        {/*    class="fa-solid fa-shuffle" */}
+        {/*    style={{ color: this.state.playRand ? '#5D4099' : '#BEB7DF' }} */}
+        {/*  ></div> */}
+        {/* </div> */}
         <div class="player__volume">
           <div onclick={this.toogleMute}  ontouchend={this.toogleMute} class={`fa-solid ${volIcon} volume__icon`}></div>
           <div

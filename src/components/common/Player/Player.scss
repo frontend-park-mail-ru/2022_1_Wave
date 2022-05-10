@@ -120,6 +120,9 @@
       font-size: 20px;
       margin-left: 0.8em;
     }
+    .player__progressbar__time {
+      display: none !important;
+    }
     .volume-progressbar-wrapper {
       display: none !important;
     }
@@ -149,9 +152,6 @@
 
   @media (max-width: 340px) {
     justify-content: space-between;
-    .player__progressbar__time {
-      display: none !important;
-    }
     .player__track {
       width: 50%;
       max-width: 50%;

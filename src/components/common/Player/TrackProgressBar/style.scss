@@ -1,0 +1,9 @@
+.player-progressbar{
+  padding: 0px 1em;
+  margin-left: 0.5em;
+  flex-grow: 1;
+  display: inline-flex;
+  .player__progressbar__time{
+    padding: 0px 0.8em;
+  }
+}

@@ -1,0 +1,52 @@
+.progress-bar {
+  height: 20px;
+  flex-grow: 1;
+  display: flex;
+
+  .progress-bar__progress {
+    background-color: #5d4099;
+    flex-grow: 1;
+    height: 2px;
+    margin: auto;
+    position: relative;
+    & > * {
+      height: 100%;
+    }
+
+    .progress__additional {
+      background-color: #6d7184;
+      position: absolute;
+    }
+
+    .progress__main {
+      display: flex;
+      position: relative;
+
+      .progress__main__state {
+        background-color: #beb7df;
+      }
+      .progressbar__main__marker {
+        height: 1.5em;
+        width: 2em;
+        margin-top: -0.75em;
+        margin-left: -1em;
+        display: flex;
+        position: absolute;
+        transition: height 1ms ease;
+        .marker__img {
+          height: 22px;
+          width: 22px;
+          position: relative;
+          margin: auto;
+          object-fit: cover;
+          background-repeat: no-repeat;
+          background-size: cover;
+        }
+      }
+    }
+  }
+
+  &:hover {
+    cursor: pointer;
+  }
+}

@@ -82,72 +82,6 @@
     }
   }
 
-  .player__progressbar {
-    flex-grow: 1;
-    display: inline-flex;
-    align-self: center;
-    margin-left: 1em;
-    margin-right: 0.6em;
-
-    .progressbar__wrapper {
-      height: 20px;
-      flex-grow: 1;
-      display: flex;
-
-      .progressbar {
-        background-color: #5d4099;
-        flex-grow: 1;
-        height: 2px;
-        margin: auto;
-
-        & > * {
-          height: 100%;
-        }
-
-        .progressbar__prefetched {
-          background-color: #6d7184;
-        }
-
-        .progressbar__state {
-          display: flex;
-          margin-top: -2px;
-          margin-right: -11px;
-          position: relative;
-
-          .progressbar__state__line {
-            background-color: #beb7df;
-          }
-          .progressbar__state__marker {
-            height: 1.5em;
-            width: 2em;
-            margin-top: -0.75em;
-            margin-left: -1em;
-            display: flex;
-            position: absolute;
-            transition: height 1ms ease;
-            .marker__img {
-              height: 22px;
-              width: 22px;
-              position: relative;
-              margin: auto;
-              object-fit: cover;
-              background-repeat: no-repeat;
-              background-size: cover;
-            }
-          }
-        }
-      }
-
-      &:hover {
-        cursor: pointer;
-      }
-    }
-
-    .player__progressbar__time {
-      margin-left: 0.8em;
-    }
-  }
-
   .player__shuffle {
     width: 60px;
     align-items: center;
@@ -163,60 +97,22 @@
     }
   }
 
-  .player__volume {
-    display: inline-flex;
-    justify-content: space-around;
-    align-items: center;
-    width: 10%;
-    color: #beb7df;
-
-    .volume__icon {
-      font-size: 1.2em;
-      width: 1.2em;
-      &:hover {
-        cursor: pointer;
-      }
-    }
-
-    .volume__wrapper {
-      width: 60%;
-      display: flex;
-      height: 20px;
-
-      .volume__input {
-        height: 2px;
-        width: 100%;
-        max-width: 100%;
-        background-color: #5d4099;
-        margin: auto;
-        display: flex;
-        position: relative;
-
-        .volume__input__state {
-          background-color: #beb7df;
-          height: inherit;
-          max-width: 100%;
-        }
-
-        .volume__state__marker {
-          width: 1em;
-          height: 0.8em;
-          margin-left: -0.4em;
-          margin-top: -0.4em;
-          position: absolute;
-          transition: height 1ms ease;
-        }
-      }
-
-      &:hover {
-        cursor: pointer;
-      }
-    }
+  .volume-progressbar-wrapper{
+    height: 100%;
+    width: 15%;
+    display: flex;
+  }
+  .player-progressbar-wrapper{
+    flex-grow: 1;
+    display: flex;
   }
 
   @media (max-width: 740px) {
     .player__shuffle {
       display: none !important;
+    }
+    .player-progressbar-wrapper{
+      width: 20%;
     }
   }
   @media (max-width: 580px) {
@@ -224,7 +120,7 @@
       font-size: 20px;
       margin-left: 0.8em;
     }
-    .player__volume {
+    .volume-progressbar-wrapper {
       display: none !important;
     }
     .player__waves {
@@ -250,6 +146,7 @@
     }
   }
 
+
   @media (max-width: 340px) {
     justify-content: space-between;
     .player__progressbar__time {
@@ -271,7 +168,7 @@
         }
       }
     }
-    .player__progressbar {
+    .player-progressbar-wrapper {
       display: none;
     }
   }

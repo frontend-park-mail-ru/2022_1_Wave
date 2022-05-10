@@ -1,0 +1,16 @@
+.volume-progressbar {
+  display: inline-flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 100%;
+  color: #beb7df;
+  margin-right: 1em;
+  .volume__icon {
+    font-size: 1.2em;
+    width: 1.2em;
+    padding-right: 0.5em;
+    &:hover {
+      cursor: pointer;
+    }
+  }
+}

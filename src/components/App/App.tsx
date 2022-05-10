@@ -15,7 +15,7 @@ import Player from '../common/Player/Player';
 import { NotifyType, notify } from '../../actions/Notifier';
 import AlbumPage from '../AlbumPage/AlbumPage';
 import Navbar from '../common/Navbar/Navbar';
-import {mainSmallScreen} from "../../mediaQueries";
+import {mainMobileScreen, mainSmallScreen} from "../../mediaQueries";
 import {closeSidebar, openSidebar} from "../../actions/Sidebar";
 import Library from '../Library/Library';
 import PlaylistPage from "../PlaylistPage/PlaylistPage";
@@ -27,13 +27,16 @@ class App extends VDom.Component<any> {
     gesture: {
       startX: 0,
       startY: 0,
-    }
+      startTime:0,
+    },
+    isMobilePlayerFull: false,
   }
 
   didMount(): void {
     this.props.getFavorites();
     this.props.userGetSelf();
     mainSmallScreen.addEventListener('change', this.mediaSmallScreenhandler);
+    mainMobileScreen.addEventListener('change', this.mediaMobileScreenhandler);
   }
 
   mediaSmallScreenhandler = (e: MediaQueryListEvent): void => {
@@ -42,8 +45,15 @@ class App extends VDom.Component<any> {
     });
   }
 
+  mediaMobileScreenhandler = (e: MediaQueryListEvent): void => {
+    this.setState({
+      isMobileScreen: e.matches,
+    });
+  }
+
   willUmount(): void {
     mainSmallScreen.removeEventListener('change', this.mediaSmallScreenhandler);
+    mainMobileScreen.removeEventListener('change', this.mediaMobileScreenhandler);
   }
 
   handleGesture = (e:TouchEvent):void => {
@@ -53,11 +63,20 @@ class App extends VDom.Component<any> {
     const { startX, startY } = this.state.gesture;
 
     if (Math.abs(startX - touchendX) >= Math.abs(startY - touchendY)) {
-      if (touchendX <= this.state.gesture.startX) {
-        this.props.closeSidebar();
+      const gestureTime: number = new Date().getTime() - this.state.gesture.startTime;
+      if (gestureTime < 200) {
+        if (touchendX <= this.state.gesture.startX) {
+          this.props.closeSidebar();
+        }
+        if (touchendX > this.state.gesture.startX) {
+          this.props.openSidebar();
+        }
       }
-      if (touchendX > this.state.gesture.startX) {
-        this.props.openSidebar();
+    }else if (Math.abs(startY - touchendY) > 70 && mainMobileScreen.matches) {
+      const gestureTime: number = new Date().getTime() - this.state.gesture.startTime;
+      if (gestureTime < 200) {
+        if (startY - touchendY > 0) this.setState({isMobilePlayerFull: true});
+        if (startY - touchendY < 0) this.setState({isMobilePlayerFull: false});
       }
     }
 
@@ -65,6 +84,7 @@ class App extends VDom.Component<any> {
       gesture: {
         startX: 0,
         startY: 0,
+        startTime:0,
       },
     });
   }
@@ -78,6 +98,7 @@ class App extends VDom.Component<any> {
         result: null,
         startX: touchstartX,
         startY: touchstartY,
+        startTime: new Date().getTime(),
       },
     });
   }
@@ -120,7 +141,7 @@ class App extends VDom.Component<any> {
                 </Route>
               </RouteSwitch>
             </div>
-            <Player />
+            <Player isMobileFull = {this.state.isMobilePlayerFull && mainMobileScreen.matches}/>
           </div>
         </Route>
       </RouteSwitch>

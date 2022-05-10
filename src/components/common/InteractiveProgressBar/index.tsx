@@ -48,7 +48,7 @@ export default class InteractiveProgressBar extends VDom.Component<ProgressBarPr
   getRelativePosition = (e: MouseEvent| TouchEvent): number  => {
     e.preventDefault();
     const rect = (e.currentTarget as HTMLDivElement).getBoundingClientRect();
-    const x = e instanceof TouchEvent ? (e as TouchEvent).touches[0].clientX : e.clientX;
+    const x = e instanceof TouchEvent ? (e as TouchEvent).changedTouches?.[0].clientX : e.clientX;
     const relativePosition = (x - rect.left) / (rect.right - rect.left);
     if (relativePosition < 0) {
       return 0;
@@ -57,7 +57,6 @@ export default class InteractiveProgressBar extends VDom.Component<ProgressBarPr
   }
 
   render = (): VDom.VirtualElement =>{
-    console.log('marker: ',this.props.marker)
     return (<div class="progress-bar"
       onClick={this.setProgress}
       onTouchEnd={this.setProgress}

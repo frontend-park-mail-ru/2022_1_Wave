@@ -1,0 +1,109 @@
+.player_mobile {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  * {
+    height: fit-content;
+  }
+  .player__track {
+    margin: 0 auto 0 auto;
+    display: flex !important;
+    flex-direction: column;
+    width: 50%;
+  }
+  .track__picture {
+    width: 100% !important;
+    font-size: 50px !important;
+  }
+  .track__name{
+    width: 100%;
+    padding-top: 5px;
+
+    * {
+      overflow: visible;
+      width: fit-content;
+      max-width: 100% !important;
+      margin: auto;
+    }
+
+  }
+
+  .player__controls {
+    flex-direction: column;
+    width: 100%;
+    .player-progressbar-wrapper {;
+      padding: 20px 10px;
+      width: 100%;
+      height: 100px;
+      .player-progressbar{
+        margin: auto;
+      }
+      .player__waves{
+        height: 100%;
+        padding-left: 10px;
+      }
+      .player__progressbar__time {
+        padding: 0px 15px !important;
+      }
+    }
+    .player__control{
+      width: 30%;
+      font-size: 40px !important;
+      align-self: center;
+      margin: auto;
+    }
+  }
+  @media (max-width: 580px) {
+    .player__waves{
+      display: flex !important;
+    }
+    .player__progressbar__time {
+      display: block !important;
+    }
+    .control__next {
+      display: block !important;
+    }
+    .control__prev {
+      display: block !important;
+    }
+    .control__play_pause {
+      width: fit-content !important;
+    }
+    .player__control {
+      width: 50% !important;
+    }
+  }
+  @media (max-width: 340px) {
+    justify-content: center;
+    .player__track {
+      width: 50%;
+      max-width: 100%;
+      font-size: 30px;
+      .track__picture {
+        width: 100% !important;
+      }
+      .track__name {
+        width: fit-content;
+        padding-left: 0;
+        * {
+          padding-left: 0;
+          max-width: 100% !important;
+          margin: auto;
+          width: fit-content;
+        }
+      }
+    }
+    .player__control{
+      width: 80% !important;
+    }
+    .player-progressbar-wrapper {
+      display: flex;
+      .player-progressbar{
+        padding-top: 0px;
+        padding-left: 10px;
+      }
+    }
+  }
+}

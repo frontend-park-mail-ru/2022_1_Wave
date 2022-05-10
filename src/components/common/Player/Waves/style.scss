@@ -1,0 +1,14 @@
+.player__waves {
+  margin-left: 20px;
+  margin-right: 10px;
+  width: 32px;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+
+  .bar {
+    background-color: #beb7df;
+    width: 2px;
+    transition: height 0.2s ease;
+  }
+}

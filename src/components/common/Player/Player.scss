@@ -8,24 +8,15 @@
   width: 100%;
   display: flex;
   z-index: 980;
+  font-size: 20px;
+  transition: height 0.2s ease;
   & > * {
     height: 100%;
     align-items: center;
   }
-
-  .player__waves {
-    margin-left: 20px;
-    margin-right: 10px;
-    width: 32px;
+  .player__controls{
+    width: 100%;
     display: flex;
-    justify-content: space-evenly;
-    align-items: center;
-
-    .bar {
-      background-color: #beb7df;
-      width: 2px;
-      transition: height 0.2s ease;
-    }
   }
 
   .player__track {
@@ -33,7 +24,6 @@
     cursor: default;
     font-size: 25px;
     .track__picture {
-      height: 2em;
       width: 2em;
       border-radius: 0.2em;
       object-fit: cover;
@@ -74,7 +64,7 @@
     }
 
     .control__play_pause {
-      font-size: 30px;
+      font-size: 1.2em;
     }
 
     .control__next {
@@ -111,7 +101,7 @@
     .player__shuffle {
       display: none !important;
     }
-    .player-progressbar-wrapper{
+    .volume-progressbar-wrapper{
       width: 20%;
     }
   }
@@ -121,7 +111,7 @@
       margin-left: 0.8em;
     }
     .player__progressbar__time {
-      display: none !important;
+      display: none ;
     }
     .volume-progressbar-wrapper {
       display: none !important;
@@ -152,13 +142,15 @@
 
   @media (max-width: 340px) {
     justify-content: space-between;
+    .player__controls{
+      width: fit-content;
+    }
     .player__track {
       width: 50%;
       max-width: 50%;
       font-size: 13px;
       .track__picture {
         width: 50px;
-        height: 50px;
       }
       .track__name {
         width: 100%;
@@ -174,21 +166,3 @@
   }
 }
 
-.player_mobile {
-  height: 100%;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  .player__track {
-    margin: 50% auto;
-    display: flex;
-    flex-direction: column;
-    width: 50%;
-    height: 50%;
-  }
-  .track__picture {
-    height: 100px;
-    width: 100px;
-    border-radius: 50px;
-  }
-}

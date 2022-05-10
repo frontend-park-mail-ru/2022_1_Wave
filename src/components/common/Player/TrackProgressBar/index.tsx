@@ -9,6 +9,8 @@ import './style.scss';
 
 interface ProgressBarProps extends IComponentPropsCommon {
     audio: HTMLAudioElement;
+    play: () => void;
+    stop: () => void;
 }
 
 class TrackProgressBar extends VDom.Component<ProgressBarProps>{
@@ -36,11 +38,17 @@ class TrackProgressBar extends VDom.Component<ProgressBarProps>{
     this.props.audio.currentTime = relativePosition * this.props.audio.duration;
   }
 
-  didMount():void {
+  didMount(): void {
     if(!this.props.audio) return;
     this.props.audio.addEventListener('timeupdate', this.timeUpdater);
     this.props.audio.addEventListener('progress', this.fetchedUpdater);
     this.props.audio.addEventListener('loadedmetadata', this.fetchedUpdater);
+  }
+
+  willUmount(): void {
+    this.props.audio.removeEventListener('timeupdate',this.timeUpdater);
+    this.props.audio.removeEventListener('progress',this.fetchedUpdater);
+    this.props.audio.removeEventListener('loadedmetadata',this.fetchedUpdater);
   }
 
   fetchedUpdater(): void {
@@ -54,7 +62,6 @@ class TrackProgressBar extends VDom.Component<ProgressBarProps>{
   timeUpdater(_e: Event): void {
     if(!this.props.audio) return;
     this.fetchedUpdater();
-    // this.updateWaveFront();
     const filled = (this.props.audio.currentTime / this.props.audio.duration) * 100;
     this.setState({ trackTime: this.props.audio.currentTime, trackFilled: filled });
   }

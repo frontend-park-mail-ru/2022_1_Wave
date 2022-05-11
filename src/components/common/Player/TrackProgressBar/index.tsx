@@ -43,6 +43,7 @@ class TrackProgressBar extends VDom.Component<ProgressBarProps>{
     this.props.audio.addEventListener('timeupdate', this.timeUpdater);
     this.props.audio.addEventListener('progress', this.fetchedUpdater);
     this.props.audio.addEventListener('loadedmetadata', this.fetchedUpdater);
+    this.timeUpdater()
   }
 
   willUmount(): void {
@@ -59,7 +60,7 @@ class TrackProgressBar extends VDom.Component<ProgressBarProps>{
     }
   }
 
-  timeUpdater(_e: Event): void {
+  timeUpdater(_e?: Event): void {
     if(!this.props.audio) return;
     this.fetchedUpdater();
     const filled = (this.props.audio.currentTime / this.props.audio.duration) * 100;

@@ -182,7 +182,7 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
 
   render(): VDom.VirtualElement {
     if (!this.#player) {
-      return <div class="player"/>;
+      return <></>;
     }
     return (
       <div class={`player ${this.props.isMobileFull ? 'player_mobile' : ''}`}>
@@ -199,13 +199,13 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
         {!this.props.isMobileFull &&
                     <div class="player__controls">
                       <div class="player__control">
-                        <div onclick={this.runPrev} ontouchend={this.runPrev} class="control__prev">
+                        <div onclick={this.runPrev} class="control__prev">
                           <div class="fa-solid fa-backward-step"/>
                         </div>
-                        <div onclick={this.togglePlay} ontouchend={this.togglePlay} class="control__play_pause">
+                        <div onclick={this.togglePlay} class="control__play_pause">
                           {this.props.isPlay ? this.#pauseIcon : this.#playIcon}
                         </div>
-                        <div onclick={this.runNext} ontouchend={this.runNext} class="control__next">
+                        <div onclick={this.runNext} class="control__next">
                           <div class="fa-solid fa-forward-step"/>
                         </div>
                       </div>

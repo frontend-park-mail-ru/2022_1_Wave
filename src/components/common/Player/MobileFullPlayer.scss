@@ -74,6 +74,14 @@
     .player__control {
       width: 50% !important;
     }
+    .volume-progressbar-wrapper {
+      width: 50% !important;
+      display: flex !important;
+      align-items: end;
+      .volume-progressbar{
+        margin-right: 0;
+      }
+    }
   }
   @media (max-width: 340px) {
     justify-content: center;
@@ -81,12 +89,15 @@
       width: 50%;
       max-width: 100%;
       font-size: 30px;
+
       .track__picture {
         width: 100% !important;
       }
+
       .track__name {
         width: fit-content;
         padding-left: 0;
+
         * {
           padding-left: 0;
           max-width: 100% !important;
@@ -95,15 +106,19 @@
         }
       }
     }
-    .player__control{
+    .player__control {
       width: 80% !important;
     }
     .player-progressbar-wrapper {
       display: flex;
-      .player-progressbar{
+
+      .player-progressbar {
         padding-top: 0px;
         padding-left: 10px;
       }
     }
+    .volume-progressbar-wrapper {
+      width: 80% !important;
+    }
   }
-}
+  }

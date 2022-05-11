@@ -73,7 +73,7 @@ class App extends VDom.Component<any> {
         }
       }
     }else if (Math.abs(startY - touchendY) > 70 && mainMobileScreen.matches) {
-      const gestureTime: number = new Date().getTime() - this.state.gesture.startTime;
+      const gestureTime: number = performance.now() - this.state.gesture.startTime;
       if (gestureTime < 200) {
         if (startY - touchendY > 0) this.setState({isMobilePlayerFull: true});
         if (startY - touchendY < 0) this.setState({isMobilePlayerFull: false});
@@ -98,7 +98,7 @@ class App extends VDom.Component<any> {
         result: null,
         startX: touchstartX,
         startY: touchstartY,
-        startTime: new Date().getTime(),
+        startTime: performance.now(),
       },
     });
   }

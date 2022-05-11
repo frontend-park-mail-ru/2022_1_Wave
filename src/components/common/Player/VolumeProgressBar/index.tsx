@@ -23,7 +23,11 @@ export default class VolumeProgressBar extends VDom.Component<ProgressBarProps> 
     this.props.audio.volume = relativePosition;
     this.setState({volume: relativePosition * 100})
   }
-  
+
+  didMount():void {
+    this.setState({volume: this.props.audio.volume * 100})
+  }
+
   getVolIcon = ():string => {
     let volIcon: string;
     if(!this.props.audio) return 'fa-volume-off';
@@ -45,7 +49,7 @@ export default class VolumeProgressBar extends VDom.Component<ProgressBarProps> 
     return volIcon;
   }
 
-  toogleMute = (e: Event): void  => {
+  toggleMute = (e: Event): void  => {
     e.preventDefault();
     if(!this.props.audio) return;
     this.props.audio.volume = this.props.audio.volume > 0 ? 0 : 0.5;
@@ -57,7 +61,7 @@ export default class VolumeProgressBar extends VDom.Component<ProgressBarProps> 
 
     return (
       <div class="volume-progressbar">
-        <div onClick={this.toogleMute} onTouchEnd={this.toogleMute}
+        <div onClick={this.toggleMute} onTouchEnd={this.toggleMute}
           class={`fa-solid ${this.getVolIcon()} volume__icon`}></div>
         <InteractiveProgressBar
           setProgressState={this.setVolume}

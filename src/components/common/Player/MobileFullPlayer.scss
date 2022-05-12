@@ -55,6 +55,13 @@
       margin: auto;
     }
   }
+  .player__close-btn{
+    width: 20px;
+    transform: rotate(-90deg);
+    position: absolute;
+    right: 10px;
+    top: 10px;
+  }
   @media (max-width: 580px) {
     .player__waves{
       display: flex !important;

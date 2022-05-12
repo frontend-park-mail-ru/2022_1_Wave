@@ -59,12 +59,12 @@ class App extends VDom.Component<any> {
   handleGesture = (e:TouchEvent):void => {
     const touchendX = e.changedTouches[0].screenX;
     const touchendY = e.changedTouches[0].screenY;
-
+    const fastSwipeTrigger = 150;
     const { startX, startY } = this.state.gesture;
+    const gestureTime: number = performance.now() - this.state.gesture.startTime;
 
     if (Math.abs(startX - touchendX) >= Math.abs(startY - touchendY)) {
-      const gestureTime: number = performance.now() - this.state.gesture.startTime;
-      if (gestureTime < 200) {
+      if (gestureTime < fastSwipeTrigger) {
         if (touchendX <= this.state.gesture.startX) {
           this.props.closeSidebar();
         }
@@ -72,9 +72,10 @@ class App extends VDom.Component<any> {
           this.props.openSidebar();
         }
       }
-    }else if (Math.abs(startY - touchendY) > 0 && mainMobileScreen.matches) {
-      const gestureTime: number = performance.now() - this.state.gesture.startTime;
-      if (gestureTime < 200) {
+    }
+
+    else if (Math.abs(startY - touchendY) > 0 && mainMobileScreen.matches) {
+      if (gestureTime < fastSwipeTrigger) {
         if (startY - touchendY > 0) this.setState({isMobilePlayerFull: true});
         if (startY - touchendY < 0) this.setState({isMobilePlayerFull: false});
       }
@@ -101,6 +102,10 @@ class App extends VDom.Component<any> {
         startTime: performance.now(),
       },
     });
+  }
+
+  togglePlayerFull = ():void => {
+    this.setState({isMobilePlayerFull: !this.state.isMobilePlayerFull})
   }
 
   render(): VDom.VirtualElement {
@@ -141,7 +146,7 @@ class App extends VDom.Component<any> {
                 </Route>
               </RouteSwitch>
             </div>
-            <Player isMobileFull = {this.state.isMobilePlayerFull && mainMobileScreen.matches}/>
+            <Player toggleMobileFull = {this.togglePlayerFull} isMobileFull = {this.state.isMobilePlayerFull && mainMobileScreen.matches}/>
           </div>
         </Route>
       </RouteSwitch>

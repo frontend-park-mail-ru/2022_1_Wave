@@ -3,6 +3,7 @@ import './MobileFullPlayer.scss';
 import VDom from '@rflban/vdom';
 import '../../App/App.scss';
 import {IComponentPropsCommon} from "@rflban/vdom/dist/IComponentProps";
+import {ArrowLeftIcon} from "@rflban/waveui";
 import {IPlayerClass, ITrack} from '../../../modules/Media/media';
 import {PlayerClass} from '../../../modules/Media/player';
 import {config} from '../../../modules/Client/Client';
@@ -22,6 +23,7 @@ interface PlayerComponentProps extends IComponentPropsCommon{
     position: number;
     isPlay: boolean;
     isMobileFull:boolean;
+    toggleMobileFull: () => void;
 }
 
 class PlayerComponent extends VDom.Component<PlayerComponentProps> {
@@ -188,6 +190,11 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
       <div class={`player ${this.props.isMobileFull ? 'player_mobile' : ''}`}>
         {!this.props.isMobileFull &&
             <Waves analyser={this.#player.analyser} audio={this.#player.audio}/>
+        }
+        {this.props.isMobileFull &&
+            <div onclick={this.props.toggleMobileFull} class="player__close-btn">
+              <ArrowLeftIcon/>
+            </div>
         }
         <div class="player__track">
           <img class="track__picture" src={this.state.trackData.cover}/>

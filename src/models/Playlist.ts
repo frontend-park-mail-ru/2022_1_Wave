@@ -38,8 +38,8 @@ export default class Playlist {
   }
 
   static deleteOfUser({trackid,playlistid}: {trackid:number,playlistid:number}): Promise<any> {
-    return HTTPClient.delete(Paths.ofCurrentUser + "?playlistId="
-        + playlistid.toString() + "&trackId=" + trackid.toString()).then((response) => {
+    return HTTPClient.delete(`${Paths.ofCurrentUser  }?playlistId=${
+      playlistid.toString()  }&trackId=${  trackid.toString()}`).then((response) => {
       if (response.status !== 200) {
         return Promise.reject(response.body);
       }
@@ -48,8 +48,10 @@ export default class Playlist {
   }
 
   static postOfUser({trackid,playlistid}: {trackid:number,playlistid:number}): Promise<any> {
-    return HTTPClient.post(Paths.ofCurrentUser + "?playlistId="
-        + playlistid.toString() + "&trackId=" + trackid.toString(),{}).then((response) => {
+    return HTTPClient.post(Paths.ofCurrentUser ,{
+      playlistId: playlistid.toString(),
+      trackId: trackid.toString(),
+    }).then((response) => {
       if (response.status !== 200) {
         return Promise.reject(response.body);
       }

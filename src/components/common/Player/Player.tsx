@@ -157,7 +157,10 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
   }
 
   togglePlay(e?: Event): void {
-    if (e instanceof Event) e.stopPropagation();
+    if (e instanceof Event) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
     if (this.props.isPlay) {
       this.props.stop();
       return;
@@ -195,7 +198,7 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
       return <></>;
     }
     return (
-      <div onclick={this.props.toggleMobileFull} class={`player ${this.props.isMobileFull ? 'player_mobile' : ''}`}>
+      <div onclick={!this.props.isMobileFull ? this.props.toggleMobileFull: null} class={`player ${this.props.isMobileFull ? 'player_mobile' : ''}`}>
         {!this.props.isMobileFull &&
             <Waves analyser={this.#player.analyser} audio={this.#player.audio}/>
         }
@@ -217,7 +220,7 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
                         <div onclick={this.runPrev} class="control__prev">
                           <div class="fa-solid fa-backward-step"/>
                         </div>
-                        <div onclick={this.togglePlay} class="control__play_pause">
+                        <div onClickCapture={this.togglePlay} class="control__play_pause">
                           {this.props.isPlay ? this.#pauseIcon : this.#playIcon}
                         </div>
                         <div onclick={this.runNext} class="control__next">

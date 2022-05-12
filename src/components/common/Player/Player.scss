@@ -23,6 +23,7 @@
     display: inline-flex;
     cursor: default;
     font-size: 25px;
+    width: fit-content;
     .track__picture {
       width: 2em;
       border-radius: 0.2em;
@@ -32,12 +33,7 @@
     .track__name {
       padding-left: 0.6em;
 
-      * {
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        max-width: 5em;
-      }
+
 
       .track__name__title {
       }
@@ -127,10 +123,12 @@
     }
     .player__control {
       width: 40px !important;
+      .control__play_pause {
+        width: fit-content !important;
+        margin: auto;
+      }
     }
-    .control__play_pause {
-      width: 100% !important;
-    }
+
     .player__shuffle {
       display: none !important;
     }

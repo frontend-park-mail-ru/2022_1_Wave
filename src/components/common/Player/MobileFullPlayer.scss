@@ -59,8 +59,9 @@
     width: 20px;
     transform: rotate(-90deg);
     position: absolute;
-    right: 10px;
     top: 10px;
+    align-self: center;
+    color: #6d7184;
   }
   @media (max-width: 580px) {
     .player__waves{

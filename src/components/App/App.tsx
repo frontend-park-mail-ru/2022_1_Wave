@@ -104,8 +104,9 @@ class App extends VDom.Component<any> {
     });
   }
 
-  togglePlayerFull = ():void => {
-    this.setState({isMobilePlayerFull: !this.state.isMobilePlayerFull})
+  togglePlayerFull = (e: Event):void => {
+    e.stopPropagation();
+    this.setState({isMobilePlayerFull: !this.state.isMobilePlayerFull});
   }
 
   render(): VDom.VirtualElement {

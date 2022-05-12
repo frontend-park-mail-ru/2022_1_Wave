@@ -187,7 +187,7 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
       return <></>;
     }
     return (
-      <div class={`player ${this.props.isMobileFull ? 'player_mobile' : ''}`}>
+      <div onclick={this.props.toggleMobileFull} class={`player ${this.props.isMobileFull ? 'player_mobile' : ''}`}>
         {!this.props.isMobileFull &&
             <Waves analyser={this.#player.analyser} audio={this.#player.audio}/>
         }

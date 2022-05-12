@@ -32,6 +32,13 @@ class App extends VDom.Component<any> {
     isMobilePlayerFull: false,
   }
 
+  consts = {
+    startXOpen:  70,
+    startXClose: 330,
+    startYOpen:  window.innerHeight - 85,
+    startYClose: 15,
+  }
+
   didMount(): void {
     this.props.getFavorites();
     this.props.userGetSelf();
@@ -57,18 +64,21 @@ class App extends VDom.Component<any> {
   }
 
   handleGesture = (e:TouchEvent):void => {
-    const touchendX = e.changedTouches[0].screenX;
-    const touchendY = e.changedTouches[0].screenY;
+    const touchendX = e.changedTouches[0].clientX;
+    const touchendY = e.changedTouches[0].clientY;
     const fastSwipeTrigger = 150;
     const { startX, startY } = this.state.gesture;
     const gestureTime: number = performance.now() - this.state.gesture.startTime;
 
+
     if (Math.abs(startX - touchendX) >= Math.abs(startY - touchendY)) {
       if (gestureTime < fastSwipeTrigger) {
-        if (touchendX <= this.state.gesture.startX) {
+        if (touchendX <= this.state.gesture.startX &&
+          startX < this.consts.startXClose ) {
           this.props.closeSidebar();
         }
-        if (touchendX > this.state.gesture.startX) {
+        if (touchendX > this.state.gesture.startX &&
+            startX < this.consts.startXOpen ) {
           this.props.openSidebar();
         }
       }
@@ -76,8 +86,10 @@ class App extends VDom.Component<any> {
 
     else if (Math.abs(startY - touchendY) > 0 && mainMobileScreen.matches) {
       if (gestureTime < fastSwipeTrigger) {
-        if (startY - touchendY > 0) this.setState({isMobilePlayerFull: true});
-        if (startY - touchendY < 0) this.setState({isMobilePlayerFull: false});
+        if (startY - touchendY > 0 &&
+            startY > this.consts.startYOpen ) this.setState({isMobilePlayerFull: true});
+        if (startY - touchendY < 0 &&
+            startY > this.consts.startYClose) this.setState({isMobilePlayerFull: false});
       }
     }
 
@@ -91,9 +103,8 @@ class App extends VDom.Component<any> {
   }
 
   catchStart = (e:TouchEvent):void => {
-    const touchstartX = e.changedTouches[0].screenX;
-    const touchstartY = e.changedTouches[0].screenY;
-
+    const touchstartX = e.changedTouches[0].clientX;
+    const touchstartY = e.changedTouches[0].clientY;
     this.setState({
       gesture: {
         result: null,

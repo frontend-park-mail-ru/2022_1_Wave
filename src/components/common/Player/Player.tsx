@@ -96,6 +96,12 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
   }
 
   willUmount(): void {
+    if (this.#player?.audio) {
+      this.#player.audio.removeEventListener('durationchange', this.loadTrackData);
+      this.#player.audio.removeEventListener('loadstart', this.loadTrackData);
+      this.#player.audio.removeEventListener('loadeddata', this.loadTrackData);
+      this.#player.audio.removeEventListener('ended', this.runNext);
+    }
     this.#player = null;
   }
 
@@ -122,6 +128,8 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
 
     if (this.#player.audio) {
       this.#player.audio.addEventListener('durationchange', this.loadTrackData);
+      this.#player.audio.addEventListener('loadstart', this.loadTrackData);
+      this.#player.audio.addEventListener('loadeddata', this.loadTrackData);
       this.#player.audio.addEventListener('ended', this.runNext);
     }
     if (this.#player.currentTrack) {

@@ -14,12 +14,13 @@ export default class Favorites {
   }
 
   static add(trackID: number): Promise<any> {
-    return HTTPClient.post(`${Paths.favorites}/${trackID}`, null)
+    return HTTPClient.post(`${Paths.favorites}`, {
+      trackId: trackID,
+    })
       .then((response) => {
         if (response.status !== 200) {
           return Promise.reject(response.body);
         }
-
         return response.body.Result;
       });
   }

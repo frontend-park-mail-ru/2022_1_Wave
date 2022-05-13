@@ -27,10 +27,9 @@ export function createPlaylist(title: string): Function {
 
 export function deleteTrackPlaylist({trackid,playlistid}: {trackid:number,playlistid:number}): Function{
   return (dispatch: Function): void => {
-    const payload = {trackid,playlistid}
     Playlist.deleteOfUser({trackid,playlistid})
       .then( () => {
-        dispatch({ type: 'userPlaylist/delete', payload});
+        getPlaylists()(dispatch);
         dispatch({
           type: `notifier/message`,
           payload: { status: 'success', msg: 'Success' },

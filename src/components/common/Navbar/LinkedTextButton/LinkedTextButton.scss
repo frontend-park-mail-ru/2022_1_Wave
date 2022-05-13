@@ -1,13 +1,12 @@
 .menu__button {
   margin: auto 0;
   font-size: 13px;
+  color: var(--btn-inactive);
 
   &:hover {
     cursor: pointer;
+    color: var(--btn-hover);
 
-    .button__text {
-      color: var(--btn-hover);
-    }
   }
   &::after {
     content: '';
@@ -21,8 +20,5 @@
   &:hover::after {
     color: var(--btn-hover);
     width: 100%;
-  }
-  .button__text {
-    color: var(--btn-inactive);
   }
 }

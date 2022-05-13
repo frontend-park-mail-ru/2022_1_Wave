@@ -64,7 +64,7 @@ class SidebarComponent extends VDom.Component<any> {
           <Link to='/settings' >
             <Navigation title="Settings" />
           </Link>
-        </div> : 
+        </div> :
           <div>
             <Link to='/login' >
               <Navigation title="Log in" />
@@ -77,7 +77,7 @@ class SidebarComponent extends VDom.Component<any> {
       </div>
     ) : (
       <div>
-          
+
       </div>
     );
     return (
@@ -93,9 +93,7 @@ class SidebarComponent extends VDom.Component<any> {
         </div>
         {content}
         <Playlist
-          highlite={this.props.position}
-          playlist={this.props.playlist}
-          setTrack={this.setTrack}
+          tracks={this.props.playlist}
         />
       </div>
     );

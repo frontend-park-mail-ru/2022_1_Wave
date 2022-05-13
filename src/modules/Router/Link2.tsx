@@ -33,7 +33,10 @@ export default class Link extends VDom.Component<LinkProps, any, null, RouteNavi
     const { to, class: additionalClass = '' } = this.props;
 
     return (
-      <a style={{ ['text-decoration']: 'none' }} class={`${additionalClass}`} href={to} onClick={this.handleClick}>
+      <a style={{
+        ['text-decoration']: 'none',
+        color: 'inherit',
+      }} class={`${additionalClass}`} href={to} onClick={this.handleClick}>
         {this.props.children}
       </a>
     );

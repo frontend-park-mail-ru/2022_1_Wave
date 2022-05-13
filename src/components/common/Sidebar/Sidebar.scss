@@ -25,7 +25,7 @@
 .sidebar_mobile {
   position: absolute;
   background-color: #0b1220;
-  z-index: 98;
+  z-index: 2;
   transition: margin-left 0.5s ease;
   width: 330px;
   @media (max-width: 363px) {

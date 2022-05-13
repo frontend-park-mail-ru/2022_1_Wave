@@ -10,6 +10,7 @@ import notification from './notification';
 import sidebar from './sidebar';
 import { userPlaylists } from './userPlaylists';
 import { favorites } from './favorites';
+import { authRequired } from './authRequired';
 
 export default combineReducers({
   tracksPopular,
@@ -28,4 +29,5 @@ export default combineReducers({
   sidebar,
   userPlaylists,
   favorites,
+  authRequired,
 });

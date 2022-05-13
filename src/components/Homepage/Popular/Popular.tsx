@@ -1,5 +1,12 @@
 import './Popular.scss';
 import VDom from '@rflban/vdom';
+import {
+  ImageCard,
+  HorizontalScroll,
+  Subhead,
+  AlbumIcon,
+  SingerRightIcon,
+} from '@rflban/waveui';
 import CarouselRow from '../../common/CarouselRow/CarouselRow';
 import AlbumCard from '../../common/AlbumCard/AlbumCard';
 import ArtistCard from '../../common/ArtistCard/ArtistCard';
@@ -8,6 +15,7 @@ import { connect } from '../../../modules/Connect';
 import { albumGetPopular } from '../../../actions/Album';
 import { artistGetPopular } from '../../../actions/Artist';
 import { config } from '../../../modules/Client/Client';
+import Link from '../../../modules/Router/Link2';
 
 interface PopularComponentProps {
   albums?: Array<Map>;
@@ -24,24 +32,79 @@ class PopularComponent extends VDom.Component<PopularComponentProps> {
   }
 
   render = (): VDom.VirtualElement => (
-    <div class="main__popular">
-      <div class="main__popular__albums main__popular_slider-hidden">
-        <div class="text main__popular__title">Popular albums</div>
-        <CarouselRow>
+    <div class="wavePopular">
+      <div class="wavePopular__albums">
+        <Subhead
+          size="m"
+          align="left"
+          class="wavePopular__title"
+        >
+          Popular albums
+        </Subhead>
+        <HorizontalScroll controlsCenterOffset={57} leftOffset={40} rightOffset={40}>
           {this.props.albums &&
-            Object.entries(this.props.albums).map(([_,v]:[k:string,v:Map]) =>
-              <AlbumCard cover={config.files + v.cover} title={v.title} artist={v.artist}/> )
+            Object.entries(this.props.albums).map(([_, v]: [k: string, v: Map]) =>
+              <ImageCard
+                icon={<AlbumIcon style={{ height: '25%' }}/>}
+                src={config.files + v.cover}
+                title={
+                  <Link to={`/album/${v.id}`}>
+                    {v.title}
+                  </Link>
+                }
+                label={
+                  <Link to={`/artist/${v.artistId}`}>
+                    {v.artist}
+                  </Link>
+                }
+                size="l"
+                imageWrapper={(img) => (
+                  <Link to={`/album/${v.id}`}>
+                    {img}
+                  </Link>
+                )}
+              />
+            )
           }
-        </CarouselRow>
+        </HorizontalScroll>
       </div>
-      <div class="main__popular__artists main__popular_slider-hidden">
-        <div class="text main__popular__title">Popular artist</div>
-        <CarouselRow>
-          {this.props.artists && 
-              Object.entries(this.props.artists).map(([_,v]:[k:string,v:Map]) =>
-                <ArtistCard cover={config.files + v.cover} name={v.name} />)
+
+      <div class="wavePopular__artists">
+        <Subhead
+          size="m"
+          align="left"
+          class="wavePopular__title"
+        >
+          Popular artists
+        </Subhead>
+        <HorizontalScroll
+          controlsCenterOffset={41}
+          leftOffset={40}
+          rightOffset={40}
+          gap={40}
+          scrollStep={160}
+        >
+          {this.props.artists &&
+            Object.entries(this.props.artists).map(([_,v]:[k:string,v:Map]) =>
+              <ImageCard
+                icon={<SingerRightIcon style={{ height: '25%' }}/>}
+                src={config.files + v.cover}
+                title={
+                  <Link to={`/artist/${v.id}`}>
+                    {v.name}
+                  </Link>
+                }
+                size="m"
+                rounded
+                align="center"
+                imageWrapper={(img) => (
+                  <Link to={`/artist/${v.id}`}>
+                    {img}
+                  </Link>
+                )}
+              />)
           }
-        </CarouselRow>
+        </HorizontalScroll>
       </div>
     </div>
   );

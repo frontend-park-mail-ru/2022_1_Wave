@@ -1,31 +1,25 @@
-.main__popular {
+.wavePopular {
   flex-grow: 1;
   justify-content: flex-end;
   display: flex;
   flex-direction: column;
-  padding-bottom: 80px;
+  padding-bottom: 120px;
   margin-left: 40px;
+  margin-right: 40px;
   padding-top: 100px;
 
-
-
-  .main__popular_slider-hidden {
-    overflow: hidden;
+  &__title {
+    margin-bottom: 25px;
   }
 
-  .main__popular__albums {
-    height: 300px;
+  &__albums {
   }
 
-  .main__popular__artists {
-    padding-top: 100px;
-    height: 200px;
+  &__artists {
+    margin-top: 60px;
   }
 
-  .main__popular > .text {
-  }
-
-  .main__popular__title {
-    font-size: 24px;
+  &__icon {
+    height: 35%;
   }
 }

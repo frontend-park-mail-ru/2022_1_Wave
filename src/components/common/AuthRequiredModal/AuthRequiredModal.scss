@@ -1,0 +1,26 @@
+.waveAuthRequiredModal {
+  display: flex;
+  flex-direction: column;
+  padding: 15px 30px;
+  gap: 20px;
+  background-color: var(--waveui--color--background);
+  border-radius: var(--waveui-size_menu--border-radius);
+
+  max-height: 80vh;
+  overflow-y: auto;
+
+  width: 500px;
+
+  &__controls {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  &__links {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-items: center;
+  }
+}

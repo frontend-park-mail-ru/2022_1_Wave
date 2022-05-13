@@ -204,7 +204,7 @@ const mapDispatchToProps = (dispatch: any): Map => ({
     dispatch(setTrack(track));
   },
   addTrack: ({trackid,playlistid}: {trackid:number,playlistid:number}): void => {
-    dispatch(addTrackPlaylist({trackid,playlistid}))
+    dispatch(addTrackPlaylist({trackID: trackid,playlistID: playlistid}))
   }
 });
 

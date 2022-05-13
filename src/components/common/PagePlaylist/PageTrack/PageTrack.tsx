@@ -36,7 +36,10 @@ class PageTrack extends VDom.Component<PageTrackProps> {
   }
 
   toggleLike(): void {
-    const isLiked = this.props.favorites?.some((t: any) => t.id === this.props.id);
+    if (!this.props.favorites){
+      return
+    }
+    const isLiked = this.props.favorites.some((t: any) => t.id === this.props.id);
 
     if (isLiked) {
       this.props.removeFromFavorites(this.props.id);

@@ -40,6 +40,7 @@
 
       .track__name__author {
         font-size: 12px;
+        width: fit-content;
         color: #6d7184;
       }
     }
@@ -47,6 +48,7 @@
 
   .player__control {
     width: 5.2em;
+    padding-left: 20px;
     display: inline-flex;
     justify-content: space-between;
 

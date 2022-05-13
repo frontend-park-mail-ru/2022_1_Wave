@@ -1,6 +1,6 @@
 import VDom from '@rflban/vdom';
 import './ArtistCard.scss';
-import Link from '../../../modules/Router/Link';
+import Link from '../../../modules/Router/Link2';
 
 interface ArtistCardProps {
   cover: string;

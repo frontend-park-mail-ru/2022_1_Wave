@@ -36,7 +36,7 @@ class PageTrack extends VDom.Component<PageTrackProps> {
   }
 
   toggleLike(): void {
-    const isLiked = this.props.favorites.some((t: any) => t.id === this.props.id);
+    const isLiked = this.props.favorites?.some((t: any) => t.id === this.props.id);
 
     if (isLiked) {
       this.props.removeFromFavorites(this.props.id);
@@ -66,7 +66,7 @@ class PageTrack extends VDom.Component<PageTrackProps> {
   render = (): VDom.VirtualElement => {
     const { num, cover, listenedCnt, name, duration, favorites = [] } = this.props;
 
-    const isLiked = favorites.some((t: any) => t.id === this.props.id);
+    const isLiked = favorites?.some((t: any) => t.id === this.props.id);
 
     const formatInt = (n: number): string => {
       const res = Math.trunc(n).toString();

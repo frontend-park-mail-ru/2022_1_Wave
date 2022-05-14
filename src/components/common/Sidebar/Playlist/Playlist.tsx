@@ -24,11 +24,12 @@ import {
 import { Map } from '../../../../modules/Store/types';
 import { connect } from '../../../../modules/Connect';
 import RouteNavigator from '../../../../modules/Router/RouteNavigator';
-import { closeAuthRequired, showAuthRequired } from '../../../../actions/Modals';
+import { closeAuthRequired as closeAuthReq, showAuthRequired as showAuthReq } from '../../../../actions/Modals';
 
 interface PlaylistProps {
   tracks: any[];
   playlists: any[];
+  favorites: any[];
   currentTrackID: number;
   isPlayerRunning: boolean;
   playerPlay: () => void;
@@ -39,6 +40,7 @@ interface PlaylistProps {
   removeFromFavorites: (_trackID: number) => void;
   showAuthRequired: () => void;
   closeAuthRequired: () => void;
+  isAuth: boolean;
 }
 
 interface PlaylistState {
@@ -88,12 +90,15 @@ class Playlist extends VDom.Component<PlaylistProps, PlaylistState, null, RouteN
     const {
       tracks,
       playlists,
+      favorites,
       setTrackByIdx,
       playerPlay,
       playerPause,
       addToFavorites,
       addTrackToPlaylist,
       removeFromFavorites,
+      showAuthRequired,
+      isAuth,
     } = this.props;
 
     const {
@@ -104,6 +109,8 @@ class Playlist extends VDom.Component<PlaylistProps, PlaylistState, null, RouteN
       return this.getSkeleton();
     }
 
+    const liked = new Set<number>((favorites ?? []).map((track) => track.id));
+
     return (<>
       {tracks.map((track: any, idx: number) => (
         <Track
@@ -111,14 +118,18 @@ class Playlist extends VDom.Component<PlaylistProps, PlaylistState, null, RouteN
           playlists={Object.entries(playlists ?? {}).map(([_, { id, title }]: [_: string, __: {id: number, title: string}]) => ({
             title,
             handler: (_e: MouseEvent): void => {
-              addTrackToPlaylist(track.id, id);
+              if (isAuth) {
+                addTrackToPlaylist(track.id, id);
+              } else {
+                showAuthRequired();
+              }
             }
           }))}
           visual={this.resolveTrackVisual(track)}
           compact
           hideControls={!smallScreen}
           useModalMenu={smallScreen}
-          liked={track.isLiked}
+          liked={liked.has(track.id)}
           cover={config.files + track.cover}
           title={track.title}
           artist={
@@ -144,13 +155,24 @@ class Playlist extends VDom.Component<PlaylistProps, PlaylistState, null, RouteN
             </RouterContext.Provider>
           )}
           onCreatePlaylist={(): void => {
-            this.props.showAuthRequired();
+            if (isAuth) {
+            } else {
+              showAuthRequired();
+            }
           }}
           onLike={(): void => {
-            addToFavorites(track.id);
+            if (isAuth) {
+              addToFavorites(track.id);
+            } else {
+              showAuthRequired();
+            }
           }}
           onUnlike={(): void => {
-            removeFromFavorites(track.id);
+            if (isAuth) {
+              removeFromFavorites(track.id);
+            } else {
+              showAuthRequired();
+            }
           }}
           onPlay={(): void => {
             setTrackByIdx(idx);
@@ -199,14 +221,16 @@ const mapDispatchToProps = (dispatch: any): Map => ({
     }));
   },
   showAuthRequired: (): void => {
-    dispatch(showAuthRequired());
+    dispatch(showAuthReq());
   },
   closeAuthRequired: (): void => {
-    dispatch(closeAuthRequired());
+    dispatch(closeAuthReq());
   },
 });
 
 const mapStateToProps = (state: any): Map => ({
+  isAuth: state.userStatus === 'authorized',
+  favorites: state.favorites,
   playlists: state.userPlaylists ?? null,
   isPlayerRunning: state.playerPlay?.value ?? false,
   currentTrackID: (state.playerPosition && state.playerPlaylist) ? state.playerPlaylist[state.playerPosition.value]?.id : null,

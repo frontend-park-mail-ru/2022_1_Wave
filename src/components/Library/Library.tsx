@@ -19,10 +19,10 @@ const validatePlaylistName = (value: string): boolean => {
 }
 
 interface LibraryProps {
-  isAuth: boolean;
   playlists: any;
   getPlaylists: Function;
   createPlaylist: (_title: string) => void;
+  userStatus: string;
 }
 
 interface LibraryState {
@@ -63,8 +63,11 @@ class Library extends VDom.Component<LibraryProps, LibraryState> {
   }
 
   render(): VDom.VirtualElement {
-    if (!this.props.isAuth) {
+    if (this.props.userStatus === 'unauthorized') {
       return <Redirect to="/login" />;
+    }
+    if (this.props.userStatus === 'pending') {
+      return <></>;
     }
 
     const { smallScreen } = this.state;
@@ -124,8 +127,8 @@ class Library extends VDom.Component<LibraryProps, LibraryState> {
 }
 
 const mapStateToProps = (state: any): Map => ({
-  isAuth: state.user?.id != null,
   playlists: state.userPlaylists,
+  userStatus: state.userStatus,
 });
 
 const mapDispatchToProps = (dispatch: Function): Map => ({

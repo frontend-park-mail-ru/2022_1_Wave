@@ -1,6 +1,6 @@
 import { Map } from '../modules/Store/types';
 
-export const authRequired = (state: boolean, action: Map): boolean => {
+const authRequired = (state: boolean, action: Map): boolean => {
   switch (action.type) {
   case 'authRequired/open':
     return true;
@@ -10,3 +10,5 @@ export const authRequired = (state: boolean, action: Map): boolean => {
     return state;
   }
 };
+
+export default authRequired;

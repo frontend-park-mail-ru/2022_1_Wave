@@ -1,6 +1,6 @@
 import { Map } from '../modules/Store/types';
 
-export const playerPlaylist = (state: Map, action: Map): Map => {
+export default (state: Map, action: Map): Map => {
   if (action.type === 'playlist/update') {
     return action.payload;
   }

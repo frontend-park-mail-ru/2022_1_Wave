@@ -23,7 +23,7 @@ export function userGetSelf(): (dispatch: Function) => void {
       .then((payload: any) => {
         dispatch({ type: 'self/user', payload });
       })
-      .catch(() => ({ type: 'self/user', payload: null }));
+      .catch(() => dispatch({ type: 'self/user', payload: null }))
   };
 }
 

@@ -67,31 +67,51 @@
     }
   }
   @media (max-width: 580px) {
+    overflow-x: hidden;
     .player__waves{
       display: flex !important;
     }
+
     .player__progressbar__time {
       display: block !important;
     }
+
     .control__next {
       display: block !important;
     }
+
     .control__prev {
       display: block !important;
     }
+
     .control__play_pause {
       width: fit-content !important;
     }
+
     .player__control {
       width: 50% !important;
+      padding-left: 0 !important;
     }
+
+    .player-progressbar-wrapper {
+      display: flex !important;
+
+    }
+
     .volume-progressbar-wrapper {
       width: 50% !important;
       display: flex !important;
       align-items: end;
       .volume-progressbar{
         margin-right: 0;
+        .progress-bar{
+          padding-left: 20px !important;
+        }
       }
+    }
+
+    .player__track {
+      margin-top: 150px;
     }
   }
   @media (max-width: 340px) {

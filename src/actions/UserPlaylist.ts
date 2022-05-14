@@ -45,7 +45,7 @@ export function addTrackPlaylist({ trackID, playlistID }: { trackID: number, pla
         dispatch({
           type: `notifier/message`,
           payload: { status: 'success', msg: 'Success' },
-        });;
+        });
       }).then(() => {
         Playlist.getOfUser()
           .then((payload) => {

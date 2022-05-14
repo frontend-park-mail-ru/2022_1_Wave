@@ -1,35 +1,35 @@
-import './Playlist.scss';
+import './TracksContainer.scss';
 import VDom from '@rflban/vdom';
 import {
   Track,
 } from '@rflban/waveui';
-import { config } from '../../../../modules/Client/Client';
-import Link from '../../../../modules/Router/Link2';
-import RouterContext from '../../../../modules/Router/RouterContext';
+import { config } from '../../../modules/Client/Client';
+import Link from '../../../modules/Router/Link2';
+import RouterContext from '../../../modules/Router/RouterContext';
 import {
   addToFavorites as addToFav,
   removeFromFavorites as remFromFav,
-} from '../../../../actions/Favorites';
+} from '../../../actions/Favorites';
 import {
   setPosition,
   stopPlay,
   startPlay,
-} from '../../../../actions/Player';
+} from '../../../actions/Player';
 import {
   addTrackPlaylist,
-} from '../../../../actions/UserPlaylist';
+} from '../../../actions/UserPlaylist';
 import {
   mainMobileScreen,
-} from '../../../../mediaQueries';
-import { Map } from '../../../../modules/Store/types';
-import { connect } from '../../../../modules/Connect';
-import RouteNavigator from '../../../../modules/Router/RouteNavigator';
+} from '../../../mediaQueries';
+import { Map } from '../../../modules/Store/types';
+import { connect } from '../../../modules/Connect';
+import RouteNavigator from '../../../modules/Router/RouteNavigator';
 import {
   showAuthRequired as showAuthReq,
   showCreatePlaylistForm as showCreatePlaylistFormAction,
-} from '../../../../actions/Modals';
+} from '../../../actions/Modals';
 
-interface PlaylistProps {
+interface TracksContainerProps {
   tracks: any[];
   playlists: any[];
   favorites: any[];
@@ -44,13 +44,14 @@ interface PlaylistProps {
   showAuthRequired: () => void;
   showCreatePlaylistForm: () => void;
   isAuth: boolean;
+  onTrackRun?: () => void;
 }
 
-interface PlaylistState {
+interface TracksContainerState {
   smallScreen: boolean;
 }
 
-class Playlist extends VDom.Component<PlaylistProps, PlaylistState, null, RouteNavigator> {
+class TracksContainer extends VDom.Component<TracksContainerProps, TracksContainerState, null, RouteNavigator> {
   static contextType = RouterContext;
 
   state = {
@@ -130,7 +131,7 @@ class Playlist extends VDom.Component<PlaylistProps, PlaylistState, null, RouteN
             }
           }))}
           visual={this.resolveTrackVisual(track)}
-          compact
+          compact={smallScreen}
           hideControls={!smallScreen}
           useModalMenu={smallScreen}
           liked={liked.has(track.id)}
@@ -180,6 +181,7 @@ class Playlist extends VDom.Component<PlaylistProps, PlaylistState, null, RouteN
             }
           }}
           onPlay={(): void => {
+            this.props.onTrackRun?.();
             setTrackByIdx(idx);
             playerPlay();
           }}
@@ -196,7 +198,7 @@ class Playlist extends VDom.Component<PlaylistProps, PlaylistState, null, RouteN
 
   render(): VDom.VirtualElement {
     return (
-      <div class="sidebar__my-playlist">
+      <div class="waveTracksContainer">
         {this.getTracks()}
       </div>
     );
@@ -241,4 +243,4 @@ const mapStateToProps = (state: any): Map => ({
   currentTrackID: (state.playerPosition && state.playerPlaylist) ? state.playerPlaylist[state.playerPosition.value]?.id : null,
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Playlist);
+export default connect(mapStateToProps, mapDispatchToProps)(TracksContainer);

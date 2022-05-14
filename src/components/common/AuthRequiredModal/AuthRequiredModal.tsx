@@ -1,8 +1,11 @@
 import './AuthRequiredModal.scss';
 import VDom from '@rflban/vdom';
 import {
-  Button, Caption,
-  ModalDisplayerStateless, Subhead,
+  Button,
+  Caption,
+  ModalDisplayerStateless,
+  PlusIcon,
+  Subhead,
 } from '@rflban/waveui';
 import RouteNavigator from '../../../modules/Router/RouteNavigator';
 import RouterContext from '../../../modules/Router/RouterContext';
@@ -71,6 +74,9 @@ export default class AuthRequiredModal extends VDom.Component<AuthRequiredModalP
         )}
       >
         <div class="waveAuthRequiredModal">
+          <div class="waveAuthRequiredModal__collapse">
+            <PlusIcon class="waveAuthRequiredModal__collapse__icon"/>
+          </div>
           <Subhead size={smallScreen ? 'l' : 'm'} align={smallScreen ? 'center' : 'left'}>
             You need an account for this action
           </Subhead>
@@ -78,7 +84,7 @@ export default class AuthRequiredModal extends VDom.Component<AuthRequiredModalP
             <Button
               stretched={smallScreen}
               mode="secondary"
-              size={smallScreen ? 'l' : 's'}
+              size={smallScreen ? 'm' : 's'}
               onClick={this.handleDismiss}
               class="waveAuthRequiredModal__dismiss"
             >
@@ -89,7 +95,7 @@ export default class AuthRequiredModal extends VDom.Component<AuthRequiredModalP
                 <Button
                   stretched={smallScreen}
                   mode="secondary"
-                  size={smallScreen ? 'l' : 's'}
+                  size={smallScreen ? 'm' : 's'}
                 >
                   Log in
                 </Button>
@@ -111,7 +117,7 @@ export default class AuthRequiredModal extends VDom.Component<AuthRequiredModalP
                 <Button
                   stretched={smallScreen}
                   mode="primary"
-                  size={smallScreen ? 'l' : 's'}
+                  size={smallScreen ? 'm' : 's'}
                 >
                   Sign up
                 </Button>

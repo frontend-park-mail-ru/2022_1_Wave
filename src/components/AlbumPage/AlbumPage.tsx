@@ -1,4 +1,9 @@
 import VDom from '@rflban/vdom';
+import {
+  Button,
+  Headline,
+  Subhead,
+} from '@rflban/waveui';
 import '../../index.css';
 import './AlbumPage.scss';
 import { Map } from '../../modules/Store/types';
@@ -12,15 +17,28 @@ import { startPlay } from '../../actions/Player';
 import PagePlaylist from '../common/PagePlaylist/PagePlaylist';
 import { albumGetById, albumGetCoverById } from '../../actions/Album';
 import {addTrackPlaylist, getPlaylists} from "../../actions/UserPlaylist";
+import TracksContainer from '../common/TracksContainer/TracksContainer';
+import { mainMobileScreen } from '../../mediaQueries';
 
 class ArtistPageComponent extends VDom.Component<any, any, null, RouteNavigator> {
   static contextType = RouterContext;
+
+  mediaSmallScreenhandler = (e: MediaQueryListEvent): void => {
+    this.setState({
+      smallScreen: e.matches,
+    });
+  }
+
+  willUmount(): void {
+    mainMobileScreen.removeEventListener('change', this.mediaSmallScreenhandler);
+  }
 
   constructor(props: any) {
     super(props);
     this.state = {
       albumLikes: 12511,
       isLiked: false,
+      smallScreen: mainMobileScreen.matches,
     };
 
     this.getAlbum = this.getAlbum.bind(this);
@@ -32,6 +50,7 @@ class ArtistPageComponent extends VDom.Component<any, any, null, RouteNavigator>
   }
 
   didMount(): void {
+    mainMobileScreen.addEventListener('change', this.mediaSmallScreenhandler);
     this.getAlbum();
     this.props.getPlaylists();
   }
@@ -56,6 +75,10 @@ class ArtistPageComponent extends VDom.Component<any, any, null, RouteNavigator>
     this.props.runMusic();
   }
 
+  tracksClickHandler = (_e: MouseEvent): void => {
+    this.props.setAlbumPlaylist(this.props.album[this.context.params.slug].tracks);
+  }
+
   runTrack(track: ITrack): (_e: Event) => void {
     return (_e: Event) => {
       this.props.setTrackFromAlbum(track);
@@ -76,9 +99,52 @@ class ArtistPageComponent extends VDom.Component<any, any, null, RouteNavigator>
     const { slug }: { slug: string } = this.context.params;
     const album = this.props?.album?.[slug];
     const cover = this.props?.cover?.[slug];
-    return !album ? (
-      <div class="album-page" />
-    ) : (
+
+    if (!album) {
+      return <></>;
+    }
+
+    return (
+      <div class="waveAlbumPage">
+        <div
+          class="waveAlbumPage__cover"
+          style={{
+            'background-image': `linear-gradient(180deg, rgba(1, 208, 234, 0.2) 0%, rgba(0, 0, 0, 0) 48.44%),
+    linear-gradient(180deg, rgba(11, 18, 32, 0.7) 0%, rgba(11, 18, 32, 0.9) 72.92%, #0B1220 93.23%),url(${
+      config.files + album.cover
+      })`,
+          }}
+        />
+        <div class="waveAlbumPage__wrapper">
+          <div class="waveAlbumPage__header">
+            <Subhead align="left">
+              <p class="waveAlbumPage__label">
+                Album
+              </p>
+            </Subhead>
+            <Headline align="left">
+              {album.title}
+            </Headline>
+            <Button
+              class="waveAlbumPage__play"
+              size={this.state.smallScreen ? 'm' : 's'}
+              stretched={this.state.smallScreen}
+              onClick={this.addAlbumToPlaylist}
+            >
+              Play
+            </Button>
+          </div>
+
+          <Subhead align="left" class="waveAlbumPage__songs-label">
+            Songs
+          </Subhead>
+
+          <TracksContainer tracks={album.tracks} onTrackRun={this.tracksClickHandler} />
+        </div>
+      </div>
+    );
+
+    return (
       <div class="album-page">
         <div
           class="album-page__main"
@@ -98,13 +164,6 @@ class ArtistPageComponent extends VDom.Component<any, any, null, RouteNavigator>
                 <div onclick={this.addAlbumToPlaylist} class="button controls__btn-play">
                   <div class="text">Play</div>
                 </div>
-                {/*<div class="text controls__likes">*/}
-                {/*  <div*/}
-                {/*    onclick={this.setLikeToArtist}*/}
-                {/*    class={`${this.state.isLiked ? 'fa-solid' : 'fa-regular'} fa-heart likes__icon`}*/}
-                {/*  ></div>*/}
-                {/*  <div class="likes__num">{this.state.albumLikes}</div>*/}
-                {/*</div>*/}
               </div>
             </div>
           </div>
@@ -112,18 +171,11 @@ class ArtistPageComponent extends VDom.Component<any, any, null, RouteNavigator>
             <div class="text album__title">Songs</div>
             <PagePlaylist runTrack={this.runTrack} playlist={album.tracks}>
               <div class="playlist-context">
-                {/* {!this.state.isShowPlaylistChoose && */}
-                {/* <div onclick={this.showPlaylists} class="text context__item">Add</div> */}
-                {/* } */}
-                {/* {this.state.isShowPlaylistChoose && */}
-                {/*    ( */}
                 {
                   this.props.playlists &&
                     Object.entries(this.props.playlists).map(([_,v]:[k:string,v:Map])  => <div onClick={this.addTrack(v.id)}
                       class="text context__item">{v.title}</div>)
                 }
-                {/* ) */}
-                {/* } */}
               </div>
             </PagePlaylist>
           </div>

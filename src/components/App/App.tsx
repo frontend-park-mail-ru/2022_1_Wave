@@ -1,7 +1,8 @@
 import VDom from '@rflban/vdom';
+import { ModalDisplayerStateless } from '@rflban/waveui';
 import './App.scss';
 import Homepage from '../Homepage/Homepage';
-import { connect } from '../../modules/Connect';
+import { connect, StoreContext } from '../../modules/Connect';
 import Route from '../../modules/Router/Route';
 import RouteSwitch from '../../modules/Router/RouteSwitch';
 import LoginPage from '../LoginPage/LoginPage';
@@ -23,9 +24,16 @@ import FavoritesPage from "../FavoritesPage/FavoritesPage";
 import { getFavorites } from '../../actions/Favorites';
 import * as UserPlaylist from '../../actions/UserPlaylist';
 import AuthRequiredModal from '../common/AuthRequiredModal/AuthRequiredModal';
-import { closeAuthRequired, showAuthRequired } from '../../actions/Modals';
+import {
+  closeAuthRequired as closeAuthRequiredAction,
+  closeCreatePlaylistForm as closeCreatePlaylistFormAction,
+  showAuthRequired,
+} from '../../actions/Modals';
+import CreatePlaylist from '../common/CreatePlaylist/CreatePlaylist';
 
 class App extends VDom.Component<any> {
+  static contextType = StoreContext;
+
   state = {
     gesture: {
       startX: 0,
@@ -140,6 +148,19 @@ class App extends VDom.Component<any> {
             open={this.props.authRequired}
             onClose={this.props.closeAuthRequired}
           />
+          <ModalDisplayerStateless
+            animated
+            direction="row"
+            onClose={this.props.closeCreatePlaylistForm}
+            open={this.props.createPlaylistForm}
+            wrapper={(modal: VDom.VirtualElement): VDom.VirtualElement => (
+              <StoreContext.Provider value={this.context}>
+                {modal}
+              </StoreContext.Provider>
+            )}
+          >
+            <CreatePlaylist onCancel={this.props.closeCreatePlaylistForm} />
+          </ModalDisplayerStateless>
           <div ontouchstart={this.catchStart} ontouchend={this.handleGesture} class="page">
             <Sidebar/>
             <div class="content">
@@ -180,6 +201,7 @@ const mapStateToProps = (state: any): Map => ({
   isAuth: state.user?.id != null,
   notifications: state.notifications,
   authRequired: state.authRequired,
+  createPlaylistForm: state.createPlaylistForm,
 });
 
 const mapDispatchToProps = (dispatch: any): Map => ({
@@ -203,7 +225,10 @@ const mapDispatchToProps = (dispatch: any): Map => ({
     dispatch(showAuthRequired());
   },
   closeAuthRequired: (): void => {
-    dispatch(closeAuthRequired());
+    dispatch(closeAuthRequiredAction());
+  },
+  closeCreatePlaylistForm: (): void => {
+    dispatch(closeCreatePlaylistFormAction());
   },
 });
 

@@ -7,7 +7,27 @@
   border-radius: var(--waveui-size_menu--border-radius);
 
   max-height: 80vh;
-  overflow-y: auto;
+  overflow: visible;
+  position: relative;
+
+  &__collapse {
+    background-color: transparent;
+    color: var(--waveui--color--foreground--secondary--modest);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    right: -8px;
+    top: -8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &__icon {
+      height: 10px;
+      transform: scale(0.65) rotate(45deg);
+    }
+  }
 
   max-width: 500px;
   @media all and (max-width: 580px) {
@@ -30,6 +50,8 @@
     @media all and (max-width: 580px) {
       order: 2;
     }
+    visibility: hidden;
+    display: none!important;
   }
 
   &__links {

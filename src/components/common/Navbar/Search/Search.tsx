@@ -1,10 +1,13 @@
 import VDom from '@rflban/vdom';
+import {
+  Input,
+  SearchLeftIcon,
+} from '@rflban/waveui';
 import SearchResult from '../../SearchResult/SearchResult';
 import { Map } from '../../../../modules/Store/types';
 import { Clear, SearchRequest } from '../../../../actions/Search';
 import { connect } from '../../../../modules/Connect';
 import './Search.scss';
-import {SearchLeftIcon} from "@rflban/waveui";
 
 interface SearchProps extends VDom.IComponentProps {
   dropSearch: () => void;
@@ -38,15 +41,15 @@ class Search extends VDom.Component<SearchProps> {
 
   render = (): VDom.VirtualElement => (
     <div class="search">
-      <input
-        onblur={this.props.dropSearch}
+      <Input
+        mode="secondary"
+        rounded
+        before={<SearchLeftIcon/>}
+        onBlur={this.props.dropSearch}
         onInput={this.onTypeRequest}
         ref={this.refSearch}
-        class="search__input"
-        type="text"
         placeholder="Search artists, albums..."
       />
-      <SearchLeftIcon class="search__icon"/>
       <SearchResult dropSearch={this.clear} />
     </div>
   );

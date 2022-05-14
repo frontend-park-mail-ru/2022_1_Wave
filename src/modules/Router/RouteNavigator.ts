@@ -38,6 +38,11 @@ export default class RouteNavigator {
     this.rerender(path);
   }
 
+  swap(path: string): void {
+    window.history.replaceState(null, '', path);
+    this.rerender(path);
+  }
+
   contains(switcher: VDom.Component): boolean {
     return this.handledSwitchers.some((handled) => handled.switcher === switcher);
   }

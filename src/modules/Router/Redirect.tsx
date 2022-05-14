@@ -19,6 +19,6 @@ export default class Redirect extends VDom.Component<
   }
 
   didMount(): void {
-    this.context!.go(this.props.to);
+    this.context!.swap(this.props.to);
   }
 }

@@ -1,5 +1,11 @@
 @import 'Popular/Popular.scss';
 
+.waveHomepage {
+  &__description {
+    color: var(--waveui--color--foreground--secondary);
+  }
+}
+
 .main__page {
   background-image: url('../../assets/img.png');
   background-repeat: no-repeat;

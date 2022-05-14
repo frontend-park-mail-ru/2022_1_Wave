@@ -1,0 +1,71 @@
+.waveAuthRequiredModal {
+  display: flex;
+  flex-direction: column;
+  padding: 15px 30px;
+  gap: 40px;
+  background-color: var(--waveui--color--background);
+  border-radius: var(--waveui-size_menu--border-radius);
+
+  max-height: 80vh;
+  overflow: visible;
+  position: relative;
+
+  &__collapse {
+    background-color: transparent;
+    color: var(--waveui--color--foreground--secondary--modest);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    right: -8px;
+    top: -8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &__icon {
+      height: 10px;
+      transform: scale(0.65) rotate(45deg);
+    }
+  }
+
+  max-width: 500px;
+  @media all and (max-width: 580px) {
+    max-width: 80vw;
+  }
+
+  &__controls {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    @media all and (max-width: 580px) {
+      flex-direction: column;
+      justify-content: start;
+      gap: 20px;
+    }
+  }
+
+  &__dismiss {
+    @media all and (max-width: 580px) {
+      order: 2;
+    }
+    visibility: hidden;
+    display: none!important;
+  }
+
+  &__links {
+    order: 1;
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-items: center;
+
+    @media all and (max-width: 580px) {
+      flex-direction: column;
+      justify-content: start;
+      width: 100%;
+      align-items: initial;
+    }
+  }
+}

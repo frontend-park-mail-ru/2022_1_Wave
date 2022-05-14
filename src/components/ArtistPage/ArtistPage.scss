@@ -1,3 +1,58 @@
+.waveArtistPage {
+  width: 100%;
+  position: relative;
+  pointer-events: none;
+
+  &__cover {
+    position: absolute;
+    height: 50vh;
+    overflow: hidden;
+    width: 100%;
+    z-index: -1;
+    background-repeat: no-repeat;
+    background-size: cover;
+    object-fit: cover;
+  }
+
+  &__songs-label {
+    margin-bottom: 20px;
+  }
+
+  &__albums-label {
+    margin-bottom: 20px;
+  }
+
+  &__wrapper {
+    pointer-events: initial;
+    width: calc(100% - 80px);
+    display: flex;
+    flex-direction: column;
+    margin: 100px 40px 100px;
+  }
+
+  &__label {
+    color: var(--waveui--color--accent);
+    margin: 0;
+  }
+
+  &__header {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin-bottom: 40px;
+  }
+
+  &__play {
+    margin-top: 20px;
+  }
+
+  &__albums {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+  }
+}
+
 .artist-page {
   width: 100%;
   display: flex;

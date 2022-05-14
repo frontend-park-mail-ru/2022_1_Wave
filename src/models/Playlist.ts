@@ -47,10 +47,10 @@ export default class Playlist {
     });
   }
 
-  static postOfUser({trackid,playlistid}: {trackid:number,playlistid:number}): Promise<any> {
+  static postOfUser({trackID, playlistID}: {trackID:number,playlistID:number}): Promise<any> {
     return HTTPClient.post(Paths.ofCurrentUser ,{
-      playlistId: playlistid,
-      trackId: trackid,
+      playlistId: playlistID,
+      trackId: trackID,
     }).then((response) => {
       if (response.status !== 200) {
         return Promise.reject(response.body);

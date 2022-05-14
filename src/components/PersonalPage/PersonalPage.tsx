@@ -15,9 +15,8 @@ import { validatePassword as _validatePassword, validateUsername } from '../../u
 import { Map } from '../../modules/Store/types';
 import { updateAvatar, updateSelf, userGetSelf, userSet } from '../../actions/User';
 import { connect } from '../../modules/Connect';
-import ValidatableInput from '../common/ValidatableInput/ValidatableInput';
 import Redirect from '../../modules/Router/Redirect';
-import { entrenceSmallScreen, mainSmallScreen } from '../../mediaQueries';
+import { mainSmallScreen } from '../../mediaQueries';
 
 const validateImage = (image?: File): boolean => (
   image != null && image.size <= 2 * 1024 * 1024
@@ -28,12 +27,12 @@ const validatePassword = (val: string): boolean => (
 );
 
 interface PersonalPageProps {
-  isAuth: boolean,
   user: any;
   setNewAvatar: (_form: any) => void;
   setNewUser: (_form: any) => void;
   userGetSelf: () => void;
   setLocalUser: (_partialUser: any) => void;
+  userStatus: string;
 }
 
 type PersonalPageState = {
@@ -70,13 +69,8 @@ class PersonalPageComponent extends VDom.Component<
 
     this.handleSubmit = this.handleSubmit.bind(this);
     this.isEqualToPassword = this.isEqualToPassword.bind(this);
-    this.additionalPasswordValidator = this.additionalPasswordValidator.bind(this);
     this.onInputAvatar = this.onInputAvatar.bind(this);
     this.checkAvatar = this.checkAvatar.bind(this);
-  }
-
-  additionalPasswordValidator(_e: InputEvent): void {
-    this.repeatPasswordInputRef.instance.validateDebounced();
   }
 
   isEqualToPassword = (repeatPassword: string): boolean => (
@@ -221,8 +215,11 @@ class PersonalPageComponent extends VDom.Component<
   }
 
   render(): VDom.VirtualElement {
-    if (!this.props.isAuth) {
+    if (this.props.userStatus === 'unauthorized') {
       return <Redirect to="/login" />;
+    }
+    if (this.props.userStatus === 'pending') {
+      return <></>;
     }
 
     const { smallScreen } = this.state;
@@ -284,6 +281,7 @@ class PersonalPageComponent extends VDom.Component<
                 placeholder="New password"
                 error="Password have to contain at least 6 characters (digits and letters)"
                 checker={validatePassword}
+                onInput={this.passwordInputHandler}
               />
               <FormItem
                 type="password"
@@ -293,6 +291,7 @@ class PersonalPageComponent extends VDom.Component<
                 placeholder="Confirm new password"
                 error="Passwords don't match"
                 checker={this.isEqualToPassword}
+                onInput={this.repeatPasswordInputHandler}
               />
             </div>
           </div>
@@ -308,88 +307,11 @@ class PersonalPageComponent extends VDom.Component<
       </div>
     );
   }
-
-  rrender = (): VDom.VirtualElement => {
-    const { user } = this.props;
-
-    return (
-      <div class="text personal-page">
-        <div class="personal-page__title">Settings</div>
-        <form onsubmit={this.handleSubmit} class="personal-page__settings-form">
-          <div class="settings-form__form">
-            <label htmlFor="avatar" class="input-label form__avatar-label">
-              Your photo
-            </label>
-            <label
-              class="form__upload"
-              style={{ 'background-image': `url(${this.state.fileSrc})` }}
-            >
-              <ValidatableInput
-                ref={this.avatarInputRef}
-                type="file"
-                class="input-line form__avatar-label"
-                placeholder="Avatar"
-                onInput={this.onInputAvatar}
-                checker={this.checkAvatar}
-                errorMessage={'Avatar is greater 1 MB'}
-              />
-            </label>
-          </div>
-          <div class="settings-form__form">
-            <label htmlFor="username" class="input-label form__username-label">
-              New username:
-            </label>
-            <ValidatableInput
-              ref={this.usernameInputRef}
-              type="text"
-              placeholder={user?.username ?? 'Username'}
-              checker={validateUsername}
-              errorMessage={'Username have to contain at 3-16 characters (digits, letters or _)'}
-            />
-          </div>
-          <div class="settings-form__form">
-            <label htmlFor="password" class="input-label form__password-label">
-              Password
-            </label>
-            <div class="form__password-inputs">
-              <ValidatableInput
-                ref={this.passwordInputRef}
-                type="password"
-                class="login-form__input-line"
-                placeholder="Password"
-                checker={validatePassword}
-                errorMessage={'Password have to contain at least 6 characters (digits and letters)'}
-                onInput={this.additionalPasswordValidator}
-              />
-              <ValidatableInput
-                ref={this.repeatPasswordInputRef}
-                type="password"
-                class="register-form__input-line"
-                placeholder="Confirm password"
-                checker={this.isEqualToPassword}
-                errorMessage={"Passwords don't match"}
-              />
-            </div>
-          </div>
-          <div class="settings-form__form _border-none">
-            <div class="form__controls">
-              <button type="cancel" class="text form__cancel-button">
-                Cancel
-              </button>
-              <button type="submit" class="text form__submit-button">
-                Save changes
-              </button>
-            </div>
-          </div>
-        </form>
-      </div>
-    );
-  };
 }
 
 const mapStateToProps = (state: any): Map => ({
-  isAuth: state.user?.id != null,
   user: state.user ? state.user : null,
+  userStatus: state.userStatus,
 });
 
 const mapDispatchToProps = (dispatch: any): Map => ({

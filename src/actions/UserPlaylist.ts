@@ -9,7 +9,7 @@ export function getPlaylists(): Function {
   }
 }
 
-export function getPlaylistsById(id): Function {
+export function getPlaylistsById(id: number): Function {
   return (dispatch: Function): void => {
     Playlist.getOfUserId(id)
       .then((payload) => {
@@ -38,14 +38,14 @@ export function deleteTrackPlaylist({trackid,playlistid}: {trackid:number,playli
   }
 }
 
-export function addTrackPlaylist({trackid,playlistid}: {trackid:number,playlistid:number}): Function{
+export function addTrackPlaylist({ trackID, playlistID }: { trackID: number, playlistID: number }): Function{
   return (dispatch: Function): void => {
-    Playlist.postOfUser({trackid,playlistid})
+    Playlist.postOfUser({ trackID, playlistID })
       .then( () => {
         dispatch({
           type: `notifier/message`,
           payload: { status: 'success', msg: 'Success' },
-        });;
+        });
       }).then(() => {
         Playlist.getOfUser()
           .then((payload) => {

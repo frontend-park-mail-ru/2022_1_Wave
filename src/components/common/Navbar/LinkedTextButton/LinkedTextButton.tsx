@@ -4,9 +4,10 @@ import Link from "../../../../modules/Router/Link2";
 import './LinkedTextButton.scss';
 
 interface LinkedButtonProps extends IComponentPropsCommon{
-    to:string,
-    text:string,
-    align?:string
+  to:string,
+  text:string,
+  align?:string,
+  onClickCapture?: (_e: MouseEvent) => void;
 }
 
 export default class LinkedTextButton extends VDom.Component<LinkedButtonProps> {
@@ -17,7 +18,7 @@ export default class LinkedTextButton extends VDom.Component<LinkedButtonProps> 
 
     return (
       <div class="menu__button" style={{textAlign: align}}>
-        <Link to={to} class="text button__text ">
+        <Link to={to} class="text button__text " onClickCapture={this.props.onClickCapture}>
           {text}
         </Link>
       </div>

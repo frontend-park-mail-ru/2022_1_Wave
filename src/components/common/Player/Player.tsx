@@ -71,12 +71,17 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
     if (!this.props.playlist) {
       return;
     }
+
     console.log('current playlist:', this.#player?.playlist, 'update with:', this.props.playlist);
     if (JSON.stringify(this.#player?.playlist) !== JSON.stringify(this.props.playlist)) {
       this.setState({trackTime: 0, trackFilled: 0, trackFetched: 0, trackBuffered: 0});
       this.#player?.updatePlaylist(this.props.playlist);
-      this.props.setPos(0);
+      console.log('pos:',this.props.position)
+      if (this.props.position < this.props.playlist.length -1 ){
+        this.props.setPos(0);
+      }
     }
+
     if (
       typeof this.props.position === 'number' &&
             this.#player?.currentIndex !== this.props.position

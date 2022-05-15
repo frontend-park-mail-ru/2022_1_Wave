@@ -17,9 +17,20 @@ import PagePlaylist from '../common/PagePlaylist/PagePlaylist';
 import {addTrackPlaylist, getPlaylists} from "../../actions/UserPlaylist";
 import TracksContainer from '../common/TracksContainer/TracksContainer';
 import Link from '../../modules/Router/Link2';
+import { mainMobileScreen } from '../../mediaQueries';
 
 class ArtistPageComponent extends VDom.Component<any, any, null, RouteNavigator> {
   static contextType = RouterContext;
+
+  mediaSmallScreenhandler = (e: MediaQueryListEvent): void => {
+    this.setState({
+      smallScreen: e.matches,
+    });
+  }
+
+  willUmount(): void {
+    mainMobileScreen.removeEventListener('change', this.mediaSmallScreenhandler);
+  }
 
   constructor(props: any) {
     super(props);
@@ -29,6 +40,7 @@ class ArtistPageComponent extends VDom.Component<any, any, null, RouteNavigator>
       albumLikes: 12511,
       isLiked: false,
       isShowPlaylistChoose: false,
+      smallScreen: mainMobileScreen.matches,
     };
 
     this.setLikeToArtist = this.setLikeToArtist.bind(this);
@@ -48,6 +60,7 @@ class ArtistPageComponent extends VDom.Component<any, any, null, RouteNavigator>
   }
 
   didMount(): void {
+    mainMobileScreen.addEventListener('change', this.mediaSmallScreenhandler);
     this.getArtist();
     this.getTracks();
     this.props.getPlaylists();

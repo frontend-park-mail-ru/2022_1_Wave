@@ -57,7 +57,11 @@ class Navbar extends VDom.Component<NavbarProps> {
           <NavMenu/>
           <Search/>
           {this.props.isAuth ?
-            <ProfileMenu avatarSrc={this.props.user?.avatar} logout={this.logout}/> :
+            <ProfileMenu
+              username={this.props.user?.username}
+              avatarSrc={this.props.user?.avatar}
+              logout={this.logout}
+            /> :
             <AuthMenu/>
           }
         </div>

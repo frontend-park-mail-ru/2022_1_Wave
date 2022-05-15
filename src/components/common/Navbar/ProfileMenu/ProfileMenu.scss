@@ -4,6 +4,10 @@
   align-items: center;
   justify-content: flex-end;
 
+  &__menu-label {
+    padding: 8px;
+  }
+
   &:hover {
     .profile-menu__popup{
       visibility: visible;
@@ -20,6 +24,12 @@
     border-radius: 25px;
     object-fit: cover;
     background-size: cover;
+
+    &__wrapper {
+      position: relative;
+      width: fit-content;
+      height: fit-content;
+    }
   }
 
 

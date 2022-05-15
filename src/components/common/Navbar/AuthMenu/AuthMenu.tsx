@@ -7,7 +7,7 @@ export default class AuthMenu extends VDom.Component {
   render = (): VDom.VirtualElement => (
     <div class="auth-menu">
       <LinkedTextButton to='/login' text='LOG IN'/>
-      <LinkedTextButton to='/signup' text='SIGN IN'/>
+      <LinkedTextButton to='/signup' text='SIGN UP'/>
     </div>
   )
 }

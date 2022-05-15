@@ -94,7 +94,7 @@ class CreatePlaylist extends VDom.Component<CreatePlaylistProps, CreatePlaylistS
               size={smallScreen ? 'm' : 's'}
               stretched={smallScreen}
             >
-              Create new playlist
+              Create
             </Button>
           </div>
         </form>

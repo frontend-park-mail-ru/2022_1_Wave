@@ -1,4 +1,9 @@
 import VDom from '@rflban/vdom';
+import {
+  Button,
+  Headline,
+  Subhead,
+} from '@rflban/waveui';
 import '../../index.css';
 import './FavoritesPage.scss';
 import { Map } from '../../modules/Store/types';
@@ -9,23 +14,41 @@ import { setTrack, setTracks } from '../../actions/Playlist';
 import { startPlay } from '../../actions/Player';
 import PagePlaylist from '../common/PagePlaylist/PagePlaylist';
 import { getFavorites } from "../../actions/Favorites";
+import TracksContainer from '../common/TracksContainer/TracksContainer';
+import { mainMobileScreen } from '../../mediaQueries';
+import Redirect from '../../modules/Router/Redirect';
 
 class PlaylistPage extends VDom.Component<any, any> {
+  mediaSmallScreenhandler = (e: MediaQueryListEvent): void => {
+    this.setState({
+      smallScreen: e.matches,
+    });
+  }
+
+  willUmount(): void {
+    mainMobileScreen.removeEventListener('change', this.mediaSmallScreenhandler);
+  }
+
   constructor(props: any) {
     super(props);
-    this.addPlaylistToPlayer = this.addPlaylistToPlayer.bind(this);
     this.runTrack = this.runTrack.bind(this);
+    this.setState({
+      smallScreen: mainMobileScreen.matches,
+    });
   }
 
   didMount(): void {
+    mainMobileScreen.addEventListener('change', this.mediaSmallScreenhandler);
     this.props.getFavorites();
   }
 
-  addPlaylistToPlayer(tracks: ITrack[]): (_e: Event) => void  {
-    return (_e: Event) => {
-      this.props.setTracks(tracks);
-      this.props.runMusic();
-    }
+  addFavoritesToPlayer = (_e: MouseEvent): void => {
+    this.props.setTracks(this.props.favorites);
+    this.props.runMusic();
+  }
+
+  tracksClickHandler = (_e: MouseEvent): void => {
+    this.props.setTracks(this.props.favorites);
   }
 
   runTrack(track: ITrack): (_e: Event) => void {
@@ -36,8 +59,14 @@ class PlaylistPage extends VDom.Component<any, any> {
     };
   }
 
-
   render = (): VDom.VirtualElement => {
+    if (this.props.userStatus === 'unauthorized') {
+      return <Redirect to="/login" />;
+    }
+    if (this.props.userStatus === 'pending') {
+      return <></>;
+    }
+
     const { favorites } = this.props;
 
     if (!favorites) {
@@ -45,6 +74,46 @@ class PlaylistPage extends VDom.Component<any, any> {
     }
 
     const cover = favorites?.[0] ? favorites[0].cover : null;
+
+    return (
+      <div class="waveFavoritesPage">
+        <div
+          class="waveFavoritesPage__cover"
+          style={{
+            'background-image': `linear-gradient(180deg, rgba(1, 208, 234, 0.2) 0%, rgba(0, 0, 0, 0) 48.44%),
+    linear-gradient(180deg, rgba(11, 18, 32, 0.7) 0%, rgba(11, 18, 32, 0.9) 72.92%, #0B1220 93.23%),url(${
+      cover ? config.files + cover : ''
+      })`,
+          }}
+        />
+        <div class="waveFavoritesPage__wrapper">
+          <div class="waveFavoritesPage__header">
+            <Subhead align="left">
+              <p class="waveFavoritesPage__label">
+                Your
+              </p>
+            </Subhead>
+            <Headline align="left">
+              Favorites
+            </Headline>
+            <Button
+              class="waveFavoritesPage__play"
+              size={this.state.smallScreen ? 'm' : 's'}
+              stretched={this.state.smallScreen}
+              onClick={this.addFavoritesToPlayer}
+            >
+              Play
+            </Button>
+          </div>
+
+          <Subhead align="left" class="waveFavoritesPage__songs-label">
+            Songs
+          </Subhead>
+
+          <TracksContainer tracks={favorites} onTrackRun={this.tracksClickHandler} />
+        </div>
+      </div>
+    );
 
     return (
       <div class="playlist-page">
@@ -84,6 +153,7 @@ class PlaylistPage extends VDom.Component<any, any> {
 }
 
 const mapStateToProps = (state: any): Map => ({
+  userStatus: state.userStatus,
   cover: state.albumCover ? state.albumCover : null,
   favorites: state.favorites,
 });

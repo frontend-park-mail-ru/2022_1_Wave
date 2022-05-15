@@ -1,7 +1,9 @@
 import './TracksContainer.scss';
 import VDom from '@rflban/vdom';
 import {
+  MenuItem,
   Track,
+  TrashIcon,
 } from '@rflban/waveui';
 import { config } from '../../../modules/Client/Client';
 import Link from '../../../modules/Router/Link2';
@@ -17,6 +19,7 @@ import {
 } from '../../../actions/Player';
 import {
   addTrackPlaylist,
+  deleteTrackPlaylist,
 } from '../../../actions/UserPlaylist';
 import {
   mainMobileScreen,
@@ -33,6 +36,7 @@ interface TracksContainerProps {
   tracks: any[];
   playlists: any[];
   favorites: any[];
+  playlistOwner?: any;
   currentTrackID: number;
   isPlayerRunning: boolean;
   playerPlay: () => void;
@@ -40,6 +44,7 @@ interface TracksContainerProps {
   setTrackByIdx: (_idx: number) => void;
   addToFavorites: (_trackID: number) => void;
   addTrackToPlaylist: (_trackID: number, _playlistID: number) => void;
+  removeTrackFromPlaylist: (_trackID: number, _playlistID: number) => void;
   removeFromFavorites: (_trackID: number) => void;
   showAuthRequired: () => void;
   showCreatePlaylistForm: () => void;
@@ -95,11 +100,13 @@ class TracksContainer extends VDom.Component<TracksContainerProps, TracksContain
       tracks,
       playlists,
       favorites,
+      playlistOwner,
       setTrackByIdx,
       playerPlay,
       playerPause,
       addToFavorites,
       addTrackToPlaylist,
+      removeTrackFromPlaylist,
       removeFromFavorites,
       showAuthRequired,
       showCreatePlaylistForm,
@@ -191,6 +198,13 @@ class TracksContainer extends VDom.Component<TracksContainerProps, TracksContain
           onPause={(): void => {
             playerPause();
           }}
+          {...(!playlistOwner ? {} : {menuExtension: [{
+            before: <TrashIcon style={{ height: '40%' }} />,
+            action: (): void => {
+              removeTrackFromPlaylist(track.id, playlistOwner.id);
+            },
+            name: 'Remove',
+          }]})}
         />
       ))}
     </>);
@@ -225,6 +239,12 @@ const mapDispatchToProps = (dispatch: any): Map => ({
     dispatch(addTrackPlaylist({
       trackID,
       playlistID,
+    }));
+  },
+  removeTrackFromPlaylist: (trackID: number, playlistID: number): void => {
+    dispatch(deleteTrackPlaylist({
+      trackid: trackID,
+      playlistid: playlistID,
     }));
   },
   showAuthRequired: (): void => {

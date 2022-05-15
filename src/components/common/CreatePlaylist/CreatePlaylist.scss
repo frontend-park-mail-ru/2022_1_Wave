@@ -1,7 +1,7 @@
 .waveCreatePlaylist {
   display: flex;
   flex-direction: column;
-  padding: 15px 30px;
+  padding: 20px 40px;
   gap: 30px;
   background-color: var(--waveui--color--background);
   border-radius: 16px;
@@ -10,9 +10,9 @@
   overflow: visible;
   position: relative;
 
-  max-width: 500px;
+  max-width: 350px;
   @media all and (max-width: 580px) {
-    max-width: 80vw;
+    max-width: 60vw;
   }
 
   &__controls {

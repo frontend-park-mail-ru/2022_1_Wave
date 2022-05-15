@@ -1,4 +1,5 @@
 import VDom from '@rflban/vdom';
+import { Button, Headline, Subhead } from '@rflban/waveui';
 import '../../index.css';
 import './PlaylistPage.scss';
 import { connect } from '../../modules/Connect';
@@ -11,12 +12,16 @@ import { startPlay } from '../../actions/Player';
 import PagePlaylist from '../common/PagePlaylist/PagePlaylist';
 import {deleteTrackPlaylist, getPlaylists} from "../../actions/UserPlaylist";
 import { Map } from '../../modules/Store/types';
+import TracksContainer from '../common/TracksContainer/TracksContainer';
+import { mainMobileScreen } from '../../mediaQueries';
+import Redirect from '../../modules/Router/Redirect';
 
 class PlaylistPage extends VDom.Component<any, any, null, RouteNavigator> {
   static contextType = RouterContext;
 
   state = {
     playlist: undefined,
+    smallScreen: mainMobileScreen.matches,
   }
 
   constructor(props: any) {
@@ -28,12 +33,31 @@ class PlaylistPage extends VDom.Component<any, any, null, RouteNavigator> {
     }
   }
 
+  mediaSmallScreenhandler = (e: MediaQueryListEvent): void => {
+    this.setState({
+      smallScreen: e.matches,
+    });
+  }
 
-  addPlaylistToPlayer(tracks: ITrack[]): (_e: Event) => void  {
-    return (e: Event) => {
-      this.props.setTracks(tracks);
-      this.props.runMusic();
-    }
+  didMount(): void {
+    mainMobileScreen.addEventListener('change', this.mediaSmallScreenhandler);
+  }
+
+  willUmount(): void {
+    mainMobileScreen.removeEventListener('change', this.mediaSmallScreenhandler);
+  }
+
+  addPlaylistToPlayer = (_e: Event): void => {
+    const { slug }: { slug: string } = this.context.params;
+    const playlist = this.props.playlists?.[slug];
+    this.props.setTracks(playlist.tracks);
+    this.props.runMusic();
+  }
+
+  tracksClickHandler = (_e: Event): void => {
+    const { slug }: { slug: string } = this.context.params;
+    const playlist = this.props.playlists?.[slug];
+    this.props.setTracks(playlist.tracks);
   }
 
   runTrack(track: ITrack): (_e: Event) => void {
@@ -52,16 +76,65 @@ class PlaylistPage extends VDom.Component<any, any, null, RouteNavigator> {
       this.props.deleteTrack({trackid, playlistid});
     };
   }
-    
+
   render = (): VDom.VirtualElement => {
-    const { slug }: { slug: string } = this.context.params;
-    const playlist:Map = this.props.playlists?.[slug];
-    if (!playlist) {
-      return <div class="playlist-page"/>;
+    if (this.props.userStatus === 'unauthorized') {
+      return <Redirect to="/login" />;
+    }
+    if (this.props.userStatus === 'pending') {
+      return <></>;
     }
 
-    const {id,title,tracks}: {id:number,title:string, tracks:ITrack[]} = playlist;
+    const { slug }: { slug: string } = this.context.params;
+    const playlist = this.props.playlists?.[slug];
+
+    if (!playlist) {
+      return <></>;
+    }
+
+    const {id, title, tracks} = playlist;
     const cover = tracks?.[0] ? tracks[0].cover : null;
+
+    return (
+      <div class="wavePlaylistPage">
+        <div
+          class="wavePlaylistPage__cover"
+          style={{
+            'background-image': `linear-gradient(180deg, rgba(1, 208, 234, 0.2) 0%, rgba(0, 0, 0, 0) 48.44%),
+    linear-gradient(180deg, rgba(11, 18, 32, 0.7) 0%, rgba(11, 18, 32, 0.9) 72.92%, #0B1220 93.23%),url(${
+      cover ? config.files + cover : ''
+      })`,
+          }}
+        />
+        <div class="wavePlaylistPage__wrapper">
+          <div class="wavePlaylistPage__header">
+            <Subhead align="left">
+              <p class="wavePlaylistPage__label">
+                Playlist
+              </p>
+            </Subhead>
+            <Headline align="left">
+              {title}
+            </Headline>
+            <Button
+              class="wavePlaylistPage__play"
+              size={this.state.smallScreen ? 'm' : 's'}
+              stretched={this.state.smallScreen}
+              onClick={this.addPlaylistToPlayer}
+            >
+              Play
+            </Button>
+          </div>
+
+          <Subhead align="left" class="wavePlaylistPage__songs-label">
+            Songs
+          </Subhead>
+
+          <TracksContainer tracks={tracks} onTrackRun={this.tracksClickHandler} playlistOwner={playlist} />
+        </div>
+      </div>
+    );
+
     return (
       <div class="playlist-page">
         <div
@@ -102,6 +175,7 @@ class PlaylistPage extends VDom.Component<any, any, null, RouteNavigator> {
 }
 
 const mapStateToProps = (state: any): Map => ({
+  userStatus: state.userStatus,
   album: state.album ? state.album : null,
   cover: state.albumCover ? state.albumCover : null,
   playlists: state.userPlaylists,

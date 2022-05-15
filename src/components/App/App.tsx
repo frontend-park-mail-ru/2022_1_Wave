@@ -1,5 +1,5 @@
 import VDom from '@rflban/vdom';
-import { ModalDisplayerStateless } from '@rflban/waveui';
+import {ModalDisplayer, ModalDisplayerStateless} from '@rflban/waveui';
 import './App.scss';
 import Homepage from '../Homepage/Homepage';
 import { connect, StoreContext } from '../../modules/Connect';
@@ -37,6 +37,8 @@ class App extends VDom.Component<any> {
 
   state = {
     isMobilePlayerFull: false,
+    isMobileScreen: mainMobileScreen.matches,
+    isSmallScreen: mainSmallScreen.matches,
   }
 
   consts = {
@@ -95,25 +97,43 @@ class App extends VDom.Component<any> {
           <SignupPage />
         </Route>
         <Route to="/">
-          {/*<AuthRequiredModal*/}
-          {/*  open={this.props.authRequired}*/}
-          {/*  onClose={this.props.closeAuthRequired}*/}
-          {/*/>*/}
-          {/*<ModalDisplayerStateless*/}
-          {/*  animated*/}
-          {/*  direction="row"*/}
-          {/*  onClose={this.props.closeCreatePlaylistForm}*/}
-          {/*  open={this.props.createPlaylistForm}*/}
-          {/*  wrapper={(modal: VDom.VirtualElement): VDom.VirtualElement => (*/}
-          {/*    <StoreContext.Provider value={this.context}>*/}
-          {/*      {modal}*/}
-          {/*    </StoreContext.Provider>*/}
-          {/*  )}*/}
-          {/*>*/}
-          {/*  <CreatePlaylist onCancel={this.props.closeCreatePlaylistForm} />*/}
-          {/*</ModalDisplayerStateless>*/}
+          <AuthRequiredModal
+            open={this.props.authRequired}
+            onClose={this.props.closeAuthRequired}
+          />
+          <ModalDisplayerStateless
+            animated
+            direction="row"
+            onClose={this.props.closeCreatePlaylistForm}
+            open={this.props.createPlaylistForm}
+            wrapper={(modal: VDom.VirtualElement): VDom.VirtualElement => (
+              <StoreContext.Provider value={this.context}>
+                {modal}
+              </StoreContext.Provider>
+            )}
+          >
+            <CreatePlaylist onCancel={this.props.closeCreatePlaylistForm} />
+          </ModalDisplayerStateless>
           <div ontouchstart={this.catchStart} class="page">
-            <Sidebar/>
+            { this.state.isSmallScreen ?
+              <ModalDisplayerStateless
+                animated
+                direction="row"
+                align="start"
+                open={this.props.sidebarIsOpen}
+                onClose={this.props.closeSidebar}
+                wrapper={(modal: VDom.VirtualElement): VDom.VirtualElement => (
+                  <StoreContext.Provider value={this.context}>
+                    {modal}
+                  </StoreContext.Provider>
+                )}
+              >
+                <Sidebar/>
+              </ModalDisplayerStateless>
+              :
+              <Sidebar/>
+            }
+
             <div class="content">
               <Navbar/>
               <RouteSwitch>
@@ -143,7 +163,7 @@ class App extends VDom.Component<any> {
                 </Route>
               </RouteSwitch>
             </div>
-            <Player toggleMobileFull = {this.togglePlayerFull} isMobileFull = {this.state.isMobilePlayerFull && mainMobileScreen.matches}/>
+            <Player toggleMobileFull = {this.togglePlayerFull} isMobileFull = {this.state.isMobilePlayerFull && this.state.isMobileScreen}/>
           </div>
         </Route>
       </RouteSwitch>
@@ -156,6 +176,8 @@ const mapStateToProps = (state: any): Map => ({
   notifications: state.notifications,
   authRequired: state.authRequired,
   createPlaylistForm: state.createPlaylistForm,
+  sidebarIsOpen: state.sidebar,
+
 });
 
 const mapDispatchToProps = (dispatch: any): Map => ({

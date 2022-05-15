@@ -1,6 +1,10 @@
 import './Player.scss';
 import './MobileFullPlayer.scss';
 import VDom from '@rflban/vdom';
+import {
+  AlternativeArrowLeftIcon,
+  AlternativeArrowRightIcon,
+} from '@rflban/waveui';
 import '../../App/App.scss';
 import {IComponentPropsCommon} from "@rflban/vdom/dist/IComponentProps";
 import {ArrowLeftIcon} from "@rflban/waveui";

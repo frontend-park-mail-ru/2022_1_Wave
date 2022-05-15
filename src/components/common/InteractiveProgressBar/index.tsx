@@ -44,7 +44,7 @@ export default class InteractiveProgressBar extends VDom.Component<ProgressBarPr
     relativePosition = relativePosition > 1 ? 1 : relativePosition;
     this.props.setProgressState(relativePosition);
   }
-    
+
   getRelativePosition = (e: MouseEvent| TouchEvent): number  => {
     e.preventDefault();
     const rect = (e.currentTarget as HTMLDivElement).getBoundingClientRect();
@@ -86,12 +86,11 @@ export default class InteractiveProgressBar extends VDom.Component<ProgressBarPr
               'margin-left': `calc(${this.props.progress}% - 1em)`,
             }}
           >
-            <div class="marker__img"
-              style={{
-                'background-image': this.props.marker ? `url("${this.props.marker}")` : '',
-                cursor: `${this.state.isPlayerDragged ? 'grabbing' : 'pointer'}`,
-              }}
-            />
+            <div class="marker__img progress-bar__circle"
+            >
+              <div class="progress-bar__circle__outer" />
+              <div class="progress-bar__circle__inner" />
+            </div>
           </div>
         </div>
       </div>

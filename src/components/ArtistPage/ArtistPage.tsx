@@ -12,7 +12,7 @@ import RouteNavigator from '../../modules/Router/RouteNavigator';
 import { config } from '../../modules/Client/Client';
 import { ITrack } from '../../modules/Media/media';
 import { setTrack, setTracks } from '../../actions/Playlist';
-import { startPlay } from '../../actions/Player';
+import {setPosition, startPlay} from '../../actions/Player';
 import PagePlaylist from '../common/PagePlaylist/PagePlaylist';
 import {addTrackPlaylist, getPlaylists} from "../../actions/UserPlaylist";
 import TracksContainer from '../common/TracksContainer/TracksContainer';
@@ -79,6 +79,7 @@ class ArtistPageComponent extends VDom.Component<any, any, null, RouteNavigator>
 
   addPopularToPlaylist(_e: Event): void {
     this.props.setArtistPlaylist(this.props.popularTracks[this.context.params.slug]);
+    this.props.setPos(0);
     this.props.runMusic();
   }
 
@@ -259,6 +260,9 @@ const mapStateToProps = (state: any): Map => ({
 const mapDispatchToProps = (dispatch: any): Map => ({
   getArtist: (id: string): void => {
     dispatch(artistGetById(id));
+  },
+  setPos: (num: number): void => {
+    dispatch(setPosition(num));
   },
   getPlaylists: (): void => {
     dispatch(getPlaylists());

@@ -30,16 +30,12 @@ import {
   showAuthRequired,
 } from '../../actions/Modals';
 import CreatePlaylist from '../common/CreatePlaylist/CreatePlaylist';
+import SearchPage from "../SearchPage";
 
 class App extends VDom.Component<any> {
   static contextType = StoreContext;
 
   state = {
-    gesture: {
-      startX: 0,
-      startY: 0,
-      startTime:0,
-    },
     isMobilePlayerFull: false,
   }
 
@@ -77,56 +73,11 @@ class App extends VDom.Component<any> {
     mainMobileScreen.removeEventListener('change', this.mediaMobileScreenhandler);
   }
 
-  handleGesture = (e:TouchEvent):void => {
-    const touchendX = e.changedTouches[0].clientX;
-    const touchendY = e.changedTouches[0].clientY;
-    const fastSwipeTrigger = 150;
-    const { startX, startY } = this.state.gesture;
-    const gestureTime: number = performance.now() - this.state.gesture.startTime;
-
-
-    if (Math.abs(startX - touchendX) >= Math.abs(startY - touchendY)) {
-      if (gestureTime < fastSwipeTrigger) {
-        if (touchendX <= this.state.gesture.startX &&
-          startX < this.consts.startXClose ) {
-          this.props.closeSidebar();
-        }
-        if (touchendX > this.state.gesture.startX &&
-            startX < this.consts.startXOpen ) {
-          this.props.openSidebar();
-        }
-      }
-    }
-
-    else if (Math.abs(startY - touchendY) > 0 && mainMobileScreen.matches) {
-      if (gestureTime < fastSwipeTrigger) {
-        if (startY - touchendY > 0 &&
-            startY > this.consts.startYOpen ) this.setState({isMobilePlayerFull: true});
-        if (startY - touchendY < 0 &&
-            startY > this.consts.startYClose) this.setState({isMobilePlayerFull: false});
-      }
-    }
-
-    this.setState({
-      gesture: {
-        startX: 0,
-        startY: 0,
-        startTime:0,
-      },
-    });
-  }
-
   catchStart = (e:TouchEvent):void => {
-    const touchstartX = e.changedTouches[0].clientX;
-    const touchstartY = e.changedTouches[0].clientY;
-    this.setState({
-      gesture: {
-        result: null,
-        startX: touchstartX,
-        startY: touchstartY,
-        startTime: performance.now(),
-      },
-    });
+    const startX = e.changedTouches[0].clientX;
+    if (startX > this.consts.startXClose) {
+      this.props.closeSidebar();
+    }
   }
 
   togglePlayerFull = (e: Event):void => {
@@ -144,30 +95,33 @@ class App extends VDom.Component<any> {
           <SignupPage />
         </Route>
         <Route to="/">
-          <AuthRequiredModal
-            open={this.props.authRequired}
-            onClose={this.props.closeAuthRequired}
-          />
-          <ModalDisplayerStateless
-            animated
-            direction="row"
-            onClose={this.props.closeCreatePlaylistForm}
-            open={this.props.createPlaylistForm}
-            wrapper={(modal: VDom.VirtualElement): VDom.VirtualElement => (
-              <StoreContext.Provider value={this.context}>
-                {modal}
-              </StoreContext.Provider>
-            )}
-          >
-            <CreatePlaylist onCancel={this.props.closeCreatePlaylistForm} />
-          </ModalDisplayerStateless>
-          <div ontouchstart={this.catchStart} ontouchend={this.handleGesture} class="page">
+          {/*<AuthRequiredModal*/}
+          {/*  open={this.props.authRequired}*/}
+          {/*  onClose={this.props.closeAuthRequired}*/}
+          {/*/>*/}
+          {/*<ModalDisplayerStateless*/}
+          {/*  animated*/}
+          {/*  direction="row"*/}
+          {/*  onClose={this.props.closeCreatePlaylistForm}*/}
+          {/*  open={this.props.createPlaylistForm}*/}
+          {/*  wrapper={(modal: VDom.VirtualElement): VDom.VirtualElement => (*/}
+          {/*    <StoreContext.Provider value={this.context}>*/}
+          {/*      {modal}*/}
+          {/*    </StoreContext.Provider>*/}
+          {/*  )}*/}
+          {/*>*/}
+          {/*  <CreatePlaylist onCancel={this.props.closeCreatePlaylistForm} />*/}
+          {/*</ModalDisplayerStateless>*/}
+          <div ontouchstart={this.catchStart} class="page">
             <Sidebar/>
             <div class="content">
               <Navbar/>
               <RouteSwitch>
                 <Route to="" exact>
                   <Homepage/>
+                </Route>
+                <Route to="/search">
+                  <SearchPage/>
                 </Route>
                 <Route to="/artist/:slug">
                   <ArtistPage />

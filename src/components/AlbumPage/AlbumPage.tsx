@@ -76,6 +76,7 @@ class ArtistPageComponent extends VDom.Component<any, any, null, RouteNavigator>
   }
 
   tracksClickHandler = (_e: MouseEvent): void => {
+    console.log(this.context.params.slug);
     this.props.setAlbumPlaylist(this.props.album[this.context.params.slug].tracks);
   }
 

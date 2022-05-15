@@ -14,21 +14,37 @@ export default class Link extends VDom.Component<LinkProps, any, null, RouteNavi
 
   constructor(props: LinkProps) {
     super(props);
-    this.handleClick = this.handleClick.bind(this);
 
     if (this.context == null) {
       throw Error('Router has not been found');
     }
   }
 
-  handleClick(e: MouseEvent): void {
+  handleClick = (e: MouseEvent): void => {
     this.props.onClick?.(e);
+    //
+    // if (e.ctrlKey || e.metaKey) {
+    //   return;
+    // }
+    //
+    // e.preventDefault();
+    // const navigator = this.context!;
+    // navigator.go(this.props.to);
+  }
+
+  handleClickCapture = (e: MouseEvent): void => {
+    this.props.onClickCapture?.(e);
+
+    if (e.defaultPrevented) {
+      return;
+    }
 
     if (e.ctrlKey || e.metaKey) {
       return;
     }
 
     e.preventDefault();
+    e.stopPropagation();
     const navigator = this.context!;
     navigator.go(this.props.to);
   }
@@ -39,13 +55,13 @@ export default class Link extends VDom.Component<LinkProps, any, null, RouteNavi
     return (
       <a
         style={{
-          ['text-decoration']: 'none',
+          'text-decoration': 'none',
           color: 'inherit',
         }}
         class={`${additionalClass}`}
         href={to}
         onClick={this.handleClick}
-        onClickCapture={this.props.onClickCapture}
+        onClickCapture={this.handleClickCapture}
       >
         {this.props.children}
       </a>

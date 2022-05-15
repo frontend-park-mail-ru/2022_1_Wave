@@ -2,7 +2,6 @@ import './AuthRequiredModal.scss';
 import VDom from '@rflban/vdom';
 import {
   Button,
-  Caption,
   ModalDisplayerStateless,
   PlusIcon,
   Subhead,
@@ -25,9 +24,7 @@ interface AuthRequiredModalState {
   smallScreen: boolean;
 }
 
-export default class AuthRequiredModal extends VDom.Component<AuthRequiredModalProps, AuthRequiredModalState, null, RouteNavigator> {
-  static contextType = RouterContext;
-
+export default class AuthRequiredModal extends VDom.Component<AuthRequiredModalProps, AuthRequiredModalState> {
   state = {
     smallScreen: mainMobileScreen.matches,
   }
@@ -61,71 +58,56 @@ export default class AuthRequiredModal extends VDom.Component<AuthRequiredModalP
     } = this.state;
 
     return (
-      <ModalDisplayerStateless
-        open={open}
-        onOpen={onOpen}
-        onClose={onClose}
-        direction="row"
-        animated
-        wrapper={(m: VDom.VirtualElement): VDom.VirtualElement => (
-          <RouterContext.Provider value={this.context}>
-            {m}
-          </RouterContext.Provider>
-        )}
-      >
-        <div class="waveAuthRequiredModal">
-          <div class="waveAuthRequiredModal__collapse">
-            <PlusIcon class="waveAuthRequiredModal__collapse__icon"/>
-          </div>
-          <Subhead size={smallScreen ? 'l' : 'm'} align={smallScreen ? 'center' : 'left'}>
-            You need an account for this action
-          </Subhead>
-          <div class="waveAuthRequiredModal__controls">
-            <Button
-              stretched={smallScreen}
-              mode="secondary"
-              size={smallScreen ? 'm' : 's'}
-              onClick={this.handleDismiss}
-              class="waveAuthRequiredModal__dismiss"
-            >
-              Dismiss
-            </Button>
-            <div class="waveAuthRequiredModal__links">
-              <Link to="/login">
-                <Button
-                  stretched={smallScreen}
-                  mode="secondary"
-                  size={smallScreen ? 'm' : 's'}
-                >
-                  Log in
-                </Button>
-              </Link>
-              {
-                smallScreen
-                  ? (
-                    <Subhead size="s">
-                      or
-                    </Subhead>
-                  )
-                  : (
-                    <Caption size="l">
-                      or
-                    </Caption>
-                  )
-              }
-              <Link to="/signup">
-                <Button
-                  stretched={smallScreen}
-                  mode="primary"
-                  size={smallScreen ? 'm' : 's'}
-                >
-                  Sign up
-                </Button>
-              </Link>
+      <RouterContext.Consumer>
+        {(navigator: RouteNavigator): VDom.VirtualElement => (
+          <ModalDisplayerStateless
+            open={open}
+            onOpen={onOpen}
+            onClose={onClose}
+            direction="row"
+            animated
+            wrapper={(m: VDom.VirtualElement): VDom.VirtualElement => (
+              <RouterContext.Provider value={navigator}>
+                {m}
+              </RouterContext.Provider>
+            )}
+          >
+            <div class="waveAuthRequiredModal">
+              <div class="waveAuthRequiredModal__collapse" onClick={onClose}>
+                <PlusIcon class="waveAuthRequiredModal__collapse__icon"/>
+              </div>
+              <Subhead size="m" align="center">
+                You need an account for this action
+              </Subhead>
+              <div class="waveAuthRequiredModal__links">
+                <Link to="/login">
+                  <Button
+                    stretched
+                    mode="secondary"
+                    size={smallScreen ? 'm' : 's'}
+                  >
+                    Log in
+                  </Button>
+                </Link>
+                {!smallScreen && (
+                  <Subhead size="s">
+                    or
+                  </Subhead>
+                )}
+                <Link to="/signup">
+                  <Button
+                    stretched
+                    mode="primary"
+                    size={smallScreen ? 'm' : 's'}
+                  >
+                    Sign up
+                  </Button>
+                </Link>
+              </div>
             </div>
-          </div>
-        </div>
-      </ModalDisplayerStateless>
+          </ModalDisplayerStateless>
+        )}
+      </RouterContext.Consumer>
     );
   }
 }

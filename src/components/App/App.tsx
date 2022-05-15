@@ -30,11 +30,8 @@ import {
   showAuthRequired,
 } from '../../actions/Modals';
 import CreatePlaylist from '../common/CreatePlaylist/CreatePlaylist';
-import SearchPage from "../SearchPage";
 
 class App extends VDom.Component<any> {
-  static contextType = StoreContext;
-
   state = {
     isMobilePlayerFull: false,
     isMobileScreen: mainMobileScreen.matches,
@@ -101,19 +98,23 @@ class App extends VDom.Component<any> {
             open={this.props.authRequired}
             onClose={this.props.closeAuthRequired}
           />
-          <ModalDisplayerStateless
-            animated
-            direction="row"
-            onClose={this.props.closeCreatePlaylistForm}
-            open={this.props.createPlaylistForm}
-            wrapper={(modal: VDom.VirtualElement): VDom.VirtualElement => (
-              <StoreContext.Provider value={this.context}>
-                {modal}
-              </StoreContext.Provider>
+          <StoreContext.Consumer>
+            {(store: any): VDom.VirtualElement => (
+              <ModalDisplayerStateless
+                animated
+                direction="row"
+                onClose={this.props.closeCreatePlaylistForm}
+                open={this.props.createPlaylistForm}
+                wrapper={(modal: VDom.VirtualElement): VDom.VirtualElement => (
+                  <StoreContext.Provider value={store}>
+                    {modal}
+                  </StoreContext.Provider>
+                )}
+              >
+                <CreatePlaylist onCancel={this.props.closeCreatePlaylistForm} />
+              </ModalDisplayerStateless>
             )}
-          >
-            <CreatePlaylist onCancel={this.props.closeCreatePlaylistForm} />
-          </ModalDisplayerStateless>
+          </StoreContext.Consumer>
           <div ontouchstart={this.catchStart} class="page">
             { this.state.isSmallScreen ?
               <ModalDisplayerStateless
@@ -139,9 +140,6 @@ class App extends VDom.Component<any> {
               <RouteSwitch>
                 <Route to="" exact>
                   <Homepage/>
-                </Route>
-                <Route to="/search">
-                  <SearchPage/>
                 </Route>
                 <Route to="/artist/:slug">
                   <ArtistPage />

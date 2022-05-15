@@ -31,7 +31,7 @@ export default class RouteNavigator {
 
   go(path: string): void {
     if (path === window.location.pathname) {
-      window.history.replaceState(null, '', path);
+      return;
     } else {
       window.history.pushState(null, '', path);
     }

@@ -76,10 +76,6 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
     if (JSON.stringify(this.#player?.playlist) !== JSON.stringify(this.props.playlist)) {
       this.setState({trackTime: 0, trackFilled: 0, trackFetched: 0, trackBuffered: 0});
       this.#player?.updatePlaylist(this.props.playlist);
-      console.log('pos:',this.props.position)
-      if (this.props.position < this.props.playlist.length -1 ){
-        this.props.setPos(0);
-      }
     }
 
     if (

@@ -130,7 +130,7 @@ export class PlayerClass {
       album: track.album,
       artwork: [
         {
-          src: track.cover,
+          src: config.files + track.cover,
         },
       ],
     });

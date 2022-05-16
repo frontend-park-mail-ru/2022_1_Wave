@@ -107,6 +107,12 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
       this.#player.audio.removeEventListener('loadeddata', this.loadTrackData);
       this.#player.audio.removeEventListener('ended', this.runNext);
     }
+
+    if(this.#player?.audio){
+      this.#player.playlist = [];
+      this.#player.audio.srcObject = null;
+      this.props.stop();
+    }
     this.#player = null;
   }
 

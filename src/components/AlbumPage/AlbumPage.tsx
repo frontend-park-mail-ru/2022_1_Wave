@@ -13,7 +13,7 @@ import RouteNavigator from '../../modules/Router/RouteNavigator';
 import { config } from '../../modules/Client/Client';
 import { ITrack } from '../../modules/Media/media';
 import { setTrack, setTracks } from '../../actions/Playlist';
-import { startPlay } from '../../actions/Player';
+import {setPosition, startPlay} from '../../actions/Player';
 import PagePlaylist from '../common/PagePlaylist/PagePlaylist';
 import { albumGetById, albumGetCoverById } from '../../actions/Album';
 import {addTrackPlaylist, getPlaylists} from "../../actions/UserPlaylist";
@@ -201,6 +201,9 @@ const mapDispatchToProps = (dispatch: any): Map => ({
   },
   getAlbumCover: (id: string): void => {
     dispatch(albumGetCoverById(id));
+  },
+  setPos: (num: number): void => {
+    dispatch(setPosition(num));
   },
   setAlbumPlaylist: (tracks: ITrack[]): void => {
     dispatch(setTracks(tracks));

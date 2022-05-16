@@ -5,11 +5,12 @@
   // TODO: replace with variables
   padding-top: 80px;
   padding-bottom: 100px;
-  padding-left: 40px;
+  margin-left: 40px;
+  margin-right: 40px;
   position: relative;
 
   @media (max-width: 400px) {
-    padding-left: 20px;
+    margin-left: 20px;
 
   }
 

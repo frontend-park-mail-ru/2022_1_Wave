@@ -39,7 +39,7 @@ class SearchPage extends VDom.Component<SearchPageProps> {
     }
     const {MatchedTracks = [], MatchedAlbums = [], MatchedArtists = []} = searched;
     const tracksColumns = MatchedTracks.reduce((accum: Array<Array<ITrack>>, track : ITrack,index:number) => {
-      const arrayPos: number = Math.floor(index / 3);
+      const arrayPos: number = Math.floor(index);
       if (!(accum[arrayPos] instanceof Array)){
         accum[arrayPos] = [];
       }
@@ -54,26 +54,16 @@ class SearchPage extends VDom.Component<SearchPageProps> {
             <div class="waveSearchPage__name">
               <Caption class="name__title">Matched Tracks</Caption>
               <Divider/>
-
             </div>
 
         }
-        <HorizontalScroll
-          controlsCenterOffset={41}
-          leftOffset={40}
-          rightOffset={40}
-          gap={40}
-          scrollStep={160}
-        >
-          {
-            tracksColumns.map(( col : Array<ITrack>) => (
-              <div class="waveSearchPage__tracks_block">
-                <TracksContainer tracks={col}
-                  onTrackRun={this.tracksClickHandler(col)}
-                />
-              </div>))
-          }
-        </HorizontalScroll>
+        <div class="waveSearchPage__tracks_block">
+
+          <TracksContainer tracks={MatchedTracks}
+            onTrackRun={this.tracksClickHandler(MatchedTracks)}
+          />
+        </div>
+
         { MatchedAlbums.length > 0 &&
             <div class="waveSearchPage__name">
               <Caption class="name__title">Matched Albums</Caption>
@@ -92,7 +82,7 @@ class SearchPage extends VDom.Component<SearchPageProps> {
                     {v.title}
                   </Link>
                 }
-                size="l"
+                size="m"
                 imageWrapper={(img): VDom.VirtualElement => (
                   <Link to={`/album/${v.id}`}>
                     {img}

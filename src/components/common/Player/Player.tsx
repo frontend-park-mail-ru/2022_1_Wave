@@ -33,9 +33,6 @@ interface PlayerComponentProps extends IComponentPropsCommon{
 class PlayerComponent extends VDom.Component<PlayerComponentProps> {
   #player: IPlayerClass | null;
 
-  #playIcon: HTMLElement = (<div class="fa-regular fa-circle-play"></div>);
-
-  #pauseIcon: HTMLElement = (<div class="fa-regular fa-circle-pause"></div>);
 
   static contextType = RouterContext;
 

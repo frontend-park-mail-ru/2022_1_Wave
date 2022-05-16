@@ -10,6 +10,8 @@ import { connect } from '../../../modules/Connect';
 import Playlist from './Playlist/Playlist';
 import { getPopularTracks } from '../../../actions/Playlist';
 import {mainSmallScreen} from "../../../mediaQueries";
+import {closeSidebar} from "../../../actions/Sidebar";
+import {userLogout} from "../../../actions/User";
 
 class SidebarComponent extends VDom.Component<any> {
   state = {
@@ -48,6 +50,12 @@ class SidebarComponent extends VDom.Component<any> {
     mainSmallScreen.removeEventListener('change', this.mediaSmallScreenhandler);
   }
 
+  close = (e:TouchEvent| MouseEvent):void => {
+    if(e.currentTarget?.className.split('\n')[0] === 'sidebar-wrapper'){
+      this.props.closeSidebar();
+    }
+  }
+  
   render = (): VDom.VirtualElement => {
     if (!this.props) {
       return <div class="sidebar" />;
@@ -64,6 +72,7 @@ class SidebarComponent extends VDom.Component<any> {
           <Link to='/settings' >
             <Navigation title="Settings" />
           </Link>
+          <Navigation clickHandler={this.props.logout} title="Logout" />
         </div> :
           <div>
             <Link to='/login' >
@@ -76,20 +85,16 @@ class SidebarComponent extends VDom.Component<any> {
         }
       </div>
     ) : (
-      <div>
-
-      </div>
+      <></>
     );
-    return (
+    const sidebarComponent: VDom.VirtualElement = (
       <div class={`sidebar 
-      ${this.state.isSmallScreen ? 'sidebar_mobile' : ''}
-      ${this.state.isSmallScreen ? 
-        this.props.sidebarIsOpen ? 'sidebar_open': 'sidebar_closed'
-        : ''}`}>
+      ${this.state.isSmallScreen ? 'sidebar_mobile' : ''}`}>
         <div class="sidebar__header">
           <Link to="/">
-            <Logo size={'m'} class="header__logo"/>
+            <Logo align='left' size={'m'} class="header__logo"/>
           </Link>
+          <div onclick={this.close} class="sidebar__header__cross fa-solid fa-xmark"/>
         </div>
         {content}
         <Playlist
@@ -97,6 +102,16 @@ class SidebarComponent extends VDom.Component<any> {
         />
       </div>
     );
+    
+    return (
+      this.state.isSmallScreen ?
+        <div onclick={this.close} class={`sidebar-wrapper
+        ${this.props.sidebarIsOpen ? 'sidebar_open': 'sidebar_closed'}`}>
+          {sidebarComponent}
+        </div>
+        :
+        {sidebarComponent}
+    )
   };
 }
 
@@ -106,6 +121,12 @@ const mapDispatchToProps = (dispatch: any): Map => ({
   },
   getPopular: (): void => {
     dispatch(getPopularTracks);
+  },
+  closeSidebar: ():void =>{
+    dispatch(closeSidebar)
+  },
+  logout: (): void => {
+    dispatch(userLogout());
   },
 });
 const mapStateToProps = (state: any): Map => ({

@@ -92,35 +92,7 @@ class App extends VDom.Component<any> {
         </Route>
         <Route to="/">
           <div class="page">
-            { this.state.isSmallScreen ?
-              <RouterContext.Consumer>
-                { (navigator: RouteNavigator): VDom.VirtualElement => (
-                  <StoreContext.Consumer>
-                    { (store: Store): VDom.VirtualElement =>(
-                      <ModalDisplayerStateless
-                        animated
-                        direction="row"
-                        align="start"
-                        open={this.props.sidebarIsOpen}
-                        onClose={this.props.closeSidebar}
-                        wrapper={(modal: VDom.VirtualElement): VDom.VirtualElement => (
-                          <RouterContext.Provider value={navigator}>
-                            <StoreContext.Provider value={store}>
-                              {modal}
-                            </StoreContext.Provider>
-                          </RouterContext.Provider>
-                        )}
-                      >
-                        <Sidebar/>
-                      </ModalDisplayerStateless>)
-                    }
-                  </StoreContext.Consumer>)
-                }
-              </RouterContext.Consumer>
-              :
-              <Sidebar/>
-            }
-
+            <Sidebar/>
             <div class="content">
               <Navbar/>
               <RouteSwitch>

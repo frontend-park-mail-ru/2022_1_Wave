@@ -30,9 +30,6 @@ import {
   showAuthRequired,
 } from '../../actions/Modals';
 import CreatePlaylist from '../common/CreatePlaylist/CreatePlaylist';
-import {Store} from "../../modules/Store/store";
-import RouteNavigator from '../../modules/Router/RouteNavigator';
-import RouterContext from '../../modules/Router/RouterContext';
 import SearchPage from "../SearchPage";
 
 class App extends VDom.Component<any> {
@@ -79,6 +76,7 @@ class App extends VDom.Component<any> {
   togglePlayerFull = (e: Event):void => {
     e.stopPropagation();
     this.setState({isMobilePlayerFull: !this.state.isMobilePlayerFull});
+    this.props.closeSidebar();
   }
 
   render(): VDom.VirtualElement {

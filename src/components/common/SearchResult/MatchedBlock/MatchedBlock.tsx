@@ -1,27 +1,30 @@
-import { Map } from '../../../../modules/Store/types';
 import VDom from '@rflban/vdom';
+import {Caption, Divider} from "@rflban/waveui/dist";
+import { Map } from '../../../../modules/Store/types';
 import './MatchedBlock.scss';
-import Link from '../../../../modules/Router/Link';
+import Link from '../../../../modules/Router/Link2';
 import { config } from '../../../../modules/Client/Client';
 
 interface MatchedBlockProps {
   array: Array<Map>;
   type: string;
   title: string;
-  drop: () => void;
+  drop?: (_e:Event) => void;
 }
 
 export default class MatchedBlock extends VDom.Component<MatchedBlockProps> {
   render = (): VDom.VirtualElement => (
     <div class="matched">
-      <div class="text matched-title"> {this.props?.title ?? ''} </div>
+      <Caption class="matched-title" align='left'>
+        {this.props?.title ?? ''}
+      </Caption>
+      <Divider/>
       <div onclick={this.props.drop} class="text matched-list">
         {this.props.array.map((v) => (
           <Link
             to={`/${this.props.type !== 'track' ? this.props.type : 'album'}/${
               v.cover.split('_')[1].split('.')[0]
             }`}
-            as="div"
             class="text matched-element"
           >
             <img

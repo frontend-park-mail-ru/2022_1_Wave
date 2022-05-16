@@ -2,10 +2,15 @@
   top: 100px;
   position: absolute;
   width: 100%;
-  background-color: rgba(11, 18, 32, 0.95);
-  z-index: 999;
+  background-color: rgb(11, 18, 32);
+  z-index: 2;
   flex-direction: column;
   align-items: stretch;
   border-radius: 5px;
-  //display: none;
+  max-height: 100vh;
+  border: solid 1px #222730;
+  .search-result__more{
+    padding: 15px 10px;
+    font-size: 16px;
+  }
 }

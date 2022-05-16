@@ -1,58 +1,49 @@
 import VDom from '@rflban/vdom';
 import { Map } from '../../../modules/Store/types';
-import { connect } from '../../../modules/Connect';
 import './SearchResult.scss';
 import MatchedBlock from './MatchedBlock/MatchedBlock';
+import {Caption} from "@rflban/waveui/dist";
+import Link from "../../../modules/Router/Link2";
 
 interface SearchInputProps {
-  searched: Map;
-  dropSearch: () => void;
+  searched: Map| null;
+  dropSearch: (_e:Event) => void;
 }
 
-class SearchResult extends VDom.Component<SearchInputProps> {
-  render = (): VDom.VirtualElement =>
-    this.props.searched ? (
-      <div onfocusout={this.props.dropSearch} class="search-result">
-        {this.props.searched.MatchedTracks.length > 0 ? (
+export default class SearchResult extends VDom.Component<SearchInputProps> {
+  render = (): VDom.VirtualElement =>{
+    if (!this.props.searched){
+      return <></>
+    }
+    return <div class="search-result">
+      {this.props.searched.MatchedTracks.length > 0 &&
           <MatchedBlock
             drop={this.props.dropSearch}
             type="track"
             title="Tracks"
-            array={this.props.searched.MatchedTracks}
+            array={this.props.searched.MatchedTracks.slice(0,3)}
           />
-        ) : (
-          <></>
-        )}
-        {this.props.searched.MatchedAlbums.length > 0 ? (
+      }
+      {this.props.searched.MatchedAlbums.length > 0 &&
           <MatchedBlock
             drop={this.props.dropSearch}
             type="album"
             title="Albums"
-            array={this.props.searched.MatchedAlbums}
+            array={this.props.searched.MatchedAlbums.slice(0,3)}
           />
-        ) : (
-          <></>
-        )}
-        {this.props.searched.MatchedArtists.length > 0 ? (
+      }
+      {this.props.searched.MatchedArtists.length > 0 &&
           <MatchedBlock
             drop={this.props.dropSearch}
             type="artist"
             title="Artists"
-            array={this.props.searched.MatchedArtists}
+            array={this.props.searched.MatchedArtists.slice(0,3)}
           />
-        ) : (
-          <></>
-        )}
-      </div>
-    ) : (
-      <></>
-    );
+      }
+      <Link to="/search">
+        <Caption class="search-result__more"> More...</Caption>
+      </Link> 
+    </div>
+  }
+
 }
-
-const mapStateToProps = (state: any): Map => ({
-  searched: state.search ?? null,
-});
-
-const mapDispatchToProps = (_dispatch: any): Map => ({});
-
-export default connect(mapStateToProps, mapDispatchToProps)(SearchResult);

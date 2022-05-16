@@ -18,6 +18,7 @@
   display: flex;
   position: absolute;
   width: 100%;
+  z-index: 3;
   background-image: var(--linear-gradient-blue-dark);
   &:focus-within .search {
     display: flex;

@@ -33,6 +33,7 @@ import CreatePlaylist from '../common/CreatePlaylist/CreatePlaylist';
 import {Store} from "../../modules/Store/store";
 import RouteNavigator from '../../modules/Router/RouteNavigator';
 import RouterContext from '../../modules/Router/RouterContext';
+import SearchPage from "../SearchPage";
 
 class App extends VDom.Component<any> {
   state = {
@@ -73,13 +74,6 @@ class App extends VDom.Component<any> {
   willUmount(): void {
     mainSmallScreen.removeEventListener('change', this.mediaSmallScreenhandler);
     mainMobileScreen.removeEventListener('change', this.mediaMobileScreenhandler);
-  }
-
-  catchStart = (e:TouchEvent):void => {
-    const startX = e.changedTouches[0].clientX;
-    if (startX > this.consts.startXClose) {
-      this.props.closeSidebar();
-    }
   }
 
   togglePlayerFull = (e: Event):void => {
@@ -132,6 +126,9 @@ class App extends VDom.Component<any> {
               <RouteSwitch>
                 <Route to="" exact>
                   <Homepage/>
+                </Route>
+                <Route to="/search">
+                  <SearchPage/>
                 </Route>
                 <Route to="/artist/:slug">
                   <ArtistPage />

@@ -1,0 +1,42 @@
+.waveSignupPage {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: url('../../assets/auth.png') no-repeat 50%;
+  background-size: cover;
+  overflow-y: scroll;
+
+  &__inner {
+    display: flex;
+    flex-direction: column;
+    width: 425px;
+    margin: auto;
+    gap: 15px;
+    padding-top: 30px;
+    padding-bottom: 30px;
+
+    @media all and (max-width: 531.25px) {
+      width: 80%;
+    }
+  }
+
+  &__logo {
+    margin-bottom: 15px;
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  &__submit {
+    margin-top: 10px;
+  }
+
+  &__footer {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+}

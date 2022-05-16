@@ -1,0 +1,30 @@
+.matched {
+  width: 100%;
+  border-radius: 5px;
+  height: 100%;
+  .matched-title {
+    padding: 10px;
+    font-size: 20px;
+    width: 100%;
+  }
+  .matched-list {
+    height: 100%;
+    .matched-element {
+      padding-top: 15px;
+      padding-left: 15px;
+      padding-bottom: 10px;
+      display: flex;
+      &:hover {
+        cursor: pointer;
+      }
+      .element-cover {
+        width: 40px;
+        height: 40px;
+        border-radius: 5px;
+      }
+      .element-name {
+        margin: auto 10px;
+      }
+    }
+  }
+}

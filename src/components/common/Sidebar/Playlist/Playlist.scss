@@ -1,0 +1,9 @@
+@import 'Track/Track.scss';
+
+.sidebar__my-playlist {
+  padding: 20px 10px 85px;
+  list-style-type: none;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  height: 100%;
+}

@@ -1,0 +1,36 @@
+.navbar {
+  --linear-gradient-blue-dark: linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0) 10%,
+    rgba(1, 208, 234, 0.1) 100%
+  );
+  --linear-gradient-blue-white: linear-gradient(
+    90deg,
+    rgba(33, 144, 179, 1) 0%,
+    rgba(184, 227, 228, 1) 100%
+  );
+  --btn-inactive: #6d7184;
+  --input-color: #0000002b;
+  --btn-hover: #37b8d6;
+}
+.navbar {
+  height: 100px;
+  display: flex;
+  position: absolute;
+  width: 100%;
+  z-index: 1;
+  background-image: var(--linear-gradient-blue-dark);
+  &:focus-within .search {
+    display: flex;
+  }
+
+  .navbar__link-new-page {
+    text-decoration: none;
+  }
+  .swipe-navbar{
+    font-size: 30px;
+    margin: auto;
+    padding: 10px;
+    color: #ffffff;
+  }
+}

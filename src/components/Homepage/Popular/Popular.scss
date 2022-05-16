@@ -1,0 +1,25 @@
+.wavePopular {
+  flex-grow: 1;
+  justify-content: flex-end;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 120px;
+  margin-left: 40px;
+  margin-right: 40px;
+  padding-top: 100px;
+
+  &__title {
+    margin-bottom: 25px;
+  }
+
+  &__albums {
+  }
+
+  &__artists {
+    margin-top: 60px;
+  }
+
+  &__icon {
+    height: 35%;
+  }
+}

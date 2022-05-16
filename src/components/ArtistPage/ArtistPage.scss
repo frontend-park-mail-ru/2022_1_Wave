@@ -1,0 +1,159 @@
+.waveArtistPage {
+  width: 100%;
+  position: relative;
+  pointer-events: none;
+
+  &__cover {
+    position: absolute;
+    height: 50vh;
+    overflow: hidden;
+    width: 100%;
+    z-index: -1;
+    background-repeat: no-repeat;
+    background-size: cover;
+    object-fit: cover;
+  }
+
+  &__songs-label {
+    margin-bottom: 20px;
+  }
+
+  &__albums-label {
+    margin-bottom: 20px;
+  }
+
+  &__wrapper {
+    pointer-events: initial;
+    width: calc(100% - 80px);
+    display: flex;
+    flex-direction: column;
+    margin: 100px 40px 100px;
+  }
+
+  &__label {
+    color: var(--waveui--color--accent);
+    margin: 0;
+  }
+
+  &__header {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin-bottom: 40px;
+  }
+
+  &__play {
+    margin-top: 20px;
+  }
+
+  &__albums {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+.artist-page {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 40px;
+
+  .artist-page__main {
+    background-repeat: no-repeat;
+    background-size: cover;
+    object-fit: cover;
+    background-position: 50%;
+    background-position-y: 0%;
+    display: flex;
+    flex-direction: column;
+
+    .artist-page__artist {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      padding-left: 50px;
+      margin-top: 100px;
+      justify-content: space-between;
+
+      .artist__related {
+        display: flex;
+
+        .related__title {
+          color: #37b8d6;
+        }
+
+        .related__names {
+          padding-left: 20px;
+        }
+      }
+
+      .artist__main {
+        font-size: 25px;
+
+        .artist__name {
+          margin-bottom: 25px;
+          margin-top: 4px;
+          font-size: 84px;
+        }
+      }
+    }
+
+    .artist__controls {
+      display: flex;
+      margin-bottom: 20px;
+
+      * {
+        margin: auto 0px;
+      }
+
+      .controls__btn-play {
+        display: flex;
+        background-color: #37b8d6;
+        width: 150px;
+        height: 40px;
+        border-radius: 21px;
+        &:hover {
+          cursor: pointer;
+        }
+        .text {
+          margin: auto;
+        }
+      }
+
+      .controls__likes {
+        padding-left: 20px;
+        display: flex;
+
+        .likes__num {
+          padding-left: 10px;
+        }
+
+        .likes__icon {
+          &:hover {
+            cursor: pointer;
+          }
+        }
+      }
+    }
+  }
+  .artist__title {
+    font-size: 26px;
+  }
+
+  .artist-page__popular {
+    padding-left: 40px;
+    margin-top: 20px;
+    flex-grow: 1;
+  }
+  .artist-page__albums {
+    margin-top: 20px;
+    padding-left: 40px;
+    height: 250px;
+    margin-bottom: 100px;
+
+    .carousel-row {
+      height: 250px;
+    }
+  }
+}

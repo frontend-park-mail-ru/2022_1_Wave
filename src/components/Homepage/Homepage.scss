@@ -1,0 +1,68 @@
+@import 'Popular/Popular.scss';
+
+.waveHomepage {
+  &__description {
+    color: var(--waveui--color--foreground--secondary);
+  }
+}
+
+.main__page {
+  background-image: url('../../assets/img.png');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: 50%;
+  display: flex;
+  flex-direction: column;
+
+  .main__top-chart__album {
+    display: flex;
+    flex-direction: column;
+    margin-top: 100px;
+    width: 50%;
+    padding-left: 40px;
+  }
+
+  @media (max-width: 580px) {
+    .main__top-chart__album {
+      width: 80%;
+    }
+  }
+
+  .main__top-chart__album__name {
+    padding-top: 25px;
+    font-size: 35px;
+  }
+
+  .main__top-chart__album__quote {
+    font-size: 18px;
+    opacity: 50%;
+    padding-top: 10px;
+  }
+
+  .main__top-chart__album__controls {
+    padding-top: 40px;
+    display: flex;
+    *{
+      width: 150px;
+      display: flex;
+      justify-content: center;
+      box-sizing: border-box;
+    }
+    .main__top-chart__album__btn_follow{
+      margin-left: 30px;
+    }
+    @media (max-width: 400px) {
+      justify-content: space-between;
+      *{
+        width: 45%;
+      }
+      .main__top-chart__album__btn_follow {
+        margin-left: 0px;
+      }
+    }
+  }
+
+  .button:hover {
+    cursor: pointer;
+  }
+}

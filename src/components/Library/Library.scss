@@ -1,0 +1,57 @@
+.waveLibrary {
+  // TODO: replace with variables
+  padding: 80px 42px 100px;
+
+  &__inner {
+    padding-top: 25px;
+    display: flex;
+    flex-direction: row;
+    gap: 35px;
+
+    @media all and (max-width: 980px) {
+      flex-direction: column;
+    }
+  }
+
+  &__playlists {
+    width: 400px;
+    height: calc(100vh - 250px);
+    overflow-y: scroll;
+    display: flex;
+    flex-direction: column;
+
+    @media all and (max-width: 980px) {
+      width: 100%;
+      order: 2;
+      height: calc(100vh - 430px);
+    }
+  }
+
+  &__playlist-form {
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    align-items: end;
+    height: fit-content;
+
+    @media all and (max-width: 980px) {
+      width: 100%;
+      order: 1;
+    }
+  }
+
+  &__playlist__icon {
+    height: 25%;
+  }
+
+  &__link {
+    padding: 10px;
+    border-radius: 8px;
+    transition: background-color 0.2s ease-out;
+  }
+
+  &__link:hover {
+    background: var(--waveui-color_background--hover--modest);
+  }
+}

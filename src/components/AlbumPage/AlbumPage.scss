@@ -1,0 +1,157 @@
+.waveAlbumPage {
+  width: 100%;
+  position: relative;
+  pointer-events: none;
+
+  &__cover {
+    position: absolute;
+    height: 50vh;
+    overflow: hidden;
+    width: 100%;
+    z-index: -1;
+    background-repeat: no-repeat;
+    background-size: cover;
+    object-fit: cover;
+  }
+
+  &__songs-label {
+    margin-bottom: 20px;
+  }
+
+  &__wrapper {
+    pointer-events: initial;
+    width: calc(100% - 80px);
+    display: flex;
+    flex-direction: column;
+    margin: 100px 40px 100px;
+  }
+
+  &__label {
+    color: var(--waveui--color--accent);
+    margin: 0;
+  }
+
+  &__header {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin-bottom: 40px;
+  }
+
+  &__play {
+    margin-top: 20px;
+  }
+}
+
+.album-page {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 40px;
+
+  .album-page__main {
+    background-repeat: no-repeat;
+    background-size: cover;
+    object-fit: cover;
+    background-position: 50%;
+    background-position-y: 0%;
+    display: flex;
+    flex-direction: column;
+
+    .album-page__album {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      padding-left: 50px;
+      margin-top: 100px;
+      justify-content: space-between;
+
+      .album__related {
+        display: flex;
+
+        .related__title {
+          color: #37b8d6;
+        }
+
+        .related__names {
+          padding-left: 20px;
+        }
+      }
+
+      .album__main {
+        font-size: 25px;
+        width: 50%;
+        .album__name {
+          margin-bottom: 25px;
+          margin-top: 4px;
+          font-size: 84px;
+        }
+        @media (max-width: 780px) {
+          width: 70%;
+          .album__name{
+            font-size: 60px;
+          }
+        }
+        @media (max-width: 400px) {
+          width: 100%;
+          .album__name{
+            font-size: 40px;
+          }
+        }
+        .album__quote {
+          font-size: 18px;
+          opacity: 50%;
+          padding: 10px;
+        }
+      }
+    }
+
+    .album__controls {
+      display: flex;
+      margin-bottom: 20px;
+
+      * {
+        margin: auto 0px;
+      }
+
+      .controls__btn-play {
+        display: flex;
+        background-color: #37b8d6;
+        width: 150px;
+        height: 40px;
+        border-radius: 21px;
+        &:hover {
+          cursor: pointer;
+        }
+        .text {
+          margin: auto;
+        }
+      }
+
+      .controls__likes {
+        padding-left: 20px;
+        display: flex;
+
+        .likes__num {
+          padding-left: 10px;
+        }
+
+        .likes__icon {
+          &:hover {
+            cursor: pointer;
+          }
+        }
+      }
+    }
+  }
+  .album__title {
+    font-size: 26px;
+  }
+
+  .album-page__popular {
+    padding-left: 40px;
+    margin-top: 20px;
+    flex-grow: 1;
+    margin-bottom: 100px;
+  }
+}

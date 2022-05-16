@@ -1,0 +1,68 @@
+.profile-menu {
+  width: 180px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+
+  &__menu-label {
+    padding: 8px;
+  }
+
+  &:hover {
+    .profile-menu__popup{
+      visibility: visible;
+    }
+  }
+
+  &__avatar-wrapper {
+    padding: 30px;
+  }
+
+  &__avatar_img-round {
+    width: 50px;
+    height: 50px;
+    border-radius: 25px;
+    object-fit: cover;
+    background-size: cover;
+
+    &__wrapper {
+      position: relative;
+      width: fit-content;
+      height: fit-content;
+    }
+  }
+
+
+  &__popup {
+    width: 180px;
+    height: 80px;
+    background-color: #06123b;
+    border-radius: 10px;
+    position: absolute;
+    top: 80px;
+    right: 50px;
+    display: flex;
+    visibility: hidden;
+    flex-direction: column;
+    justify-content: space-evenly;
+
+  }
+
+  &__popup__text {
+    color: #dbd9d9;
+    font-size: 14px;
+    margin: auto;
+    width: 80%;
+
+    &:hover {
+      color: #37b8d6;
+      cursor: pointer;
+    }
+  }
+
+  &__popup__settings {
+    border-bottom: solid 2px #5d4099;
+    padding-bottom: 10px;
+  }
+
+}

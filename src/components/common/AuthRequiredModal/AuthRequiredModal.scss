@@ -1,0 +1,53 @@
+.waveAuthRequiredModal {
+  display: flex;
+  flex-direction: column;
+  padding: 30px 60px;
+  gap: 40px;
+  background-color: var(--waveui--color--background);
+  border-radius: 16px;
+
+  max-height: 80vh;
+  overflow: visible;
+  position: relative;
+
+  &__collapse {
+    background-color: transparent;
+    color: var(--waveui--color--foreground--secondary--modest);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &__icon {
+      transform: scale(0.80) rotate(45deg);
+      cursor: pointer;
+    }
+  }
+
+  max-width: 300px;
+  @media all and (max-width: 580px) {
+    max-width: 60vw;
+  }
+
+  &__links {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+
+    @media all and (max-width: 580px) {
+      flex-direction: column-reverse;
+      justify-content: start;
+      width: 100%;
+      align-items: initial;
+      gap: 20px;
+    }
+  }
+}

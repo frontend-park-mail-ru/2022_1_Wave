@@ -1,0 +1,85 @@
+.progress-bar {
+  height: 20px;
+  flex-grow: 1;
+  display: flex;
+
+  &:hover &__circle__outer, &:hover &__circle__inner {
+    transform: scale(1);
+  }
+
+  &__circle {
+    width: 21px;
+    height: 21px;
+    position: relative;
+
+    &__outer {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      border-radius: 50%;
+      box-shadow: inset 0 0 1px 1px #BEB7DF, inset 0 0 5px 2px #BEB7DF;
+      transform: scale(0);
+      transition: transform 0.2s ease-out;
+    }
+
+    &__inner {
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background-color: #BEB7DF;
+      position: absolute;
+      top: 9px;
+      left: 8.5px;
+      transform: scale(0);
+    }
+  }
+
+  .progress-bar__progress {
+    background: linear-gradient(180deg, rgba(23, 19, 44, 0.97) 12.5%, rgba(93, 64, 153, 0.67) 91.67%);
+    flex-grow: 1;
+    height: 2px;
+    margin: auto;
+    position: relative;
+    & > * {
+      height: 100%;
+    }
+
+    .progress__additional {
+      position: absolute;
+      background: linear-gradient(180deg, rgba(57, 51, 91, 0.97) 12.5%, rgba(93, 64, 153, 0.67) 91.67%);
+    }
+
+    .progress__main {
+      display: flex;
+      position: relative;
+
+      .progress__main__state {
+        background-color: #beb7df;
+        height: 2px;
+      }
+      .progressbar__main__marker {
+        height: 31px;
+        width: 2em;
+        margin-top: -0.75em;
+        margin-left: -1em;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        transition: height 1ms ease;
+        .marker__img {
+          //height: 22px;
+          //width: 22px;
+          //position: relative;
+          //object-fit: cover;
+          //background-repeat: no-repeat;
+          //background-size: cover;
+        }
+      }
+    }
+  }
+
+  &:hover {
+    cursor: pointer;
+  }
+}

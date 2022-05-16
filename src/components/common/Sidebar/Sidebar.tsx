@@ -94,7 +94,9 @@ class SidebarComponent extends VDom.Component<any> {
           <Link to="/">
             <Logo align='left' size={'m'} class="header__logo"/>
           </Link>
-          <div onclick={this.close} class="sidebar__header__cross fa-solid fa-xmark"/>
+          { this.state.isSmallScreen &&
+            <div onClick={this.close} class="sidebar__header__cross fa-solid fa-xmark"/>
+          }
         </div>
         {content}
         <Playlist
@@ -110,7 +112,7 @@ class SidebarComponent extends VDom.Component<any> {
           {sidebarComponent}
         </div>
         :
-        {sidebarComponent}
+        sidebarComponent
     )
   };
 }

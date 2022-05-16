@@ -31,26 +31,34 @@
     }
 
     .track__name {
-      padding-left: 0.6em;
-
-
+      width: 226px;
+      overflow-x: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      padding-left: 10px;
 
       .track__name__title {
+        @media (max-width: 580px) {
+        }
       }
 
       .track__name__author {
         font-size: 12px;
         width: fit-content;
         color: #6d7184;
+
+        @media (max-width: 580px) {
+        }
       }
     }
   }
 
   .player__control {
-    width: 5.2em;
     padding-left: 20px;
     display: inline-flex;
-    justify-content: space-between;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
 
     & > * {
       color: #beb7df;
@@ -59,14 +67,23 @@
 
     .control__prev {
       font-size: 1.2em;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
     }
 
     .control__play_pause {
       font-size: 1.2em;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
     }
 
     .control__next {
       font-size: 1.2em;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
     }
   }
 
@@ -87,8 +104,9 @@
 
   .volume-progressbar-wrapper{
     height: 100%;
-    width: 15%;
+    width: 150px;
     display: flex;
+    margin-right: 40px;
   }
 
   .player-progressbar-wrapper{
@@ -148,7 +166,7 @@
       font-size: 30px !important;
       .control__play_pause {
         width: fit-content !important;
-        margin: auto;
+        //margin: auto;
       }
     }
 

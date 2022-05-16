@@ -1,4 +1,10 @@
 import VDom from "@rflban/vdom";
+import {
+  VolumeLevelNoneIcon,
+  VolumeLevel0Icon,
+  VolumeLevel1Icon,
+  VolumeLevel2Icon,
+} from '@rflban/waveui';
 import {IComponentPropsCommon} from "@rflban/vdom/dist/IComponentProps";
 import InteractiveProgressBar from "../../InteractiveProgressBar";
 import './style.scss';
@@ -49,6 +55,24 @@ export default class VolumeProgressBar extends VDom.Component<ProgressBarProps> 
     return volIcon;
   }
 
+  getVolIconSVG = (): VDom.VirtualElement => {
+    if(!this.props.audio)
+      return <VolumeLevelNoneIcon  onClick={this.toggleMute} onTouchEnd={this.toggleMute}/>;
+
+    console.log('audio get',this.state.volume);
+
+    switch (true) {
+    case this.props.audio.volume === 0:
+      return <VolumeLevelNoneIcon class="volume__icon" onClick={this.toggleMute} onTouchEnd={this.toggleMute}/>;
+    case this.state.volume < 25:
+      return <VolumeLevel0Icon class="volume__icon" onClick={this.toggleMute} onTouchEnd={this.toggleMute}/>;
+    case this.state.volume < 60:
+      return <VolumeLevel1Icon class="volume__icon" onClick={this.toggleMute} onTouchEnd={this.toggleMute}/>;
+    default:
+      return <VolumeLevel2Icon class="volume__icon" onClick={this.toggleMute} onTouchEnd={this.toggleMute}/>;
+    }
+  }
+
   toggleMute = (e: Event): void  => {
     e.preventDefault();
     if(!this.props.audio) return;
@@ -61,13 +85,13 @@ export default class VolumeProgressBar extends VDom.Component<ProgressBarProps> 
 
     return (
       <div class="volume-progressbar">
-        <div onClick={this.toggleMute} onTouchEnd={this.toggleMute}
-          class={`fa-solid ${this.getVolIcon()} volume__icon`}></div>
+        {this.getVolIconSVG()}
+
         <InteractiveProgressBar
           setProgressState={this.setVolume}
           progress={this.state.volume}/>
       </div>
     )
   }
-  
+
 }

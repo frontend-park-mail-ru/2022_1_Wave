@@ -3,7 +3,7 @@ import './MobileFullPlayer.scss';
 import VDom from '@rflban/vdom';
 import {
   AlternativeArrowLeftIcon,
-  AlternativeArrowRightIcon,
+  AlternativeArrowRightIcon, PauseOutlineIcon, PlayOutlineIcon,
 } from '@rflban/waveui';
 import '../../App/App.scss';
 import {IComponentPropsCommon} from "@rflban/vdom/dist/IComponentProps";
@@ -223,13 +223,16 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
                     <div class="player__controls">
                       <div class="player__control">
                         <div onclick={this.runPrev} class="control__prev">
-                          <div class="fa-solid fa-backward-step"/>
+                          <AlternativeArrowLeftIcon/>
                         </div>
                         <div onClickCapture={this.togglePlay} class="control__play_pause">
-                          {this.props.isPlay ? this.#pauseIcon : this.#playIcon}
+                          {this.props.isPlay
+                            ? (<PauseOutlineIcon />)
+                            : (<PlayOutlineIcon />)
+                          }
                         </div>
                         <div onclick={this.runNext} class="control__next">
-                          <div class="fa-solid fa-forward-step"/>
+                          <AlternativeArrowRightIcon />
                         </div>
                       </div>
                       <div class="player-progressbar-wrapper">
@@ -261,13 +264,16 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
 
               <div class="player__control">
                 <div class="control__prev" onClick={this.runPrev} onTouchEnd={this.runPrev}>
-                  <div class="fa-solid fa-backward-step"/>
+                  <AlternativeArrowLeftIcon />
                 </div>
                 <div class="control__play_pause" onClick={this.togglePlay} onTouchEnd={this.togglePlay} >
-                  {this.props.isPlay ? this.#pauseIcon : this.#playIcon}
+                  {this.props.isPlay
+                    ? (<PauseOutlineIcon />)
+                    : (<PlayOutlineIcon />)
+                  }
                 </div>
                 <div class="control__next" onClick={this.runNext} onTouchEnd={this.runNext} >
-                  <div class="fa-solid fa-forward-step"/>
+                  <AlternativeArrowRightIcon />
                 </div>
               </div>
               {/* <div onclick={this.toogleShuffle} ontouchend={this.toogleShuffle} class="player__shuffle"> */}

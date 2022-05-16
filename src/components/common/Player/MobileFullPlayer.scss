@@ -14,14 +14,19 @@
     width: 50%;
   }
   .track__picture {
-    width: 100% !important;
+    width: 185px !important;
+    height: 185px !important;
     font-size: 50px !important;
   }
   .track__name{
     width: 100%;
     padding-top: 5px;
+    padding-left: 0 !important;
+    .track__name__title {
+      text-align: center;
+    }
 
-    * {
+      * {
       overflow: visible;
       width: fit-content;
       max-width: 100% !important;
@@ -101,6 +106,7 @@
     .volume-progressbar-wrapper {
       width: 50% !important;
       display: flex !important;
+      margin-right: 0;
       align-items: end;
       .volume-progressbar{
         margin-right: 0;
@@ -111,7 +117,7 @@
     }
 
     .player__track {
-      margin-top: 150px;
+      //margin-top: 150px;
     }
   }
   @media (max-width: 340px) {

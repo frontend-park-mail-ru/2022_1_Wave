@@ -51,18 +51,20 @@ class SearchPage extends VDom.Component<SearchPageProps> {
       <div class="waveSearchPage">
         <Headline align='left' size="s">Search Results</Headline>
         { MatchedTracks.length > 0 &&
-            <div class="waveSearchPage__name">
-              <Caption class="name__title">Matched Tracks</Caption>
-              <Divider/>
-            </div>
+            <>
+              <div class="waveSearchPage__name">
+                <Caption class="name__title">Matched Tracks</Caption>
+                <Divider/>
+              </div>
 
+              <div class="waveSearchPage__tracks_block">
+
+                <TracksContainer tracks={MatchedTracks}
+                  onTrackRun={this.tracksClickHandler(MatchedTracks)}
+                />
+              </div>
+            </>
         }
-        <div class="waveSearchPage__tracks_block">
-
-          <TracksContainer tracks={MatchedTracks}
-            onTrackRun={this.tracksClickHandler(MatchedTracks)}
-          />
-        </div>
 
         { MatchedAlbums.length > 0 &&
             <div class="waveSearchPage__name">

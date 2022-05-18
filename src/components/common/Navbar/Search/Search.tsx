@@ -31,6 +31,7 @@ class Search extends VDom.Component<SearchProps> {
   constructor(props: SearchProps) {
     super(props);
     this.onTypeRequest = this.onTypeRequest.bind(this);
+    this.clearResult = this.clearResult.bind(this);
   }
 
   @VDom.util.Debounce(debounceTimeMS)
@@ -79,6 +80,11 @@ class Search extends VDom.Component<SearchProps> {
     this.clear();
   }
 
+  clearResult(): void {
+    this.refSearch.instance.value = "";
+    this.setState({isAnyFound:false});
+  }
+
   render = (): VDom.VirtualElement => {
 
     if(this.state.onSearch && this.props?.searched){
@@ -96,6 +102,7 @@ class Search extends VDom.Component<SearchProps> {
             <SearchLeftIcon />
           </div>}
         onInput={this.onTypeRequest}
+        onBlur={this.clearResult}
         ref={this.refSearch}
         placeholder="Search artists, albums..."
       />

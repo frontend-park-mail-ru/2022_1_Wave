@@ -217,13 +217,6 @@ class ArtistPageComponent extends VDom.Component<any, any, null, RouteNavigator>
                 <div onclick={this.addPopularToPlaylist} class="button controls__btn-play">
                   <div class="text">Play</div>
                 </div>
-                {/*<div class="text controls__likes">*/}
-                {/*  <div*/}
-                {/*    onclick={this.setLikeToArtist}*/}
-                {/*    class={`${this.state.isLiked ? 'fa-solid' : 'fa-regular'} fa-heart likes__icon`}*/}
-                {/*  ></div>*/}
-                {/*  <div class="likes__num">{this.state.albumLikes}</div>*/}
-                {/*</div>*/}
               </div>
             </div>
           </div>
@@ -231,18 +224,11 @@ class ArtistPageComponent extends VDom.Component<any, any, null, RouteNavigator>
             <div class="text artist__title">Popular songs</div>
             <PagePlaylist runTrack={this.runTrack} playlist={popularTracks} >
               <div class="playlist-context">
-                {/* {!this.state.isShowPlaylistChoose && */}
-                {/* <div onclick={this.showPlaylists} class="text context__item">Add</div> */}
-                {/* } */}
-                {/* {this.state.isShowPlaylistChoose && */}
-                {/*    ( */}
                 {
                   this.props.playlists &&
                   Object.entries(this.props.playlists).map(([_,v]:[k:string,v:Map])  =>
                     <div onclick={this.addTrack(v.id)} class="text context__item">{v.title}</div>)
                 }
-                {/* ) */}
-                {/* } */}
               </div>
 
             </PagePlaylist>

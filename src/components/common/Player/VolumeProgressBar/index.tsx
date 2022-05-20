@@ -19,19 +19,41 @@ export default class VolumeProgressBar extends VDom.Component<ProgressBarProps> 
     volume: 50,
   }
 
+  volumeStoreKey: string = 'currentVolume';
+
+
   constructor(props: ProgressBarProps) {
     super(props);
     this.setVolume = this.setVolume.bind(this);
+  }
+
+  tryUpdateVolume = (_e:Event):void  => {
+    const storage:string|null = localStorage.getItem(this.volumeStoreKey);
+
+    if (!storage || storage === ''){
+      return;
+    }
+    const {volume}:{volume:number} = JSON.parse(storage);
+    if( this.props.audio){
+      this.props.audio.volume = volume;
+      this.setState({volume: volume * 100});
+    }
   }
 
   setVolume(relativePosition: number): void {
     if(!this.props.audio) return;
     this.props.audio.volume = relativePosition;
     this.setState({volume: relativePosition * 100})
+    localStorage.setItem(this.volumeStoreKey,JSON.stringify({volume:this.props.audio.volume}))
   }
 
   didMount():void {
     this.setState({volume: this.props.audio.volume * 100})
+    window.addEventListener('storage',this.tryUpdateVolume);
+  }
+
+  willUmount():void {
+    window.removeEventListener('storage',this.tryUpdateVolume);
   }
 
   getVolIcon = ():string => {
@@ -76,8 +98,8 @@ export default class VolumeProgressBar extends VDom.Component<ProgressBarProps> 
   toggleMute = (e: Event): void  => {
     e.preventDefault();
     if(!this.props.audio) return;
-    this.props.audio.volume = this.props.audio.volume > 0 ? 0 : 0.5;
-    this.setState({volume: this.props.audio.volume * 100})
+    const volume:number =  this.props.audio.volume > 0 ? 0 : 0.5;
+    this.setVolume(volume);
   }
 
   render = (): VDom.VirtualElement => {

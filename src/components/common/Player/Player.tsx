@@ -38,11 +38,12 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
 
   static contextType = RouterContext;
 
-  playlistStoreKey: string = 'playlist';
 
-  posStoreKey: string = 'currentPos';
+  playlistChannel:BroadcastChannel;
 
-  isPlayStoreKey: string = 'isPlayerPlay';
+  posChannel:BroadcastChannel;
+
+  playStateChannel:BroadcastChannel;
 
   constructor(props: PlayerComponentProps) {
     super(props);
@@ -69,38 +70,7 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
     this.runNext = this.runNext.bind(this);
     this.runPrev = this.runPrev.bind(this);
     this.toogleShuffle = this.toogleShuffle.bind(this);
-    this.updateLocalStorage = this.updateLocalStorage.bind(this);
     this.props.stop();
-  }
-
-  updateLocalStorage(_e:Event): void {
-    const tracks = this.getFromLocalStorageByKey(this.playlistStoreKey);
-    if (tracks){
-      this.props.setPlaylist(tracks);
-    }
-    const {pos}:{pos:number} = this.getFromLocalStorageByKey(this.posStoreKey);
-    if (pos){
-      this.props.setPos(pos)
-    }
-    const playing: {isPlay:boolean} | null = this.getFromLocalStorageByKey(this.isPlayStoreKey);
-    if (playing){
-      this.setState({playState:playing.isPlay})
-      if(!playing.isPlay){
-        this.props.stop();
-      }
-    }
-  }
-
-  getFromLocalStorageByKey = (key: string): any | null  => {
-    const storage:string|null = localStorage.getItem(key);
-
-    if (!storage){
-      return null;
-    }
-    if (storage === ''){
-      return null;
-    }
-    return JSON.parse(storage);
   }
 
   didUpdate(): void {
@@ -117,7 +87,7 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
     if (JSON.stringify(this.#player?.playlist) !== JSON.stringify(this.props.playlist)) {
       this.setState({trackTime: 0, trackFilled: 0, trackFetched: 0, trackBuffered: 0});
       this.#player?.updatePlaylist(this.props.playlist);
-      localStorage.setItem(this.playlistStoreKey,JSON.stringify(this.props.playlist));
+      this.playlistChannel.postMessage(this.props.playlist);
     }
 
     if (
@@ -125,7 +95,7 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
             this.#player?.currentIndex !== this.props.position
     ) {
       this.#player?.setPosition(this.props.position);
-      localStorage.setItem(this.posStoreKey,JSON.stringify({pos:this.props.position}))
+      this.posChannel.postMessage(this.props.position)
     }
     // if (this.props.isPlay && !this.state.playState) {
     //   this.#player.stop();
@@ -141,7 +111,17 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
     if (!this.#player && this.props.playlist && this.props.playlist.length > 0) {
       this.initPlayer();
     }
-    window.addEventListener('storage',this.updateLocalStorage)
+    this.playlistChannel = new BroadcastChannel('playlist');
+    this.playlistChannel.onmessage = (_e:MessageEvent) => {this.props.setPlaylist(_e.data as ITrack[])};
+    this.posChannel = new BroadcastChannel('position');
+    this.posChannel.onmessage = (_e:MessageEvent) => {this.props.setPos(_e.data as number)};
+    this.playStateChannel = new BroadcastChannel('playState');
+    this.playStateChannel.onmessage = (_e:MessageEvent) => {
+      this.setState({playState:_e.data})
+      if(!_e.data){
+        this.props.stop();
+      }
+    };
   }
 
   willUmount(): void {
@@ -158,8 +138,9 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
       this.props.stop();
     }
     this.#player = null;
-    window.removeEventListener('storage',this.updateLocalStorage)
-
+    this.playlistChannel.close();
+    this.posChannel.close();
+    this.playStateChannel.close();
   }
 
   initPlayer(): void {
@@ -180,8 +161,7 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
     navigator.mediaSession.setActionHandler('nexttrack', () => {
       this.runNext();
     });
-    const tracks: ITrack[] = this.getFromLocalStorageByKey(this.playlistStoreKey) ?? this.props.playlist;
-    this.#player = new PlayerClass(tracks);
+    this.#player = new PlayerClass(this.props.playlist);
 
     if (this.#player.audio) {
       this.#player.audio.addEventListener('durationchange', this.loadTrackData);
@@ -206,10 +186,7 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
   }
 
   checkPlay(): void {
-    localStorage.setItem(
-      this.isPlayStoreKey,
-      JSON.stringify({isPlay:this.props.isPlay}
-      ))
+    this.playStateChannel.postMessage(this.props.isPlay)
     this.setState({playState: this.props.isPlay})
     if (this.props.isPlay) {
       this.#player?.play();

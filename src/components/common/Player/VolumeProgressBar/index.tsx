@@ -19,7 +19,7 @@ export default class VolumeProgressBar extends VDom.Component<ProgressBarProps> 
     volume: 50,
   }
 
-  volumeStoreKey: string = 'currentVolume';
+  volumeChannel:BroadcastChannel;
 
 
   constructor(props: ProgressBarProps) {
@@ -27,33 +27,24 @@ export default class VolumeProgressBar extends VDom.Component<ProgressBarProps> 
     this.setVolume = this.setVolume.bind(this);
   }
 
-  tryUpdateVolume = (_e:Event):void  => {
-    const storage:string|null = localStorage.getItem(this.volumeStoreKey);
-
-    if (!storage || storage === ''){
-      return;
-    }
-    const {volume}:{volume:number} = JSON.parse(storage);
-    if( this.props.audio){
-      this.props.audio.volume = volume;
-      this.setState({volume: volume * 100});
-    }
-  }
-
   setVolume(relativePosition: number): void {
     if(!this.props.audio) return;
     this.props.audio.volume = relativePosition;
-    this.setState({volume: relativePosition * 100})
-    localStorage.setItem(this.volumeStoreKey,JSON.stringify({volume:this.props.audio.volume}))
+    this.setState({volume: relativePosition * 100});
+    this.volumeChannel.postMessage(relativePosition);
   }
 
   didMount():void {
     this.setState({volume: this.props.audio.volume * 100})
-    window.addEventListener('storage',this.tryUpdateVolume);
+    this.volumeChannel = new BroadcastChannel('volumeChannel');
+    this.volumeChannel.onmessage = (_e:MessageEvent) => {
+      this.props.audio.volume = _e.data;
+      this.setState({volume: _e.data * 100});
+    }
   }
 
   willUmount():void {
-    window.removeEventListener('storage',this.tryUpdateVolume);
+    this.volumeChannel.close();
   }
 
   getVolIcon = ():string => {
@@ -103,8 +94,6 @@ export default class VolumeProgressBar extends VDom.Component<ProgressBarProps> 
   }
 
   render = (): VDom.VirtualElement => {
-    console.log('audio now',this.props.audio?.volume)
-
     return (
       <div class="volume-progressbar">
         {this.getVolIconSVG()}

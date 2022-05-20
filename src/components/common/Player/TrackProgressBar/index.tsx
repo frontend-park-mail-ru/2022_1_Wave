@@ -21,17 +21,32 @@ class TrackProgressBar extends VDom.Component<ProgressBarProps>{
     trackFilled:0
   }
 
+  progressStoreKey: string = 'currentProgress';
+
   constructor(props: ProgressBarProps) {
     super(props);
     this.setTime = this.setTime.bind(this);
     this.timeUpdater = this.timeUpdater.bind(this);
     this.fetchedUpdater = this.fetchedUpdater.bind(this);
+    this.tryUpdateTime = this.tryUpdateTime.bind(this);
   }
 
   formatInt = (n: number): string => {
     const res = Math.trunc(n).toString();
     return n >= 10 ? res : `0${res}`;
   };
+
+  tryUpdateTime():void {
+    const storage:string|null = localStorage.getItem(this.progressStoreKey);
+
+    if (!storage || storage === ''){
+      return;
+    }
+    const {time}:{time:number} = JSON.parse(storage);
+    if( this.props.audio){
+      this.props.audio.currentTime = time;
+    }
+  }
 
   setTime(relativePosition: number): void {
     if(!this.props.audio) return;
@@ -43,6 +58,7 @@ class TrackProgressBar extends VDom.Component<ProgressBarProps>{
     this.props.audio.addEventListener('timeupdate', this.timeUpdater);
     this.props.audio.addEventListener('progress', this.fetchedUpdater);
     this.props.audio.addEventListener('loadedmetadata', this.fetchedUpdater);
+    window.addEventListener('storage',this.tryUpdateTime);
     this.timeUpdater()
   }
 
@@ -50,6 +66,7 @@ class TrackProgressBar extends VDom.Component<ProgressBarProps>{
     this.props.audio.removeEventListener('timeupdate',this.timeUpdater);
     this.props.audio.removeEventListener('progress',this.fetchedUpdater);
     this.props.audio.removeEventListener('loadedmetadata',this.fetchedUpdater);
+    window.removeEventListener('storage',this.tryUpdateTime);
   }
 
   fetchedUpdater(): void {
@@ -65,6 +82,7 @@ class TrackProgressBar extends VDom.Component<ProgressBarProps>{
     this.fetchedUpdater();
     const filled = (this.props.audio.currentTime / this.props.audio.duration) * 100;
     this.setState({ trackTime: this.props.audio.currentTime, trackFilled: filled });
+    localStorage.setItem(this.progressStoreKey,JSON.stringify({time:this.props.audio.currentTime}))
   }
 
   render = (): VDom.VirtualElement => <div class="player-progressbar">

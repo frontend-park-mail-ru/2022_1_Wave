@@ -4,10 +4,9 @@ import VDom from '@rflban/vdom';
 import {
   AlternativeArrowLeftIcon,
   AlternativeArrowRightIcon, PauseOutlineIcon, PlayOutlineIcon,
-} from '@rflban/waveui';
+  ArrowLeftIcon} from '@rflban/waveui';
 import '../../App/App.scss';
 import {IComponentPropsCommon} from "@rflban/vdom/dist/IComponentProps";
-import {ArrowLeftIcon} from "@rflban/waveui";
 import {IPlayerClass, ITrack} from '../../../modules/Media/media';
 import {PlayerClass} from '../../../modules/Media/player';
 import {config} from '../../../modules/Client/Client';
@@ -18,6 +17,8 @@ import RouterContext from '../../../modules/Router/RouterContext';
 import TrackProgressBar from "./TrackProgressBar";
 import VolumeProgressBar from "./VolumeProgressBar";
 import Waves from "./Waves";
+import {setTracks} from "../../../actions/Playlist";
+
 
 interface PlayerComponentProps extends IComponentPropsCommon{
     play: () => void;
@@ -28,6 +29,7 @@ interface PlayerComponentProps extends IComponentPropsCommon{
     isPlay: boolean;
     isMobileFull:boolean;
     toggleMobileFull: () => void;
+    setPlaylist: (_tracks: ITrack[]) => void;
 }
 
 class PlayerComponent extends VDom.Component<PlayerComponentProps> {
@@ -35,6 +37,12 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
 
 
   static contextType = RouterContext;
+
+  playlistStoreKey: string = 'playlist';
+
+  posStoreKey: string = 'currentPos';
+
+  isPlayStoreKey: string = 'isPlayerPlay';
 
   constructor(props: PlayerComponentProps) {
     super(props);
@@ -61,7 +69,38 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
     this.runNext = this.runNext.bind(this);
     this.runPrev = this.runPrev.bind(this);
     this.toogleShuffle = this.toogleShuffle.bind(this);
+    this.updateLocalStorage = this.updateLocalStorage.bind(this);
     this.props.stop();
+  }
+
+  updateLocalStorage(_e:Event): void {
+    const tracks = this.getFromLocalStorageByKey(this.playlistStoreKey);
+    if (tracks){
+      this.props.setPlaylist(tracks);
+    }
+    const {pos}:{pos:number} = this.getFromLocalStorageByKey(this.posStoreKey);
+    if (pos){
+      this.props.setPos(pos)
+    }
+    const playing: {isPlay:boolean} | null = this.getFromLocalStorageByKey(this.isPlayStoreKey);
+    if (playing){
+      this.setState({playState:playing.isPlay})
+      if(!playing.isPlay){
+        this.props.stop();
+      }
+    }
+  }
+
+  getFromLocalStorageByKey = (key: string): any | null  => {
+    const storage:string|null = localStorage.getItem(key);
+
+    if (!storage){
+      return null;
+    }
+    if (storage === ''){
+      return null;
+    }
+    return JSON.parse(storage);
   }
 
   didUpdate(): void {
@@ -69,6 +108,7 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
       this.initPlayer();
       return;
     }
+
     if (!this.props.playlist) {
       return;
     }
@@ -77,6 +117,7 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
     if (JSON.stringify(this.#player?.playlist) !== JSON.stringify(this.props.playlist)) {
       this.setState({trackTime: 0, trackFilled: 0, trackFetched: 0, trackBuffered: 0});
       this.#player?.updatePlaylist(this.props.playlist);
+      localStorage.setItem(this.playlistStoreKey,JSON.stringify(this.props.playlist));
     }
 
     if (
@@ -84,7 +125,12 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
             this.#player?.currentIndex !== this.props.position
     ) {
       this.#player?.setPosition(this.props.position);
+      localStorage.setItem(this.posStoreKey,JSON.stringify({pos:this.props.position}))
     }
+    // if (this.props.isPlay && !this.state.playState) {
+    //   this.#player.stop();
+    //   return;
+    // }
     if (this.#player?.audio?.paused === this.props.isPlay) {
       this.checkPlay();
     }
@@ -95,6 +141,7 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
     if (!this.#player && this.props.playlist && this.props.playlist.length > 0) {
       this.initPlayer();
     }
+    window.addEventListener('storage',this.updateLocalStorage)
   }
 
   willUmount(): void {
@@ -111,6 +158,8 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
       this.props.stop();
     }
     this.#player = null;
+    window.removeEventListener('storage',this.updateLocalStorage)
+
   }
 
   initPlayer(): void {
@@ -131,8 +180,8 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
     navigator.mediaSession.setActionHandler('nexttrack', () => {
       this.runNext();
     });
-
-    this.#player = new PlayerClass(this.props.playlist);
+    const tracks: ITrack[] = this.getFromLocalStorageByKey(this.playlistStoreKey) ?? this.props.playlist;
+    this.#player = new PlayerClass(tracks);
 
     if (this.#player.audio) {
       this.#player.audio.addEventListener('durationchange', this.loadTrackData);
@@ -157,6 +206,11 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
   }
 
   checkPlay(): void {
+    localStorage.setItem(
+      this.isPlayStoreKey,
+      JSON.stringify({isPlay:this.props.isPlay}
+      ))
+    this.setState({playState: this.props.isPlay})
     if (this.props.isPlay) {
       this.#player?.play();
       return;
@@ -169,8 +223,9 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
       e.preventDefault();
       e.stopPropagation();
     }
-    if (this.props.isPlay) {
+    if (this.props.isPlay || this.state.playState) {
       this.props.stop();
+      this.checkPlay();
       return;
     }
     this.props.play();
@@ -181,7 +236,7 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
     if (e instanceof Event) e.stopPropagation();
     if (!this.#player) return;
     if (this.#player.currentIndex + 1 > this.#player.playlist.length - 1) return;
-    this.setState({trackFilled: 100, playState: true});
+    this.setState({trackFilled: 100});
     this.props.setPos(this.#player.currentIndex + 1);
     this.checkPlay();
   }
@@ -229,7 +284,7 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
                           <AlternativeArrowLeftIcon/>
                         </div>
                         <div onClickCapture={this.togglePlay} class="control__play_pause">
-                          {this.props.isPlay
+                          {this.props.isPlay || this.state.playState
                             ? (<PauseOutlineIcon />)
                             : (<PlayOutlineIcon />)
                           }
@@ -270,7 +325,7 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
                   <AlternativeArrowLeftIcon />
                 </div>
                 <div class="control__play_pause" onClick={this.togglePlay} onTouchEnd={this.togglePlay} >
-                  {this.props.isPlay
+                  {this.props.isPlay || this.state.playState
                     ? (<PauseOutlineIcon />)
                     : (<PlayOutlineIcon />)
                   }
@@ -308,9 +363,13 @@ const mapDispatchToProps = (dispatch: any): Map => ({
   stop: (): void => {
     dispatch(stopPlay);
   },
+  setPlaylist: (tracks:ITrack[]):void => {
+    dispatch(setTracks(tracks));
+  }
 });
 
 const mapStateToProps = (state: any): Map => ({
+  isAuth: state.user?.id != null,
   playlist: state.playerPlaylist ? state.playerPlaylist : null,
   position: state.playerPosition ? state.playerPosition.value : 0,
   isPlay: state.playerPlay ? state.playerPlay.value : false,

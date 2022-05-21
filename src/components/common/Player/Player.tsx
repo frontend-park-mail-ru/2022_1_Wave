@@ -227,8 +227,8 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
                         </div>
                         <div onClickCapture={this.togglePlay} class="control__play_pause">
                           {this.props.isPlay
-                            ? (<PauseOutlineIcon />)
-                            : (<PlayOutlineIcon />)
+                            ? (<PauseOutlineIcon style={{ height: '35px', width: '35px', }} />)
+                            : (<PlayOutlineIcon style={{ height: '35px', width: '35px', }} />)
                           }
                         </div>
                         <div onclick={this.runNext} class="control__next">
@@ -264,16 +264,16 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
 
               <div class="player__control">
                 <div class="control__prev" onClick={this.runPrev} onTouchEnd={this.runPrev}>
-                  <AlternativeArrowLeftIcon />
+                  <AlternativeArrowLeftIcon style={{ height: '25px', width: '25px', }} />
                 </div>
                 <div class="control__play_pause" onClick={this.togglePlay} onTouchEnd={this.togglePlay} >
                   {this.props.isPlay
-                    ? (<PauseOutlineIcon />)
-                    : (<PlayOutlineIcon />)
+                    ? (<PauseOutlineIcon style={{ height: '45px', width: '45px', }} />)
+                    : (<PlayOutlineIcon style={{ height: '45px', width: '45px', }} />)
                   }
                 </div>
                 <div class="control__next" onClick={this.runNext} onTouchEnd={this.runNext} >
-                  <AlternativeArrowRightIcon />
+                  <AlternativeArrowRightIcon style={{ height: '25px', width: '25px', }} />
                 </div>
               </div>
               {/* <div onclick={this.toogleShuffle} ontouchend={this.toogleShuffle} class="player__shuffle"> */}

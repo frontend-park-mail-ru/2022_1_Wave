@@ -10,8 +10,8 @@ interface wavesProps extends IComponentPropsCommon{
 }
 
 export default class Waves extends VDom.Component<wavesProps> {
-    
-  
+
+
   state = {
     freqArray: [],
     waveHeights: [0, 0, 0, 0],
@@ -54,16 +54,17 @@ export default class Waves extends VDom.Component<wavesProps> {
         elNums += 1;
       });
       const interpolated = sum / elNums;
-      barsHeight[i] = (interpolated / 256) * 100;
+      barsHeight[i] = (interpolated / 256) * 100 / (4 - i) * (5 + 0.1 * i) + (Math.random() - 0.5) * 20;
+      barsHeight[i] = barsHeight[i] > 0 ? barsHeight[i] : 0;
     }
     this.setState({freqArray: currFreq, waveHeights: barsHeight});
   }
 
   render = (): VDom.VirtualElement  =>
     <div class="player__waves">
-      <div class="bar" id="1" style={{height: `${this.state.waveHeights[0]}%`}}/>
-      <div class="bar" id="2" style={{height: `${this.state.waveHeights[1]}%`}}/>
-      <div class="bar" id="3" style={{height: `${this.state.waveHeights[2]}%`}}/>
-      <div class="bar" id="4" style={{height: `${this.state.waveHeights[3]}%`}}/>
+      <div class="bar" id="1" style={{height: `calc(${this.state.waveHeights[0]}% + 2px)`}}/>
+      <div class="bar" id="2" style={{height: `calc(${this.state.waveHeights[1]}% + 2px)`}}/>
+      <div class="bar" id="3" style={{height: `calc(${this.state.waveHeights[2]}% + 2px)`}}/>
+      <div class="bar" id="4" style={{height: `calc(${this.state.waveHeights[3]}% + 2px)`}}/>
     </div>
 }

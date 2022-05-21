@@ -57,19 +57,19 @@ export default class VolumeProgressBar extends VDom.Component<ProgressBarProps> 
 
   getVolIconSVG = (): VDom.VirtualElement => {
     if(!this.props.audio)
-      return <VolumeLevelNoneIcon  onClick={this.toggleMute} onTouchEnd={this.toggleMute}/>;
+      return <VolumeLevelNoneIcon  onClick={this.toggleMute} style={{ height: '25px', width: '25px', }}/>;
 
     console.log('audio get',this.state.volume);
 
     switch (true) {
     case this.props.audio.volume === 0:
-      return <VolumeLevelNoneIcon class="volume__icon" onClick={this.toggleMute} onTouchEnd={this.toggleMute}/>;
+      return <VolumeLevelNoneIcon class="volume__icon" onClick={this.toggleMute} style={{ height: '25px', width: '25px', }}/>;
     case this.state.volume < 25:
-      return <VolumeLevel0Icon class="volume__icon" onClick={this.toggleMute} onTouchEnd={this.toggleMute}/>;
+      return <VolumeLevel0Icon class="volume__icon" onClick={this.toggleMute} style={{ height: '25px', width: '25px', }}/>;
     case this.state.volume < 60:
-      return <VolumeLevel1Icon class="volume__icon" onClick={this.toggleMute} onTouchEnd={this.toggleMute}/>;
+      return <VolumeLevel1Icon class="volume__icon" onClick={this.toggleMute} style={{ height: '25px', width: '25px', }}/>;
     default:
-      return <VolumeLevel2Icon class="volume__icon" onClick={this.toggleMute} onTouchEnd={this.toggleMute}/>;
+      return <VolumeLevel2Icon class="volume__icon" onClick={this.toggleMute} style={{ height: '25px', width: '25px', }}/>;
     }
   }
 

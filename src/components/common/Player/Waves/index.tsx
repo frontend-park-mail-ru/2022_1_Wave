@@ -6,23 +6,34 @@ import {IComponentPropsCommon} from "@rflban/vdom/dist/IComponentProps";
 interface wavesProps extends IComponentPropsCommon{
     analyser: AnalyserNode;
     audio: HTMLAudioElement;
-
 }
 
 export default class Waves extends VDom.Component<wavesProps> {
-
-
   state = {
     freqArray: [],
     waveHeights: [0, 0, 0, 0],
   }
 
-  didMount():void {
-    if(!this.props.analyser || !this.props.audio) return;
+  private hasInit = false;
 
+  init(): void {
     this.props.audio.addEventListener('timeupdate',this.updateWaveFront);
+    this.hasInit = true;
+
     const freqArray: Uint8Array = new Uint8Array(this.props.analyser.frequencyBinCount);
     this.setState({freqArray});
+  }
+
+  didMount():void {
+    if (this.props.analyser && this.props.audio) {
+      this.init();
+    }
+  }
+
+  didUpdate(): void {
+    if (!this.hasInit && this.props.analyser && this.props.audio) {
+      this.init();
+    }
   }
 
   willUmount():void {

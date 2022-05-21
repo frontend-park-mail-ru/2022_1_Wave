@@ -8,6 +8,7 @@ import {
 import {IComponentPropsCommon} from "@rflban/vdom/dist/IComponentProps";
 import InteractiveProgressBar from "../../InteractiveProgressBar";
 import './style.scss';
+import broadcast from "../../../../broadcast";
 
 interface ProgressBarProps extends IComponentPropsCommon {
     audio: HTMLAudioElement;
@@ -31,15 +32,18 @@ export default class VolumeProgressBar extends VDom.Component<ProgressBarProps> 
     if(!this.props.audio) return;
     this.props.audio.volume = relativePosition;
     this.setState({volume: relativePosition * 100});
-    this.volumeChannel.postMessage(relativePosition);
+    this.volumeChannel.postMessage({volume:relativePosition});
   }
 
   didMount():void {
     this.setState({volume: this.props.audio.volume * 100})
-    this.volumeChannel = new BroadcastChannel('volumeChannel');
+    this.volumeChannel = new BroadcastChannel(broadcast);
     this.volumeChannel.onmessage = (_e:MessageEvent) => {
-      this.props.audio.volume = _e.data;
-      this.setState({volume: _e.data * 100});
+      const {volume}: {volume:number} = _e.data;
+      if (volume !== undefined){
+        this.props.audio.volume = volume;
+        this.setState({volume: volume * 100});
+      }
     }
   }
 
@@ -50,7 +54,6 @@ export default class VolumeProgressBar extends VDom.Component<ProgressBarProps> 
   getVolIcon = ():string => {
     let volIcon: string;
     if(!this.props.audio) return 'fa-volume-off';
-    console.log('audio get',this.state.volume);
     switch (true) {
     case this.props.audio.volume === 0:
       volIcon = 'fa-volume-xmark';
@@ -72,8 +75,6 @@ export default class VolumeProgressBar extends VDom.Component<ProgressBarProps> 
     if(!this.props.audio)
       return <VolumeLevelNoneIcon  onClick={this.toggleMute} onTouchEnd={this.toggleMute}/>;
 
-    console.log('audio get',this.state.volume);
-
     switch (true) {
     case this.props.audio.volume === 0:
       return <VolumeLevelNoneIcon class="volume__icon" onClick={this.toggleMute} onTouchEnd={this.toggleMute}/>;
@@ -93,16 +94,14 @@ export default class VolumeProgressBar extends VDom.Component<ProgressBarProps> 
     this.setVolume(volume);
   }
 
-  render = (): VDom.VirtualElement => {
-    return (
-      <div class="volume-progressbar">
-        {this.getVolIconSVG()}
+  render = (): VDom.VirtualElement => (
+    <div class="volume-progressbar">
+      {this.getVolIconSVG()}
 
-        <InteractiveProgressBar
-          setProgressState={this.setVolume}
-          progress={this.state.volume}/>
-      </div>
-    )
-  }
+      <InteractiveProgressBar
+        setProgressState={this.setVolume}
+        progress={this.state.volume}/>
+    </div>
+  )
 
 }

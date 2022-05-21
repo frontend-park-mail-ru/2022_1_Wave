@@ -18,7 +18,7 @@ import TrackProgressBar from "./TrackProgressBar";
 import VolumeProgressBar from "./VolumeProgressBar";
 import Waves from "./Waves";
 import {setTracks} from "../../../actions/Playlist";
-
+import broadcast from "../../../broadcast";
 
 interface PlayerComponentProps extends IComponentPropsCommon{
     play: () => void;
@@ -39,11 +39,7 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
   static contextType = RouterContext;
 
 
-  playlistChannel:BroadcastChannel;
-
-  posChannel:BroadcastChannel;
-
-  playStateChannel:BroadcastChannel;
+  syncChannel:BroadcastChannel;
 
   constructor(props: PlayerComponentProps) {
     super(props);
@@ -87,7 +83,7 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
     if (JSON.stringify(this.#player?.playlist) !== JSON.stringify(this.props.playlist)) {
       this.setState({trackTime: 0, trackFilled: 0, trackFetched: 0, trackBuffered: 0});
       this.#player?.updatePlaylist(this.props.playlist);
-      this.playlistChannel.postMessage(this.props.playlist);
+      this.syncChannel.postMessage({playlist:this.props.playlist});
     }
 
     if (
@@ -95,7 +91,7 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
             this.#player?.currentIndex !== this.props.position
     ) {
       this.#player?.setPosition(this.props.position);
-      this.posChannel.postMessage(this.props.position)
+      this.syncChannel.postMessage({pos:this.props.position})
     }
     // if (this.props.isPlay && !this.state.playState) {
     //   this.#player.stop();
@@ -111,17 +107,26 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
     if (!this.#player && this.props.playlist && this.props.playlist.length > 0) {
       this.initPlayer();
     }
-    this.playlistChannel = new BroadcastChannel('playlist');
-    this.playlistChannel.onmessage = (_e:MessageEvent) => {this.props.setPlaylist(_e.data as ITrack[])};
-    this.posChannel = new BroadcastChannel('position');
-    this.posChannel.onmessage = (_e:MessageEvent) => {this.props.setPos(_e.data as number)};
-    this.playStateChannel = new BroadcastChannel('playState');
-    this.playStateChannel.onmessage = (_e:MessageEvent) => {
-      this.setState({playState:_e.data})
-      if(!_e.data){
+    this.syncChannel = new BroadcastChannel(broadcast);
+    this.syncChannel.onmessage = this.onMessageBroadcast;
+  }
+
+  onMessageBroadcast = (_e:MessageEvent):void => {
+    const {playlist, pos, playState}:
+        { playlist: ITrack[] | null, pos: number | null, playState: boolean | null } =
+        _e.data;
+    if (playlist) {
+      this.props.setPlaylist(playlist);
+    }
+    if (pos) {
+      this.props.setPos(pos);
+    }
+    if ( playState !== undefined) {
+      this.setState({playState})
+      if(!playState){
         this.props.stop();
       }
-    };
+    }
   }
 
   willUmount(): void {
@@ -138,9 +143,7 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
       this.props.stop();
     }
     this.#player = null;
-    this.playlistChannel.close();
-    this.posChannel.close();
-    this.playStateChannel.close();
+    this.syncChannel.close();
   }
 
   initPlayer(): void {
@@ -186,7 +189,7 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
   }
 
   checkPlay(): void {
-    this.playStateChannel.postMessage(this.props.isPlay)
+    this.syncChannel.postMessage({playState:this.props.isPlay})
     this.setState({playState: this.props.isPlay})
     if (this.props.isPlay) {
       this.#player?.play();

@@ -76,7 +76,11 @@
           //background-size: cover;
         }
       }
+      .dragged{
+        cursor: grabbing;
+      }
     }
+
   }
 
   &:hover {

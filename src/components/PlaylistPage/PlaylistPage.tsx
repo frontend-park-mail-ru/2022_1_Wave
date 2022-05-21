@@ -8,7 +8,7 @@ import RouteNavigator from '../../modules/Router/RouteNavigator';
 import { config } from '../../modules/Client/Client';
 import { ITrack } from '../../modules/Media/media';
 import { setTrack, setTracks } from '../../actions/Playlist';
-import { startPlay } from '../../actions/Player';
+import {setPosition, startPlay} from '../../actions/Player';
 import PagePlaylist from '../common/PagePlaylist/PagePlaylist';
 import {deleteTrackPlaylist, getPlaylists} from "../../actions/UserPlaylist";
 import { Map } from '../../modules/Store/types';
@@ -51,6 +51,7 @@ class PlaylistPage extends VDom.Component<any, any, null, RouteNavigator> {
     const { slug }: { slug: string } = this.context.params;
     const playlist = this.props.playlists?.[slug];
     this.props.setTracks(playlist.tracks);
+    this.props.setPos(0);
     this.props.runMusic();
   }
 
@@ -187,6 +188,9 @@ const mapDispatchToProps = (dispatch: any): Map => ({
   },
   setTracks: (tracks: ITrack[]): void => {
     dispatch(setTracks(tracks));
+  },
+  setPos: (num: number): void => {
+    dispatch(setPosition(num));
   },
   runMusic: (): void => {
     dispatch(startPlay);

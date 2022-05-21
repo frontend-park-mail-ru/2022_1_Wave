@@ -12,8 +12,8 @@
   "dependencies": {
     "@babel/plugin-proposal-decorators": "^7.17.9",
     "@babel/runtime": "^7.17.8",
-    "@rflban/vdom": "^1.0.6",
-    "@rflban/waveui": "^0.3.5",
+    "@rflban/vdom": "^1.0.7",
+    "@rflban/waveui": "^0.3.6",
     "glob": "^7.2.0",
     "node-sass": "^7.0.1",
     "postcss-cli": "^8.3.1",

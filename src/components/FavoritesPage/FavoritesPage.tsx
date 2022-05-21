@@ -11,7 +11,7 @@ import { connect } from '../../modules/Connect';
 import { config } from '../../modules/Client/Client';
 import { ITrack } from '../../modules/Media/media';
 import { setTrack, setTracks } from '../../actions/Playlist';
-import { startPlay } from '../../actions/Player';
+import {setPosition, startPlay} from '../../actions/Player';
 import PagePlaylist from '../common/PagePlaylist/PagePlaylist';
 import { getFavorites } from "../../actions/Favorites";
 import TracksContainer from '../common/TracksContainer/TracksContainer';
@@ -44,6 +44,7 @@ class PlaylistPage extends VDom.Component<any, any> {
 
   addFavoritesToPlayer = (_e: MouseEvent): void => {
     this.props.setTracks(this.props.favorites);
+    this.props.setPos(0);
     this.props.runMusic();
   }
 
@@ -164,6 +165,9 @@ const mapDispatchToProps = (dispatch: any): Map => ({
   },
   setTracks: (tracks: ITrack[]): void => {
     dispatch(setTracks(tracks));
+  },
+  setPos: (num: number): void => {
+    dispatch(setPosition(num));
   },
   runMusic: (): void => {
     dispatch(startPlay);

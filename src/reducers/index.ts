@@ -13,6 +13,7 @@ import favorites from './favorites';
 import authRequired from './authRequired';
 import userStatus from './userStatus';
 import createPlaylistForm from './createPlaylistFrom';
+import editPlaylistForm from './editPlaylistFrom';
 
 export default combineReducers({
   tracksPopular,
@@ -34,4 +35,5 @@ export default combineReducers({
   authRequired,
   userStatus,
   createPlaylistForm,
+  editPlaylistForm,
 });

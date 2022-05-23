@@ -71,11 +71,21 @@ export default class Waves extends VDom.Component<wavesProps> {
     this.setState({freqArray: currFreq, waveHeights: barsHeight});
   }
 
-  render = (): VDom.VirtualElement  =>
-    <div class="player__waves">
-      <div class="bar" id="1" style={{height: `calc(${this.state.waveHeights[0]}% + 2px)`}}/>
-      <div class="bar" id="2" style={{height: `calc(${this.state.waveHeights[1]}% + 2px)`}}/>
-      <div class="bar" id="3" style={{height: `calc(${this.state.waveHeights[2]}% + 2px)`}}/>
-      <div class="bar" id="4" style={{height: `calc(${this.state.waveHeights[3]}% + 2px)`}}/>
-    </div>
+  render = (): VDom.VirtualElement  => {
+    const { waveHeights } = this.state;
+    const minSize = waveHeights.every((h) => Math.abs(h) === 0) ? 0 : 2;
+
+    return (
+      <div class="player__waves">
+        <div class="bar" id="1"
+          style={{ height: `calc(${this.state.waveHeights[0]}% + ${minSize}px)` }} />
+        <div class="bar" id="2"
+          style={{ height: `calc(${this.state.waveHeights[1]}% + ${minSize}px)` }} />
+        <div class="bar" id="3"
+          style={{ height: `calc(${this.state.waveHeights[2]}% + ${minSize}px)` }} />
+        <div class="bar" id="4"
+          style={{ height: `calc(${this.state.waveHeights[3]}% + ${minSize}px)` }} />
+      </div>
+    );
+  }
 }

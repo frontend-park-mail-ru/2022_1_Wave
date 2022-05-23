@@ -36,6 +36,7 @@ interface TracksContainerProps {
   tracks: any[];
   playlists: any[];
   favorites: any[];
+  hideArtist?: boolean;
   playlistOwner?: any;
   currentTrackID: number;
   isPlayerRunning: boolean;
@@ -111,6 +112,7 @@ class TracksContainer extends VDom.Component<TracksContainerProps, TracksContain
       showAuthRequired,
       showCreatePlaylistForm,
       isAuth,
+      hideArtist,
     } = this.props;
 
     const {
@@ -144,11 +146,11 @@ class TracksContainer extends VDom.Component<TracksContainerProps, TracksContain
           liked={liked.has(track.id)}
           cover={config.files + track.cover}
           title={track.title}
-          artist={
+          {...(hideArtist ? {} : {artist: (
             <Link to={`/artist/${track.artistId}`}>
               {track.artist}
             </Link>
-          }
+          )})}
           listened={track.listenings}
           duration={track.duration}
           artistWrapper={(artist): VDom.VirtualElement => (

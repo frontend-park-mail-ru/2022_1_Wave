@@ -15,6 +15,31 @@ export default class Playlist {
       });
   }
 
+  static edit({ id, title }: { id: number, title: string }): Promise<any> {
+    return HTTPClient.put(`${Paths.playlist}`, {
+      id,
+      title,
+    })
+      .then((response) => {
+        if (response.status !== 200) {
+          return Promise.reject(response.body);
+        }
+
+        return response.body.Result;
+      });
+  }
+
+  static delete(id: number): Promise<any> {
+    return HTTPClient.delete(`${Paths.playlist}${id}`)
+      .then((response) => {
+        if (response.status !== 200) {
+          return Promise.reject(response.body);
+        }
+
+        return response.body.Result;
+      })
+  }
+
   static getOfUser(): Promise<any> {
     return HTTPClient.get(Paths.ofCurrentUser)
       .then((response) => {

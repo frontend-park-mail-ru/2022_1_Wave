@@ -63,6 +63,32 @@ export default class Client {
       }));
   }
 
+  /*
+   * PUT запрос на бэкенд
+   * @param {string} path - путь, относительно домена
+   * @param {Object} body - тело запроса
+   */
+  static put(path: string, requestBody: any): Promise<any> {
+    let status: any = null;
+
+    return fetch(this.fullUrl(path), {
+      method: 'PUT',
+      body: requestBody ? JSON.stringify(requestBody) : undefined,
+      headers: {
+        [config.csrfHeader]: localStorage.getItem('csrf'),
+        'Content-Type': 'application/json',
+      } as HeadersInit,
+    })
+      .then((response) => {
+        status = response.status;
+        return response.json().catch(() => null);
+      })
+      .then((body) => ({
+        status,
+        body,
+      }));
+  }
+
   static delete(path: string): Promise<any> {
     let status: any = null;
 

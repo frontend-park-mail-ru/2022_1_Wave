@@ -70,7 +70,7 @@ class EditPlaylist extends VDom.Component<EditPlaylistProps, EditPlaylistState> 
     return (
       <div class="waveEditPlaylist">
         <Subhead size={smallScreen ? 'l' : 'm'} align={smallScreen ? 'center' : 'left'}>
-          Edit new playlist
+          Edit playlist
         </Subhead>
         <form className="waveEditPlaylist__playlist-form" onSubmit={this.handleSubmit}>
           <FormItem

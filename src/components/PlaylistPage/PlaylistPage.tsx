@@ -159,6 +159,7 @@ class PlaylistPage extends VDom.Component<any, any, null, RouteNavigator> {
                   <ModalMenu ref={this.menuRef}>
                     <MenuItem
                       closeOnClick
+                      onClick={this.onEdit}
                       size="l"
                       before={
                         <EditIcon
@@ -188,6 +189,7 @@ class PlaylistPage extends VDom.Component<any, any, null, RouteNavigator> {
                     </MenuItem>
                     <MenuItem
                       closeOnClick
+                      onClick={this.onDelete}
                       size="l"
                       before={
                         <TrashIcon

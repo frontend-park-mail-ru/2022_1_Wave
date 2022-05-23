@@ -39,6 +39,9 @@ module.exports = (env = {}) => {
     new CopyPlugin({
       patterns: [{ from: path.resolve(__dirname, 'src/sw.js') }],
     }),
+    new CopyPlugin({
+      patterns: [{ from: path.resolve(__dirname, 'src/worker.js') }],
+    }),
   ];
 
   return {

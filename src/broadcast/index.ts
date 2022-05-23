@@ -1,1 +1,1 @@
-export default 'syncChannel'
+export default 'syncChannel';

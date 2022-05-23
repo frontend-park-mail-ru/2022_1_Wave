@@ -4,7 +4,7 @@ import { albumPopular, album, albumCover } from './album';
 import { artistPopular, artist, artistPopularTracks } from './artist';
 import user from './user';
 import playerPlaylist from './playlist';
-import { playerPlay, playerPosition } from './player';
+import { playerPlay,playDisplay, playerPosition } from './player';
 import search from './search';
 import notification from './notification';
 import sidebar from './sidebar';
@@ -25,6 +25,7 @@ export default combineReducers({
   user,
   playerPlaylist,
   playerPlay,
+  playDisplay,
   playerPosition,
   notification,
   search,

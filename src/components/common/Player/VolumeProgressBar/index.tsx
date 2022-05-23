@@ -8,7 +8,7 @@ import {
 import {IComponentPropsCommon} from "@rflban/vdom/dist/IComponentProps";
 import InteractiveProgressBar from "../../InteractiveProgressBar";
 import './style.scss';
-import broadcast from "../../../../broadcast";
+import broadcastName from "../../../../broadcast";
 
 interface ProgressBarProps extends IComponentPropsCommon {
     audio: HTMLAudioElement;
@@ -32,18 +32,17 @@ export default class VolumeProgressBar extends VDom.Component<ProgressBarProps> 
     if(!this.props.audio) return;
     this.props.audio.volume = relativePosition;
     this.setState({volume: relativePosition * 100});
-    this.volumeChannel.postMessage({volume:relativePosition});
+    this.volumeChannel.postMessage({type:'volume',payload:relativePosition});
   }
 
   didMount():void {
     this.setState({volume: this.props.audio.volume * 100})
-    this.volumeChannel = new BroadcastChannel(broadcast);
+    this.volumeChannel = new BroadcastChannel(broadcastName);
     this.volumeChannel.onmessage = (_e:MessageEvent) => {
-      const {volume}: {volume:number} = _e.data;
-      if (volume !== undefined){
-        this.props.audio.volume = volume;
-        this.setState({volume: volume * 100});
-      }
+      const {type,payload}: {type:string,payload:number} = _e.data;
+      if(type !== 'volume') return;
+      this.props.audio.volume = payload;
+      this.setState({volume: payload * 100});
     }
   }
 

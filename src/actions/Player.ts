@@ -25,3 +25,12 @@ export function setPosition(pos: number): (dispatch: Function) => void {
     dispatch({ type: 'player/position', payload: res });
   };
 }
+
+export function setPlayState(status: boolean): (dispatch: Function) => void {
+  return (dispatch: Function): void => {
+    const res: object = {
+      value: status,
+    };
+    dispatch({ type: 'player/show', payload: res });
+  };
+}

@@ -12,13 +12,14 @@ import {PlayerClass} from '../../../modules/Media/player';
 import {config} from '../../../modules/Client/Client';
 import {Map} from '../../../modules/Store/types';
 import {connect} from '../../../modules/Connect';
-import {setPosition, startPlay, stopPlay} from '../../../actions/Player';
+import {setPlayState, setPosition, startPlay, stopPlay} from '../../../actions/Player';
 import RouterContext from '../../../modules/Router/RouterContext';
 import TrackProgressBar from "./TrackProgressBar";
 import VolumeProgressBar from "./VolumeProgressBar";
 import Waves from "./Waves";
 import {setTracks} from "../../../actions/Playlist";
-import broadcast from "../../../broadcast";
+import broadcastName from "../../../broadcast";
+import {playDisplay} from "../../../reducers/player";
 
 interface PlayerComponentProps extends IComponentPropsCommon{
     play: () => void;
@@ -30,6 +31,8 @@ interface PlayerComponentProps extends IComponentPropsCommon{
     isMobileFull:boolean;
     toggleMobileFull: () => void;
     setPlaylist: (_tracks: ITrack[]) => void;
+    displayPlayState: (_status:boolean) => void;
+    playDisplay:boolean;
 }
 
 class PlayerComponent extends VDom.Component<PlayerComponentProps> {
@@ -58,6 +61,7 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
       },
       isPlayerDragged: false,
       isVolumeDragged: false,
+      isControlled: false,
     };
     this.initPlayer = this.initPlayer.bind(this);
     this.loadTrackData = this.loadTrackData.bind(this);
@@ -66,6 +70,7 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
     this.runNext = this.runNext.bind(this);
     this.runPrev = this.runPrev.bind(this);
     this.toogleShuffle = this.toogleShuffle.bind(this);
+
     this.props.stop();
   }
 
@@ -83,7 +88,7 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
     if (JSON.stringify(this.#player?.playlist) !== JSON.stringify(this.props.playlist)) {
       this.setState({trackTime: 0, trackFilled: 0, trackFetched: 0, trackBuffered: 0});
       this.#player?.updatePlaylist(this.props.playlist);
-      this.syncChannel.postMessage({playlist:this.props.playlist});
+      this.syncChannel.postMessage({type:'playlist',payload:this.props.playlist});
     }
 
     if (
@@ -91,7 +96,7 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
             this.#player?.currentIndex !== this.props.position
     ) {
       this.#player?.setPosition(this.props.position);
-      this.syncChannel.postMessage({pos:this.props.position})
+      this.syncChannel.postMessage({type:'position',payload:this.props.position})
     }
     // if (this.props.isPlay && !this.state.playState) {
     //   this.#player.stop();
@@ -107,25 +112,33 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
     if (!this.#player && this.props.playlist && this.props.playlist.length > 0) {
       this.initPlayer();
     }
-    this.syncChannel = new BroadcastChannel(broadcast);
+    this.syncChannel = new BroadcastChannel(broadcastName);
     this.syncChannel.onmessage = this.onMessageBroadcast;
   }
 
+
   onMessageBroadcast = (_e:MessageEvent):void => {
-    const {playlist, pos, playState}:
-        { playlist: ITrack[] | null, pos: number | null, playState: boolean | null } =
+    const {type,payload}:
+        { type: string, payload: any} =
         _e.data;
-    if (playlist) {
-      this.props.setPlaylist(playlist);
-    }
-    if (pos) {
-      this.props.setPos(pos);
-    }
-    if ( playState !== undefined) {
-      this.setState({playState})
-      if(!playState){
+    switch (type){
+    case 'playlist':
+      this.props.setPlaylist(payload);
+      this.props.setPos(0);
+      break;
+    case 'position':
+      this.#player?.setPosition(payload);
+      this.props.setPos(payload);
+      break;
+    case 'playState':
+      this.setState({playState:payload})
+      this.props.displayPlayState(payload);
+      if (!payload){
         this.props.stop();
+        this.syncChannel.postMessage({type:'PlayersStopped',payload:'ok'})
       }
+      break;
+    default:
     }
   }
 
@@ -189,10 +202,10 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
   }
 
   checkPlay(): void {
-    this.syncChannel.postMessage({playState:this.props.isPlay})
-    this.setState({playState: this.props.isPlay})
+    this.syncChannel.postMessage({type:'playState',payload:false});
     if (this.props.isPlay) {
       this.#player?.play();
+      this.syncChannel.postMessage({type:'playState',payload:true});
       return;
     }
     this.#player?.stop();
@@ -203,7 +216,7 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
       e.preventDefault();
       e.stopPropagation();
     }
-    if (this.props.isPlay || this.state.playState) {
+    if (this.props.isPlay || this.props.playDisplay) {
       this.props.stop();
       this.checkPlay();
       return;
@@ -264,7 +277,7 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
                           <AlternativeArrowLeftIcon/>
                         </div>
                         <div onClickCapture={this.togglePlay} class="control__play_pause">
-                          {this.props.isPlay || this.state.playState
+                          {this.props.isPlay || this.props.playDisplay
                             ? (<PauseOutlineIcon style={{ height: '35px', width: '35px', }} />)
                             : (<PlayOutlineIcon style={{ height: '35px', width: '35px', }} />)
                           }
@@ -295,6 +308,7 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
             <div class="player__controls">
               {this.#player.audio &&
               <div class="player-progressbar-wrapper">
+                
                 <Waves analyser={this.#player.analyser} audio={this.#player.audio}/>
                 <TrackProgressBar audio={this.#player.audio}/>
               </div>
@@ -305,7 +319,7 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
                   <AlternativeArrowLeftIcon style={{ height: '25px', width: '25px', }} />
                 </div>
                 <div class="control__play_pause" onClick={this.togglePlay} onTouchEnd={this.togglePlay} >
-                  {this.props.isPlay || this.state.playState
+                  {this.props.isPlay || this.props.playDisplay
                     ? (<PauseOutlineIcon style={{ height: '45px', width: '45px', }} />)
                     : (<PlayOutlineIcon style={{ height: '45px', width: '45px', }} />)
                   }
@@ -345,6 +359,9 @@ const mapDispatchToProps = (dispatch: any): Map => ({
   },
   setPlaylist: (tracks:ITrack[]):void => {
     dispatch(setTracks(tracks));
+  },
+  displayPlayState: (state:boolean):void => {
+    dispatch(setPlayState(state));
   }
 });
 
@@ -352,7 +369,8 @@ const mapStateToProps = (state: any): Map => ({
   isAuth: state.user?.id != null,
   playlist: state.playerPlaylist ? state.playerPlaylist : null,
   position: state.playerPosition ? state.playerPosition.value : 0,
-  isPlay: state.playerPlay ? state.playerPlay.value : false,
+  isPlay: state.playerPlay?.value ?? false,
+  playDisplay: state.playDisplay?.value ?? false,
 });
 
 const Player = connect(mapStateToProps, mapDispatchToProps)(PlayerComponent);

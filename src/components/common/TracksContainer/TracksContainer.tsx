@@ -259,7 +259,7 @@ const mapStateToProps = (state: any): Map => ({
   isAuth: state.userStatus === 'authorized',
   favorites: state.favorites,
   playlists: state.userPlaylists ?? null,
-  isPlayerRunning: state.playerPlay?.value ?? false,
+  isPlayerRunning: (state.playerPlay?.value || state.playDisplay?.value) ?? false,
   currentTrackID: (state.playerPosition && state.playerPlaylist) ? state.playerPlaylist[state.playerPosition.value]?.id : null,
 });
 

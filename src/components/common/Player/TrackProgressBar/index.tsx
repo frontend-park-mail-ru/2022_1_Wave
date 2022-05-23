@@ -6,7 +6,7 @@ import {startPlay, stopPlay} from "../../../../actions/Player";
 import marker from '../../../../assets/player_marker.png';
 import {connect} from "../../../../modules/Connect";
 import './style.scss';
-import broadcast from "../../../../broadcast";
+import broadcastName from "../../../../broadcast";
 
 interface ProgressBarProps extends IComponentPropsCommon {
     audio: HTMLAudioElement;
@@ -19,7 +19,8 @@ class TrackProgressBar extends VDom.Component<ProgressBarProps>{
   state = {
     trackBuffered: 0,
     trackTime:0,
-    trackFilled:0
+    trackFilled:0,
+    requirePlayerStopped: null,
   }
 
   progressChannel:BroadcastChannel;
@@ -35,30 +36,34 @@ class TrackProgressBar extends VDom.Component<ProgressBarProps>{
     const res = Math.trunc(n).toString();
     return n >= 10 ? res : `0${res}`;
   };
-
+  
   setTime(relativePosition: number): void {
     if(!this.props.audio) return;
+    this.props.stop();
     this.props.audio.currentTime = relativePosition * this.props.audio.duration;
+    this.progressChannel.postMessage({type:'progress',payload:relativePosition * this.props.audio.duration});
+    this.props.play();
   }
+
+  onBroadcastMessage = (e: MessageEvent):void => {
+    const {type,payload}:{type:string,payload:number} = e.data;
+    if (
+      type === 'progress' &&
+          this.props.audio.paused  &&
+            this.props.audio.currentTime !== payload
+    ){
+
+      this.props.audio.currentTime = payload;
+    }
+  };
 
   didMount(): void {
     if(!this.props.audio) return;
     this.props.audio.addEventListener('timeupdate', this.timeUpdater);
     this.props.audio.addEventListener('progress', this.fetchedUpdater);
     this.props.audio.addEventListener('loadedmetadata', this.fetchedUpdater);
-    this.progressChannel = new BroadcastChannel(broadcast);
-    this.progressChannel.onmessage = (e:MessageEvent) => {
-      const {progress}:{progress:number} = e.data;
-      if(this.props.audio.paused  &&
-          progress !== undefined &&
-          this.props.audio.currentTime !== progress
-      ){
-
-        this.props.audio.currentTime = progress;
-
-      }
-    };
-    this.timeUpdater()
+    this.progressChannel = new BroadcastChannel(broadcastName);
+    this.progressChannel.onmessage = this.onBroadcastMessage;
   }
 
   willUmount(): void {
@@ -66,6 +71,7 @@ class TrackProgressBar extends VDom.Component<ProgressBarProps>{
     this.props.audio.removeEventListener('progress',this.fetchedUpdater);
     this.props.audio.removeEventListener('loadedmetadata',this.fetchedUpdater);
     this.progressChannel.close();
+
   }
 
   fetchedUpdater(): void {
@@ -81,11 +87,13 @@ class TrackProgressBar extends VDom.Component<ProgressBarProps>{
     this.fetchedUpdater();
     const filled = (this.props.audio.currentTime / this.props.audio.duration) * 100;
     this.setState({ trackTime: this.props.audio.currentTime, trackFilled: filled });
-    this.progressChannel.postMessage({progress:this.props.audio.currentTime});
+    if (!this.props.audio.paused) {
+      this.progressChannel.postMessage({type:'progress',payload:this.props.audio.currentTime});
+    }
   }
 
   render = (): VDom.VirtualElement => <div class="player-progressbar">
-    <InteractiveProgressBar 
+    <InteractiveProgressBar
       onDragStart={this.props.stop}
       onDragStop={this.props.play}
       setProgressState={this.setTime}

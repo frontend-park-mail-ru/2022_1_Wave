@@ -21,6 +21,16 @@ if ('serviceWorker' in navigator) {
     });
 }
 
+const worker = new SharedWorker('/worker.js');
+worker.port.start();
+
+worker.port.onmessage = event => {
+  console.log('worker msg!:',event.data)
+};
+
+worker.port.onmessageerror = ev => console.log('error worker!',ev);
+console.log('worker start',worker);
+
 User.getCSRFToken().then((): void => {
   VDom.render(
     <Router>

@@ -3,7 +3,7 @@ on: [ push ]
 jobs:
   build:
     name: build
-    runs-on: node
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/setup-node@v3
         with:
@@ -20,17 +20,15 @@ jobs:
           path: |
             .
   deploy:
-    runs-on: docker
+    runs-on: ubuntu-latest
     name: deploy
     needs:
       - build
     steps:
       - uses: actions/checkout@v3
       - name: Build dockerfile
-        run: docker build -t wave.music.build
-#      - name: Login to DockerHub Registry
-#        run: echo ${{ secrets.DOCKERHUB_PASSWORD }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
-#      - name: Build all Docker images
-#        run: cd deploy && dockerBuildAll.sh
-#      - name: Push all Docker images
-#        run: cd deploy && dockerPushAll.sh
+        run: docker build -t rius/wave.music.front
+      - name: Login to DockerHub Registry
+        run: echo ${{ secrets.DOCKERHUB_PASSWORD }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
+      - name: Push to registry
+        run: docker push rius/wave.music.front

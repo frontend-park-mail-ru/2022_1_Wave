@@ -11,8 +11,12 @@ const playlistRegex = /\/playlists\/([0-9])$/;
 
 const fetch = (...args) => import('node-fetch').then(({default: nodeFetch}) => nodeFetch(...args));
 
-const config = {
+let config = {
   port: opt.argv.port ?? process.env.PORT ?? 8080,
+  host: "",
+  api_host: "",
+  static_host: "",
+  schema: "http",
 };
 
 const proxyRequest = async (req, res, url) => {
@@ -51,7 +55,7 @@ const mux = async (req, res) => {
       }
 
       if (req.url.toString().startsWith('/assets')) {
-        await proxyRequest(req, res, `http://localhost${req.url}`);
+        await proxyRequest(req, res, `${config.schema}://${config.static_host}${req.url}`);
         return;
       }
 
@@ -67,20 +71,20 @@ const mux = async (req, res) => {
     }
 
     if (req.url.toString().startsWith('/api')) {
-      await proxyRequest(req, res, `http://localhost${req.url}`);
+      await proxyRequest(req, res, `${config.schema}://${config.api_host}${req.url}`);
       return;
     }
 
-    let type = 'website';
+    const type = 'website';
     let title = 'WaveMusic';
     let description = 'Best music service!';
-    let image = 'http://localhost:8080/images/OG-LOGO.png';
-    let url = 'https://wave-music.online';
+    let image = 'http://localhost:8080/assets/OG-LOGO.png';
+    const url = 'https://wave-music.online';
 
     let match = req.url.toString().match(albumRegex);
     if (match) {
       try {
-        const response = await fetch(`http://localhost/api/v1/albums/${match[1]}`);
+        const response = await fetch(`${config.schema}://${config.api_host}/api/v1/albums/${match[1]}`);
         const album = (await response.json()).Result;
         title = `${album.title}`;
         description = `Album ${album.title} - ${album.artist}`;
@@ -92,7 +96,7 @@ const mux = async (req, res) => {
     match = req.url.toString().match(artistRegex);
     if (match) {
       try {
-        const response = await fetch(`http://localhost/api/v1/artists/${match[1]}`);
+        const response = await fetch(`${config.schema}://${config.api_host}/api/v1/artists/${match[1]}`);
         const artist = (await response.json()).Result;
         title = `${artist.name}`;
         description = `Artist ${artist.name}`;
@@ -104,7 +108,7 @@ const mux = async (req, res) => {
     match = req.url.toString().match(playlistRegex);
     if (match) {
       try {
-        const response = await fetch(`http://localhost/api/v1/playlists/${match[1]}`);
+        const response = await fetch(`${config.schema}://${config.api_host}/api/v1/playlists/${match[1]}`);
         const playlist = (await response.json()).Result;
         title = `${playlist.title}`;
         description = `Playlist ${playlist.title}`;
@@ -133,7 +137,15 @@ const mux = async (req, res) => {
 }
 
 const server = http.createServer(mux);
-server
-  .listen(config.port, () => {
-    console.log(`Server is running at http://localhost:${config.port}`);
+fs.readFile(path.resolve(__dirname,'config.dev.json')).then((data) => {
+  config = JSON.parse(data);
+  console.log(config);
+  server.listen(config.port, () => {
+    console.log(`Server is running at ${config.schema}://localhost:${config.port}`);
   });
+})
+  .catch(err => {
+    console.error(err)
+  });
+
+

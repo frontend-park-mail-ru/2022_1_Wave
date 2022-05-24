@@ -1,0 +1,31 @@
+name: Docker
+on: [ push ]
+jobs:
+  build:
+    name: build
+    runs-on: node
+    steps:
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - uses: actions/checkout@v3
+      - name: build
+      - run: nvm use
+      - run: npm i
+      - run: npm run build
+
+  deploy:
+    runs-on: docker
+    name: deploy
+    needs:
+      - build
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build dockerfile
+      - run: docker build -t wave.music.build
+#      - name: Login to DockerHub Registry
+#        run: echo ${{ secrets.DOCKERHUB_PASSWORD }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
+#      - name: Build all Docker images
+#        run: cd deploy && dockerBuildAll.sh
+#      - name: Push all Docker images
+#        run: cd deploy && dockerPushAll.sh

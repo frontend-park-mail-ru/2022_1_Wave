@@ -89,7 +89,7 @@ const mux = async (req, res) => {
         const album = (await response.json()).Result;
         title = `${album.title}`;
         description = `Album ${album.title} - ${album.artist}`;
-        image = `http://localhost/${album.cover}`;
+        image = `${config.schema}://${config.static_host}/${album.cover}`;
       } catch (e) {
         console.log(e);
       }
@@ -101,7 +101,7 @@ const mux = async (req, res) => {
         const artist = (await response.json()).Result;
         title = `${artist.name}`;
         description = `Artist ${artist.name}`;
-        image = `http://localhost/${artist.cover}`;
+        image = `${config.schema}://${config.static_host}/${artist.cover}`;
       } catch (e) {
         console.log(e);
       }

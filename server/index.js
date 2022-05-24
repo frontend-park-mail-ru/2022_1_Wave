@@ -61,6 +61,7 @@ const mux = async (req, res) => {
 
       try {
         const file = await fs.readFile(path.resolve(__dirname, '..', 'build', req.url.slice(1)));
+        res.setHeader('Content-Type', mimeType);
         res.writeHead(200);
         res.end(file);
       } catch (e) {
@@ -127,6 +128,7 @@ const mux = async (req, res) => {
         image,
         url,
       })}`);
+    res.setHeader('Content-Type', 'text/html; charset=UTF-8');
     res.writeHead(200);
     res.end(file);
   } catch (e) {

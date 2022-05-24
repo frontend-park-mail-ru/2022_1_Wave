@@ -79,7 +79,7 @@ const mux = async (req, res) => {
     const type = 'website';
     let title = 'WaveMusic';
     let description = 'Best music service!';
-    let image = 'http://localhost:8080/assets/OG-LOGO.png';
+    let image = `${config.schema}://${config.static_host}/assets/OG-LOGO.png`;
     const url = 'https://wave-music.online';
 
     let match = req.url.toString().match(albumRegex);

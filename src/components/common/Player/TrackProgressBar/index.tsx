@@ -116,6 +116,6 @@ const mapDispatchToProps = (dispatch: any): Map => ({
   },
 });
 
-const mapStateToProps = (state: any): Map => ({});
+const mapStateToProps = (_state: any): Map => ({});
 
 export default connect(mapStateToProps, mapDispatchToProps)(TrackProgressBar);

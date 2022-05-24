@@ -19,7 +19,6 @@ import VolumeProgressBar from "./VolumeProgressBar";
 import Waves from "./Waves";
 import {setTracks} from "../../../actions/Playlist";
 import broadcastName from "../../../broadcast";
-import {playDisplay} from "../../../reducers/player";
 
 interface PlayerComponentProps extends IComponentPropsCommon{
     play: () => void;
@@ -33,6 +32,7 @@ interface PlayerComponentProps extends IComponentPropsCommon{
     setPlaylist: (_tracks: ITrack[]) => void;
     displayPlayState: (_status:boolean) => void;
     playDisplay:boolean;
+    isAuth:boolean;
 }
 
 class PlayerComponent extends VDom.Component<PlayerComponentProps> {
@@ -62,6 +62,7 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
       isPlayerDragged: false,
       isVolumeDragged: false,
       isControlled: false,
+      isSyncWithServer:false,
     };
     this.initPlayer = this.initPlayer.bind(this);
     this.loadTrackData = this.loadTrackData.bind(this);
@@ -77,6 +78,7 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
   didUpdate(): void {
     if (!this.#player?.audio) {
       this.initPlayer();
+      this.syncChannel.postMessage({type:'firstConnection',payload:'ok'});
       return;
     }
 
@@ -111,6 +113,7 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
     this.props.setPos(0);
     if (!this.#player && this.props.playlist && this.props.playlist.length > 0) {
       this.initPlayer();
+      this.syncChannel.postMessage({type:'firstConnection',payload:'ok'});
     }
     this.syncChannel = new BroadcastChannel(broadcastName);
     this.syncChannel.onmessage = this.onMessageBroadcast;
@@ -121,7 +124,36 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
     const {type,payload}:
         { type: string, payload: any} =
         _e.data;
+    console.log('Player type',type,'payload',payload);
+    if(!this.state.isSyncWithServer && this.props.isAuth){
+      this.syncChannel.postMessage({type:'WSCommand',payload:'connect'});
+    }
     switch (type){
+    case 'firstConnection':{
+      if(this.props.isAuth){
+        this.syncChannel.postMessage({type:'WSCommand',payload:'connect'});
+      }
+      this.syncChannel.postMessage({type:'playlist',payload:this.props.playlist});
+      this.syncChannel.postMessage({type:'position',payload:this.props.position});
+      this.syncChannel.postMessage({type:'playState',payload:this.props.playDisplay});
+      break;
+    }
+    case 'WSState':{
+      switch (payload){
+      case WebSocket.OPEN: {
+        this.setState({isSyncWithServer:true});
+        break;
+      }
+
+      case WebSocket.CLOSED: {
+        this.setState({isSyncWithServer:false});
+        break;
+      }
+      default:
+        this.syncChannel.postMessage({type:'WSCommand',payload:'connect'});
+      }
+      break;
+    }
     case 'playlist':
       this.props.setPlaylist(payload);
       this.props.setPos(0);
@@ -156,6 +188,7 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
       this.props.stop();
     }
     this.#player = null;
+    this.syncChannel.postMessage({type:'WSCommand',payload:'disconnect'});
     this.syncChannel.close();
   }
 
@@ -371,6 +404,7 @@ const mapStateToProps = (state: any): Map => ({
   position: state.playerPosition ? state.playerPosition.value : 0,
   isPlay: state.playerPlay?.value ?? false,
   playDisplay: state.playDisplay?.value ?? false,
+  
 });
 
 const Player = connect(mapStateToProps, mapDispatchToProps)(PlayerComponent);

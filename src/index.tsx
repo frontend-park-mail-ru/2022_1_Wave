@@ -29,7 +29,6 @@ worker.port.onmessage = event => {
 };
 
 worker.port.onmessageerror = ev => console.log('error worker!',ev);
-console.log('worker start',worker);
 
 User.getCSRFToken().then((): void => {
   VDom.render(

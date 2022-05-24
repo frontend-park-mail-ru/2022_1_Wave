@@ -27,6 +27,7 @@ import Redirect from '../../modules/Router/Redirect';
 import * as UserPlaylists from '../../actions/UserPlaylist';
 import * as Modals from '../../actions/Modals';
 import { LikeEmptyIcon } from '../../../../WaveUI/src';
+import {notify, NotifyType} from "../../actions/Notifier";
 
 class PlaylistPage extends VDom.Component<any, any, null, RouteNavigator> {
   static contextType = RouterContext;
@@ -98,6 +99,7 @@ class PlaylistPage extends VDom.Component<any, any, null, RouteNavigator> {
 
   onShare = (): void => {
     window.navigator.clipboard.writeText(`${window.location.origin}${window.location.pathname}`);
+    this.props.notifyAction({status:'success',msg:'Link copied to clipboard'})
   }
 
   onDelete = (): void => {
@@ -342,6 +344,9 @@ const mapDispatchToProps = (dispatch: any): Map => ({
   },
   closeEditForm: (): void => {
     dispatch(Modals.closeEditPlaylistForm());
+  },
+  notifyAction: (notification: NotifyType): void => {
+    dispatch(notify(notification));
   },
 });
 

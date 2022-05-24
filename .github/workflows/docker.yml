@@ -10,10 +10,15 @@ jobs:
           node-version: 16
       - uses: actions/checkout@v3
       - name: build
-      - run: nvm use
-      - run: npm i
-      - run: npm run build
-
+        run: | 
+          npm i
+          npm build
+      - name: Archive production artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: dist-without-markdown
+          path: |
+            .
   deploy:
     runs-on: docker
     name: deploy
@@ -22,7 +27,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Build dockerfile
-      - run: docker build -t wave.music.build
+        run: docker build -t wave.music.build
 #      - name: Login to DockerHub Registry
 #        run: echo ${{ secrets.DOCKERHUB_PASSWORD }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
 #      - name: Build all Docker images

@@ -28,8 +28,7 @@ jobs:
   k8s:
     runs-on: ubuntu-latest
     name: k8s
-    #    needs:
-    #      - dockerDeploy
+    needs: build
     steps:
       - uses: actions/checkout@v1
       - name: k8s install

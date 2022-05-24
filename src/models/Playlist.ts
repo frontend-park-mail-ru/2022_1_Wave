@@ -40,6 +40,17 @@ export default class Playlist {
       })
   }
 
+  static getByID(id: number): Promise<any> {
+    return HTTPClient.get(`${Paths.playlist}${id}`)
+      .then((response) => {
+        if (response.status !== 200) {
+          return Promise.reject(response.body);
+        }
+
+        return response.body.Result;
+      })
+  }
+
   static getOfUser(): Promise<any> {
     return HTTPClient.get(Paths.ofCurrentUser)
       .then((response) => {

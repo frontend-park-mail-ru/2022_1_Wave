@@ -25,6 +25,7 @@ import TracksContainer from '../common/TracksContainer/TracksContainer';
 import { mainMobileScreen } from '../../mediaQueries';
 import Redirect from '../../modules/Router/Redirect';
 import * as UserPlaylists from '../../actions/UserPlaylist';
+import * as SidePlaylist from '../../actions/SidePlaylist';
 import * as Modals from '../../actions/Modals';
 import { LikeEmptyIcon } from '../../../../WaveUI/src';
 import {notify, NotifyType} from "../../actions/Notifier";
@@ -55,6 +56,11 @@ class PlaylistPage extends VDom.Component<any, any, null, RouteNavigator> {
   }
 
   didMount(): void {
+    const { slug }: { slug: string } = this.context.params;
+    if (!this.props.playlists?.[slug] && (!this.props.sidePlaylist || this.props.sidePlaylist.id !== +slug)) {
+      this.props.getPlaylistById(+slug);
+    }
+
     mainMobileScreen.addEventListener('change', this.mediaSmallScreenhandler);
   }
 
@@ -122,10 +128,16 @@ class PlaylistPage extends VDom.Component<any, any, null, RouteNavigator> {
     }
 
     const { slug }: { slug: string } = this.context.params;
-    const playlist = this.props.playlists?.[slug];
+    let playlist = this.props.playlists?.[slug];
+    let ownPlaylist = true;
 
     if (!playlist) {
-      return <></>;
+      if (this.props.sidePlaylist && this.props.sidePlaylist.id === +slug) {
+        playlist = this.props.sidePlaylist;
+        ownPlaylist = false;
+      } else {
+        return <></>;
+      }
     }
 
     const {id, title, tracks} = playlist;
@@ -150,7 +162,7 @@ class PlaylistPage extends VDom.Component<any, any, null, RouteNavigator> {
                   Playlist
                 </p>
               </Subhead>
-              {this.state.smallScreen && (
+              {ownPlaylist && this.state.smallScreen && (
                 <div className="wavePlaylistPage__actions__wrapper">
                   <div
                     class="wavePlaylistPage__mobileActions"
@@ -220,7 +232,7 @@ class PlaylistPage extends VDom.Component<any, any, null, RouteNavigator> {
               >
                 Play
               </Button>
-              {!this.state.smallScreen && (
+              {ownPlaylist && !this.state.smallScreen && (
                 <div class="wavePlaylistPage__actions__wrapper">
                   <Button
                     mode="outline"
@@ -315,6 +327,7 @@ const mapStateToProps = (state: any): Map => ({
   cover: state.albumCover ? state.albumCover : null,
   playlists: state.userPlaylists,
   editPlaylistId: state.editPlaylistForm,
+  sidePlaylist: state.sidePlaylist,
 });
 
 const mapDispatchToProps = (dispatch: any): Map => ({
@@ -348,6 +361,9 @@ const mapDispatchToProps = (dispatch: any): Map => ({
   notifyAction: (notification: NotifyType): void => {
     dispatch(notify(notification));
   },
+  getPlaylistById: (id: number): void => {
+    dispatch(SidePlaylist.getPlaylistById(id));
+  }
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(PlaylistPage);

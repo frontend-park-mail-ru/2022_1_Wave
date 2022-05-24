@@ -9,6 +9,7 @@ import search from './search';
 import notification from './notification';
 import sidebar from './sidebar';
 import userPlaylists from './userPlaylists';
+import sidePlaylist from './sidePlaylist';
 import favorites from './favorites';
 import authRequired from './authRequired';
 import userStatus from './userStatus';
@@ -32,6 +33,7 @@ export default combineReducers({
   search,
   sidebar,
   userPlaylists,
+  sidePlaylist,
   favorites,
   authRequired,
   userStatus,

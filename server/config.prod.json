@@ -1,5 +1,5 @@
 {
-  "schema": "https",
+  "schema": "http",
   "host": "localhost",
   "api_host": "nginx.default.svc.cluster.local",
   "static_host": "space.wave-music.online",

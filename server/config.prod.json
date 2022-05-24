@@ -1,7 +1,7 @@
 {
   "schema": "https",
   "host": "localhost",
-  "api_host": "localhost",
-  "static_host": "localhost",
+  "api_host": "nginx.default.svc.cluster.local",
+  "static_host": "space.wave-music.online",
   "port": 8080
 }

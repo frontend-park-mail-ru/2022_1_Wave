@@ -137,7 +137,8 @@ const mux = async (req, res) => {
 }
 
 const server = http.createServer(mux);
-fs.readFile(path.resolve(__dirname,'config.dev.json')).then((data) => {
+const confPath = process.env.WAVEFRONTENV === 'production' ? 'config.prod.json' : 'config.dev.json';
+fs.readFile(path.resolve(__dirname,confPath)).then((data) => {
   config = JSON.parse(data);
   console.log(config);
   server.listen(config.port, () => {

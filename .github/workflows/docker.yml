@@ -46,5 +46,5 @@ jobs:
         run: |
           echo "${{ secrets.K8S_CONFIG }}" > k8s.yaml
           export KUBECONFIG="$(pwd)/k8s.yaml"
-          kubectl apply -f ./env/prod/k8/ -R
+          kubectl apply -f ./k8s/ -R
           kubectl rollout restart deploy

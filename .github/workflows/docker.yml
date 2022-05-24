@@ -15,7 +15,7 @@ jobs:
           npm run build
       - name: Build dockerfile
         run: |
-        docker build -t rius/wave.music.front
-        echo ${{ secrets.DOCKERHUB_PASSWORD }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
-        docker push rius/wave.music.front
+          docker build -t rius/wave.music.front
+          echo ${{ secrets.DOCKERHUB_PASSWORD }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
+          docker push rius/wave.music.front
 

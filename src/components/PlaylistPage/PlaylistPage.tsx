@@ -1,23 +1,37 @@
 import VDom from '@rflban/vdom';
-import { Button, Headline, Subhead } from '@rflban/waveui';
+import {
+  Button,
+  Headline,
+  Menu,
+  IMenu,
+  MenuItem,
+  Subhead,
+  ModalMenu,
+  MenuVerticalIcon, ModalDisplayer, TrashIcon, EditIcon, ShareIcon
+} from '@rflban/waveui';
 import '../../index.css';
 import './PlaylistPage.scss';
-import { connect } from '../../modules/Connect';
+import { connect, StoreContext } from '../../modules/Connect';
 import RouterContext from '../../modules/Router/RouterContext';
 import RouteNavigator from '../../modules/Router/RouteNavigator';
 import { config } from '../../modules/Client/Client';
 import { ITrack } from '../../modules/Media/media';
 import { setTrack, setTracks } from '../../actions/Playlist';
 import {setPosition, startPlay} from '../../actions/Player';
-import PagePlaylist from '../common/PagePlaylist/PagePlaylist';
+import EditPlaylistForm from '../common/EditPlaylist/EditPlaylist';
 import {deleteTrackPlaylist, getPlaylists} from "../../actions/UserPlaylist";
 import { Map } from '../../modules/Store/types';
 import TracksContainer from '../common/TracksContainer/TracksContainer';
 import { mainMobileScreen } from '../../mediaQueries';
 import Redirect from '../../modules/Router/Redirect';
+import * as UserPlaylists from '../../actions/UserPlaylist';
+import * as Modals from '../../actions/Modals';
+import { LikeEmptyIcon } from '../../../../WaveUI/src';
 
 class PlaylistPage extends VDom.Component<any, any, null, RouteNavigator> {
   static contextType = RouterContext;
+
+  private readonly menuRef = new VDom.Ref<IMenu>();
 
   state = {
     playlist: undefined,
@@ -78,6 +92,25 @@ class PlaylistPage extends VDom.Component<any, any, null, RouteNavigator> {
     };
   }
 
+  onActionsClick = (): void => {
+    this.menuRef.instance.toggle();
+  }
+
+  onShare = (): void => {
+    window.navigator.clipboard.writeText(`${window.location.origin}${window.location.pathname}`);
+  }
+
+  onDelete = (): void => {
+    const { slug }: { slug: string } = this.context.params;
+    this.props.deletePlaylist(+slug);
+    this.context.go('/library');
+  }
+
+  onEdit = (): void => {
+    const { slug }: { slug: string } = this.context.params;
+    this.props.showEditForm(+slug);
+  }
+
   render = (): VDom.VirtualElement => {
     if (this.props.userStatus === 'unauthorized') {
       return <Redirect to="/login" />;
@@ -109,22 +142,141 @@ class PlaylistPage extends VDom.Component<any, any, null, RouteNavigator> {
         />
         <div class="wavePlaylistPage__wrapper">
           <div class="wavePlaylistPage__header">
-            <Subhead align="left">
-              <p class="wavePlaylistPage__label">
-                Playlist
-              </p>
-            </Subhead>
+            <div class="wavePlaylistPage__mobileActions__container">
+              <Subhead align="left">
+                <p class="wavePlaylistPage__label">
+                  Playlist
+                </p>
+              </Subhead>
+              {this.state.smallScreen && (
+                <div className="wavePlaylistPage__actions__wrapper">
+                  <div
+                    class="wavePlaylistPage__mobileActions"
+                    onClick={this.onActionsClick}
+                  >
+                    <MenuVerticalIcon />
+                  </div>
+                  <ModalMenu ref={this.menuRef}>
+                    <MenuItem
+                      closeOnClick
+                      onClick={this.onEdit}
+                      size="l"
+                      before={
+                        <EditIcon
+                          style={{
+                            height: '45%',
+                            width: '45%',
+                          }}
+                        />
+                      }
+                    >
+                      Edit
+                    </MenuItem>
+                    <MenuItem
+                      closeOnClick
+                      size="l"
+                      onClick={this.onShare}
+                      before={
+                        <ShareIcon
+                          style={{
+                            height: '45%',
+                            width: '45%',
+                          }}
+                        />
+                      }
+                    >
+                      Share
+                    </MenuItem>
+                    <MenuItem
+                      closeOnClick
+                      onClick={this.onDelete}
+                      size="l"
+                      before={
+                        <TrashIcon
+                          style={{
+                            height: '45%',
+                            width: '45%',
+                          }}
+                        />
+                      }
+                    >
+                      Delete
+                    </MenuItem>
+                  </ModalMenu>
+                </div>
+              )}
+            </div>
             <Headline align="left">
               {title}
             </Headline>
-            <Button
-              class="wavePlaylistPage__play"
-              size={this.state.smallScreen ? 'm' : 's'}
-              stretched={this.state.smallScreen}
-              onClick={this.addPlaylistToPlayer}
-            >
-              Play
-            </Button>
+            <div class="wavePlaylistPage__controls">
+              <Button
+                class="wavePlaylistPage__play"
+                size={this.state.smallScreen ? 'm' : 's'}
+                stretched={this.state.smallScreen}
+                onClick={this.addPlaylistToPlayer}
+              >
+                Play
+              </Button>
+              {!this.state.smallScreen && (
+                <div class="wavePlaylistPage__actions__wrapper">
+                  <Button
+                    mode="outline"
+                    class="wavePlaylistPage__actions"
+                    size={this.state.smallScreen ? 'm' : 's'}
+                    onClick={this.onActionsClick}
+                  >
+                    Actions
+                  </Button>
+                  <Menu
+                    ref={this.menuRef} pos="end" side="right"
+                  >
+                    <MenuItem
+                      closeOnClick
+                      onClick={this.onEdit}
+                      before={
+                        <EditIcon
+                          style={{
+                            height: '45%',
+                            width: '45%',
+                          }}
+                        />
+                      }
+                    >
+                      Edit
+                    </MenuItem>
+                    <MenuItem
+                      closeOnClick
+                      onClick={this.onShare}
+                      before={
+                        <ShareIcon
+                          style={{
+                            height: '45%',
+                            width: '45%',
+                          }}
+                        />
+                      }
+                    >
+                      Share
+                    </MenuItem>
+                    <MenuItem
+                      closeOnClick
+                      onClick={this.onDelete}
+                      before={
+                        <TrashIcon
+                          style={{
+                            height: '45%',
+                            width: '45%',
+                          }}
+                        />
+                      }
+                    >
+                      Delete
+                    </MenuItem>
+                  </Menu>
+                </div>
+              )}
+            </div>
           </div>
 
           <Subhead align="left" class="wavePlaylistPage__songs-label">
@@ -133,43 +285,23 @@ class PlaylistPage extends VDom.Component<any, any, null, RouteNavigator> {
 
           <TracksContainer tracks={tracks} onTrackRun={this.tracksClickHandler} playlistOwner={playlist} />
         </div>
-      </div>
-    );
-
-    return (
-      <div class="playlist-page">
-        <div
-          class="playlist-page__main"
-          style={{
-            'background-image': `linear-gradient(180deg, rgba(1, 208, 234, 0.2) 0%, rgba(0, 0, 0, 0) 48.44%),
-    linear-gradient(180deg, rgba(11, 18, 32, 0.7) 0%, rgba(11, 18, 32, 0.9) 72.92%, #0B1220 93.23%),url(${
-      cover ? config.files + cover : ''
-      })`,
-          }}
-        >
-          <div class="playlist-page__playlist">
-            <div class="text playlist__main">
-                            Playlist
-              <div class="playlist__name">{title}</div>
-              <div class="playlist__controls">
-                <div onclick={this.addPlaylistToPlayer(tracks)} class="button controls__btn-play">
-                  <div class="text">Play</div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="playlist-page__popular">
-            <div class="text playlist__title">Songs</div>
-            {
-              playlist &&
-              <PagePlaylist runTrack={this.runTrack} playlist={tracks}>
-                <div class="playlist-context">
-                  <div onclick={this.deleteTrack(id)} class="text context__item">Delete</div>
-                </div>
-              </PagePlaylist>
-            }
-          </div>
-        </div>
+        <StoreContext.Consumer>
+          {(store: any): VDom.VirtualElement => (
+            <ModalDisplayer
+              animated
+              direction="row"
+              onClose={this.props.closeEditForm}
+              open={this.props.editPlaylistId != null}
+              wrapper={(modal: VDom.VirtualElement): VDom.VirtualElement => (
+                <StoreContext.Provider value={store}>
+                  {modal}
+                </StoreContext.Provider>
+              )}
+            >
+              <EditPlaylistForm id={id} onCancel={this.props.closeEditForm} />
+            </ModalDisplayer>
+          )}
+        </StoreContext.Consumer>
       </div>
     );
   };
@@ -180,6 +312,7 @@ const mapStateToProps = (state: any): Map => ({
   album: state.album ? state.album : null,
   cover: state.albumCover ? state.albumCover : null,
   playlists: state.userPlaylists,
+  editPlaylistId: state.editPlaylistForm,
 });
 
 const mapDispatchToProps = (dispatch: any): Map => ({
@@ -200,7 +333,16 @@ const mapDispatchToProps = (dispatch: any): Map => ({
   },
   deleteTrack: ({trackid,playlistid}: {trackid:number,playlistid:number}): void => {
     dispatch(deleteTrackPlaylist({trackid,playlistid}))
-  }
+  },
+  deletePlaylist: (id: number): void => {
+    dispatch(UserPlaylists.deletePlaylist(id));
+  },
+  showEditForm: (id: number): void => {
+    dispatch(Modals.showEditPlaylistForm(id));
+  },
+  closeEditForm: (): void => {
+    dispatch(Modals.closeEditPlaylistForm());
+  },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(PlaylistPage);

@@ -144,7 +144,7 @@ class ArtistPageComponent extends VDom.Component<any, any, null, RouteNavigator>
             Popular songs
           </Subhead>
 
-          <TracksContainer tracks={popularTracks} onTrackRun={this.tracksClickHandler} />
+          <TracksContainer tracks={popularTracks} onTrackRun={this.tracksClickHandler} hideArtist />
 
           <div class="waveArtistPage__albums">
             <Subhead align="left" class="waveArtistPage__albums-label">

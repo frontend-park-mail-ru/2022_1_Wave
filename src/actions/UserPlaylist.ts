@@ -18,10 +18,32 @@ export function getPlaylistsById(id: number): Function {
   }
 }
 
+export function deletePlaylistLocal(id: number): any {
+  return { type: 'userPlaylist/delete', payload: id };
+}
+
+export function editPlaylistLocal(id: number, title: string): any {
+  return { type: 'userPlaylist/edit', payload: {id, title} };
+}
+
 export function createPlaylist(title: string): Function {
   return (dispatch: Function): void => {
     Playlist.create({ title })
       .then((): Promise<any> => getPlaylists()(dispatch))
+  }
+}
+
+export function editPlaylist(id: number, title: string): Function {
+  return (dispatch: Function): void => {
+    Playlist.edit({id, title})
+      .then((): Promise<any> => dispatch(editPlaylistLocal(id, title)));
+  }
+}
+
+export function deletePlaylist(id: number): Function {
+  return (dispatch: Function): void => {
+    Playlist.delete(id)
+      .then((): Promise<any> => dispatch(deletePlaylistLocal(id)));
   }
 }
 

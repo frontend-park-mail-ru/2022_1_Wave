@@ -38,6 +38,12 @@ module.exports = (env = {}) => {
       crossorigin: 'use-credentials',
       display: 'minimal-ui',
       orientation: 'portrait',
+      icons: [
+        {
+          src: path.resolve('src/assets/icon.svg'),
+          sizes: [96, 128, 192, 256, 384, 512],
+        },
+      ]
     }),
     new HtmlWebpackPlugin({
       template: './src/index.html',

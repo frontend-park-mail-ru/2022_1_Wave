@@ -23,3 +23,9 @@ export function albumGetCoverById(id: string): (dispatch: Function) => void {
     });
   };
 }
+
+export function albumGetWeek(dispatch: Function): void {
+  album.getWeek().then((payload: any) => {
+    dispatch({ type: 'week/album', payload });
+  });
+}

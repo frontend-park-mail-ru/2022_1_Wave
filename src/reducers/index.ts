@@ -1,6 +1,6 @@
 import combineReducers from '../modules/Reducers';
 import tracksPopular from './track';
-import { albumPopular, album, albumCover } from './album';
+import {albumPopular, album, albumCover, albumWeek} from './album';
 import { artistPopular, artist, artistPopularTracks } from './artist';
 import user from './user';
 import playerPlaylist from './playlist';
@@ -39,4 +39,5 @@ export default combineReducers({
   userStatus,
   createPlaylistForm,
   editPlaylistForm,
+  albumWeek,
 });

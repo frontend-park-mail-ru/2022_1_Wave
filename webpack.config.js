@@ -36,12 +36,13 @@ module.exports = (env = {}) => {
       description: 'Best music service!',
       background_color: '#0B1220',
       crossorigin: 'use-credentials',
-      display: 'minimal-ui',
+      display: 'standalone',
       orientation: 'portrait',
       icons: [
         {
-          src: path.resolve('src/assets/icon.svg'),
-          sizes: [96, 128, 192, 256, 384, 512],
+          src: path.resolve('src/assets/maskable_icon.png'),
+          sizes: [96, 128, 192, 256, 384, 512, 1024],
+          purpose: 'maskable',
         },
       ]
     }),

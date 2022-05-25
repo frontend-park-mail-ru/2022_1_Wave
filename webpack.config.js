@@ -42,6 +42,10 @@ module.exports = (env = {}) => {
         {
           src: path.resolve('src/assets/maskable_icon.png'),
           sizes: [96, 128, 192, 256, 384, 512, 1024],
+        },
+        {
+          src: path.resolve('src/assets/maskable_icon.png'),
+          sizes: [96, 128, 192, 256, 384, 512, 1024],
           purpose: 'maskable',
         },
       ]

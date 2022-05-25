@@ -125,14 +125,14 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
         { type: string, payload: any} =
         _e.data;
     console.log('Player type',type,'payload',payload);
-    if(!this.state.isSyncWithServer && this.props.isAuth){
-      this.syncChannel.postMessage({type:'WSCommand',payload:'connect'});
-    }
+    // if(!this.state.isSyncWithServer && this.props.isAuth){
+    //   this.syncChannel.postMessage({type:'WSCommand',payload:'connect'});
+    // }
     switch (type){
     case 'firstConnection':{
-      if(this.props.isAuth){
-        this.syncChannel.postMessage({type:'WSCommand',payload:'connect'});
-      }
+      // if(this.props.isAuth){
+      //   this.syncChannel.postMessage({type:'WSCommand',payload:'connect'});
+      // }
       this.syncChannel.postMessage({type:'playlist',payload:this.props.playlist});
       this.syncChannel.postMessage({type:'position',payload:this.props.position});
       this.syncChannel.postMessage({type:'playState',payload:this.props.playDisplay});

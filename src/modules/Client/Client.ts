@@ -1,7 +1,7 @@
 export const config = {
-  url: 'http://wave-music.online',
+  url: 'https://wave-music.online',
   csrfHeader: 'X-CSRF-TOKEN',
-  files: 'http://space.wave-music.online/',
+  files: 'https://space.wave-music.online/',
 };
 
 export default class Client {

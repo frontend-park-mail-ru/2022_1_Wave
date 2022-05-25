@@ -88,7 +88,7 @@ class Homepage extends VDom.Component<HompageProps> {
 }
 
 const mapStateToProps = (state: any): Map => ({
-  albumWeek: state.albumWeek?.[2] ?? null,
+  albumWeek: state.albumWeek?.[5] ?? null,
   albumCover: state.albumCover ?? null,
 });
 

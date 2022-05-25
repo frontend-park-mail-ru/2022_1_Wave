@@ -136,7 +136,6 @@ class PlaylistPage extends VDom.Component<any, any, null, RouteNavigator> {
     this.toPlay = playlist;
     const {id, title, tracks} = playlist;
     const cover = tracks?.[0] ? tracks[0].cover : null;
-
     return (
       <div class="wavePlaylistPage">
         <div
@@ -218,14 +217,16 @@ class PlaylistPage extends VDom.Component<any, any, null, RouteNavigator> {
               {title}
             </Headline>
             <div class="wavePlaylistPage__controls">
-              <Button
-                class="wavePlaylistPage__play"
-                size={this.state.smallScreen ? 'm' : 's'}
-                stretched={this.state.smallScreen}
-                onClick={this.addPlaylistToPlayer}
-              >
-                Play
-              </Button>
+              { tracks?.length > 0 &&
+                <Button
+                  class="wavePlaylistPage__play"
+                  size={this.state.smallScreen ? 'm' : 's'}
+                  stretched={this.state.smallScreen}
+                  onClick={this.addPlaylistToPlayer}
+                >
+                  Play
+                </Button>
+              }
               {ownPlaylist && !this.state.smallScreen && (
                 <div class="wavePlaylistPage__actions__wrapper">
                   <Button

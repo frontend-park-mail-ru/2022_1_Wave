@@ -97,14 +97,16 @@ class PlaylistPage extends VDom.Component<any, any> {
             <Headline align="left">
               Favorites
             </Headline>
-            <Button
-              class="waveFavoritesPage__play"
-              size={this.state.smallScreen ? 'm' : 's'}
-              stretched={this.state.smallScreen}
-              onClick={this.addFavoritesToPlayer}
-            >
-              Play
-            </Button>
+            { favorites?.length > 0 &&
+                <Button
+                  class="waveFavoritesPage__play"
+                  size={this.state.smallScreen ? 'm' : 's'}
+                  stretched={this.state.smallScreen}
+                  onClick={this.addFavoritesToPlayer}
+                >
+                  Play
+                </Button>
+            }
           </div>
 
           <Subhead align="left" class="waveFavoritesPage__songs-label">

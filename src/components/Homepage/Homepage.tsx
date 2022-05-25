@@ -50,7 +50,6 @@ class Homepage extends VDom.Component<HompageProps> {
     const {id,artistId,artist,title,cover}
     : {id:number,artistId:number,artist:string,title:string,cover:string} = this.props.albumWeek;
     const albumCover:Map = this.props.albumCover?.[id];
-    console.log('album cover',albumCover)
 
     return (
       <div class="main__page" style={{

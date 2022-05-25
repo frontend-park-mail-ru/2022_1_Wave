@@ -63,6 +63,7 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
       isVolumeDragged: false,
       isControlled: false,
       isSyncWithServer:false,
+      aboutToUnmount: false,
     };
     this.initPlayer = this.initPlayer.bind(this);
     this.loadTrackData = this.loadTrackData.bind(this);
@@ -76,6 +77,9 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
   }
 
   didUpdate(): void {
+    if(this.state.aboutToUnmount){
+      return;
+    }
     if (!this.#player?.audio) {
       this.initPlayer();
       this.syncChannel.postMessage({type:'firstConnection',payload:'ok'});
@@ -111,12 +115,13 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
 
   didMount(): void {
     this.props.setPos(0);
+    this.syncChannel = new BroadcastChannel(broadcastName);
+    this.syncChannel.onmessage = this.onMessageBroadcast;
     if (!this.#player && this.props.playlist && this.props.playlist.length > 0) {
       this.initPlayer();
       this.syncChannel.postMessage({type:'firstConnection',payload:'ok'});
     }
-    this.syncChannel = new BroadcastChannel(broadcastName);
-    this.syncChannel.onmessage = this.onMessageBroadcast;
+    this.setState({aboutToUnmount:false});
   }
 
 
@@ -124,7 +129,7 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
     const {type,payload}:
         { type: string, payload: any} =
         _e.data;
-    console.log('Player type',type,'payload',payload);
+    // console.log('Player type',type,'payload',payload);
     // if(!this.state.isSyncWithServer && this.props.isAuth){
     //   this.syncChannel.postMessage({type:'WSCommand',payload:'connect'});
     // }
@@ -190,6 +195,7 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
     this.#player = null;
     this.syncChannel.postMessage({type:'WSCommand',payload:'disconnect'});
     this.syncChannel.close();
+    this.setState({aboutToUnmount:true});
   }
 
   initPlayer(): void {

@@ -40,8 +40,9 @@ module.exports = (env = {}) => {
       orientation: 'portrait',
       icons: [
         {
-          src: path.resolve('src/assets/maskable_icon.png'),
+          src: path.resolve('src/assets/icon.svg'),
           sizes: [96, 128, 192, 256, 384, 512, 1024],
+          purpose: 'any',
         },
         {
           src: path.resolve('src/assets/maskable_icon.png'),

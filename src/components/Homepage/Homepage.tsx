@@ -31,7 +31,7 @@ class Homepage extends VDom.Component<HompageProps> {
   }
 
   didUpdate():void {
-    if (this.props.albumCover)
+    if (this.props.albumCover?.[this.props.albumWeek?.id])
       return;
     if(this.props.albumWeek?.id)
       this.props.getAlbumCover(this.props.albumWeek.id)

@@ -138,28 +138,34 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
       // if(this.props.isAuth){
       //   this.syncChannel.postMessage({type:'WSCommand',payload:'connect'});
       // }
+      if(this.props.playlist && this.props.playlist.length < 0){
+        return;
+      }
       this.syncChannel.postMessage({type:'playlist',payload:this.props.playlist});
       this.syncChannel.postMessage({type:'position',payload:this.props.position});
       this.syncChannel.postMessage({type:'playState',payload:this.props.playDisplay});
       break;
     }
-    case 'WSState':{
-      switch (payload){
-      case WebSocket.OPEN: {
-        this.setState({isSyncWithServer:true});
-        break;
-      }
-
-      case WebSocket.CLOSED: {
-        this.setState({isSyncWithServer:false});
-        break;
-      }
-      default:
-        this.syncChannel.postMessage({type:'WSCommand',payload:'connect'});
-      }
-      break;
-    }
+    // case 'WSState':{
+    //   switch (payload){
+    //   case WebSocket.OPEN: {
+    //     this.setState({isSyncWithServer:true});
+    //     break;
+    //   }
+    //
+    //   case WebSocket.CLOSED: {
+    //     this.setState({isSyncWithServer:false});
+    //     break;
+    //   }
+    //   default:
+    //     this.syncChannel.postMessage({type:'WSCommand',payload:'connect'});
+    //   }
+    //   break;
+    // }
     case 'playlist':
+      if(payload && payload.length <= 0){
+        return;
+      }
       this.props.setPlaylist(payload);
       this.props.setPos(0);
       break;
@@ -193,7 +199,8 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
       this.props.stop();
     }
     this.#player = null;
-    this.syncChannel.postMessage({type:'WSCommand',payload:'disconnect'});
+    this.syncChannel.postMessage({type:'playState',payload:false});
+    // this.syncChannel.postMessage({type:'WSCommand',payload:'disconnect'});
     this.syncChannel.close();
     this.setState({aboutToUnmount:true});
   }

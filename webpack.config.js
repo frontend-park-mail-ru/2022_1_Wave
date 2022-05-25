@@ -4,6 +4,7 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 // eslint-disable-next-line no-undef
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const WebpackPwaManifest = require('webpack-pwa-manifest');
 
 const CopyPlugin = require('copy-webpack-plugin');
 
@@ -29,6 +30,15 @@ module.exports = (env = {}) => {
   const isProd = mode === 'production';
 
   const getPlugins = () => [
+    new WebpackPwaManifest({
+      name: 'Wave Music',
+      short_name: 'Wave',
+      description: 'Best music service!',
+      background_color: '#0B1220',
+      crossorigin: 'use-credentials',
+      display: 'minimal-ui',
+      orientation: 'portrait',
+    }),
     new HtmlWebpackPlugin({
       template: './src/index.html',
       favicon: './src/assets/favicon.png'

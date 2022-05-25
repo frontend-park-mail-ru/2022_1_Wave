@@ -1,7 +1,7 @@
 export const config = {
-  url: 'http://localhost:8080',
+  url: 'http://wave-music.online',
   csrfHeader: 'X-CSRF-TOKEN',
-  files: 'http://localhost:8080/',
+  files: 'http://space.wave-music.online/',
 };
 
 export default class Client {

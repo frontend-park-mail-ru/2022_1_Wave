@@ -10,8 +10,8 @@ import { mainMobileScreen } from '../../../mediaQueries';
 import * as UserPlaylist from '../../../actions/UserPlaylist';
 
 const validatePlaylistName = (value: string): boolean => {
-  const reg = /^[a-z0-9_ ]{1,32}$/;
-  return reg.test(value.toLowerCase());
+  const reg = /^[a-zа-я0-9_ ]{1,32}$/;
+  return reg.test(value.toLowerCase().trim());
 }
 
 interface EditPlaylistProps {
@@ -77,7 +77,7 @@ class EditPlaylist extends VDom.Component<EditPlaylistProps, EditPlaylistState> 
             as={Input}
             ref={this.inputRef}
             label="Playlist name"
-            error="Only 1-32 of latin letters, numbers or _ are allowed"
+            error="Only 1-32 of letters, numbers or _ are allowed"
             checker={validatePlaylistName}
             placeholder="Playlist new name"
           />

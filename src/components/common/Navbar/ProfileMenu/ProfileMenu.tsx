@@ -32,7 +32,7 @@ export default class ProfileMenu extends VDom.Component<ProfileMenuProps> {
         <div class="profile-menu__avatar_img-round__wrapper">
           <img
             class="profile-menu__avatar_img-round"
-            src={this.props.avatarSrc ? `${config.files}${this.props.avatarSrc}` : avatar}
+            src={this.props.avatarSrc ? (this.props.avatarSrc.startsWith('blob') ? this.props.avatarSrc : `${config.files}${this.props.avatarSrc}`) : avatar}
             alt="avatar.png"
             onclick={this.menuOpen}
           />

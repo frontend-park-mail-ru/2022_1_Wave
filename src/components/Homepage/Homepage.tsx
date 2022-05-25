@@ -38,7 +38,7 @@ class Homepage extends VDom.Component<HompageProps> {
   }
 
   render = (): VDom.VirtualElement => {
-    
+
     if (!this.props.albumWeek){
       return (
         <div class="main__page">
@@ -72,10 +72,10 @@ class Homepage extends VDom.Component<HompageProps> {
                 </div>
                 <div class="main__top-chart__album__controls">
                   <Link to={`/album/${id}`}>
-                    <Button class='main__top-chart__album__btn_play' mode='primary'>Play</Button>
+                    <Button stretched class='main__top-chart__album__btn_play' mode='primary'>Play</Button>
                   </Link>
                   <Link to={`/artist/${artistId}`}>
-                    <Button class='main__top-chart__album__btn_follow' mode='outline'>More</Button>
+                    <Button stretched class='main__top-chart__album__btn_follow' mode='outline'>More</Button>
                   </Link>
                 </div>
               </div>
@@ -83,7 +83,7 @@ class Homepage extends VDom.Component<HompageProps> {
         <Popular/>
       </div>
     );
-  
+
   }
 }
 

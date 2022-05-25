@@ -35,6 +35,8 @@ class PlaylistPage extends VDom.Component<any, any, null, RouteNavigator> {
 
   private readonly menuRef = new VDom.Ref<IMenu>();
 
+  private toPlay: any = null;
+
   state = {
     playlist: undefined,
     smallScreen: mainMobileScreen.matches,
@@ -69,16 +71,14 @@ class PlaylistPage extends VDom.Component<any, any, null, RouteNavigator> {
   }
 
   addPlaylistToPlayer = (_e: Event): void => {
-    const { slug }: { slug: string } = this.context.params;
-    const playlist = this.props.playlists?.[slug];
+    const playlist = this.toPlay;
     this.props.setTracks(playlist.tracks);
     this.props.setPos(0);
     this.props.runMusic();
   }
 
   tracksClickHandler = (_e: Event): void => {
-    const { slug }: { slug: string } = this.context.params;
-    const playlist = this.props.playlists?.[slug];
+    const playlist = this.toPlay;
     this.props.setTracks(playlist.tracks);
   }
 
@@ -120,26 +120,20 @@ class PlaylistPage extends VDom.Component<any, any, null, RouteNavigator> {
   }
 
   render = (): VDom.VirtualElement => {
-    if (this.props.userStatus === 'unauthorized') {
-      return <Redirect to="/login" />;
-    }
-    if (this.props.userStatus === 'pending') {
-      return <></>;
-    }
-
     const { slug }: { slug: string } = this.context.params;
     let playlist = this.props.playlists?.[slug];
     let ownPlaylist = true;
 
     if (!playlist) {
+      ownPlaylist = false;
       if (this.props.sidePlaylist && this.props.sidePlaylist.id === +slug) {
         playlist = this.props.sidePlaylist;
-        ownPlaylist = false;
       } else {
         return <></>;
       }
     }
 
+    this.toPlay = playlist;
     const {id, title, tracks} = playlist;
     const cover = tracks?.[0] ? tracks[0].cover : null;
 

@@ -122,6 +122,8 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
       this.syncChannel.postMessage({type:'firstConnection',payload:'ok'});
     }
     this.setState({aboutToUnmount:false});
+    window.onbeforeunload = ():void =>
+      this.syncChannel.postMessage({type:'playState',payload:false});
   }
 
 
@@ -138,7 +140,7 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
       // if(this.props.isAuth){
       //   this.syncChannel.postMessage({type:'WSCommand',payload:'connect'});
       // }
-      if(this.props.playlist && this.props.playlist.length < 0){
+      if(!this.props.playlist){
         return;
       }
       this.syncChannel.postMessage({type:'playlist',payload:this.props.playlist});
@@ -163,13 +165,17 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
     //   break;
     // }
     case 'playlist':
-      if(payload && payload.length <= 0){
+      if(!payload){
         return;
       }
       this.props.setPlaylist(payload);
       this.props.setPos(0);
       break;
     case 'position':
+      if(!this.props.playlist){
+        return;
+      }
+      console.log('got position',payload);
       this.#player?.setPosition(payload);
       this.props.setPos(payload);
       break;

@@ -1,6 +1,5 @@
 import VDom from '@rflban/vdom';
 import {
-  Caption,
   Input,
   SearchLeftIcon,
 } from '@rflban/waveui';
@@ -109,13 +108,6 @@ class Search extends VDom.Component<SearchProps> {
       { this.props.searched && this.state.showPopup &&
         <SearchResult dropSearch={this.clear} 
           searched={this.refSearch.instance.value.length > 0 ? this.props.searched: null}/>
-      }
-      { !this.state.isAnyFound && this.refSearch?.instance?.value?.length > 0 &&
-          <div class="search__none">
-            <Caption align="left">
-            Found none
-            </Caption>
-          </div>
       }
     </div>
   }

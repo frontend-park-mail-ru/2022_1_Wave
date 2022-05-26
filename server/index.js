@@ -1,4 +1,4 @@
-const http = require('http2');
+const http = require('http');
 const mime = require('mime-types');
 const path = require('path');
 const opt = require('optimist');

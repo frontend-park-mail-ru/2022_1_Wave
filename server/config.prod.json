@@ -1,7 +1,7 @@
 {
   "schema": "http",
   "host": "localhost",
-  "api_host": "wave-music.online",
+  "api_host": "wave.default.svc.cluster.local:5000",
   "static_host": "space.wave-music.online",
   "port": 8080
 }

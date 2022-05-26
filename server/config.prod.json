@@ -1,5 +1,5 @@
 {
-  "schema": "http",
+  "schema": "https",
   "host": "localhost",
   "api_host": "wave-music.online",
   "static_host": "space.wave-music.online",

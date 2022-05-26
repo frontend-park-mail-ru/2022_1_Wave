@@ -17,6 +17,7 @@ import { updateAvatar, updateSelf, userGetSelf, userSet } from '../../actions/Us
 import { connect } from '../../modules/Connect';
 import Redirect from '../../modules/Router/Redirect';
 import { mainSmallScreen } from '../../mediaQueries';
+import { config } from '../../modules/Client/Client';
 
 const validateImage = (image?: File): boolean => (
   image != null && image.size <= 2 * 1024 * 1024
@@ -241,7 +242,7 @@ class PersonalPageComponent extends VDom.Component<
                 label={smallScreen ? 'Your photo' : undefined}
                 as={ImageInput}
                 size="l"
-                nonValue={user?.avatar ?? avatarPlaceholder}
+                nonValue={user?.avatar ? `${config.files}${user.avatar}` : avatarPlaceholder}
                 align={smallScreen ? 'center' : 'right'}
                 checker={validateImage}
                 error="Picture max size is 2Mib"

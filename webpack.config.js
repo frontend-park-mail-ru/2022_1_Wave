@@ -32,9 +32,9 @@ module.exports = (env = {}) => {
   const getPlugins = () => [
     new WebpackPwaManifest({
       name: 'Wave Music',
-      short_name: 'Wave',
+      short_name: 'WaveMusic',
       description: 'Best music service!',
-      background_color: '#0B1220',
+      background_color: '#080D21',
       crossorigin: 'use-credentials',
       display: 'standalone',
       orientation: 'portrait',

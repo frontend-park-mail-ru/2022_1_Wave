@@ -6,23 +6,34 @@ import {IComponentPropsCommon} from "@rflban/vdom/dist/IComponentProps";
 interface wavesProps extends IComponentPropsCommon{
     analyser: AnalyserNode;
     audio: HTMLAudioElement;
-
 }
 
 export default class Waves extends VDom.Component<wavesProps> {
-    
-  
   state = {
     freqArray: [],
     waveHeights: [0, 0, 0, 0],
   }
 
-  didMount():void {
-    if(!this.props.analyser || !this.props.audio) return;
+  private hasInit = false;
 
+  init(): void {
     this.props.audio.addEventListener('timeupdate',this.updateWaveFront);
+    this.hasInit = true;
+
     const freqArray: Uint8Array = new Uint8Array(this.props.analyser.frequencyBinCount);
     this.setState({freqArray});
+  }
+
+  didMount():void {
+    if (this.props.analyser && this.props.audio) {
+      this.init();
+    }
+  }
+
+  didUpdate(): void {
+    if (!this.hasInit && this.props.analyser && this.props.audio) {
+      this.init();
+    }
   }
 
   willUmount():void {
@@ -54,16 +65,27 @@ export default class Waves extends VDom.Component<wavesProps> {
         elNums += 1;
       });
       const interpolated = sum / elNums;
-      barsHeight[i] = (interpolated / 256) * 100;
+      barsHeight[i] = (interpolated / 256) * 100 / (4 - i) * (5 + 0.1 * i) + (Math.random() - 0.5) * 20;
+      barsHeight[i] = barsHeight[i] > 0 ? barsHeight[i] : 0;
     }
     this.setState({freqArray: currFreq, waveHeights: barsHeight});
   }
 
-  render = (): VDom.VirtualElement  =>
-    <div class="player__waves">
-      <div class="bar" id="1" style={{height: `${this.state.waveHeights[0]}%`}}/>
-      <div class="bar" id="2" style={{height: `${this.state.waveHeights[1]}%`}}/>
-      <div class="bar" id="3" style={{height: `${this.state.waveHeights[2]}%`}}/>
-      <div class="bar" id="4" style={{height: `${this.state.waveHeights[3]}%`}}/>
-    </div>
+  render = (): VDom.VirtualElement  => {
+    const { waveHeights } = this.state;
+    const minSize = waveHeights.every((h) => Math.abs(h) === 0) ? 0 : 2;
+
+    return (
+      <div class="player__waves">
+        <div class="bar" id="1"
+          style={{ height: `calc(${this.state.waveHeights[0]}% + ${minSize}px)` }} />
+        <div class="bar" id="2"
+          style={{ height: `calc(${this.state.waveHeights[1]}% + ${minSize}px)` }} />
+        <div class="bar" id="3"
+          style={{ height: `calc(${this.state.waveHeights[2]}% + ${minSize}px)` }} />
+        <div class="bar" id="4"
+          style={{ height: `calc(${this.state.waveHeights[3]}% + ${minSize}px)` }} />
+      </div>
+    );
+  }
 }

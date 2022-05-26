@@ -2,8 +2,6 @@ import VDom from '@rflban/vdom';
 import { Map } from '../../../modules/Store/types';
 import './SearchResult.scss';
 import MatchedBlock from './MatchedBlock/MatchedBlock';
-import {Caption} from "@rflban/waveui/dist";
-import Link from "../../../modules/Router/Link2";
 
 interface SearchInputProps {
   searched: Map| null;
@@ -11,12 +9,16 @@ interface SearchInputProps {
 }
 
 export default class SearchResult extends VDom.Component<SearchInputProps> {
+
   render = (): VDom.VirtualElement =>{
-    if (!this.props.searched){
+
+    if (!this.props.searched) {
       return <></>
     }
+
     return <div class="search-result">
-      {this.props.searched.MatchedTracks.length > 0 &&
+      {
+        this.props.searched.MatchedTracks.length > 0 &&
           <MatchedBlock
             drop={this.props.dropSearch}
             type="track"
@@ -24,7 +26,8 @@ export default class SearchResult extends VDom.Component<SearchInputProps> {
             array={this.props.searched.MatchedTracks.slice(0,3)}
           />
       }
-      {this.props.searched.MatchedAlbums.length > 0 &&
+      {
+        this.props.searched.MatchedAlbums.length > 0 &&
           <MatchedBlock
             drop={this.props.dropSearch}
             type="album"
@@ -32,7 +35,8 @@ export default class SearchResult extends VDom.Component<SearchInputProps> {
             array={this.props.searched.MatchedAlbums.slice(0,3)}
           />
       }
-      {this.props.searched.MatchedArtists.length > 0 &&
+      {
+        this.props.searched.MatchedArtists.length > 0 &&
           <MatchedBlock
             drop={this.props.dropSearch}
             type="artist"
@@ -40,9 +44,6 @@ export default class SearchResult extends VDom.Component<SearchInputProps> {
             array={this.props.searched.MatchedArtists.slice(0,3)}
           />
       }
-      <Link to="/search">
-        <Caption class="search-result__more"> More...</Caption>
-      </Link> 
     </div>
   }
 

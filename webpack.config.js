@@ -4,6 +4,7 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 // eslint-disable-next-line no-undef
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const WebpackPwaManifest = require('webpack-pwa-manifest');
 
 const CopyPlugin = require('copy-webpack-plugin');
 
@@ -29,6 +30,27 @@ module.exports = (env = {}) => {
   const isProd = mode === 'production';
 
   const getPlugins = () => [
+    new WebpackPwaManifest({
+      name: 'Wave Music',
+      short_name: 'WaveMusic',
+      description: 'Best music service!',
+      background_color: '#080D21',
+      crossorigin: 'use-credentials',
+      display: 'standalone',
+      orientation: 'portrait',
+      icons: [
+        {
+          src: path.resolve('src/assets/icon.svg'),
+          sizes: [96, 128, 192, 256, 384, 512, 1024],
+          purpose: 'any',
+        },
+        {
+          src: path.resolve('src/assets/maskable_icon.png'),
+          sizes: [96, 128, 192, 256, 384, 512, 1024],
+          purpose: 'maskable',
+        },
+      ]
+    }),
     new HtmlWebpackPlugin({
       template: './src/index.html',
       favicon: './src/assets/favicon.png'
@@ -38,6 +60,9 @@ module.exports = (env = {}) => {
     }),
     new CopyPlugin({
       patterns: [{ from: path.resolve(__dirname, 'src/sw.js') }],
+    }),
+    new CopyPlugin({
+      patterns: [{ from: path.resolve(__dirname, 'src/worker.js') }],
     }),
   ];
 

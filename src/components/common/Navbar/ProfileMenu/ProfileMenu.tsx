@@ -11,6 +11,7 @@ import {IComponentPropsCommon} from "@rflban/vdom/dist/IComponentProps";
 import avatar from "../../../../assets/avatar_placeholder.png";
 import Link from "../../../../modules/Router/Link2";
 import './ProfileMenu.scss';
+import { config } from '../../../../modules/Client/Client';
 
 interface ProfileMenuProps extends IComponentPropsCommon{
   username: string,
@@ -31,7 +32,7 @@ export default class ProfileMenu extends VDom.Component<ProfileMenuProps> {
         <div class="profile-menu__avatar_img-round__wrapper">
           <img
             class="profile-menu__avatar_img-round"
-            src={this.props.avatarSrc ?? avatar}
+            src={this.props.avatarSrc ? (this.props.avatarSrc.startsWith('blob') ? this.props.avatarSrc : `${config.files}${this.props.avatarSrc}`) : avatar}
             alt="avatar.png"
             onclick={this.menuOpen}
           />

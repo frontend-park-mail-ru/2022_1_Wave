@@ -1,7 +1,7 @@
 export const config = {
-  url: 'http://localhost:8080',
+  url: 'https://wave-music.online',
   csrfHeader: 'X-CSRF-TOKEN',
-  files: 'http://localhost:8080/',
+  files: 'https://space.wave-music.online/',
 };
 
 export default class Client {
@@ -47,6 +47,32 @@ export default class Client {
 
     return fetch(this.fullUrl(path), {
       method: 'POST',
+      body: requestBody ? JSON.stringify(requestBody) : undefined,
+      headers: {
+        [config.csrfHeader]: localStorage.getItem('csrf'),
+        'Content-Type': 'application/json',
+      } as HeadersInit,
+    })
+      .then((response) => {
+        status = response.status;
+        return response.json().catch(() => null);
+      })
+      .then((body) => ({
+        status,
+        body,
+      }));
+  }
+
+  /*
+   * PUT запрос на бэкенд
+   * @param {string} path - путь, относительно домена
+   * @param {Object} body - тело запроса
+   */
+  static put(path: string, requestBody: any): Promise<any> {
+    let status: any = null;
+
+    return fetch(this.fullUrl(path), {
+      method: 'PUT',
       body: requestBody ? JSON.stringify(requestBody) : undefined,
       headers: {
         [config.csrfHeader]: localStorage.getItem('csrf'),

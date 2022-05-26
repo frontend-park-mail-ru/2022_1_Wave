@@ -71,8 +71,8 @@ class ArtistPageComponent extends VDom.Component<any, any, null, RouteNavigator>
   }
 
   addAlbumToPlaylist(_e: Event): void {
-    this.props.setAlbumPlaylist(this.props.album[this.context.params.slug].tracks);
     this.props.setPos(0);
+    this.props.setAlbumPlaylist(this.props.album[this.context.params.slug].tracks);
     this.props.runMusic();
   }
 

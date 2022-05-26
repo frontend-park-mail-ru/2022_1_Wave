@@ -5,10 +5,12 @@
   display: flex;
   justify-content: space-evenly;
   align-items: center;
+  height: 40px;
 
   .bar {
     background-color: #beb7df;
     width: 2px;
-    transition: height 0.2s ease;
+    border-radius: 2px;
+    transition: height 0.2s ease-in;
   }
 }

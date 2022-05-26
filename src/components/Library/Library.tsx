@@ -14,8 +14,8 @@ import * as UserPlaylist from '../../actions/UserPlaylist';
 import { mainSmallScreen } from '../../mediaQueries';
 
 const validatePlaylistName = (value: string): boolean => {
-  const reg = /^[a-z0-9_ ]{1,32}$/;
-  return reg.test(value.toLowerCase());
+  const reg = /^[a-zа-я0-9_ ]{1,32}$/;
+  return reg.test(value.toLowerCase().trim());
 }
 
 interface LibraryProps {

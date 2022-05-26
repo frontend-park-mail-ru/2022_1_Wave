@@ -20,3 +20,11 @@ export const albumCover = (state: Map, action: Map): Map => {
   }
   return state;
 };
+
+export const albumWeek = (state: Map, action: Map): Map => {
+  if (action.type === 'week/album') {
+    return action.payload;
+  }
+  return state;
+};
+

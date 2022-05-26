@@ -45,10 +45,8 @@ class ArtistPageComponent extends VDom.Component<any, any, null, RouteNavigator>
 
     this.setLikeToArtist = this.setLikeToArtist.bind(this);
     this.addPopularToPlaylist = this.addPopularToPlaylist.bind(this);
-    this.runTrack = this.runTrack.bind(this);
     this.showPlaylists = this.showPlaylists.bind(this);
     this.unshowPlaylists = this.unshowPlaylists.bind(this);
-    this.addTrack = this.addTrack.bind(this);
   }
 
   showPlaylists():void {
@@ -100,22 +98,6 @@ class ArtistPageComponent extends VDom.Component<any, any, null, RouteNavigator>
     this.props.setArtistPlaylist(this.props.popularTracks[this.context.params.slug]);
   }
 
-  runTrack(track: ITrack): (_e: Event) => void {
-    return (_e: Event) => {
-      this.props.setTrackFromArtist(track);
-      this.props.runMusic();
-    };
-  }
-
-  addTrack(playlistid:number): (e: Event) => void {
-    return (e: Event) => {
-      const trackid = parseInt(e.currentTarget.parentElement.parentElement.parentElement.id);
-      e.preventDefault();
-      e.stopPropagation();
-      this.props.addTrack({trackid, playlistid});
-    };
-  }
-
   render = (): VDom.VirtualElement => {
     const { slug }: { slug: string } = this.context.params;
     if (!this.props.artist || !this.props.popularTracks) {
@@ -162,7 +144,7 @@ class ArtistPageComponent extends VDom.Component<any, any, null, RouteNavigator>
             Popular songs
           </Subhead>
 
-          <TracksContainer tracks={popularTracks} onTrackRun={this.tracksClickHandler} />
+          <TracksContainer tracks={popularTracks} onTrackRun={this.tracksClickHandler} hideArtist />
 
           <div class="waveArtistPage__albums">
             <Subhead align="left" class="waveArtistPage__albums-label">
@@ -172,7 +154,7 @@ class ArtistPageComponent extends VDom.Component<any, any, null, RouteNavigator>
               {
                 Object.entries(artist.albums).map(([_, v]: [k: string, v: Map]) =>
                   <ImageCard
-                    icon={<AlbumIcon style={{ height: '25%' }}/>}
+                    zoom
                     src={config.files + v.cover}
                     title={
                       <Link to={`/album/${v.id}`}>
@@ -190,73 +172,6 @@ class ArtistPageComponent extends VDom.Component<any, any, null, RouteNavigator>
               }
             </HorizontalScroll>
           </div>
-        </div>
-      </div>
-    );
-
-    return (
-      <div class="artist-page">
-        <div
-          class="artist-page__main"
-          style={{
-            'background-image': `linear-gradient(180deg, rgba(1, 208, 234, 0.2) 0%, rgba(0, 0, 0, 0) 48.44%),
-    linear-gradient(180deg, rgba(11, 18, 32, 0.7) 0%, rgba(11, 18, 32, 0.9) 72.92%, #0B1220 93.23%),url(${
-      config.files + artist.cover
-      })`,
-          }}
-        >
-          <div class="artist-page__artist">
-            <div class="artist__related">
-              <div class="text related__title">Related artists:</div>
-              <span class="text related__names">Lana Del Rey, Moby</span>
-            </div>
-            <div class="text artist__main">
-              Artist
-              <div class="artist__name">{artist.name}</div>
-              <div class="artist__controls">
-                <div onclick={this.addPopularToPlaylist} class="button controls__btn-play">
-                  <div class="text">Play</div>
-                </div>
-                {/*<div class="text controls__likes">*/}
-                {/*  <div*/}
-                {/*    onclick={this.setLikeToArtist}*/}
-                {/*    class={`${this.state.isLiked ? 'fa-solid' : 'fa-regular'} fa-heart likes__icon`}*/}
-                {/*  ></div>*/}
-                {/*  <div class="likes__num">{this.state.albumLikes}</div>*/}
-                {/*</div>*/}
-              </div>
-            </div>
-          </div>
-          <div class="artist-page__popular">
-            <div class="text artist__title">Popular songs</div>
-            <PagePlaylist runTrack={this.runTrack} playlist={popularTracks} >
-              <div class="playlist-context">
-                {/* {!this.state.isShowPlaylistChoose && */}
-                {/* <div onclick={this.showPlaylists} class="text context__item">Add</div> */}
-                {/* } */}
-                {/* {this.state.isShowPlaylistChoose && */}
-                {/*    ( */}
-                {
-                  this.props.playlists &&
-                  Object.entries(this.props.playlists).map(([_,v]:[k:string,v:Map])  =>
-                    <div onclick={this.addTrack(v.id)} class="text context__item">{v.title}</div>)
-                }
-                {/* ) */}
-                {/* } */}
-              </div>
-
-            </PagePlaylist>
-          </div>
-        </div>
-
-        <div class="artist-page__albums">
-          <div class="text artist__title">Albums</div>
-          <CarouselRow>
-            {artist.albums &&
-                Object.entries(artist.albums).map(([_,v]:[k:string,v:Map])  =>
-                  <AlbumCard cover={config.files + v.cover} title={v.title} artist={v.artist} />)
-            }
-          </CarouselRow>
         </div>
       </div>
     );

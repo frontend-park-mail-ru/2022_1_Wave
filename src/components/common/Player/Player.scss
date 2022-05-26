@@ -1,12 +1,13 @@
 .player {
   grid-area: play;
-  background-color: #080D21;
+  background: #080D21;
   height: 85px;
   position: fixed;
   bottom: 0;
   left: 0;
   width: 100%;
   display: flex;
+  align-items: center;
   z-index: 2;
   font-size: 20px;
   transition: height 0.2s ease;

@@ -98,7 +98,17 @@ export function updateSelf(form: any): (_dispatch: Function) => void {
   return (dispatch: Function): void => {
     user.updateUser(form).then((payload: any) => {
       dispatch({ type: 'update/user', payload });
-    });
+    })
+      .then(() :Promise<any> => dispatch({
+        type: `notifier/message`,
+        payload: { status: 'success', msg: `Profile has changed` },
+      }))
+      .catch(
+        () :Promise<any> => dispatch({
+          type: `notifier/message`,
+          payload: { status: 'error', msg: `Something went wrong. Please, try again later` },
+        })
+      );;
   };
 }
 
@@ -106,6 +116,16 @@ export function updateAvatar(form: any): (_dispatch: Function) => void {
   return (dispatch: Function): void => {
     user.uploadAvatar(form).then((payload: any) => {
       dispatch({ type: 'update/avatar', payload });
-    });
+    })
+      .then(() :Promise<any> => dispatch({
+        type: `notifier/message`,
+        payload: { status: 'success', msg: `Avatar has changed` },
+      }))
+      .catch(
+        () :Promise<any> => dispatch({
+          type: `notifier/message`,
+          payload: { status: 'error', msg: `Something went wrong. Please, try again later` },
+        })
+      );;
   };
 }

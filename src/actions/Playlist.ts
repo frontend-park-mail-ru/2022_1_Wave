@@ -8,7 +8,13 @@ export function getPopularTracks(dispatch: Function): void {
   track.getPopular().then((payload: any) => {
     dispatch({ type: 'playlist/update', payload });
     dispatch({ type: 'popular/track', payload });
-  });
+  })
+    .catch(
+      () :Promise<any> => dispatch({
+        type: `notifier/message`,
+        payload: { status: 'error', msg: `Something went wrong. Please, try again later` },
+      })
+    );;
 }
 
 export function addTrack(newTrack: ITrack): (dispatch: Function) => void {

@@ -1,0 +1,7 @@
+{
+  "schema": "http",
+  "host": "localhost",
+  "api_host": "localhost",
+  "static_host": "localhost",
+  "port": 8080
+}

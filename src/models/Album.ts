@@ -45,4 +45,13 @@ export default class Album {
       return res;
     });
   }
+
+  static getWeek() {
+    return HTTPClient.get(Paths.albumWeek).then((response) => {
+      if (response.status !== 200) {
+        return Promise.reject(response.body);
+      }
+      return response.body.Result;
+    });
+  }
 }

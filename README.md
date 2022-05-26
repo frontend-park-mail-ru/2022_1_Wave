@@ -20,7 +20,11 @@
 
 ## Деплой
 
+Приложение:
 [wave-music.online](http://wave-music.online)
+
+Библиотека компонентов:
+[uikit.wave-music.online](http://uikit.wave-music.online)
 
 ## Основные команды для работы
 

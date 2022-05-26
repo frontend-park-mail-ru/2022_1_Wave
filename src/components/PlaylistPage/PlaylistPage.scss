@@ -42,8 +42,33 @@
     margin-bottom: 40px;
   }
 
-  &__play {
+  &__controls {
     margin-top: 20px;
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+  }
+
+  &__play {
+  }
+
+  &__mobileActions {
+    height: 100%;
+    display: flex;
+    justify-content: end;
+    align-items: center;
+
+    &__container {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+    }
+  }
+
+  &__actions {
+    &__wrapper {
+      position: relative;
+    }
   }
 
   &__albums {

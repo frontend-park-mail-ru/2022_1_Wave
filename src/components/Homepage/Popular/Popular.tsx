@@ -45,7 +45,7 @@ class PopularComponent extends VDom.Component<PopularComponentProps> {
           {this.props.albums &&
             Object.entries(this.props.albums).map(([_, v]: [k: string, v: Map]) =>
               <ImageCard
-                icon={<AlbumIcon style={{ height: '25%' }}/>}
+                zoom
                 src={config.files + v.cover}
                 title={
                   <Link to={`/album/${v.id}`}>
@@ -87,7 +87,7 @@ class PopularComponent extends VDom.Component<PopularComponentProps> {
           {this.props.artists &&
             Object.entries(this.props.artists).map(([_,v]:[k:string,v:Map]) =>
               <ImageCard
-                icon={<SingerRightIcon style={{ height: '25%' }}/>}
+                zoom
                 src={config.files + v.cover}
                 title={
                   <Link to={`/artist/${v.id}`}>

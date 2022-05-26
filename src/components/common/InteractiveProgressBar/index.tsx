@@ -56,44 +56,42 @@ export default class InteractiveProgressBar extends VDom.Component<ProgressBarPr
     return relativePosition;
   }
 
-  render = (): VDom.VirtualElement =>{
-    return (<div class="progress-bar"
-      onClick={this.setProgress}
-      onTouchEnd={this.setProgress}
-      onMouseMove={this.setProgress}
-      onTouchMove={this.setProgress}
-      onMouseLeave={this.onDrag}>
-      <div class="progress-bar__progress">
+  render = (): VDom.VirtualElement => (<div class="progress-bar"
+    onClick={this.setProgress}
+    onTouchEnd={this.setProgress}
+    onMouseMove={this.setProgress}
+    onTouchMove={this.setProgress}
+    onMouseLeave={this.onDrag}>
+    <div class="progress-bar__progress">
 
-        { this.props.additionalProgress &&
+      { this.props.additionalProgress &&
           <div
             class="progress__additional"
             style={{width: `${this.props.additionalProgress}%`}}
           />
-        }
-        <div class="progress__main">
-          <div
-            class="progress__main__state"
-            style={{width: `${this.props.progress}%`}}
-          ></div>
-          <div class="progressbar__main__marker"
-            draggable={false}
-            onMouseDown={this.onDrag}
-            onMouseUp={this.onDrag}
-            onTouchStart={this.onDrag}
-            onTouchEnd={this.onDrag}
-            style={{
-              'margin-left': `calc(${this.props.progress}% - 1em)`,
-            }}
+      }
+      <div class="progress__main">
+        <div
+          class="progress__main__state"
+          style={{width: `${this.props.progress}%`}}
+        ></div>
+        <div class={`progressbar__main__marker ${this.state.isPlayerDragged ? 'dragged':''}`}
+          draggable={false}
+          onMouseDown={this.onDrag}
+          onMouseUp={this.onDrag}
+          onTouchStart={this.onDrag}
+          onTouchEnd={this.onDrag}
+          style={{
+            'margin-left': `calc(${this.props.progress}% - 1em)`,
+          }}
+        >
+          <div class="marker__img progress-bar__circle"
           >
-            <div class="marker__img progress-bar__circle"
-            >
-              <div class="progress-bar__circle__outer" />
-              <div class="progress-bar__circle__inner" />
-            </div>
+            <div class="progress-bar__circle__outer" />
+            <div class="progress-bar__circle__inner" />
           </div>
         </div>
       </div>
-    </div>)
-  }
+    </div>
+  </div>)
 }

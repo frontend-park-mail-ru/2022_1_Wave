@@ -7,12 +7,12 @@ export function SearchRequest(request: string): (dispatch: Function) => void {
       .then((payload: any) => {
         dispatch({ type: `search/request`, payload });
       })
-      .catch(() => {
-        dispatch({
+      .catch(
+        () :Promise<any> => dispatch({
           type: `notifier/message`,
-          payload: { status: 'error', msg: 'None network' },
-        });
-      });
+          payload: { status: 'error', msg: `Something went wrong. Please, try again later` },
+        })
+      );
   };
 }
 

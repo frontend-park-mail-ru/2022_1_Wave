@@ -4,20 +4,21 @@ import VDom from '@rflban/vdom';
 import {
   AlternativeArrowLeftIcon,
   AlternativeArrowRightIcon, PauseOutlineIcon, PlayOutlineIcon,
-} from '@rflban/waveui';
+  ArrowLeftIcon} from '@rflban/waveui';
 import '../../App/App.scss';
 import {IComponentPropsCommon} from "@rflban/vdom/dist/IComponentProps";
-import {ArrowLeftIcon} from "@rflban/waveui";
 import {IPlayerClass, ITrack} from '../../../modules/Media/media';
 import {PlayerClass} from '../../../modules/Media/player';
 import {config} from '../../../modules/Client/Client';
 import {Map} from '../../../modules/Store/types';
 import {connect} from '../../../modules/Connect';
-import {setPosition, startPlay, stopPlay} from '../../../actions/Player';
+import {setPlayState, setPosition, startPlay, stopPlay} from '../../../actions/Player';
 import RouterContext from '../../../modules/Router/RouterContext';
 import TrackProgressBar from "./TrackProgressBar";
 import VolumeProgressBar from "./VolumeProgressBar";
 import Waves from "./Waves";
+import {setTracks} from "../../../actions/Playlist";
+import broadcastName from "../../../broadcast";
 
 interface PlayerComponentProps extends IComponentPropsCommon{
     play: () => void;
@@ -28,6 +29,10 @@ interface PlayerComponentProps extends IComponentPropsCommon{
     isPlay: boolean;
     isMobileFull:boolean;
     toggleMobileFull: () => void;
+    setPlaylist: (_tracks: ITrack[]) => void;
+    displayPlayState: (_status:boolean) => void;
+    playDisplay:boolean;
+    isAuth:boolean;
 }
 
 class PlayerComponent extends VDom.Component<PlayerComponentProps> {
@@ -35,6 +40,9 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
 
 
   static contextType = RouterContext;
+
+
+  syncChannel:BroadcastChannel;
 
   constructor(props: PlayerComponentProps) {
     super(props);
@@ -53,6 +61,9 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
       },
       isPlayerDragged: false,
       isVolumeDragged: false,
+      isControlled: false,
+      isSyncWithServer:false,
+      aboutToUnmount: false,
     };
     this.initPlayer = this.initPlayer.bind(this);
     this.loadTrackData = this.loadTrackData.bind(this);
@@ -61,14 +72,20 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
     this.runNext = this.runNext.bind(this);
     this.runPrev = this.runPrev.bind(this);
     this.toogleShuffle = this.toogleShuffle.bind(this);
+
     this.props.stop();
   }
 
   didUpdate(): void {
-    if (!this.#player?.audio) {
-      this.initPlayer();
+    if(this.state.aboutToUnmount){
       return;
     }
+    if (!this.#player?.audio) {
+      this.initPlayer();
+      this.syncChannel.postMessage({type:'firstConnection',payload:'ok'});
+      return;
+    }
+
     if (!this.props.playlist) {
       return;
     }
@@ -77,6 +94,7 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
     if (JSON.stringify(this.#player?.playlist) !== JSON.stringify(this.props.playlist)) {
       this.setState({trackTime: 0, trackFilled: 0, trackFetched: 0, trackBuffered: 0});
       this.#player?.updatePlaylist(this.props.playlist);
+      this.syncChannel.postMessage({type:'playlist',payload:this.props.playlist});
     }
 
     if (
@@ -84,7 +102,12 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
             this.#player?.currentIndex !== this.props.position
     ) {
       this.#player?.setPosition(this.props.position);
+      this.syncChannel.postMessage({type:'position',payload:this.props.position})
     }
+    // if (this.props.isPlay && !this.state.playState) {
+    //   this.#player.stop();
+    //   return;
+    // }
     if (this.#player?.audio?.paused === this.props.isPlay) {
       this.checkPlay();
     }
@@ -92,8 +115,73 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
 
   didMount(): void {
     this.props.setPos(0);
+    this.syncChannel = new BroadcastChannel(broadcastName);
+    this.syncChannel.onmessage = this.onMessageBroadcast;
     if (!this.#player && this.props.playlist && this.props.playlist.length > 0) {
       this.initPlayer();
+      this.syncChannel.postMessage({type:'firstConnection',payload:'ok'});
+    }
+    this.setState({aboutToUnmount:false});
+  }
+
+
+  onMessageBroadcast = (_e:MessageEvent):void => {
+    const {type,payload}:
+        { type: string, payload: any} =
+        _e.data;
+    // console.log('Player type',type,'payload',payload);
+    // if(!this.state.isSyncWithServer && this.props.isAuth){
+    //   this.syncChannel.postMessage({type:'WSCommand',payload:'connect'});
+    // }
+    switch (type){
+    case 'firstConnection':{
+      // if(this.props.isAuth){
+      //   this.syncChannel.postMessage({type:'WSCommand',payload:'connect'});
+      // }
+      if(this.props.playlist && this.props.playlist.length < 0){
+        return;
+      }
+      this.syncChannel.postMessage({type:'playlist',payload:this.props.playlist});
+      this.syncChannel.postMessage({type:'position',payload:this.props.position});
+      this.syncChannel.postMessage({type:'playState',payload:this.props.playDisplay});
+      break;
+    }
+    // case 'WSState':{
+    //   switch (payload){
+    //   case WebSocket.OPEN: {
+    //     this.setState({isSyncWithServer:true});
+    //     break;
+    //   }
+    //
+    //   case WebSocket.CLOSED: {
+    //     this.setState({isSyncWithServer:false});
+    //     break;
+    //   }
+    //   default:
+    //     this.syncChannel.postMessage({type:'WSCommand',payload:'connect'});
+    //   }
+    //   break;
+    // }
+    case 'playlist':
+      if(payload && payload.length <= 0){
+        return;
+      }
+      this.props.setPlaylist(payload);
+      this.props.setPos(0);
+      break;
+    case 'position':
+      this.#player?.setPosition(payload);
+      this.props.setPos(payload);
+      break;
+    case 'playState':
+      this.setState({playState:payload})
+      this.props.displayPlayState(payload);
+      if (!payload){
+        this.props.stop();
+        this.syncChannel.postMessage({type:'PlayersStopped',payload:'ok'})
+      }
+      break;
+    default:
     }
   }
 
@@ -111,6 +199,10 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
       this.props.stop();
     }
     this.#player = null;
+    this.syncChannel.postMessage({type:'playState',payload:false});
+    // this.syncChannel.postMessage({type:'WSCommand',payload:'disconnect'});
+    this.syncChannel.close();
+    this.setState({aboutToUnmount:true});
   }
 
   initPlayer(): void {
@@ -131,7 +223,6 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
     navigator.mediaSession.setActionHandler('nexttrack', () => {
       this.runNext();
     });
-
     this.#player = new PlayerClass(this.props.playlist);
 
     if (this.#player.audio) {
@@ -157,8 +248,10 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
   }
 
   checkPlay(): void {
+    this.syncChannel.postMessage({type:'playState',payload:false});
     if (this.props.isPlay) {
       this.#player?.play();
+      this.syncChannel.postMessage({type:'playState',payload:true});
       return;
     }
     this.#player?.stop();
@@ -169,8 +262,9 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
       e.preventDefault();
       e.stopPropagation();
     }
-    if (this.props.isPlay) {
+    if (this.props.isPlay || this.props.playDisplay) {
       this.props.stop();
+      this.checkPlay();
       return;
     }
     this.props.play();
@@ -181,7 +275,7 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
     if (e instanceof Event) e.stopPropagation();
     if (!this.#player) return;
     if (this.#player.currentIndex + 1 > this.#player.playlist.length - 1) return;
-    this.setState({trackFilled: 100, playState: true});
+    this.setState({trackFilled: 100});
     this.props.setPos(this.#player.currentIndex + 1);
     this.checkPlay();
   }
@@ -229,9 +323,9 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
                           <AlternativeArrowLeftIcon/>
                         </div>
                         <div onClickCapture={this.togglePlay} class="control__play_pause">
-                          {this.props.isPlay
-                            ? (<PauseOutlineIcon />)
-                            : (<PlayOutlineIcon />)
+                          {this.props.isPlay || this.props.playDisplay
+                            ? (<PauseOutlineIcon style={{ height: '35px', width: '35px', }} />)
+                            : (<PlayOutlineIcon style={{ height: '35px', width: '35px', }} />)
                           }
                         </div>
                         <div onclick={this.runNext} class="control__next">
@@ -260,6 +354,7 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
             <div class="player__controls">
               {this.#player.audio &&
               <div class="player-progressbar-wrapper">
+                
                 <Waves analyser={this.#player.analyser} audio={this.#player.audio}/>
                 <TrackProgressBar audio={this.#player.audio}/>
               </div>
@@ -267,16 +362,16 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
 
               <div class="player__control">
                 <div class="control__prev" onClick={this.runPrev} onTouchEnd={this.runPrev}>
-                  <AlternativeArrowLeftIcon />
+                  <AlternativeArrowLeftIcon style={{ height: '25px', width: '25px', }} />
                 </div>
                 <div class="control__play_pause" onClick={this.togglePlay} onTouchEnd={this.togglePlay} >
-                  {this.props.isPlay
-                    ? (<PauseOutlineIcon />)
-                    : (<PlayOutlineIcon />)
+                  {this.props.isPlay || this.props.playDisplay
+                    ? (<PauseOutlineIcon style={{ height: '45px', width: '45px', }} />)
+                    : (<PlayOutlineIcon style={{ height: '45px', width: '45px', }} />)
                   }
                 </div>
                 <div class="control__next" onClick={this.runNext} onTouchEnd={this.runNext} >
-                  <AlternativeArrowRightIcon />
+                  <AlternativeArrowRightIcon style={{ height: '25px', width: '25px', }} />
                 </div>
               </div>
               {/* <div onclick={this.toogleShuffle} ontouchend={this.toogleShuffle} class="player__shuffle"> */}
@@ -308,12 +403,21 @@ const mapDispatchToProps = (dispatch: any): Map => ({
   stop: (): void => {
     dispatch(stopPlay);
   },
+  setPlaylist: (tracks:ITrack[]):void => {
+    dispatch(setTracks(tracks));
+  },
+  displayPlayState: (state:boolean):void => {
+    dispatch(setPlayState(state));
+  }
 });
 
 const mapStateToProps = (state: any): Map => ({
+  isAuth: state.user?.id != null,
   playlist: state.playerPlaylist ? state.playerPlaylist : null,
   position: state.playerPosition ? state.playerPosition.value : 0,
-  isPlay: state.playerPlay ? state.playerPlay.value : false,
+  isPlay: state.playerPlay?.value ?? false,
+  playDisplay: state.playDisplay?.value ?? false,
+  
 });
 
 const Player = connect(mapStateToProps, mapDispatchToProps)(PlayerComponent);

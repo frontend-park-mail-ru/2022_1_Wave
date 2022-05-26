@@ -1,5 +1,5 @@
 import VDom from '@rflban/vdom';
-import {ModalDisplayerStateless} from '@rflban/waveui';
+import {ModalDisplayer} from '@rflban/waveui';
 import './App.scss';
 import Homepage from '../Homepage/Homepage';
 import { connect, StoreContext } from '../../modules/Connect';
@@ -128,7 +128,7 @@ class App extends VDom.Component<any> {
           />
           <StoreContext.Consumer>
             {(store: any): VDom.VirtualElement => (
-              <ModalDisplayerStateless
+              <ModalDisplayer
                 animated
                 direction="row"
                 onClose={this.props.closeCreatePlaylistForm}
@@ -140,7 +140,7 @@ class App extends VDom.Component<any> {
                 )}
               >
                 <CreatePlaylist onCancel={this.props.closeCreatePlaylistForm} />
-              </ModalDisplayerStateless>
+              </ModalDisplayer>
             )}
           </StoreContext.Consumer>
         </Route>
@@ -155,7 +155,6 @@ const mapStateToProps = (state: any): Map => ({
   authRequired: state.authRequired,
   createPlaylistForm: state.createPlaylistForm,
   sidebarIsOpen: state.sidebar,
-
 });
 
 const mapDispatchToProps = (dispatch: any): Map => ({

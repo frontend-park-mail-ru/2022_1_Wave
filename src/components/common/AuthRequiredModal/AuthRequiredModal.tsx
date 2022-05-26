@@ -2,7 +2,7 @@ import './AuthRequiredModal.scss';
 import VDom from '@rflban/vdom';
 import {
   Button,
-  ModalDisplayerStateless,
+  ModalDisplayer,
   PlusIcon,
   Subhead,
 } from '@rflban/waveui';
@@ -60,7 +60,7 @@ export default class AuthRequiredModal extends VDom.Component<AuthRequiredModalP
     return (
       <RouterContext.Consumer>
         {(navigator: RouteNavigator): VDom.VirtualElement => (
-          <ModalDisplayerStateless
+          <ModalDisplayer
             open={open}
             onOpen={onOpen}
             onClose={onClose}
@@ -105,7 +105,7 @@ export default class AuthRequiredModal extends VDom.Component<AuthRequiredModalP
                 </Link>
               </div>
             </div>
-          </ModalDisplayerStateless>
+          </ModalDisplayer>
         )}
       </RouterContext.Consumer>
     );

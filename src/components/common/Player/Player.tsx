@@ -72,14 +72,27 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
     this.runNext = this.runNext.bind(this);
     this.runPrev = this.runPrev.bind(this);
     this.toogleShuffle = this.toogleShuffle.bind(this);
-
+    this.connectToWS = this.connectToWS.bind(this);
     this.props.stop();
+  }
+
+  @VDom.util.Debounce(100)
+  connectToWS():void{
+    console.log('ws connecting...');
+    this.syncChannel.postMessage({type:'WSCommand',payload:'connect'});
+    this.syncChannel.postMessage({type:'getWSState',payload:'connect'});
+    console.log('sent ws connect');
   }
 
   didUpdate(): void {
     if(this.state.aboutToUnmount){
       return;
     }
+
+    if (this.props.isAuth && !this.state.isSyncWithServer) {
+      this.connectToWS();
+    }
+
     if (!this.#player?.audio) {
       this.initPlayer();
       this.syncChannel.postMessage({type:'firstConnection',payload:'ok'});
@@ -101,6 +114,7 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
       typeof this.props.position === 'number' &&
             this.#player?.currentIndex !== this.props.position
     ) {
+      console.log('position setting:',this.props.position);
       this.#player?.setPosition(this.props.position);
       this.syncChannel.postMessage({type:'position',payload:this.props.position})
     }
@@ -121,9 +135,12 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
       this.initPlayer();
       this.syncChannel.postMessage({type:'firstConnection',payload:'ok'});
     }
+    this.connectToWS();
     this.setState({aboutToUnmount:false});
-    window.onbeforeunload = ():void =>
+    window.onbeforeunload = ():void =>{
       this.syncChannel.postMessage({type:'playState',payload:false});
+      this.syncChannel.postMessage({type:'WSCommand',payload:"disconnect"});
+    }
   }
 
 
@@ -131,39 +148,35 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
     const {type,payload}:
         { type: string, payload: any} =
         _e.data;
-    // console.log('Player type',type,'payload',payload);
+    console.log('Player type',type,'payload',payload);
     // if(!this.state.isSyncWithServer && this.props.isAuth){
     //   this.syncChannel.postMessage({type:'WSCommand',payload:'connect'});
     // }
     switch (type){
     case 'firstConnection':{
-      // if(this.props.isAuth){
-      //   this.syncChannel.postMessage({type:'WSCommand',payload:'connect'});
-      // }
-      if(!this.props.playlist){
-        return;
-      }
+      // if(this.props.isAuth) return;
+      if(!this.props.playlist) return;
       this.syncChannel.postMessage({type:'playlist',payload:this.props.playlist});
       this.syncChannel.postMessage({type:'position',payload:this.props.position});
       this.syncChannel.postMessage({type:'playState',payload:this.props.playDisplay});
       break;
     }
-    // case 'WSState':{
-    //   switch (payload){
-    //   case WebSocket.OPEN: {
-    //     this.setState({isSyncWithServer:true});
-    //     break;
-    //   }
-    //
-    //   case WebSocket.CLOSED: {
-    //     this.setState({isSyncWithServer:false});
-    //     break;
-    //   }
-    //   default:
-    //     this.syncChannel.postMessage({type:'WSCommand',payload:'connect'});
-    //   }
-    //   break;
-    // }
+    case 'WSState':{
+      switch (payload){
+      case WebSocket.OPEN: {
+        this.syncChannel.postMessage({type:'getWSState'});
+        this.setState({isSyncWithServer:true});
+        break;
+      }
+
+      case WebSocket.CLOSED: {
+        this.setState({isSyncWithServer:false});
+        break;
+      }
+      default:
+      }
+      break;
+    }
     case 'playlist':
       if(!payload){
         return;
@@ -176,6 +189,7 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
         return;
       }
       console.log('got position',payload);
+      console.log('position',payload, 'playlist:',this.props.playlist);
       this.#player?.setPosition(payload);
       this.props.setPos(payload);
       break;
@@ -206,7 +220,7 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
     }
     this.#player = null;
     this.syncChannel.postMessage({type:'playState',payload:false});
-    // this.syncChannel.postMessage({type:'WSCommand',payload:'disconnect'});
+    this.syncChannel.postMessage({type:'WSCommand',payload:'disconnect'});
     this.syncChannel.close();
     this.setState({aboutToUnmount:true});
   }
@@ -240,6 +254,7 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
     if (this.#player.currentTrack) {
       this.loadTrackData();
     }
+    this.connectToWS();
   }
 
   loadTrackData(): void {

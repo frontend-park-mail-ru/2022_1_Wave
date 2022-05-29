@@ -22,7 +22,6 @@ class SidebarComponent extends VDom.Component<any> {
     super(props);
     this.setTrack = this.setTrack.bind(this);
     this.clickRecomended = this.clickRecomended.bind(this);
-    this.props.getPopular();
   }
 
   setTrack(pos: number): (_e: Event) => void {
@@ -44,6 +43,9 @@ class SidebarComponent extends VDom.Component<any> {
 
   didMount(): void {
     mainSmallScreen.addEventListener('change', this.mediaSmallScreenhandler);
+    if(!this.props.playlist || this.props.playlist?.length < 0) {
+      this.props.getPopular();
+    }
   }
 
   willUmount(): void {

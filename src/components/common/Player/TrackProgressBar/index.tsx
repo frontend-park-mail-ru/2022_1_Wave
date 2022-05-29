@@ -41,7 +41,7 @@ class TrackProgressBar extends VDom.Component<ProgressBarProps>{
     if(!this.props.audio) return;
     this.props.stop();
     this.props.audio.currentTime = relativePosition * this.props.audio.duration;
-    this.progressChannel.postMessage({type:'progress',payload:relativePosition * this.props.audio.duration});
+    this.progressChannel.postMessage({type:'progress',payload:relativePosition * this.props.audio.duration, from:'user'});
     this.props.play();
   }
 

@@ -11,7 +11,7 @@ export default class Sharing {
     })
       .then((response) => response.json())
       .then((response) => {
-        if (response.status !== 200 && response.status !== 201) {
+        if (response.status !== 'OK') {
           return Promise.reject(response);
         }
         return `${Paths.schema}${response.Result.hash}`;

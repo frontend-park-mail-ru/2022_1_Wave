@@ -29,6 +29,7 @@ import * as SidePlaylist from '../../actions/SidePlaylist';
 import * as Modals from '../../actions/Modals';
 import { LikeEmptyIcon } from '../../../../WaveUI/src';
 import {notify, NotifyType} from "../../actions/Notifier";
+import Sharing from '../../actions/Sharing';
 
 class PlaylistPage extends VDom.Component<any, any, null, RouteNavigator> {
   static contextType = RouterContext;
@@ -104,8 +105,7 @@ class PlaylistPage extends VDom.Component<any, any, null, RouteNavigator> {
   }
 
   onShare = (): void => {
-    window.navigator.clipboard.writeText(`${window.location.origin}${window.location.pathname}`);
-    this.props.notifyAction({status:'success',msg:'Link copied to clipboard'})
+    this.props.shrinkToClipboard(`${window.location.origin}${window.location.pathname}`)
   }
 
   onDelete = (): void => {
@@ -358,6 +358,9 @@ const mapDispatchToProps = (dispatch: any): Map => ({
   },
   getPlaylistById: (id: number): void => {
     dispatch(SidePlaylist.getPlaylistById(id));
+  },
+  shrinkToClipboard: (url: string): void => {
+    dispatch(Sharing.shrink(url));
   }
 });
 

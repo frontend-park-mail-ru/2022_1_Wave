@@ -23,7 +23,7 @@ if ('serviceWorker' in navigator) {
 
 let worker : SharedWorker | Worker;
 
-if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)){
+if (/Safari|Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)){
   worker = new Worker('/worker.js');
 }
 else {

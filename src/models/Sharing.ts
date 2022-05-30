@@ -1,4 +1,3 @@
-import HTTPClient, { config } from '../modules/Client/Client';
 import Paths from '../config/Sharing';
 
 export default class Sharing {
@@ -12,13 +11,13 @@ export default class Sharing {
     })
       .then((response) => response.json())
       .then((response) => {
-        if (response.status !== 200) {
+        if (response.status !== 200 || response.status !== 201) {
           return Promise.reject(response.body);
         }
-        return `${Paths.schema}response.Result.hash`;
+        return `${Paths.schema}${response.Result.hash}`;
       })
       .catch((e) => {
-        console.error('Sharing.shrink', e);
+        console.error('Sharing.shrink error:', e);
         return url;
       })
   }

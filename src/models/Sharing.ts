@@ -12,7 +12,7 @@ export default class Sharing {
       .then((response) => response.json())
       .then((response) => {
         if (response.status !== 200 || response.status !== 201) {
-          return Promise.reject(response.body);
+          return Promise.reject(response);
         }
         return `${Paths.schema}${response.Result.hash}`;
       })

@@ -1,11 +1,7 @@
 const internalChannelName = 'syncChannel';
-
-const websocketUrl = 'ws://localhost/api/v1/player-sync';
+const websocketUrl = 'wss://wave-music.online/api/v1/player-sync';
 let activePorts = 0;
 let ws;
-
-const setTimeStep = 0;// 0-1-2
-const setPlaylistStep = 0;// 0-1
 
 const internalChannel = new BroadcastChannel(internalChannelName);
 
@@ -59,7 +55,7 @@ const websocketOnMessage = ({data}) => {
   }
 
   if( typeof isPaused !== 'undefined' && currentState.isPaused !== isPaused){
-    console.log('setting pause state:', isPaused,currentState.isPaused)
+    console.log('setting pause state:', isPaused,currentState.isPaused);
     internalChannel.postMessage({type:'playState',payload: !isPaused});
     currentState.isPaused = isPaused;
   }
@@ -164,13 +160,6 @@ const internalChannelOnMessage = (eMsg ) => {
       if( updateTime < currentState.lastUpdate ) return;
       currentState.lastUpdate = updateTime
       currentState.playlistPos = 0;
-      const msgStop = {
-        type_push_state: "on_pause",
-        data: {
-          last_sec_position: currentState.currentTime,
-          time_state_update: currentState.lastUpdate,
-        }
-      }
       const msg = {
         type_push_state: "new_tracks_queue",
         data: {
@@ -199,11 +188,11 @@ const internalChannelOnMessage = (eMsg ) => {
         type_push_state: "new_track",
         data: {
           queue_position: currentState.playlistPos,
-          last_sec_position: currentState.currentTime,
+          last_sec_position: 0,
           time_state_update: currentState.lastUpdate,
         }
       }
-      console.log('position created msg:', msg)
+      console.log('position created msg:', msg);
       ws.send(JSON.stringify(msg));
     }
     break;

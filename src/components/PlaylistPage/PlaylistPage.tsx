@@ -29,7 +29,7 @@ import * as SidePlaylist from '../../actions/SidePlaylist';
 import * as Modals from '../../actions/Modals';
 import { LikeEmptyIcon } from '../../../../WaveUI/src';
 import {notify, NotifyType} from "../../actions/Notifier";
-import Sharing from '../../actions/Sharing';
+import * as Sharing from '../../actions/Sharing';
 
 class PlaylistPage extends VDom.Component<any, any, null, RouteNavigator> {
   static contextType = RouterContext;

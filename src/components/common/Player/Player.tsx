@@ -78,11 +78,9 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
 
   @VDom.util.Debounce(100)
   connectToWS():void{
-    if (this.state.isSyncWithServer || !this.props.isAuth)  return;
     console.log('ws connecting...');
     this.syncChannel.postMessage({type:'WSCommand',payload:'connect'});
     this.syncChannel.postMessage({type:'getWSState',payload:'connect'});
-    console.log('sent ws connect');
   }
 
   didUpdate(): void {
@@ -93,12 +91,14 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
     if (!this.#player?.audio) {
       this.initPlayer();
       this.syncChannel.postMessage({type:'firstConnection',payload:'ok'});
-      this.connectToWS();
       return;
     }
 
-    if (!this.props.playlist) {
+    if (!this.state.isSyncWithServer && this.props.isAuth) {
       this.connectToWS();
+    }
+
+    if (!this.props.playlist) {
       return;
     }
 
@@ -107,7 +107,6 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
       this.setState({trackTime: 0, trackFilled: 0, trackFetched: 0, trackBuffered: 0});
       this.#player?.updatePlaylist(this.props.playlist);
       this.syncChannel.postMessage({type:'playlist',payload:this.props.playlist});
-      this.connectToWS();
     }
 
     if (
@@ -117,14 +116,12 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
       console.log('position setting:',this.props.position);
       this.#player?.setPosition(this.props.position);
       this.syncChannel.postMessage({type:'position',payload:this.props.position});
-      this.connectToWS();
     }
     // if (this.props.isPlay && !this.state.playState) {
     //   this.#player.stop();
     //   return;
     // }
     if (this.#player?.audio?.paused === this.props.isPlay) {
-      this.connectToWS();
       this.checkPlay();
     }
   }
@@ -137,7 +134,9 @@ class PlayerComponent extends VDom.Component<PlayerComponentProps> {
       this.initPlayer();
       this.syncChannel.postMessage({type:'firstConnection',payload:'ok'});
     }
-    this.connectToWS();
+    if (!this.state.isSyncWithServer && this.props.isAuth) {
+      this.connectToWS();
+    }
     this.setState({aboutToUnmount:false});
     window.onbeforeunload = ():void =>{
       this.syncChannel.postMessage({type:'playState',payload:false});

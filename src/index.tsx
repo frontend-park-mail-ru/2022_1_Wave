@@ -21,8 +21,16 @@ if ('serviceWorker' in navigator) {
     });
 }
 
-const worker = new SharedWorker('/worker.js');
-worker.port.start();
+let worker : SharedWorker | Worker;
+
+if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)){
+  worker = new Worker('/worker.js');
+}
+else {
+  worker = new SharedWorker('/worker.js');
+  worker.port.start();
+
+}
 
 User.getCSRFToken().then((): void => {
   VDom.render(

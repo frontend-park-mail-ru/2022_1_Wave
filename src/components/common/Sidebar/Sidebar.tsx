@@ -1,7 +1,7 @@
 import './Sidebar.scss';
 import VDom from '@rflban/vdom';
 import '../../../index.css';
-import {Logo} from "@rflban/waveui";
+import {Caption, Logo} from "@rflban/waveui";
 import Navigation from './Navigation/Navigation';
 import Link from '../../../modules/Router/Link2';
 import { Map } from '../../../modules/Store/types';
@@ -44,6 +44,7 @@ class SidebarComponent extends VDom.Component<any> {
   didMount(): void {
     mainSmallScreen.addEventListener('change', this.mediaSmallScreenhandler);
     if(!this.props.playlist || this.props.playlist?.length < 0) {
+      console.log('getting popular',this.props.playlist , this.props.playlist?.length)
       this.props.getPopular();
     }
   }
@@ -100,6 +101,7 @@ class SidebarComponent extends VDom.Component<any> {
             <div onClick={this.close} class="sidebar__header__cross fa-solid fa-xmark"/>
           }
         </div>
+        <Caption align="center"> The Best musical service</Caption>
         {content}
         <Playlist
           tracks={this.props.playlist}

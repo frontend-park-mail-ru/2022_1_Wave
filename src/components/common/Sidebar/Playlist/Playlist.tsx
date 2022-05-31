@@ -117,7 +117,7 @@ class Playlist extends VDom.Component<PlaylistProps, PlaylistState, null, RouteN
     const liked = new Set<number>((favorites ?? []).map((track) => track.id));
 
     return (<>
-      <Headline align="left" size="s">Play queue</Headline>
+      <Headline align="left" size="s">Player queue</Headline>
       <Divider/>
       {tracks.map((track: any, idx: number) => (
         <Track

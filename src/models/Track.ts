@@ -24,4 +24,13 @@ export default class Track {
       return response.body.Result;
     });
   }
+
+  static getWeek() {
+    return HTTPClient.get(Paths.trackWeek).then((response) => {
+      if (response.status !== 200) {
+        return Promise.reject(response.body);
+      }
+      return response.body.Result;
+    });
+  }
 }

@@ -5,7 +5,7 @@ import { ITrack } from '../modules/Media/media';
  * Actions for playlist
  */
 export function getPopularTracks(dispatch: Function): void {
-  track.getPopular().then((payload: any) => {
+  track.getWeek().then((payload: any) => {
     dispatch({ type: 'playlist/update', payload });
     dispatch({ type: 'popular/track', payload });
   })

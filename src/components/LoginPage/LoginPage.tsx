@@ -79,6 +79,10 @@ class LoginPage extends VDom.Component<any, any, null, RouteNavigator> {
         <div class="waveLoginPage__inner">
           <Link to="/">
             <Logo size={smallScreen ? 'm': 'l'} class="waveLoginPage__logo"/>
+            <Caption align="center" style={{
+              display:'table',
+              margin:'0 auto'
+            }}> The Best Musical Service</Caption>
           </Link>
           <form class="waveLoginPage__form" onSubmit={this.handleSubmit}>
             <FormItem

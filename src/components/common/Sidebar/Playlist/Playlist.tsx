@@ -1,7 +1,7 @@
 import './Playlist.scss';
 import VDom from '@rflban/vdom';
 import {
-  Caption, Headline,
+  Caption, Divider, Headline,
   Track,
 } from '@rflban/waveui';
 import { config } from '../../../../modules/Client/Client';
@@ -118,6 +118,7 @@ class Playlist extends VDom.Component<PlaylistProps, PlaylistState, null, RouteN
 
     return (<>
       <Headline align="left" size="s">Play queue</Headline>
+      <Divider/>
       {tracks.map((track: any, idx: number) => (
         <Track
           num={idx + 1}

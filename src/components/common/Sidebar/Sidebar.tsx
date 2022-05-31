@@ -96,12 +96,15 @@ class SidebarComponent extends VDom.Component<any> {
         <div class="sidebar__header">
           <Link to="/">
             <Logo align='left' size={'m'} class="header__logo"/>
+            <Caption align="center" style={{
+              display:'table',
+              margin:'0 auto',
+              'padding-right':'40px'}}> The Best Musical Service</Caption>
           </Link>
           { this.state.isSmallScreen &&
             <div onClick={this.close} class="sidebar__header__cross fa-solid fa-xmark"/>
           }
         </div>
-        <Caption align="center"> The Best musical service</Caption>
         {content}
         <Playlist
           tracks={this.props.playlist}

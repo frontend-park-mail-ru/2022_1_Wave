@@ -23,21 +23,24 @@ export default class ProfileMenu extends VDom.Component<ProfileMenuProps> {
   private readonly menuRef = new VDom.Ref();
 
   menuOpen = (): void => {
-    (this.menuRef.instance as any).open();
+    (this.menuRef.instance as any).toggle();
   }
 
   render = (): VDom.VirtualElement => (
     <div class="profile-menu">
       <div class="profile-menu__avatar-wrapper">
-        <div class="profile-menu__avatar_img-round__wrapper">
+        <div
+          class="profile-menu__avatar_img-round__wrapper"
+          onclick={this.menuOpen}
+        >
+          <div class="profile-menu__avatar_img-round__wrapper__avatarShadow" />
           <img
             class="profile-menu__avatar_img-round"
             src={this.props.avatarSrc ? (this.props.avatarSrc.startsWith('blob') ? this.props.avatarSrc : `${config.files}${this.props.avatarSrc}`) : avatar}
             alt="avatar.png"
-            onclick={this.menuOpen}
           />
           <Menu
-            ref={this.menuRef}
+            ref={this.menuRef} offset={5}
           >
             <div class="profile-menu__menu-label">
               <Caption size="m" align="left">

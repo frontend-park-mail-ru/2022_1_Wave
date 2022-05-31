@@ -14,7 +14,7 @@ import * as UserPlaylist from '../../actions/UserPlaylist';
 import { mainSmallScreen } from '../../mediaQueries';
 
 const validatePlaylistName = (value: string): boolean => {
-  const reg = /^[a-zа-я0-9_ ]{1,32}$/;
+  const reg = /^[a-zа-я0-9_ ]{1,16}$/;
   return reg.test(value.toLowerCase().trim());
 }
 
@@ -108,7 +108,7 @@ class Library extends VDom.Component<LibraryProps, LibraryState> {
               as={Input}
               ref={this.inputRef}
               label="New playlist"
-              error="Only 1-32 of latin letters, numbers or _ are allowed"
+              error="Only 1-16 of latin letters, numbers or _ are allowed"
               checker={validatePlaylistName}
               placeholder="New playlist name"
             />

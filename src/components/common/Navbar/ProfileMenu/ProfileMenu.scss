@@ -3,6 +3,7 @@
   display: flex;
   align-items: center;
   justify-content: flex-end;
+  padding-bottom: 10px;
 
   &__menu-label {
     padding: 8px;
@@ -11,6 +12,15 @@
   &:hover {
     .profile-menu__popup{
       visibility: visible;
+    }
+
+    &__avatarShadow {
+      background-color: var(--waveui-color_background--hover--invert);
+    }
+  }
+  &:active {
+    &__avatarShadow {
+      background-color: var(--waveui-color_background--pressed--invert);
     }
   }
 
@@ -21,14 +31,38 @@
   &__avatar_img-round {
     width: 50px;
     height: 50px;
-    border-radius: 25px;
+    border-radius: 50%;
     object-fit: cover;
     background-size: cover;
+    user-select: none;
+    pointer-events: none;
 
     &__wrapper {
       position: relative;
-      width: fit-content;
-      height: fit-content;
+      width: 50px;
+      height: 50px;
+      cursor: pointer;
+
+      &__avatarShadow {
+        background-color: #00000000;
+        transition: background-color 0.2s ease-out, box-shadow 0.2s ease-out;
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        pointer-events: none;
+        border-radius: 50%;
+      }
+
+      &:hover &__avatarShadow {
+        background-color: var(--waveui-color_background--hover--invert);
+        box-shadow: 0 0 0 5px var(--waveui-color_background--hover--invert);
+      }
+      &:active &__avatarShadow {
+        background-color: var(--waveui-color_background--pressed--invert);
+        box-shadow: 0 0 0 5px var(--waveui-color_background--pressed--invert);
+      }
     }
   }
 

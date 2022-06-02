@@ -1,7 +1,7 @@
 import './Playlist.scss';
 import VDom from '@rflban/vdom';
 import {
-  Caption, Divider, Headline,
+  Divider, Subhead,
   Track,
 } from '@rflban/waveui';
 import { config } from '../../../../modules/Client/Client';
@@ -117,7 +117,7 @@ class Playlist extends VDom.Component<PlaylistProps, PlaylistState, null, RouteN
     const liked = new Set<number>((favorites ?? []).map((track) => track.id));
 
     return (<>
-      <Headline align="left" size="s">Player queue</Headline>
+      <Subhead align="left" size="s">Player queue</Subhead>
       <Divider/>
       {tracks.map((track: any, idx: number) => (
         <Track

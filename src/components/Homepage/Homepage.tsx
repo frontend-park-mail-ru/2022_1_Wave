@@ -30,9 +30,11 @@ interface HompageProps extends VDom.IComponentProps {
 }
 
 class Homepage extends VDom.Component<HompageProps> {
-  constructor(props: HompageProps) {
-    super(props);
-    this.props.getAlbumWeek();
+  
+  didMount():void {
+    if(!this.props.playlist || this.props.playlist?.length < 0) {
+      this.props.getAlbumWeek();
+    }
   }
 
   didUpdate():void {
@@ -41,9 +43,7 @@ class Homepage extends VDom.Component<HompageProps> {
     if(this.props.trackWeek?.albumId){
       const id: number = this.props.trackWeek.albumId;
       this.props.getAlbumCover(this.props.trackWeek.albumId);
-      if(!this.props.playlist || this.props.playlist?.length < 0) {
-        this.props.getAlbum(id.toString());
-      }
+      this.props.getAlbum(id.toString());
     }
 
   }

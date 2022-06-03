@@ -35,6 +35,7 @@ module.exports = (env = {}) => {
       short_name: 'WaveMusic',
       description: 'Best music service!',
       background_color: '#080D21',
+      theme_color: '#080D21',
       crossorigin: 'use-credentials',
       display: 'standalone',
       orientation: 'portrait',

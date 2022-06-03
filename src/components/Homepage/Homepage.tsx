@@ -86,9 +86,9 @@ class Homepage extends VDom.Component<HompageProps> {
                   </Subhead>
                 </div>
                 <div class="main__top-chart__album__controls">
-                  <Button onClick={this.setPopularTrack} class='main__top-chart__album__btn_play' mode='primary'>Play</Button>
-                  <Link to={`/artist/${artistId}`}>
-                    <Button stretched class='main__top-chart__album__btn_follow' mode='outline'>More</Button>
+                  <Button onClick={this.setPopularTrack} class='main__top-chart__album__btn_play' mode='primary'>Listen top</Button>
+                  <Link to={`/album/${albumId}`}>
+                    <Button stretched class='main__top-chart__album__btn_follow' mode='outline'>To album</Button>
                   </Link>
                 </div>
               </div>

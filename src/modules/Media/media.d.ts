@@ -3,6 +3,9 @@ export interface Dic {
 }
 
 export interface ITrack {
+  id: number;
+  artistId: number;
+  albumId: number;
   title: string;
   artist: string;
   album: string;

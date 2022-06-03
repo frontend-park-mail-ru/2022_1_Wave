@@ -7,7 +7,7 @@ import './Homepage.scss';
 import Popular from './Popular/Popular';
 import {Map} from "../../modules/Store/types";
 import {connect} from "../../modules/Connect";
-import {albumGetCoverById} from "../../actions/Album";
+import {albumGetById, albumGetCoverById} from "../../actions/Album";
 import Link from "../../modules/Router/Link2";
 import {config} from "../../modules/Client/Client";
 import {trackGetWeek} from "../../actions/Track";
@@ -16,21 +16,16 @@ import {ITrack} from "../../modules/Media/media";
 import {setTracks} from "../../actions/Playlist";
 
 interface HompageProps extends VDom.IComponentProps {
-  trackWeek: {
-    id :number,
-    artistId :number,
-    albumId :number,
-    title: string,
-    artist: string,
-    cover: string,
-  }
+  trackWeek: ITrack,
   allTracks: ITrack[],
   albumCover: Map,
   getAlbumWeek: () => void;
   getAlbumCover: (_id:number) => void;
-  setWeekTracks: (_tracks : ITrack[]) => void;
+  setTracks: (_tracks : ITrack[]) => void;
   runMusic: () => void;
   setPos: (_num : number) => void;
+  getAlbum: (_id : string) => void;
+  album: Map;
 }
 
 class Homepage extends VDom.Component<HompageProps> {
@@ -42,14 +37,21 @@ class Homepage extends VDom.Component<HompageProps> {
   didUpdate():void {
     if (this.props.albumCover?.[this.props.trackWeek?.albumId])
       return;
-    if(this.props.trackWeek?.albumId)
+    if(this.props.trackWeek?.albumId){
+      const id: number = this.props.trackWeek.albumId
       this.props.getAlbumCover(this.props.trackWeek.albumId)
+      this.props.getAlbum(id.toString());
+    }
+
   }
 
-  setPopularTrack = (e: Event) : void => {
+  setPopularTrack =  (e: Event): void => {
     e.preventDefault();
-    this.props.setWeekTracks(this.props.allTracks);
-    this.props.setPos(0);
+    const {tracks}:{tracks:ITrack[]} = this.props.album[this.props.trackWeek.albumId];
+    this.props.setTracks(tracks);
+    const pos :number = tracks.reduce( (position,track,i) =>
+      track.id === this.props.trackWeek.id ?  i : position, 0)
+    this.props.setPos(pos);
     this.props.runMusic();
   }
 
@@ -63,8 +65,8 @@ class Homepage extends VDom.Component<HompageProps> {
       )
     }
 
-    const {artistId,albumId,artist,title,cover}
-    : {artistId:number, albumId:number, artist:string,title:string,cover:string} = this.props.trackWeek;
+    const {albumId,artist,title,cover}
+    : {albumId:number, artist:string,title:string,cover:string} = this.props.trackWeek;
     const albumCover:Map = this.props.albumCover?.[albumId];
 
     return (
@@ -86,9 +88,9 @@ class Homepage extends VDom.Component<HompageProps> {
                   </Subhead>
                 </div>
                 <div class="main__top-chart__album__controls">
-                  <Button onClick={this.setPopularTrack} class='main__top-chart__album__btn_play' mode='primary'>Listen top</Button>
+                  <Button onClick={this.setPopularTrack} class='main__top-chart__album__btn_play' mode='primary'>Play</Button>
                   <Link to={`/album/${albumId}`}>
-                    <Button stretched class='main__top-chart__album__btn_follow' mode='outline'>To album</Button>
+                    <Button stretched class='main__top-chart__album__btn_follow' mode='outline'>More</Button>
                   </Link>
                 </div>
               </div>
@@ -102,8 +104,9 @@ class Homepage extends VDom.Component<HompageProps> {
 
 const mapStateToProps = (state: any): Map => ({
   trackWeek: state.trackWeek?.[0] ?? null,
-  allTracks: state.trackWeek ?? null,
   albumCover: state.albumCover ?? null,
+  album: state.album ?? null,
+
 });
 
 const mapDispatchToProps = (dispatch: any): Map => ({
@@ -116,12 +119,15 @@ const mapDispatchToProps = (dispatch: any): Map => ({
   runMusic: (): void => {
     dispatch(startPlay);
   },
-  setWeekTracks: (tracks : ITrack[]): void => {
+  setTracks: (tracks : ITrack[]): void => {
     dispatch(setTracks(tracks));
   },
   setPos: (num: number): void => {
     dispatch(setPosition(num));
   },
+  getAlbum: (id: string): void => {
+    albumGetById(id)(dispatch);
+  }
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Homepage);

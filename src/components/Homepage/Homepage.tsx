@@ -18,6 +18,7 @@ import {setTracks} from "../../actions/Playlist";
 interface HompageProps extends VDom.IComponentProps {
   trackWeek: ITrack,
   allTracks: ITrack[],
+  playlist: ITrack[],
   albumCover: Map,
   getAlbumWeek: () => void;
   getAlbumCover: (_id:number) => void;
@@ -38,9 +39,11 @@ class Homepage extends VDom.Component<HompageProps> {
     if (this.props.albumCover?.[this.props.trackWeek?.albumId])
       return;
     if(this.props.trackWeek?.albumId){
-      const id: number = this.props.trackWeek.albumId
-      this.props.getAlbumCover(this.props.trackWeek.albumId)
-      this.props.getAlbum(id.toString());
+      const id: number = this.props.trackWeek.albumId;
+      this.props.getAlbumCover(this.props.trackWeek.albumId);
+      if(!this.props.playlist || this.props.playlist?.length < 0) {
+        this.props.getAlbum(id.toString());
+      }
     }
 
   }
@@ -106,7 +109,8 @@ const mapStateToProps = (state: any): Map => ({
   trackWeek: state.trackWeek?.[0] ?? null,
   albumCover: state.albumCover ?? null,
   album: state.album ?? null,
-
+  isAuth: state.userStatus === 'authorized',
+  playlist: state.playerPlaylist ? state.playerPlaylist : null,
 });
 
 const mapDispatchToProps = (dispatch: any): Map => ({

@@ -44,7 +44,6 @@ class SidebarComponent extends VDom.Component<any> {
   didMount(): void {
     mainSmallScreen.addEventListener('change', this.mediaSmallScreenhandler);
     if(!this.props.playlist || this.props.playlist?.length < 0) {
-      console.log('getting popular',this.props.playlist , this.props.playlist?.length)
       this.props.getPopular();
     }
   }

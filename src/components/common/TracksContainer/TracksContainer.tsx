@@ -151,7 +151,7 @@ class TracksContainer extends VDom.Component<TracksContainerProps, TracksContain
               {track.artist}
             </Link>
           )})}
-          listened={track.listenings}
+          listened={track.likes}
           duration={track.duration}
           artistWrapper={(artist): VDom.VirtualElement => (
             <Link to={`/artist/${track.artistId}`}>

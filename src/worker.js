@@ -90,6 +90,9 @@ const initWebsocket = () => {
     }
     console.log('get state created msg:', msg)
     ws.send(JSON.stringify(msg));
+    setInterval(() => {
+      ws.send("check");
+    },30000)
     internalChannel.postMessage({type:'WSState', payload: ws.readyState});
   }
   ws.onclose = (e) =>{

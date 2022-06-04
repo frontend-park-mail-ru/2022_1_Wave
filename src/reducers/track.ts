@@ -3,8 +3,12 @@ import { Map } from '../modules/Store/types';
 export const tracksPopular = (state: Map, action: Map): Map => {
   switch (action.type){
   case 'popular/track':
-  case 'week/track':
     return action.payload;
+
+  case 'week/track':
+    if (!state || state.length === 0)
+      return action.payload;
+    break;
   default:
     return state;
   }

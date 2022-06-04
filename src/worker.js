@@ -37,12 +37,12 @@ const websocketOnMessage = ({data}) => {
 
     setTimeout( () => {
       internalChannel.postMessage({type:'position', payload: currentState.playlistPos});
-    }, 20);
+    }, 100);
 
     setTimeout( () => {
       internalChannel.postMessage({type:'progress', payload: currentState.currentTime});
       internalChannel.postMessage({type:'playState',payload: !currentState.isPaused});
-    },15);
+    },120);
 
     return;
   }
@@ -91,7 +91,7 @@ const initWebsocket = () => {
     console.log('get state created msg:', msg)
     ws.send(JSON.stringify(msg));
     setInterval(() => {
-      ws.send("check");
+      ws.send('check');
     },30000)
     internalChannel.postMessage({type:'WSState', payload: ws.readyState});
   }

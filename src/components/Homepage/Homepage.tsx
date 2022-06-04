@@ -32,9 +32,7 @@ interface HompageProps extends VDom.IComponentProps {
 class Homepage extends VDom.Component<HompageProps> {
   
   didMount():void {
-    if(!this.props.playlist || this.props.playlist?.length < 0) {
-      this.props.getAlbumWeek();
-    }
+    this.props.getAlbumWeek();
   }
 
   didUpdate():void {
